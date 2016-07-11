@@ -802,10 +802,12 @@ public class Automaton implements Serializable, Cloneable {
 	 * This handles deserialization so that the listener sets are reset to avoid
 	 * null pointer exceptions when one tries to add listeners to the object.
 	 * 
-     * @deprecated 
+   * @deprecated 
 	 * @param in
 	 *            the input stream for the object
+	 *            @
 	 */
+	@Deprecated
 	private void readObject(java.io.ObjectInputStream in)
 			throws java.io.IOException, ClassNotFoundException {
 		// Reset all nonread objects.
