@@ -63,12 +63,12 @@ public class UnitController {
 					.setText("For every unit production, connect start and end.");
 			// Make the VDG.
 			vdg = new VariableDependencyGraph();
-			remover.initializeDependencyGraph(vdg, grammar);
+			UnitProductionRemover.initializeDependencyGraph(vdg, grammar);
 			// Cache the transitions we have to add.
 			Production[] p = grammar.getProductions();
 			for (int i = 0; i < p.length; i++)
 				if (ProductionChecker.isUnitProduction(p[i]))
-					vdgTransitions.add(remover.getTransitionForUnitProduction(
+					vdgTransitions.add(UnitProductionRemover.getTransitionForUnitProduction(
 							p[i], vdg));
 			// Set up the listener so we know when new actions get
 			// added to the VDG.
@@ -112,7 +112,7 @@ public class UnitController {
 				}
 			}
 			// Get the desired productions.
-			Grammar desiredGrammar = remover.getUnitProductionlessGrammar(
+			Grammar desiredGrammar = UnitProductionRemover.getUnitProductionlessGrammar(
 					grammar, vdg);
 			p = desiredGrammar.getProductions();
 			for (int i = 0; i < p.length; i++)
@@ -346,9 +346,6 @@ public class UnitController {
 
 	/** The grammar being converted. */
 	Grammar grammar;
-
-	/** The unit remover object. */
-	UnitProductionRemover remover = new UnitProductionRemover();
 
 	// Variables related to the VDG.
 

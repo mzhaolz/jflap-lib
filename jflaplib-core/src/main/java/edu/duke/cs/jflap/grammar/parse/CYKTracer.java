@@ -67,8 +67,7 @@ public class CYKTracer {
 	
 	private void initializeLambdaStepMap()
 	{
-		LambdaProductionRemover remover = new LambdaProductionRemover();
-		Set lambdaDerivers = remover.getCompleteLambdaSet(myOriginalGrammar);
+		Set lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(myOriginalGrammar);
 		Grammar g=myOriginalGrammar;
 	    //System.out.println("LD = "+lambdaDerivers);
 		if (lambdaDerivers.size() > 0) {
@@ -108,7 +107,7 @@ public class CYKTracer {
 	    	
 	    	for (int i=0; i<p.length; i++)
 	    	{
-	    		Production[] p2 = remover.getProductionsToAddForProduction(
+	    		Production[] p2 = LambdaProductionRemover.getProductionsToAddForProduction(
 					p[i], lambdaDerivers);
 	    	//	//System.out.println("Expanding From : "+p[i]);
 	    		for (int j=0; j<p2.length; j++)
@@ -149,8 +148,7 @@ public class CYKTracer {
 	}
 
 	private void intializeUnitStepMap(Grammar g) {
-		UnitProductionRemover remover = new UnitProductionRemover();
-		if (remover.getUnitProductions(g).length > 0) {
+		if (UnitProductionRemover.getUnitProductions(g).length > 0) {
 			
 			myUnitStepMap=new HashMap <ArrayList <Production>, Production>();
 			
@@ -158,7 +156,7 @@ public class CYKTracer {
 			UnitPane up = new UnitPane(env, g);
 			UnitController controller=new UnitController(up, g);
 			controller.doStep();
-			Production[] units=remover.getUnitProductions(g);
+			Production[] units = UnitProductionRemover.getUnitProductions(g);
 			HashMap <String, Production> removedUnitProductions=new HashMap <String, Production>();
 			
 			for (int i=0; i<units.length; i++)
@@ -167,7 +165,7 @@ public class CYKTracer {
 			}
 			//System.out.println("UNIT = "+removedUnitProductions);
 			
-			Grammar unitless=remover.getUnitProductionlessGrammar(controller.getGrammar(), remover.getVariableDependencyGraph(g));
+			Grammar unitless = UnitProductionRemover.getUnitProductionlessGrammar(controller.getGrammar(), UnitProductionRemover.getVariableDependencyGraph(g));
 			Production[] temp=unitless.getProductions();
 			ArrayList <Production> productionsToAdd=new ArrayList <Production>();
 			for (int i=0; i<temp.length; i++)
@@ -237,8 +235,6 @@ public class CYKTracer {
 
 	private void removeUseless(Grammar g) 
 	{
-		UselessProductionRemover remover = new UselessProductionRemover();
-		
 		Grammar g2 = UselessProductionRemover
 				.getUselessProductionlessGrammar(g);
 		

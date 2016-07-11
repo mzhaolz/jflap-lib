@@ -58,7 +58,7 @@ public class LambdaController {
 			pane.mainLabel.setText("Select variables that derive lambda.");
 			pane.detailLabel
 					.setText("Click productions; the LHS variable will be added.");
-			lambdaVariables = remover.getCompleteLambdaSet(grammar);
+			lambdaVariables = LambdaProductionRemover.getCompleteLambdaSet(grammar);
 			derivedLambdaVariables = new TreeSet();
 			pane.deleteAction.setEnabled(false);
 			pane.completeSelectedAction.setEnabled(false);
@@ -80,7 +80,7 @@ public class LambdaController {
 					lambdaProductions.add(p[i]);
 					continue;
 				}
-				Production[] p2 = remover.getProductionsToAddForProduction(
+				Production[] p2 = LambdaProductionRemover.getProductionsToAddForProduction(
 						p[i], lambdaVariables);
 				desiredProductions.add(p[i]);
 				productionsToExpansion.put(p[i], p2);
@@ -294,9 +294,6 @@ public class LambdaController {
 
 	/** The grammar being converted. */
 	Grammar grammar;
-
-	/** The lambda remover object. */
-	LambdaProductionRemover remover = new LambdaProductionRemover();
 
 	/** The set of variables that derive lambda, and those discovered. */
 	Set lambdaVariables, derivedLambdaVariables;
