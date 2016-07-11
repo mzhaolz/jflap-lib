@@ -75,7 +75,7 @@ public class UnitProductionRemover {
 	/**
 	 * Creates instance of <CODE>UnitProductionRemover</CODE>.
 	 */
-	public UnitProductionRemover() {
+	private UnitProductionRemover() {
 
 	}
 
@@ -86,7 +86,7 @@ public class UnitProductionRemover {
 	 *            the grammar.
 	 * @return the variable dependency graph for the variables in <CODE>grammar</CODE>.
 	 */
-	public VariableDependencyGraph getVariableDependencyGraph(Grammar grammar) {
+	public static VariableDependencyGraph getVariableDependencyGraph(Grammar grammar) {
 		VariableDependencyGraph graph = new VariableDependencyGraph();
 		initializeDependencyGraph(graph, grammar);
 		Production[] uprods = getUnitProductions(grammar);
@@ -105,7 +105,7 @@ public class UnitProductionRemover {
 	 *            the grammar.
 	 * @return all unit productions in <CODE>grammar</CODE>.
 	 */
-	public Production[] getUnitProductions(Grammar grammar) {
+	public static Production[] getUnitProductions(Grammar grammar) {
 		ArrayList list = new ArrayList();
 		ProductionChecker pc = new ProductionChecker();
 
@@ -125,7 +125,7 @@ public class UnitProductionRemover {
 	 *            the grammar
 	 * @return all non-unit productions in <CODE>grammar</CODE>.
 	 */
-	public Production[] getNonUnitProductions(Grammar grammar) {
+	public static Production[] getNonUnitProductions(Grammar grammar) {
 		ArrayList list = new ArrayList();
 		ProductionChecker pc = new ProductionChecker();
 
@@ -146,7 +146,7 @@ public class UnitProductionRemover {
 	 * @param grammar
 	 *            the grammar
 	 */
-	public void initializeDependencyGraph(VariableDependencyGraph graph,
+	public static void initializeDependencyGraph(VariableDependencyGraph graph,
 			Grammar grammar) {
 		// StatePlacer sp = new StatePlacer();
 		String[] variables = grammar.getVariables();
@@ -172,7 +172,7 @@ public class UnitProductionRemover {
 	 * @return the state in <CODE>graph</CODE> that represents <CODE>variable</CODE>
 	 *         (i.e. the state whose label is <CODE>variable</CODE>).
 	 */
-	public State getStateForVariable(String variable,
+	public static State getStateForVariable(String variable,
 			VariableDependencyGraph graph) {
 		State[] states = graph.getStates();
 		for (int k = 0; k < states.length; k++) {
@@ -193,7 +193,7 @@ public class UnitProductionRemover {
 	 * @return the transition for <CODE>graph</CODE> that represents the
 	 *         dependency of the variables in the unit production <CODE>production</CODE>.
 	 */
-	public Transition getTransitionForUnitProduction(Production production,
+	public static Transition getTransitionForUnitProduction(Production production,
 			VariableDependencyGraph graph) {
 		ProductionChecker pc = new ProductionChecker();
 		if (!ProductionChecker.isUnitProduction(production))
@@ -213,7 +213,7 @@ public class UnitProductionRemover {
 	 * @param newGrammar
 	 *            a grammar
 	 */
-	public void addAllNonUnitProductionsToGrammar(Grammar oldGrammar,
+	public static void addAllNonUnitProductionsToGrammar(Grammar oldGrammar,
 			Grammar newGrammar) {
 		Production[] productions = getNonUnitProductions(oldGrammar);
 		for (int k = 0; k < productions.length; k++) {
@@ -236,7 +236,7 @@ public class UnitProductionRemover {
 	 *         (i.e. there is a path in <CODE>graph</CODE> from <CODE>variable1</CODE>
 	 *         to <CODE>variable2</CODE>).
 	 */
-	public boolean isDependentOn(String variable1, String variable2,
+	public static boolean isDependentOn(String variable1, String variable2,
 			VariableDependencyGraph graph) {
 		State v1 = getStateForVariable(variable1, graph);
 		State v2 = getStateForVariable(variable2, graph);
@@ -266,7 +266,7 @@ public class UnitProductionRemover {
 	 *         all variables whose states can be reached from the state that
 	 *         represents <CODE>variable</CODE> in <CODE>graph</CODE>.
 	 */
-	public String[] getDependencies(String variable, Grammar grammar,
+	public static String[] getDependencies(String variable, Grammar grammar,
 			VariableDependencyGraph graph) {
 		ArrayList list = new ArrayList();
 		String[] variables = grammar.getVariables();
@@ -294,7 +294,7 @@ public class UnitProductionRemover {
 	 *         as their left hand side, and the right hand side of a production
 	 *         in <CODE>oldProductions</CODE> as their right hand sides.
 	 */
-	public Production[] getNewProductions(String variable,
+	public static Production[] getNewProductions(String variable,
 			Production[] oldProductions) {
 		ArrayList list = new ArrayList();
 		for (int k = 0; k < oldProductions.length; k++) {
@@ -314,7 +314,7 @@ public class UnitProductionRemover {
 	 * @param graph
 	 *            the variable dependency graph of the original grammar
 	 */
-	public void addAllNewProductionsToGrammar(Grammar oldGrammar,
+	public static void addAllNewProductionsToGrammar(Grammar oldGrammar,
 			Grammar newGrammar, VariableDependencyGraph graph) {
 		GrammarChecker gc = new GrammarChecker();
 		String[] variables = oldGrammar.getVariables();
@@ -338,11 +338,18 @@ public class UnitProductionRemover {
 	 *            the variable dependency graph of <CODE>grammar</CODE>.
 	 * @return a unit production-less grammar equivalent to <CODE>grammar</CODE>.
 	 */
-	public Grammar getUnitProductionlessGrammar(Grammar grammar,
+	public static Grammar getUnitProductionlessGrammar(Grammar grammar,
 			VariableDependencyGraph graph) {
 		Grammar uplgrammar = new ContextFreeGrammar();
 		addAllNonUnitProductionsToGrammar(grammar, uplgrammar);
 		addAllNewProductionsToGrammar(grammar, uplgrammar, graph);
+		return uplgrammar;
+	}
+
+	public static Grammar getUnitProductionlessGrammar(Grammar grammar) {
+		Grammar uplgrammar = new ContextFreeGrammar();
+		addAllNonUnitProductionsToGrammar(grammar, uplgrammar);
+		addAllNewProductionsToGrammar(grammar, uplgrammar, getVariableDependencyGraph(grammar));
 		return uplgrammar;
 	}
 }

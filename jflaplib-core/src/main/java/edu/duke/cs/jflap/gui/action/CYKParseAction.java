@@ -118,8 +118,7 @@ public class CYKParseAction extends GrammarAction{
 	 * @param g Original grammar that is going to be changed
 	 */
 	protected void hypothesizeLambda(GrammarEnvironment env, Grammar g) {
-		LambdaProductionRemover remover = new LambdaProductionRemover();
-		Set lambdaDerivers = remover.getCompleteLambdaSet(g);
+		Set lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(g);
 		if (lambdaDerivers.contains(g.getStartVariable())) {
 			JOptionPane.showMessageDialog(env,
 					"WARNING : The start variable derives lambda.\n"
@@ -141,8 +140,7 @@ public class CYKParseAction extends GrammarAction{
 	 * @param g Grammar in transformation
 	 */
 	protected void hypothesizeUnit(GrammarEnvironment env, Grammar g) {
-		UnitProductionRemover remover = new UnitProductionRemover();
-		if (remover.getUnitProductions(g).length > 0) {
+		if (UnitProductionRemover.getUnitProductions(g).length > 0) {
 			UnitPane up = new UnitPane(env, g);
 			UnitController controller=new UnitController(up, g);
 			controller.doAll();
@@ -157,8 +155,6 @@ public class CYKParseAction extends GrammarAction{
 	 * @param g Grammar in transformation
 	 */
 	protected void hypothesizeUseless(GrammarEnvironment env, Grammar g) {
-		UselessProductionRemover remover = new UselessProductionRemover();
-		
 		Grammar g2 = UselessProductionRemover
 				.getUselessProductionlessGrammar(g);
 		

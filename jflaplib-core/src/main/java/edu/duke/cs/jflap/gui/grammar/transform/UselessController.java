@@ -308,9 +308,6 @@ public class UselessController {
 	/** The grammar being converted. */
 	Grammar grammar;
 
-	/** The unit remover object. */
-	UselessProductionRemover remover = new UselessProductionRemover();
-
 	// Variables related to the VDG.
 
 	/** The set of variables that derive terminals. */

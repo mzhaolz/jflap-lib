@@ -48,7 +48,7 @@ public class UselessProductionRemover {
 	/**
 	 * Creates instance of <CODE>UselessProductionRemover</CODE>.
 	 */
-	public UselessProductionRemover() {
+	private UselessProductionRemover() {
 
 	}
 
@@ -592,5 +592,5 @@ public class UselessProductionRemover {
 	}
 
 	/** the start symbol. */
-	protected static String START_SYMBOL = "S";
+	protected static final String START_SYMBOL = "S";
 }
