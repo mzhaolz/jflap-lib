@@ -37,7 +37,6 @@ public class CNFConverter {
 	 */
 	public CNFConverter(Grammar grammar) {
 		this.grammar = grammar;
-		productionComparator = new ProductionComparator(grammar);
 		productionDirectory = new ProductionDirectory(grammar);
 	}
 
@@ -240,9 +239,6 @@ public class CNFConverter {
 
 	/** The number of variable things assigned already. */
 	private int numVariables = 0;
-
-	/** The comparator for productions. */
-	private ProductionComparator productionComparator;
 
 	/** The production directory. */
 	private ProductionDirectory productionDirectory;
