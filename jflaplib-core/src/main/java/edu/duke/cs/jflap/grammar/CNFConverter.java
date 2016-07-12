@@ -148,6 +148,18 @@ public class CNFConverter {
 		return pnew;
 	}
 
+	public static Grammar convert(Grammar grammar) {
+		Grammar g;
+		try {
+			g = grammar.getClass().newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		g.addProductions(convert(grammar.getProductions()));
+		g.setStartVariable(grammar.getStartVariable());
+		return g;
+	}
+
 	/**
 	 * Returns the array of productions needed to replace a production.
 	 * 

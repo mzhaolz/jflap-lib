@@ -61,7 +61,6 @@ public class CYKParser {
 	{
 		myProductions=grammar.getProductions();
 		START_VARIABLE=grammar.getStartVariable();
-	//	System.out.println("GRAMMAR = "+Arrays.asList(grammar.getProductions()));
 	}
 	
 	/**
