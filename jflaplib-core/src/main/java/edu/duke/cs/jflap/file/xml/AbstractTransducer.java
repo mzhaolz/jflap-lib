@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.file.xml;
 
 import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.*;
 
@@ -88,9 +89,9 @@ public abstract class AbstractTransducer implements Transducer {
    *            the node to get the map for
    * @return the map from children element names to their textual contents
    */
-  protected static Map elementsToText(Node node) {
+  protected static Map<String, String> elementsToText(Node node) {
     NodeList children = node.getChildNodes();
-    Map e2t = new java.util.HashMap();
+    Map<String, String> e2t = new HashMap<>();
     for (int i = 0; i < children.getLength(); i++) {
       Node c = children.item(i);
       if (c.getNodeType() != Node.ELEMENT_NODE) continue;
@@ -131,7 +132,7 @@ public abstract class AbstractTransducer implements Transducer {
    * @return a new element
    */
   protected static Element createElement(
-      Document document, String tagname, Map attributes, String text) {
+      Document document, String tagname, Map<String, String> attributes, String text) {
     // Create the new element.
     tagname = tagname.replaceAll("'", "");
     tagname = tagname.replaceAll("&", "");
@@ -144,10 +145,10 @@ public abstract class AbstractTransducer implements Transducer {
     Element element = document.createElement(tagname);
     // Set the attributes.
     if (attributes != null) {
-      Iterator it = attributes.keySet().iterator();
+      Iterator<String> it = attributes.keySet().iterator();
       while (it.hasNext()) {
-        String name = (String) it.next();
-        String value = (String) attributes.get(name);
+        String name = it.next();
+        String value = attributes.get(name);
         element.setAttribute(name, value);
       }
     }

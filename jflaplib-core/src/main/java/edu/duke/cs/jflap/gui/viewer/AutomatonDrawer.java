@@ -27,7 +27,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import edu.duke.cs.jflap.automata.Automaton;
@@ -38,7 +40,6 @@ import edu.duke.cs.jflap.automata.event.AutomataStateEvent;
 import edu.duke.cs.jflap.automata.event.AutomataStateListener;
 import edu.duke.cs.jflap.automata.event.AutomataTransitionEvent;
 import edu.duke.cs.jflap.automata.event.AutomataTransitionListener;
-import java.util.HashSet;
 
 /**
  * This is the very basic class of an Automaton drawer. It has facilities to
@@ -166,7 +167,7 @@ public class AutomatonDrawer {
    */
   public Rectangle getBounds(Transition transition) {
     if (!valid) refreshArrowMap();
-    CurvedArrow arrow = (CurvedArrow) transitionToArrowMap.get(transition);
+    CurvedArrow arrow = transitionToArrowMap.get(transition);
     Rectangle2D r = arrow.getBounds();
     return new Rectangle((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
   }
@@ -188,16 +189,16 @@ public class AutomatonDrawer {
     Rectangle rect = getBounds(states[0]);
     for (int i = 1; i < states.length; i++) rect.add(getBounds(states[i]));
 
-    ArrayList notes = getAutomaton().getNotes();
+    List<Note> notes = getAutomaton().getNotes();
     for (int k = 0; k < notes.size(); k++) {
-      Note curNote = ((Note) notes.get(k));
+      Note curNote = notes.get(k);
       Rectangle newBounds =
           new Rectangle(curNote.getAutoPoint(), new Dimension(curNote.getBounds().getSize()));
       rect.add(newBounds);
     }
-    Iterator it = arrowToTransitionMap.keySet().iterator();
+    Iterator<CurvedArrow> it = arrowToTransitionMap.keySet().iterator();
     while (it.hasNext()) {
-      CurvedArrow arrow = (CurvedArrow) it.next();
+      CurvedArrow arrow = it.next();
       Rectangle2D arrowBounds = arrow.getBounds();
       rect.add(arrowBounds);
     }
@@ -229,10 +230,10 @@ public class AutomatonDrawer {
    */
   protected void drawTransitions(Graphics g) {
     Graphics2D g2 = (Graphics2D) g;
-    Set arrows = arrowToTransitionMap.keySet();
-    Iterator it = arrows.iterator();
+    Set<CurvedArrow> arrows = arrowToTransitionMap.keySet();
+    Iterator<CurvedArrow> it = arrows.iterator();
     while (it.hasNext()) {
-      CurvedArrow arrow = (CurvedArrow) it.next();
+      CurvedArrow arrow = it.next();
       if (arrow.myTransition.isSelected) {
         arrow.drawHighlight(g2);
         arrow.drawControlPoint(g2);
@@ -450,11 +451,11 @@ public class AutomatonDrawer {
    */
   public Transition transitionAtPoint(Point point) {
     if (!valid) refreshArrowMap();
-    Set arrows = arrowToTransitionMap.keySet();
-    Iterator it = arrows.iterator();
+    Set<CurvedArrow> arrows = arrowToTransitionMap.keySet();
+    Iterator<CurvedArrow> it = arrows.iterator();
     while (it.hasNext()) {
-      CurvedArrow arrow = (CurvedArrow) it.next();
-      if (arrow.isNear(point, 2)) return (Transition) arrowToTransitionMap.get(arrow);
+      CurvedArrow arrow = it.next();
+      if (arrow.isNear(point, 2)) return arrowToTransitionMap.get(arrow);
     }
     return null;
   }
@@ -501,7 +502,7 @@ public class AutomatonDrawer {
    * @return the curved arrow object that is used to draw this transition
    */
   protected CurvedArrow arrowForTransition(Transition transition) {
-    return (CurvedArrow) transitionToArrowMap.get(transition);
+    return transitionToArrowMap.get(transition);
   }
 
   /**
@@ -582,21 +583,21 @@ public class AutomatonDrawer {
   /**
    * A map of self transitions mapped to their angle of appearance.
    */
-  public HashMap<Transition, Double> selfTransitionMap = new HashMap();
+  public HashMap<Transition, Double> selfTransitionMap = new HashMap<>();
 
   /**
    * Map of curvatures for transitions
    */
-  public HashMap<Transition, Float> curveTransitionMap = new HashMap();
+  public HashMap<Transition, Float> curveTransitionMap = new HashMap<>();
 
   /**
    * A map of curved arrows to transitions. This object is also used for
    * iteration over all arrows when drawing must be done
    */
-  public HashMap arrowToTransitionMap = new HashMap();
+  public HashMap<CurvedArrow, Transition> arrowToTransitionMap = new HashMap<>();
 
   /** The map from transitions to their respective arrows. */
-  public HashMap transitionToArrowMap = new HashMap();
+  public HashMap<Transition, CurvedArrow> transitionToArrowMap = new HashMap<>();
 
   /** The state drawer. */
   public StateDrawer statedrawer = new StateDrawer();

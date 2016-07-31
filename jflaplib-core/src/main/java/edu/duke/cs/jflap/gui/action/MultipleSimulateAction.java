@@ -85,6 +85,8 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  * @modified by Kyung Min (Jason) Lee
  */
 public class MultipleSimulateAction extends NoInteractionSimulateAction {
+	private static final long serialVersionUID = 23L;
+
   /**
    * Instantiates a new <CODE>MultipleSimulateAction</CODE>.
    *
@@ -140,7 +142,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
       AutomatonSimulator simulator,
       Configuration[] configs,
       Object initialInput,
-      List associatedConfigurations) {
+      List<Configuration> associatedConfigurations) {
     JFrame frame = Universe.frameForEnvironment(getEnvironment());
     // How many configurations have we had?
     int numberGenerated = 0;
@@ -158,7 +160,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
         while (numberGenerated >= warningGenerated) warningGenerated *= 2;
       }
       // Get the next batch of configurations.
-      ArrayList next = new ArrayList();
+      List<Configuration> next = new ArrayList<>();
       for (int i = 0; i < configs.length; i++) {
         lastConsidered = configs[i];
         if (configs[i].isAccept()) {
@@ -168,7 +170,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
           next.addAll(simulator.stepConfiguration(configs[i]));
         }
       }
-      configs = (Configuration[]) next.toArray(new Configuration[0]);
+      configs = next.toArray(new Configuration[0]);
     }
     associatedConfigurations.add(lastConsidered);
     return 1;
@@ -206,9 +208,9 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
       tcmodel.removeColumn(tcmodel.getColumn(inputCount));
     }
     if (multiple) {
-      ArrayList autos = this.getEnvironment().myObjects;
+      List<Object> autos = this.getEnvironment().myObjects;
       //System.out.println("In initialize: " + autos.size());
-      ArrayList strings = this.getEnvironment().myTestStrings;
+      List<String> strings = this.getEnvironment().myTestStrings;
       int offset = strings.size();
       int row = 0;
       for (int m = 0; m < autos.size(); m++) {

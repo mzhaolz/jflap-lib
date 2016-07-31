@@ -22,6 +22,7 @@ import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -39,6 +40,7 @@ import edu.duke.cs.jflap.automata.Configuration;
  * @author Thomas Finley
  */
 public class NoInteractionSimulateAction extends SimulateAction {
+	private static final long serialVersionUID = 21L;
 
   public NoInteractionSimulateAction(Grammar gram, Environment environment) {
     super(gram, environment);
@@ -141,7 +143,7 @@ public class NoInteractionSimulateAction extends SimulateAction {
         while (numberGenerated >= warningGenerated) warningGenerated *= 2;
       }
       // Get the next batch of configurations.
-      ArrayList next = new ArrayList();
+      List<Configuration> next = new ArrayList<>();
       for (int i = 0; i < configs.length; i++) {
         if (configs[i].isAccept()) {
           numberAccepted++;
@@ -150,7 +152,7 @@ public class NoInteractionSimulateAction extends SimulateAction {
           next.addAll(simulator.stepConfiguration(configs[i]));
         }
       }
-      configs = (Configuration[]) next.toArray(new Configuration[0]);
+      configs = next.toArray(new Configuration[0]);
     }
     if (numberAccepted == 0) {
       JOptionPane.showMessageDialog(frame, "The input was rejected.");

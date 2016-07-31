@@ -28,6 +28,7 @@ import javax.swing.event.TableModelEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 
@@ -40,6 +41,7 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  * @author Thomas Finley
  */
 public class InputTableModel extends GrowableTableModel {
+	private static final long serialVersionUID = 69L;
   /**
    * This instantiates an <CODE>InputTableModel</CODE>.
    *
@@ -192,8 +194,7 @@ public class InputTableModel extends GrowableTableModel {
    *         of inputs for this automaton
    */
   public static InputTableModel getModel(Automaton automaton, boolean multipleFile) {
-    InputTableModel model =
-        (InputTableModel) INPUTS_TO_MODELS.get(new Integer(inputsForMachine(automaton)));
+    InputTableModel model = INPUTS_TO_MODELS.get(new Integer(inputsForMachine(automaton)));
     if (model != null && (model.isMultiple == multipleFile)) {
       model = new InputTableModel(model);
       // Clear out the results column.
@@ -211,7 +212,7 @@ public class InputTableModel extends GrowableTableModel {
   }
 
   public static InputTableModel getModel(Grammar gram, boolean multipleFile) {
-    InputTableModel model = (InputTableModel) INPUTS_TO_MODELS.get(new Integer(1));
+    InputTableModel model = INPUTS_TO_MODELS.get(new Integer(1));
     if (model != null) {
       model = new InputTableModel(model);
       // Clear out the results column.
@@ -242,7 +243,7 @@ public class InputTableModel extends GrowableTableModel {
    *            wish to not have a configuration associated with a row
    */
   public void setResult(
-      int row, String result, Configuration config, ArrayList comparison, int index) {
+      int row, String result, Configuration config, List<String> comparison, int index) {
     int halfway = getInputCount();
     if (isMultiple) halfway++;
     int outNum = 1;
@@ -255,9 +256,9 @@ public class InputTableModel extends GrowableTableModel {
         for (int i = 0; i < tapes.length; i++) {
           String put = tapes[i].getOutput();
           if (comparison != null) {
-            String expected = ((String) comparison.get(index + i));
+            String expected = comparison.get(index + i);
             if (!expected.equals("~") && !expected.equals(put)) put = put + "(" + expected + ")";
-            if (((String) comparison.get(index + outNum)).toLowerCase().startsWith("r")) {
+            if (comparison.get(index + outNum).toLowerCase().startsWith("r")) {
               if (!result.endsWith(")")) result = result + "(Reject)";
               if (!put.endsWith(")")) put = put + "(" + expected + ")";
             }
@@ -268,8 +269,8 @@ public class InputTableModel extends GrowableTableModel {
         for (int i = 0; i < halfway; i++) {
           String put = "";
           if (comparison != null) {
-            String expected = ((String) comparison.get(index + i));
-            if (!((String) comparison.get(index + outNum)).toLowerCase().startsWith("r")) {
+            String expected = comparison.get(index + i);
+            if (!comparison.get(index + outNum).toLowerCase().startsWith("r")) {
               if (!result.endsWith(")")) result = result + "(Accept)";
               put = put + "(" + expected + ")";
             }
@@ -284,9 +285,9 @@ public class InputTableModel extends GrowableTableModel {
         if (result.equals("Reject")) accept = false;
       } else accept = config.isAccept();
       if (comparison != null && (index + outNum) < comparison.size()) {
-        if (((String) comparison.get(index + outNum)).toLowerCase().startsWith("r") && accept) {
+        if (comparison.get(index + outNum).toLowerCase().startsWith("r") && accept) {
           if (!result.endsWith(")")) result = result + "(Reject)";
-        } else if (!((String) comparison.get(index + outNum)).toLowerCase().startsWith("r")
+        } else if (!comparison.get(index + outNum).toLowerCase().startsWith("r")
             && !accept) {
           if (!result.endsWith(")")) result = result + "(Accept)";
         }
@@ -322,7 +323,7 @@ public class InputTableModel extends GrowableTableModel {
    *         if there is no associated accepting configuration
    */
   public Configuration getAssociatedConfigurationForRow(int row) {
-    return (Configuration) rowToAssociatedConfiguration.get(new Integer(row));
+    return rowToAssociatedConfiguration.get(new Integer(row));
   }
 
   /** The static table model listener for caching inputs. */
@@ -343,11 +344,11 @@ public class InputTableModel extends GrowableTableModel {
   /**
    * The map of number of inputs (stored as integers) to input table models.
    */
-  protected final static Map INPUTS_TO_MODELS = new HashMap();
+  protected final static Map<Integer, InputTableModel> INPUTS_TO_MODELS = new HashMap<>();
 
   /**
    * The map of row to the associated configuration. If this row does not have
    * an associated configuration, this map should not hold an entry.
    */
-  private final Map rowToAssociatedConfiguration = new HashMap();
+  private final Map<Integer, Configuration> rowToAssociatedConfiguration = new HashMap<>();
 }

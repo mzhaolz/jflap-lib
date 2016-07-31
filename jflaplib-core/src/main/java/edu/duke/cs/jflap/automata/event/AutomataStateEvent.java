@@ -34,6 +34,8 @@ import edu.duke.cs.jflap.automata.State;
  * @author Thomas Finley
  */
 public class AutomataStateEvent extends EventObject {
+	private static final long serialVersionUID = 10L;
+
   /**
    * Instantiates a new <CODE>AutomataStateEvent</CODE>.
    *

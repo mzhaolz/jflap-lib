@@ -32,6 +32,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -41,6 +42,7 @@ import javax.swing.*;
  * @author Thomas Finley
  */
 public class AutomatonPane extends JPanel implements Scrollable {
+	private static final long serialVersionUID = 3L;
   private final Logger logger = LoggerFactory.getLogger(AutomatonPane.class);
   /**
    * Instantiates an AutomatonPane.
@@ -142,9 +144,9 @@ public class AutomatonPane extends JPanel implements Scrollable {
     //g2.translate(-transform.getTranslateX(), -transform.getTranslateY());
     //g2.scale(1.0/transform.getScaleX(), 1.0/transform.getScaleY());
     //reposition the notes on scroll...since I can't figure out where it is scrolling, I do it here.
-    ArrayList notes = this.getDrawer().getAutomaton().getNotes();
+    List<Note> notes = this.getDrawer().getAutomaton().getNotes();
     for (int k = 0; k < notes.size(); k++) {
-      Note curNote = (Note) notes.get(k);
+      Note curNote = notes.get(k);
       curNote.updateView();
     }
 
@@ -185,9 +187,9 @@ public class AutomatonPane extends JPanel implements Scrollable {
     drawer.invalidate();
     drawer.drawAutomaton(g);
 
-    ArrayList notes = this.getDrawer().getAutomaton().getNotes();
+    List<Note> notes = this.getDrawer().getAutomaton().getNotes();
     for (int k = 0; k < notes.size(); k++) {
-      Note curNote = (Note) notes.get(k);
+      Note curNote = notes.get(k);
       curNote.updateView();
     }
 

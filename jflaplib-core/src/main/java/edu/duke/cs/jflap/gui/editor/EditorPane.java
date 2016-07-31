@@ -22,6 +22,7 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -38,6 +39,8 @@ import edu.duke.cs.jflap.automata.Note;
  * @author Thomas Finley
  */
 public class EditorPane extends JComponent {
+	private static final long serialVersionUID = 5L;
+
   /**
    * Instantiates a new editor pane for the given automaton.
    *
@@ -111,9 +114,9 @@ public class EditorPane extends JComponent {
     this.add(toolbar, BorderLayout.NORTH);
     this.add(new AutomatonSizeSlider(pane, drawer), BorderLayout.SOUTH);
 
-    ArrayList notes = drawer.getAutomaton().getNotes();
+    List<Note> notes = drawer.getAutomaton().getNotes();
     for (int k = 0; k < notes.size(); k++) {
-      ((Note) notes.get(k)).initializeForView(pane);
+      notes.get(k).initializeForView(pane);
     }
   }
 

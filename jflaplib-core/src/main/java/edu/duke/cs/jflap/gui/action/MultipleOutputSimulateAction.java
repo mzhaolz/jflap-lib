@@ -24,6 +24,7 @@ import javax.swing.table.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
@@ -39,6 +40,8 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  * @author Thomas Finley
  */
 public class MultipleOutputSimulateAction extends MultipleSimulateAction {
+	private static final long serialVersionUID = 63L;
+
   /**
    * Instantiates a new <CODE>MultipleOuptutSimulateAction</CODE>.
    *
@@ -79,9 +82,8 @@ public class MultipleOutputSimulateAction extends MultipleSimulateAction {
     table.setShowGrid(true);
     table.setGridColor(Color.lightGray);
     if (multiple) {
-      ArrayList autos = this.getEnvironment().myObjects;
-      ArrayList strings = this.getEnvironment().myTestStrings;
-      ArrayList outs = this.getEnvironment().myTransducerStrings;
+      List<Object>autos = this.getEnvironment().myObjects;
+      List<String> strings = this.getEnvironment().myTestStrings;
       int offset = strings.size();
       int tapeNum = 1;
       if (autos.get(0) instanceof TuringMachine) {
@@ -93,7 +95,7 @@ public class MultipleOutputSimulateAction extends MultipleSimulateAction {
         for (int k = 0; k < strings.size(); k++) {
           row = k / tapeNum + offset * m;
           model.setValueAt(((Automaton) autos.get(m)).getFileName(), row, 0);
-          model.setValueAt((String) strings.get(k), row, k % tapeNum + 1);
+          model.setValueAt(strings.get(k), row, k % tapeNum + 1);
         }
       }
     }

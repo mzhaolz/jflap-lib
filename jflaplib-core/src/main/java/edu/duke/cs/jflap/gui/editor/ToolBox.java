@@ -38,5 +38,5 @@ public interface ToolBox {
    * @param drawer
    *            the automaton drawer for the view
    */
-  public List tools(AutomatonPane view, AutomatonDrawer drawer);
+  public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer);
 }

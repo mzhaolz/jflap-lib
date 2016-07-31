@@ -19,8 +19,12 @@ package edu.duke.cs.jflap.file.xml;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -77,11 +81,12 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    *             in the case of non-numeric, negative, or duplicate IDs
    * @see #readTransitions
    */
-  protected Map readStates(Node node, Automaton automaton, Set locatedStates, Document document) {
-    Map i2s = new java.util.HashMap();
+  protected Map<Integer, State> readStates(
+			Node node, Automaton automaton, Set<State> locatedStates, Document document) {
+    Map<Integer, State> i2s = new HashMap<>();
     if (node == null) return i2s;
     NodeList allNodes = node.getChildNodes();
-    ArrayList stateNodes = new ArrayList();
+    ArrayList<Node> stateNodes = new ArrayList<>();
     for (int k = 0; k < allNodes.getLength(); k++) {
       if (allNodes.item(k).getNodeName().equals(STATE_NAME)) {
         stateNodes.add(allNodes.item(k));
@@ -89,15 +94,16 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
     }
     // Map state IDs to states, in an attempt to add in numeric
     // things first. A specialized Comparator is helpful here.
-    Map i2sn =
-        new java.util.TreeMap(
-            new Comparator() {
-              public int compare(Object o1, Object o2) {
-                if (o1 instanceof Integer && !(o2 instanceof Integer)) return -1;
-                if (o1 instanceof Integer)
-                  return ((Integer) o1).intValue() - ((Integer) o2).intValue();
-                if (o2 instanceof Integer) return 1;
-                return ((Comparable) o1).compareTo(o2);
+    Map<Integer, Node> i2sn =
+        new TreeMap<>(
+            new Comparator<Integer>() {
+              public int compare(Integer o1, Integer o2) {
+								return o1.intValue() - o2.intValue();
+                //if (o1 instanceof Integer && !(o2 instanceof Integer)) return -1;
+                //if (o1 instanceof Integer)
+                //  return ((Integer) o1).intValue() - ((Integer) o2).intValue();
+                //if (o2 instanceof Integer) return 1;
+                //return ((Comparable) o1).compareTo(o2);
               }
             });
     createState(stateNodes, i2sn, automaton, locatedStates, i2s, false, document);
@@ -107,16 +113,16 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
 
   //Creates a state node
   protected void createState(
-      ArrayList stateNodes,
-      Map i2sn,
+      List<Node> stateNodes,
+      Map<Integer, Node> i2sn,
       Automaton automaton,
-      Set locatedStates,
-      Map i2s,
+      Set<State> locatedStates,
+      Map<Integer, State> i2s,
       boolean isBlock,
       Document document) {
     // Create the map of ids to state nodes.
     for (int i = 0; i < stateNodes.size(); i++) {
-      Node stateNode = (Node) stateNodes.get(i);
+      Node stateNode = stateNodes.get(i);
       if (stateNode.getNodeType() != Node.ELEMENT_NODE) continue;
       // Extract the ID attribute.
       String idString = ((Element) stateNode).getAttribute(STATE_ID_NAME);
@@ -128,12 +134,12 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
         throw new DataException("The state ID " + id + " appears twice!");
     }
     // Go through the map, and turn the state nodes into states.
-    Iterator it = i2sn.keySet().iterator();
+    Iterator<Integer> it = i2sn.keySet().iterator();
     while (it.hasNext()) {
-      Integer id = (Integer) it.next();
+      Integer id = it.next();
       Element stateNode = (Element) i2sn.get(id);
       // Get the fields of this state.
-      Map e2t = elementsToText(stateNode);
+      Map<String, String> e2t = elementsToText(stateNode);
       // Create the state.
       java.awt.Point p = new java.awt.Point();
       boolean hasLocation = true;
@@ -185,13 +191,13 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
       }
       if (hasLocation && locatedStates != null) locatedStates.add(state);
       i2s.put(id, state);
-      String name = ((Element) stateNode).getAttribute(STATE_NAME_NAME);
+      String name = stateNode.getAttribute(STATE_NAME_NAME);
       if (name.equals("")) state.setName("q" + id.intValue());
       else state.setName(name);
 
       // Add various attributes.
-      if (e2t.containsKey(STATE_NAME_NAME)) state.setName((String) e2t.get(STATE_NAME_NAME));
-      if (e2t.containsKey(STATE_LABEL_NAME)) state.setLabel((String) e2t.get(STATE_LABEL_NAME));
+      if (e2t.containsKey(STATE_NAME_NAME)) state.setName(e2t.get(STATE_NAME_NAME));
+      if (e2t.containsKey(STATE_LABEL_NAME)) state.setLabel(e2t.get(STATE_LABEL_NAME));
       if (e2t.containsKey(STATE_FINAL_NAME)) automaton.addFinalState(state);
       if (e2t.containsKey(STATE_INITIAL_NAME)) automaton.setInitialState(state);
       /*
@@ -199,33 +205,31 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
        */
       if (automaton instanceof MooreMachine && e2t.containsKey(MooreTransducer.STATE_OUTPUT_NAME))
         ((MooreMachine) automaton)
-            .setOutput(state, (String) e2t.get(MooreTransducer.STATE_OUTPUT_NAME));
+            .setOutput(state, e2t.get(MooreTransducer.STATE_OUTPUT_NAME));
     }
   }
   //Add the blocks
   protected void addBlocks(
-      Node node, Automaton automaton, Set locatedStates, Map i2s, Document document) {
+      Node node, Automaton automaton, Set<State> locatedStates, Map<Integer, State> i2s, Document document) {
+		//TODO: convert this to Preconditions (Guava)
     assert (automaton
         instanceof
         TuringMachine); //this code should really be in TMTransducer, but I see why it's here
     if (node == null) return;
     if (!node.hasChildNodes()) return;
     NodeList allNodes = node.getChildNodes();
-    ArrayList blockNodes = new ArrayList();
+    List<Node> blockNodes = new ArrayList<>();
     for (int k = 0; k < allNodes.getLength(); k++) {
       if (allNodes.item(k).getNodeName().equals(BLOCK_NAME)) {
         blockNodes.add(allNodes.item(k));
       }
     }
-    Map i2sn =
-        new java.util.TreeMap(
-            new Comparator() {
-              public int compare(Object o1, Object o2) {
-                if (o1 instanceof Integer && !(o2 instanceof Integer)) return -1;
-                if (o1 instanceof Integer)
-                  return ((Integer) o1).intValue() - ((Integer) o2).intValue();
-                if (o2 instanceof Integer) return 1;
-                return ((Comparable) o1).compareTo(o2);
+    Map<Integer, Node> i2sn =
+        new TreeMap<Integer, Node>(
+            new Comparator<Integer>() {
+							@Override
+              public int compare(Integer o1, Integer o2) {
+								return o1.intValue() - o2.intValue();
               }
             });
     createState(blockNodes, i2sn, automaton, locatedStates, i2s, true, document);
@@ -248,7 +252,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    * @see #readTransitions
    */
   protected abstract Transition createTransition(
-      State from, State to, Node node, Map e2t, boolean isBlock);
+      State from, State to, Node node, Map<String, String> e2t, boolean isBlock);
 
   /**
    * Reads the transitions from the document and adds them to the automaton.
@@ -266,11 +270,11 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    * @see #createTransition
    * @see #readStates
    */
-  protected void readTransitions(Node parent, Automaton automaton, Map id2state) {
-    Map i2s = new java.util.HashMap();
+  protected void readTransitions(Node parent, Automaton automaton, Map<Integer, State> id2state) {
+    Map<Integer, State> i2s = new HashMap<>();
     if (parent == null || automaton == null) return;
     NodeList allNodes = parent.getChildNodes();
-    ArrayList tNodes = new ArrayList();
+    List<Node> tNodes = new ArrayList<>();
     boolean bool = false;
     for (int k = 0; k < allNodes.getLength(); k++) {
       if (allNodes.item(k).getNodeName().equals(TRANSITION_NAME)) {
@@ -280,22 +284,22 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
 
     // Create the transitions.
     for (int i = 0; i < tNodes.size(); i++) {
-      Node tNode = (Node) tNodes.get(i);
+      Node tNode = tNodes.get(i);
       // Get the subelements of this transition.
-      Map e2t = elementsToText(tNode);
+      Map<String, String> e2t = elementsToText(tNode);
       // Get the from state.
       String isBlock = ((Element) tNode).getAttribute("block");
       if (isBlock.equals("true")) {
         bool = true; //We have a block transition.
       }
-      String fromName = (String) e2t.get(TRANSITION_FROM_NAME);
+      String fromName = e2t.get(TRANSITION_FROM_NAME);
       if (fromName == null) throw new DataException("A transition has no from state!");
       int id = parseID(fromName).intValue();
       State from = automaton.getStateWithID(id);
       if (from == null)
         throw new DataException("A transition is defined from " + "non-existent state " + id + "!");
       // Get the to state.
-      String toName = (String) e2t.get(TRANSITION_TO_NAME);
+      String toName = e2t.get(TRANSITION_TO_NAME);
       if (toName == null) throw new DataException("A transition has no to state!");
       id = parseID(toName).intValue();
       State to = automaton.getStateWithID(id);
@@ -307,8 +311,8 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
       bool = false;
 
       //deal with the shapiness of the transition, if the file specifies it. //add controlX and controlY
-      String controlX = (String) e2t.get(TRANSITION_CONTROL_X);
-      String controlY = (String) e2t.get(TRANSITION_CONTROL_Y);
+      String controlX = e2t.get(TRANSITION_CONTROL_X);
+      String controlY = e2t.get(TRANSITION_CONTROL_Y);
       if (controlX != null && controlY != null) {
         Point p = new Point(Integer.parseInt(controlX), Integer.parseInt(controlY));
         transition.setControl(p);
@@ -349,7 +353,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    *            representation and should be kept as "isonodes" in the layout
    *            algorithm
    */
-  private void performLayout(Automaton automaton, Set locStates) {
+  private void performLayout(Automaton automaton, Set<State> locStates) {
     // Apply the graph layout algorithm to those states that
     // appeared without the <x> and <y> tags.
     if (locStates.size() == automaton.getStates().length) return;
@@ -384,7 +388,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
   }
 
   public java.io.Serializable readAutomaton(Node parent, Document document) {
-    Set locatedStates = new java.util.HashSet();
+    Set<State> locatedStates = new HashSet<>();
     Automaton root = createEmptyAutomaton(document);
     if (parent == null) return root;
     readBlocks(parent, root, locatedStates, document);
@@ -401,17 +405,17 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
   private void readnotes(Node parent, Automaton root, Document document) {
 
     NodeList allNodes = parent.getChildNodes();
-    ArrayList noteNodes = new ArrayList();
+    List<Node> noteNodes = new ArrayList<>();
     for (int k = 0; k < allNodes.getLength(); k++) {
       if (allNodes.item(k).getNodeName().equals(NOTE_NAME)) {
         noteNodes.add(allNodes.item(k));
       }
     }
     for (int i = 0; i < noteNodes.size(); i++) {
-      Node noteNode = (Node) noteNodes.get(i);
+      Node noteNode = noteNodes.get(i);
       if (noteNode.getNodeType() != Node.ELEMENT_NODE) continue;
 
-      Map e2t = elementsToText(noteNode);
+      Map<String, String> e2t = elementsToText(noteNode);
 
       java.awt.Point p = new java.awt.Point();
       boolean hasLocation = true;
@@ -456,8 +460,8 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    * @param document
    * @param a *
    */
-  private void readBlocks(Node parent, Automaton root, Set states, Document document) {
-    Map i2b = new java.util.HashMap();
+  private void readBlocks(Node parent, Automaton root, Set<State> states, Document document) {
+    Map<Integer, State> i2b = new HashMap<>();
     addBlocks(parent, root, states, i2b, document);
   }
 
@@ -638,11 +642,11 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
     //MERLIN MERLIN MERLIN MERLIN MERLIN//
     if (auto
         instanceof TuringMachine) { //there should not be building blocks in non-Turing Machines
-      Map references = ((TuringMachine) auto).getBlockMap();
-      Iterator refer = references.keySet().iterator();
+      Map<String, TuringMachine> references = ((TuringMachine) auto).getBlockMap();
+      Iterator<String> refer = references.keySet().iterator();
       if (refer.hasNext()) se.appendChild(createComment(doc, COMMENT_AUTOMATA));
       while (refer.hasNext()) {
-        String name = (String) refer.next();
+        String name = refer.next();
         if (!automatonMap.containsKey((Automaton) references.get(name))) {
           se.appendChild(createAutomatonElement(doc, (Automaton) references.get(name), name));
           automatonMap.put(name, auto);
@@ -651,9 +655,9 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
     }
 
     //Add the sticky notes at the very end
-    ArrayList notes = auto.getNotes();
+    List<Note> notes = auto.getNotes();
     for (int k = 0; k < notes.size(); k++) {
-      se.appendChild(createNoteElement(doc, (Note) notes.get(k)));
+      se.appendChild(createNoteElement(doc, notes.get(k)));
     }
     return se;
   }
@@ -670,7 +674,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
     return ne;
   }
 
-  private Map automatonMap = new java.util.HashMap();
+  private Map<String, Automaton> automatonMap = new HashMap<>();
 
   private Automaton originalAutomaton = null;
 
