@@ -1,22 +1,18 @@
 /*
- *  JFLAP - Formal Languages and Automata Package
- * 
- * 
- *  Susan H. Rodger
- *  Computer Science Department
- *  Duke University
- *  August 27, 2009
+*  JFLAP - Formal Languages and Automata Package
+*
+*
+*  Susan H. Rodger
+*  Computer Science Department
+*  Duke University
+*  August 27, 2009
 
- *  Copyright (c) 2002-2009
- *  All rights reserved.
+*  Copyright (c) 2002-2009
+*  All rights reserved.
 
- *  JFLAP is open source software. Please see the LICENSE for terms.
- *
- */
-
-
-
-
+*  JFLAP is open source software. Please see the LICENSE for terms.
+*
+*/
 
 package edu.duke.cs.jflap.gui.environment.tag;
 
@@ -29,12 +25,9 @@ package edu.duke.cs.jflap.gui.environment.tag;
  * to certain values that absolutely everybody and his mother had to be made
  * aware of. A tag object may simply be something that implements <CODE>Tag</CODE>
  * only to indicate that it has no tag.
- * 
+ *
  * @see edu.duke.cs.jflap.gui.environment.Environment#add
- * 
+ *
  * @author Thomas Finley
  */
-
-public interface Tag {
-
-}
+public interface Tag {}
