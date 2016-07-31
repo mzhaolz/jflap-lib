@@ -30,7 +30,7 @@ import java.awt.Graphics2D;
  * @author Thomas Finley
  */
 public class EditCanvas extends AutomatonPane {
-	private static final long serialVersionUID = 8L;
+  private static final long serialVersionUID = 8L;
 
   /**
    * Instantiates a new <CODE>EditCanvas</CODE>.

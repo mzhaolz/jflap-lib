@@ -45,7 +45,7 @@ import javax.swing.filechooser.FileFilter;
  * @author Thomas Finley
  */
 public class EnvironmentFrame extends JFrame {
-	private static final long serialVersionUID = 15L;
+  private static final long serialVersionUID = 15L;
   /**
    * Instantiates a new <CODE>EnvironmentFrame</CODE>. This does not fill
    * the environment with anything.

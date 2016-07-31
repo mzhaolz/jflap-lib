@@ -39,7 +39,7 @@ import edu.duke.cs.jflap.automata.Note;
  * @author Thomas Finley
  */
 public class EditorPane extends JComponent {
-	private static final long serialVersionUID = 5L;
+  private static final long serialVersionUID = 5L;
 
   /**
    * Instantiates a new editor pane for the given automaton.

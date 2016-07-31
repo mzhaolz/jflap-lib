@@ -34,7 +34,7 @@ import javax.swing.JTextArea;
  * A class that represents notes on the JFLAP canvas.
  */
 public class Note extends JTextArea {
-	private static final long serialVersionUID = 2L;
+  private static final long serialVersionUID = 2L;
   private Point myAutoPoint = null;
   public boolean moving = false;
   protected Point initialPointState;

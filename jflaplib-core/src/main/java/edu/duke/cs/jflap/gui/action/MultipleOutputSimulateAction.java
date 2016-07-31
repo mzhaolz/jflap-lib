@@ -40,7 +40,7 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  * @author Thomas Finley
  */
 public class MultipleOutputSimulateAction extends MultipleSimulateAction {
-	private static final long serialVersionUID = 63L;
+  private static final long serialVersionUID = 63L;
 
   /**
    * Instantiates a new <CODE>MultipleOuptutSimulateAction</CODE>.
@@ -82,7 +82,7 @@ public class MultipleOutputSimulateAction extends MultipleSimulateAction {
     table.setShowGrid(true);
     table.setGridColor(Color.lightGray);
     if (multiple) {
-      List<Object>autos = this.getEnvironment().myObjects;
+      List<Object> autos = this.getEnvironment().myObjects;
       List<String> strings = this.getEnvironment().myTestStrings;
       int offset = strings.size();
       int tapeNum = 1;

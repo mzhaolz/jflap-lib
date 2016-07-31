@@ -85,7 +85,7 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  * @modified by Kyung Min (Jason) Lee
  */
 public class MultipleSimulateAction extends NoInteractionSimulateAction {
-	private static final long serialVersionUID = 23L;
+  private static final long serialVersionUID = 23L;
 
   /**
    * Instantiates a new <CODE>MultipleSimulateAction</CODE>.

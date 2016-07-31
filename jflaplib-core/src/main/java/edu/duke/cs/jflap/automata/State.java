@@ -32,7 +32,7 @@ import edu.duke.cs.jflap.automata.event.AutomataStateEvent;
  * @version 1.0
  */
 public class State implements Serializable {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   /**
    * Instantiates a new state.
    *

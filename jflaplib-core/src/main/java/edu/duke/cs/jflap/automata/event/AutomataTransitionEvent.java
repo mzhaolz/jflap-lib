@@ -33,7 +33,7 @@ import edu.duke.cs.jflap.automata.Transition;
  * @author Thomas Finley
  */
 public class AutomataTransitionEvent extends EventObject {
-	private static final long serialVersionUID = 11L;
+  private static final long serialVersionUID = 11L;
 
   /**
    * Instantiates a new <CODE>AutomataStateEvent</CODE>.

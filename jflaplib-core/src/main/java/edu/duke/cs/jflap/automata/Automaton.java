@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Automaton implements Serializable, Cloneable {
   private final transient Logger logger = LoggerFactory.getLogger(Automaton.class);
-	private static final long serialVersionUID = 0L;
+  private static final long serialVersionUID = 0L;
 
   /**
    * Creates an instance of <CODE>Automaton</CODE>. The created instance
@@ -274,8 +274,7 @@ public class Automaton implements Serializable, Cloneable {
    * @return an array containing all transitions for this automaton
    */
   public Transition[] getTransitions() {
-    if (cachedTransitions == null)
-      cachedTransitions = transitions.toArray(new Transition[0]);
+    if (cachedTransitions == null) cachedTransitions = transitions.toArray(new Transition[0]);
     return cachedTransitions;
   }
 
@@ -477,12 +476,12 @@ public class Automaton implements Serializable, Cloneable {
       Arrays.sort(
           cachedStates,
           new Comparator<State>() {
-						@Override
+            @Override
             public int compare(State o1, State o2) {
               return o1.getID() - o2.getID();
             }
 
-						@Override
+            @Override
             public boolean equals(Object o) {
               return this == o;
             }

@@ -305,11 +305,11 @@ public class TuringMachine extends Automaton {
 
   public Map<String, TuringMachine> getBlockMap() {
     Map<String, TuringMachine> ret = new HashMap<String, TuringMachine>();
-		//that's right, EVERY state in TM has an inner Auto, even if that inner auto might be empty.
+    //that's right, EVERY state in TM has an inner Auto, even if that inner auto might be empty.
     for (State s : states) {
-			TMState state = (TMState) s;
-    	ret.put(state.getInternalName(), state.getInnerTM());
-		}
+      TMState state = (TMState) s;
+      ret.put(state.getInternalName(), state.getInnerTM());
+    }
 
     return ret;
   }

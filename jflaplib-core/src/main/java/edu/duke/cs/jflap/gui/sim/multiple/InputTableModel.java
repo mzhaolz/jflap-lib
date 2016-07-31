@@ -41,7 +41,7 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  * @author Thomas Finley
  */
 public class InputTableModel extends GrowableTableModel {
-	private static final long serialVersionUID = 69L;
+  private static final long serialVersionUID = 69L;
   /**
    * This instantiates an <CODE>InputTableModel</CODE>.
    *
@@ -287,8 +287,7 @@ public class InputTableModel extends GrowableTableModel {
       if (comparison != null && (index + outNum) < comparison.size()) {
         if (comparison.get(index + outNum).toLowerCase().startsWith("r") && accept) {
           if (!result.endsWith(")")) result = result + "(Reject)";
-        } else if (!comparison.get(index + outNum).toLowerCase().startsWith("r")
-            && !accept) {
+        } else if (!comparison.get(index + outNum).toLowerCase().startsWith("r") && !accept) {
           if (!result.endsWith(")")) result = result + "(Accept)";
         }
       } else if (comparison != null && config == null) {

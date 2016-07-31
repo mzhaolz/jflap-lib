@@ -34,7 +34,7 @@ import edu.duke.cs.jflap.automata.Note;
  * @author Henry Qin and Jonathan Su
  */
 public class AutomatonSizeSlider extends JSlider {
-	private static final long serialVersionUID = 33L;
+  private static final long serialVersionUID = 33L;
   //Set up animation parameters.
   static final int AUTOMATON_SIZE_MIN = 1;
   static final int AUTOMATON_SIZE_MAX = 800;
