@@ -25,6 +25,7 @@ package edu.duke.cs.jflap.grammar;
  * @author Thomas Finley
  */
 public class UnboundGrammar extends Grammar {
+	private static final long serialVersionUID = 1600L;
   /**
    * Creates a new grammar.
    */

@@ -20,6 +20,7 @@ import edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
@@ -97,7 +98,7 @@ public class UnitProductionRemover {
    * @return all unit productions in <CODE>grammar</CODE>.
    */
   public static Production[] getUnitProductions(Grammar grammar) {
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     ProductionChecker pc = new ProductionChecker();
 
     Production[] productions = grammar.getProductions();
@@ -106,7 +107,7 @@ public class UnitProductionRemover {
         list.add(productions[k]);
       }
     }
-    return (Production[]) list.toArray(new Production[0]);
+    return list.toArray(new Production[0]);
   }
 
   /**
@@ -117,7 +118,7 @@ public class UnitProductionRemover {
    * @return all non-unit productions in <CODE>grammar</CODE>.
    */
   public static Production[] getNonUnitProductions(Grammar grammar) {
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     ProductionChecker pc = new ProductionChecker();
 
     Production[] productions = grammar.getProductions();
@@ -126,7 +127,7 @@ public class UnitProductionRemover {
         list.add(productions[k]);
       }
     }
-    return (Production[]) list.toArray(new Production[0]);
+    return list.toArray(new Production[0]);
   }
 
   /**
@@ -252,7 +253,7 @@ public class UnitProductionRemover {
    */
   public static String[] getDependencies(
       String variable, Grammar grammar, VariableDependencyGraph graph) {
-    ArrayList list = new ArrayList();
+    List<String> list = new ArrayList<>();
     String[] variables = grammar.getVariables();
     for (int k = 0; k < variables.length; k++) {
       if (!variable.equals(variables[k])) {
@@ -261,7 +262,7 @@ public class UnitProductionRemover {
         }
       }
     }
-    return (String[]) list.toArray(new String[0]);
+    return list.toArray(new String[0]);
   }
 
   /**
@@ -279,11 +280,11 @@ public class UnitProductionRemover {
    *         in <CODE>oldProductions</CODE> as their right hand sides.
    */
   public static Production[] getNewProductions(String variable, Production[] oldProductions) {
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     for (int k = 0; k < oldProductions.length; k++) {
       list.add(new Production(variable, oldProductions[k].getRHS()));
     }
-    return (Production[]) list.toArray(new Production[0]);
+    return list.toArray(new Production[0]);
   }
 
   /**
