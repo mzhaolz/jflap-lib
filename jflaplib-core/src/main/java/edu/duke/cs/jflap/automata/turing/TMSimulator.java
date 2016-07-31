@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
  * machine.
  *
  * @author Thomas Finley
+ *
  */
 public class TMSimulator extends AutomatonSimulator {
   /**
@@ -104,7 +105,7 @@ public class TMSimulator extends AutomatonSimulator {
    *            the input strings
    */
   public Configuration[] getInitialConfigurations(String[] inputs) {
-    inputStrings = (String[]) inputs.clone();
+    inputStrings = inputs.clone();
     Tape[] tapes = new Tape[inputs.length];
     for (int i = 0; i < tapes.length; i++) tapes[i] = new Tape(inputs[i]);
     Configuration[] configs = new Configuration[1];
@@ -193,7 +194,7 @@ public class TMSimulator extends AutomatonSimulator {
    *
    * @return List containing the single configuration, or null if there are no valid transitions.
    */
-  public List stepBlock(TMConfiguration config) {
+  public List<Configuration> stepBlock(TMConfiguration config) {
     EDebug.print("Inside StepBlock");
     while (((TuringMachine)
                 (config = (TMConfiguration) stepConfiguration(config).get(0))
@@ -213,12 +214,12 @@ public class TMSimulator extends AutomatonSimulator {
    *
    * @return ArrayList containing the single configuration, or null if there are no valid transitions.
    */
-  public ArrayList stepConfiguration(
+  public List<Configuration> stepConfiguration(
       Configuration config) { //one step, and will dig into building blocks if necessary
 
     //MERLIN MERLIN MERLIN MERLIN MERLIN//
 
-    ArrayList list = new ArrayList();
+    List<Configuration> list = new ArrayList<>();
     TMConfiguration configuration = (TMConfiguration) config;
 
     TMState currentState =
@@ -378,11 +379,11 @@ public class TMSimulator extends AutomatonSimulator {
     while (!myConfigurations.isEmpty()) {
       //System.out.println("HERE!!!!!");
       if (isAccepted()) return true;
-      ArrayList configurationsToAdd = new ArrayList();
-      Iterator it = myConfigurations.iterator();
+      List<Configuration> configurationsToAdd = new ArrayList<>();
+      Iterator<Configuration> it = myConfigurations.iterator();
       while (it.hasNext()) {
         TMConfiguration configuration = (TMConfiguration) it.next();
-        ArrayList configsToAdd = stepConfiguration(configuration);
+        List<Configuration> configsToAdd = stepConfiguration(configuration);
         configurationsToAdd.addAll(configsToAdd);
         it.remove();
       }

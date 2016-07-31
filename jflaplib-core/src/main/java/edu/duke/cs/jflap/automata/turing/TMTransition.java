@@ -28,6 +28,7 @@ import java.util.*;
  * @author Thomas Finley
  */
 public class TMTransition extends Transition {
+	private static final long serialVersionUID = 1000L;
 
   //added for turing to grammar conversion
   private int tapes;
@@ -79,9 +80,9 @@ public class TMTransition extends Transition {
     tapes = toReadArray.length;
     if (tapes == 0)
       throw new IllegalArgumentException("Attempted to create a transition with 0 tapes!");
-    toRead = new ArrayList();
-    toWrite = new ArrayList();
-    direction = new ArrayList();
+    toRead = new ArrayList<>();
+    toWrite = new ArrayList<>();
+    direction = new ArrayList<>();
     for (int i = 0; i < tapes; i++) {
       toRead.add("");
       toWrite.add("");
@@ -114,9 +115,9 @@ public class TMTransition extends Transition {
     return new TMTransition(
         from,
         to,
-        (String[]) toRead.toArray(s),
-        (String[]) toWrite.toArray(s),
-        (String[]) direction.toArray(s));
+        toRead.toArray(s),
+        toWrite.toArray(s),
+        direction.toArray(s));
   }
 
   /**
@@ -126,7 +127,7 @@ public class TMTransition extends Transition {
    *            the tape index to retrieve
    */
   public String getRead(int tape) {
-    return (String) toRead.get(tape);
+    return toRead.get(tape);
   }
 
   public void setRead(int tape, String symbol) {
@@ -168,7 +169,7 @@ public class TMTransition extends Transition {
    *            the tape to return the
    */
   public String getWrite(int tape) {
-    return (String) toWrite.get(tape);
+    return toWrite.get(tape);
   }
 
   /**
@@ -194,7 +195,7 @@ public class TMTransition extends Transition {
    * @return the transition's direction for this tape
    */
   public String getDirection(int tape) {
-    return (String) direction.get(tape);
+    return direction.get(tape);
   }
 
   /**
@@ -233,12 +234,12 @@ public class TMTransition extends Transition {
     int t = this.tapes();
     for (int i = 0; i < t; i++) {
       if (i != 0) sb.append(" | ");
-      sb.append((String) toRead.get(i));
+      sb.append(toRead.get(i));
       if (!blockTransition) {
         sb.append(" ; ");
-        sb.append((String) toWrite.get(i));
+        sb.append(toWrite.get(i));
         sb.append(" , ");
-        sb.append((String) direction.get(i));
+        sb.append(direction.get(i));
       }
     }
     return sb.toString();
@@ -301,13 +302,13 @@ public class TMTransition extends Transition {
   private boolean blockTransition = false;
 
   /** The read symbols. */
-  private List toRead;
+  private List<String> toRead;
 
   /** The write symbols. */
-  private List toWrite;
+  private List<String> toWrite;
 
   /** The direction fields. */
-  private List direction;
+  private List<String> direction;
 
   /** The blank symbol. */
   public static final String BLANK = "" + Tape.BLANK;
