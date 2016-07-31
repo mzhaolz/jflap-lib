@@ -1,22 +1,18 @@
 /*
- *  JFLAP - Formal Languages and Automata Package
- * 
- * 
- *  Susan H. Rodger
- *  Computer Science Department
- *  Duke University
- *  August 27, 2009
+*  JFLAP - Formal Languages and Automata Package
+*
+*
+*  Susan H. Rodger
+*  Computer Science Department
+*  Duke University
+*  August 27, 2009
 
- *  Copyright (c) 2002-2009
- *  All rights reserved.
+*  Copyright (c) 2002-2009
+*  All rights reserved.
 
- *  JFLAP is open source software. Please see the LICENSE for terms.
- *
- */
-
-
-
-
+*  JFLAP is open source software. Please see the LICENSE for terms.
+*
+*/
 
 package edu.duke.cs.jflap.file;
 
@@ -27,25 +23,24 @@ package edu.duke.cs.jflap.file;
  * the data in the file that indicates that the data is formatted correctly, but
  * that trying to make a JFLAP structure out of it is impossible. For example,
  * the data could be formatted correctly, but be inconsistent.
- * 
+ *
  * @author Thomas Finley
  */
-
 public class DataException extends RuntimeException {
-	/**
-	 * Creates a generic data exception.
-	 */
-	public DataException() {
-		super();
-	}
+  /**
+   * Creates a generic data exception.
+   */
+  public DataException() {
+    super();
+  }
 
-	/**
-	 * Creates a data exception with the given message.
-	 * 
-	 * @param message
-	 *            the exception message
-	 */
-	public DataException(String message) {
-		super(message);
-	}
+  /**
+   * Creates a data exception with the given message.
+   *
+   * @param message
+   *            the exception message
+   */
+  public DataException(String message) {
+    super(message);
+  }
 }

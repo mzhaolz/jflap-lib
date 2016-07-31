@@ -1,21 +1,18 @@
 /*
- *  JFLAP - Formal Languages and Automata Package
- * 
- * 
- *  Susan H. Rodger
- *  Computer Science Department
- *  Duke University
- *  August 27, 2009
+*  JFLAP - Formal Languages and Automata Package
+*
+*
+*  Susan H. Rodger
+*  Computer Science Department
+*  Duke University
+*  August 27, 2009
 
- *  Copyright (c) 2002-2009
- *  All rights reserved.
+*  Copyright (c) 2002-2009
+*  All rights reserved.
 
- *  JFLAP is open source software. Please see the LICENSE for terms.
- *
- */
-
-
-
+*  JFLAP is open source software. Please see the LICENSE for terms.
+*
+*/
 
 package edu.duke.cs.jflap.automata.turing;
 
@@ -23,47 +20,54 @@ import edu.duke.cs.jflap.automata.State;
 import java.awt.Point;
 import edu.duke.cs.jflap.automata.Automaton;
 
-
 /**
-  This class represents the TuringMachine-specific aspects of states, such as the ability to hold inner machines.
+ * This class represents the TuringMachine-specific aspects of states, such as the ability to hold inner machines.
+ *
+ *
+ * @author Henry Qin
+ */
+public class TMState extends State {
+  private TuringMachine myInnerTuringMachine;
 
+  public TMState(int id, Point point, Automaton tm) { //do we really need a pointer to the parent?
+    super(id, point, tm);
 
-  @author Henry Qin
-  */
-public class TMState extends State{
-    private TuringMachine myInnerTuringMachine;
+    assert (tm instanceof TuringMachine);
 
-    public TMState(int id, Point point, Automaton tm){ //do we really need a pointer to the parent?
-        super(id, point, tm);
+    myInnerTuringMachine = new TuringMachine();
+    myInnerTuringMachine.setParent(this);
+  }
 
-        assert(tm instanceof TuringMachine);
+  public TMState(TMState copyMe) { //do we really need a pointer to the parent?
+    this(copyMe.getID(), (Point) copyMe.getPoint().clone(), copyMe.getAutomaton());
 
-        myInnerTuringMachine = new TuringMachine();
-        myInnerTuringMachine.setParent(this);
-    }
+    myInnerTuringMachine =
+        (TuringMachine)
+            copyMe
+                .getInnerTM()
+                .clone(); //this should result in recursion until we reach a TMState whose inner TM does not contain states.
+  }
 
-    public TMState(TMState copyMe){ //do we really need a pointer to the parent?
-        this(copyMe.getID(), (Point)copyMe.getPoint().clone(), copyMe.getAutomaton());
+  public void setInnerTM(TuringMachine tm) {
+    myInnerTuringMachine = tm;
+    myInnerTuringMachine.setParent(this);
+    assert (myInnerTuringMachine.getParent() == this);
+  }
 
-        myInnerTuringMachine = (TuringMachine) copyMe.getInnerTM().clone(); //this should result in recursion until we reach a TMState whose inner TM does not contain states.
-    }
+  public TuringMachine getInnerTM() {
+    return myInnerTuringMachine;
+  }
 
-    public void setInnerTM(TuringMachine tm){
-        myInnerTuringMachine = tm;
-        myInnerTuringMachine.setParent(this);
-        assert (myInnerTuringMachine.getParent() == this);
-    }
-    public TuringMachine getInnerTM(){
-        return myInnerTuringMachine;
-    }
-    public String getInternalName(){ //just for trying to preserve old way of saving.
-        //ASSUME that ID's are Independent
-        return myInternalName == null? myInternalName = "Machine"+ getID() : myInternalName; //create an internal name if one has not been assigned explicitly
-    }
-    public void setInternalName(String s){ //just for trying to preserve old way of saving.
-        myInternalName = s;
-    }
+  public String getInternalName() { //just for trying to preserve old way of saving.
+    //ASSUME that ID's are Independent
+    return myInternalName == null
+        ? myInternalName = "Machine" + getID()
+        : myInternalName; //create an internal name if one has not been assigned explicitly
+  }
 
-    private String myInternalName = null;
+  public void setInternalName(String s) { //just for trying to preserve old way of saving.
+    myInternalName = s;
+  }
 
+  private String myInternalName = null;
 }

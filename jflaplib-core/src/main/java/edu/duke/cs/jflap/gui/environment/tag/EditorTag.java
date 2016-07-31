@@ -1,22 +1,18 @@
 /*
- *  JFLAP - Formal Languages and Automata Package
- * 
- * 
- *  Susan H. Rodger
- *  Computer Science Department
- *  Duke University
- *  August 27, 2009
+*  JFLAP - Formal Languages and Automata Package
+*
+*
+*  Susan H. Rodger
+*  Computer Science Department
+*  Duke University
+*  August 27, 2009
 
- *  Copyright (c) 2002-2009
- *  All rights reserved.
+*  Copyright (c) 2002-2009
+*  All rights reserved.
 
- *  JFLAP is open source software. Please see the LICENSE for terms.
- *
- */
-
-
-
-
+*  JFLAP is open source software. Please see the LICENSE for terms.
+*
+*/
 
 package edu.duke.cs.jflap.gui.environment.tag;
 
@@ -26,10 +22,7 @@ package edu.duke.cs.jflap.gui.environment.tag;
  * that can change the inner workings of some sort of object, presumably for the
  * purpose, one would assume, of keeping it from doing so if such an edit would
  * be inconvenient or hazardous at some critical time.
- * 
+ *
  * @author Thomas Finley
  */
-
-public interface EditorTag extends Tag {
-
-}
+public interface EditorTag extends Tag {}
