@@ -40,7 +40,7 @@ import edu.duke.cs.jflap.automata.Configuration;
  * @author Thomas Finley
  */
 public class NoInteractionSimulateAction extends SimulateAction {
-	private static final long serialVersionUID = 21L;
+  private static final long serialVersionUID = 21L;
 
   public NoInteractionSimulateAction(Grammar gram, Environment environment) {
     super(gram, environment);

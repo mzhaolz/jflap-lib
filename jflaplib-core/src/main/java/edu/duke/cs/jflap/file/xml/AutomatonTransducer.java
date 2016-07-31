@@ -82,7 +82,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    * @see #readTransitions
    */
   protected Map<Integer, State> readStates(
-			Node node, Automaton automaton, Set<State> locatedStates, Document document) {
+      Node node, Automaton automaton, Set<State> locatedStates, Document document) {
     Map<Integer, State> i2s = new HashMap<>();
     if (node == null) return i2s;
     NodeList allNodes = node.getChildNodes();
@@ -98,7 +98,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
         new TreeMap<>(
             new Comparator<Integer>() {
               public int compare(Integer o1, Integer o2) {
-								return o1.intValue() - o2.intValue();
+                return o1.intValue() - o2.intValue();
                 //if (o1 instanceof Integer && !(o2 instanceof Integer)) return -1;
                 //if (o1 instanceof Integer)
                 //  return ((Integer) o1).intValue() - ((Integer) o2).intValue();
@@ -204,14 +204,17 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
        * If it is a Moore machine, add state output.
        */
       if (automaton instanceof MooreMachine && e2t.containsKey(MooreTransducer.STATE_OUTPUT_NAME))
-        ((MooreMachine) automaton)
-            .setOutput(state, e2t.get(MooreTransducer.STATE_OUTPUT_NAME));
+        ((MooreMachine) automaton).setOutput(state, e2t.get(MooreTransducer.STATE_OUTPUT_NAME));
     }
   }
   //Add the blocks
   protected void addBlocks(
-      Node node, Automaton automaton, Set<State> locatedStates, Map<Integer, State> i2s, Document document) {
-		//TODO: convert this to Preconditions (Guava)
+      Node node,
+      Automaton automaton,
+      Set<State> locatedStates,
+      Map<Integer, State> i2s,
+      Document document) {
+    //TODO: convert this to Preconditions (Guava)
     assert (automaton
         instanceof
         TuringMachine); //this code should really be in TMTransducer, but I see why it's here
@@ -227,9 +230,9 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
     Map<Integer, Node> i2sn =
         new TreeMap<Integer, Node>(
             new Comparator<Integer>() {
-							@Override
+              @Override
               public int compare(Integer o1, Integer o2) {
-								return o1.intValue() - o2.intValue();
+                return o1.intValue() - o2.intValue();
               }
             });
     createState(blockNodes, i2sn, automaton, locatedStates, i2s, true, document);

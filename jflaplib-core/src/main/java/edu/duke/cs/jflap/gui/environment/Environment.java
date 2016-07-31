@@ -50,7 +50,7 @@ import javax.swing.event.ChangeListener;
  */
 public abstract class Environment extends JPanel {
 
-	private static final long serialVersionUID = 37L;
+  private static final long serialVersionUID = 37L;
 
   /**
    * Instantiates a new environment for the given object. This environment is

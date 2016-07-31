@@ -42,7 +42,7 @@ import javax.swing.*;
  * @author Thomas Finley
  */
 public class AutomatonPane extends JPanel implements Scrollable {
-	private static final long serialVersionUID = 3L;
+  private static final long serialVersionUID = 3L;
   private final Logger logger = LoggerFactory.getLogger(AutomatonPane.class);
   /**
    * Instantiates an AutomatonPane.

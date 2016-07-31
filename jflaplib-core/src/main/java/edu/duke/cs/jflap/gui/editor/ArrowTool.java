@@ -420,7 +420,8 @@ public class ArrowTool extends Tool {
    * remove the "Final State" option from Moore and Mealy machines.
    */
   protected class StateMenu extends JPopupMenu implements ActionListener {
-		private static final long serialVersionUID = 29L;
+    private static final long serialVersionUID = 29L;
+
     public StateMenu() {
       makeFinal = new JCheckBoxMenuItem("Final");
       makeFinal.addActionListener(this);
@@ -623,7 +624,8 @@ public class ArrowTool extends Tool {
    * The contextual menu class for context clicks in blank space.
    */
   private class EmptyMenu extends JPopupMenu implements ActionListener {
-		private static final long serialVersionUID = 31L;
+    private static final long serialVersionUID = 31L;
+
     public EmptyMenu() {
       stateLabels = new JCheckBoxMenuItem("Display State Labels");
       stateLabels.addActionListener(this);

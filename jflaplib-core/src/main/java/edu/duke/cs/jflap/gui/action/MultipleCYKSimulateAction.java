@@ -68,7 +68,7 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  *
  */
 public class MultipleCYKSimulateAction extends MultipleSimulateAction {
-	private static final long serialVersionUID = 41L;
+  private static final long serialVersionUID = 41L;
 
   private Grammar myOriginalGrammar;
   private Grammar myCNFGrammar;
@@ -95,7 +95,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
     // Add the running input thing.
     bar.add(
         new AbstractAction("Load Inputs") {
-					private static final long serialVersionUID = 43L;
+          private static final long serialVersionUID = 43L;
 
           public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
@@ -130,7 +130,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
         });
     bar.add(
         new AbstractAction("Run Inputs") {
-					private static final long serialVersionUID = 45L;
+          private static final long serialVersionUID = 45L;
 
           public void actionPerformed(ActionEvent e) {
             try {
@@ -161,7 +161,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
       // Add the clear button.
       bar.add(
           new AbstractAction("Clear") {
-						private static final long serialVersionUID = 47L;
+            private static final long serialVersionUID = 47L;
 
             public void actionPerformed(ActionEvent e) {
               try {
@@ -186,7 +186,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
       else if (Universe.curProfile.getEmptyString().equals(Profile.EPSILON)) empty = "Epsilon";
       bar.add(
           new AbstractAction("Enter " + empty /*"Enter Lambda"*/) {
-						private static final long serialVersionUID = 49L;
+            private static final long serialVersionUID = 49L;
+
             public void actionPerformed(ActionEvent e) {
               int row = table.getSelectedRow();
               if (row == -1) return;
@@ -199,7 +200,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
       bar.add(
           new AbstractAction("Edit File") {
-						private static final long serialVersionUID = 51L;
+            private static final long serialVersionUID = 51L;
+
             public void actionPerformed(ActionEvent arg0) {
               int k = getMachineIndexBySelectedRow(table);
               if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -216,7 +218,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
       bar.add(
           new AbstractAction("Add input string") {
-						private static final long serialVersionUID = 53L;
+            private static final long serialVersionUID = 53L;
+
             public void actionPerformed(ActionEvent arg0) {
               //add input
               int inputsNeeded = 1;
@@ -238,8 +241,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
               //add expected output
               if (turing) {
-                Object output =
-                    initialInput(getEnvironment().getActive(), "Expected Output?");
+                Object output = initialInput(getEnvironment().getActive(), "Expected Output?");
 
                 if (output instanceof String) {
                   String s = (String) output;
@@ -256,9 +258,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
               }
               //add expected result
               Object result =
-                  initialInput(
-                      getEnvironment().getActive(),
-                      "Expected Result? (Accept or Reject)");
+                  initialInput(getEnvironment().getActive(), "Expected Result? (Accept or Reject)");
 
               if (result instanceof String) {
                 String s = (String) result;
@@ -281,7 +281,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
       bar.add(
           new AbstractAction("Add file") {
-						private static final long serialVersionUID = 55L;
+            private static final long serialVersionUID = 55L;
+
             public void actionPerformed(ActionEvent arg0) {
               TestAction test = new TestAction();
               test.chooseFile(getEnvironment().getActive(), false);
@@ -292,7 +293,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
       bar.add(
           new AbstractAction("Remove file") {
-						private static final long serialVersionUID = 57L;
+            private static final long serialVersionUID = 57L;
+
             public void actionPerformed(ActionEvent arg0) {
               int k = getMachineIndexBySelectedRow(table);
               if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -315,7 +317,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
       bar.add(
           new AbstractAction("Save Results") {
-						private static final long serialVersionUID = 59L;
+            private static final long serialVersionUID = 59L;
+
             public void actionPerformed(ActionEvent arg0) {
               final JFrame frame = new JFrame("Save Location");
 
@@ -359,8 +362,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
                           if (!badname) {
                             Universe.CHOOSER.setFileFilter(null);
                             Universe.CHOOSER.setDialogTitle("Choose directory to save files in");
-                            Universe.CHOOSER.setFileSelectionMode(
-																JFileChooser.DIRECTORIES_ONLY);
+                            Universe.CHOOSER.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                             int result = Universe.CHOOSER.showSaveDialog(frame);
                             if (result != JFileChooser.APPROVE_OPTION) break;
                             file = Universe.CHOOSER.getSelectedFile();
@@ -430,9 +432,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
                               out.write("Input: ");
                               input = true;
                             }
-                            if (model.getColumnName(c).startsWith("Output")
-                                && !output
-                                && turing) {
+                            if (model.getColumnName(c).startsWith("Output") && !output && turing) {
                               out.write("Output: ");
                               output = true;
                             }
@@ -564,7 +564,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
    * identify what type of component is active according to its class.
    */
   public class MultiplePane extends JPanel {
-		private static final long serialVersionUID = 61L;
+    private static final long serialVersionUID = 61L;
+
     public MultiplePane(JSplitPane split) {
       super(new BorderLayout());
       add(split, BorderLayout.CENTER);

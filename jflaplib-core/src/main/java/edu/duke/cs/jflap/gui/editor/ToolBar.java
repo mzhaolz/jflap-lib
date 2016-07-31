@@ -37,7 +37,7 @@ import java.util.*;
  * @author Thomas Finley
  */
 public class ToolBar extends JToolBar implements ActionListener {
-	private static final long serialVersionUID = 6L;
+  private static final long serialVersionUID = 6L;
 
   /**
    * Instantiates a new tool bar.
@@ -146,7 +146,8 @@ public class ToolBar extends JToolBar implements ActionListener {
    * The action that clicks a button.
    */
   private class ButtonClicker extends AbstractAction {
-		private static final long serialVersionUID = 7L;
+    private static final long serialVersionUID = 7L;
+
     public ButtonClicker(AbstractButton button) {
       this.button = button;
     }
