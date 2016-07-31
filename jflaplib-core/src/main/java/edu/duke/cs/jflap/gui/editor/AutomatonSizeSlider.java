@@ -21,6 +21,7 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
 
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JSlider;
@@ -33,6 +34,7 @@ import edu.duke.cs.jflap.automata.Note;
  * @author Henry Qin and Jonathan Su
  */
 public class AutomatonSizeSlider extends JSlider {
+	private static final long serialVersionUID = 33L;
   //Set up animation parameters.
   static final int AUTOMATON_SIZE_MIN = 1;
   static final int AUTOMATON_SIZE_MAX = 800;
@@ -67,9 +69,9 @@ public class AutomatonSizeSlider extends JSlider {
       double pass = source.getValue() * 1. / AUTOMATON_SIZE_INIT;
       view.setScale(pass);
       view.requestTransform();
-      ArrayList<Note> noteslist = drawer.getAutomaton().getNotes();
+      List<Note> noteslist = drawer.getAutomaton().getNotes();
       for (Note n : noteslist) {
-        n.setFont(new Font("Default", Font.PLAIN, (int) source.getValue() / 20));
+        n.setFont(new Font("Default", Font.PLAIN, source.getValue() / 20));
       }
     }
   }

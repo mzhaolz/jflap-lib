@@ -58,6 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Automaton implements Serializable, Cloneable {
   private final transient Logger logger = LoggerFactory.getLogger(Automaton.class);
+	private static final long serialVersionUID = 0L;
 
   /**
    * Creates an instance of <CODE>Automaton</CODE>. The created instance
@@ -138,9 +139,9 @@ public class Automaton implements Serializable, Cloneable {
       }
     }
     for (int k = 0; k < this.getNotes().size(); k++) {
-      Note curNote = (Note) this.getNotes().get(k);
+      Note curNote = getNotes().get(k);
       a.addNote(new Note(curNote.getAutoPoint(), curNote.getText()));
-      ((Note) a.getNotes().get(k)).setView(curNote.getView());
+      a.getNotes().get(k).setView(curNote.getView());
 
       //for undo, we must initialize the clone to our view
 
@@ -204,9 +205,9 @@ public class Automaton implements Serializable, Cloneable {
       }
     }
     for (int k = 0; k < src.getNotes().size(); k++) {
-      Note curNote = (Note) src.getNotes().get(k);
+      Note curNote = src.getNotes().get(k);
       dest.addNote(new Note(curNote.getAutoPoint(), curNote.getText()));
-      ((Note) dest.getNotes().get(k)).initializeForView(curNote.getView());
+      dest.getNotes().get(k).initializeForView(curNote.getView());
     }
     dest.setEnvironmentFrame(src.getEnvironmentFrame());
   }
@@ -221,10 +222,10 @@ public class Automaton implements Serializable, Cloneable {
    *         this state
    */
   public Transition[] getTransitionsFromState(State from) {
-    Transition[] toReturn = (Transition[]) transitionArrayFromStateMap.get(from);
+    Transition[] toReturn = transitionArrayFromStateMap.get(from);
     if (toReturn == null) {
       List<Transition> list = transitionFromStateMap.get(from);
-      toReturn = (Transition[]) list.toArray(new Transition[0]);
+      toReturn = list.toArray(new Transition[0]);
       transitionArrayFromStateMap.put(from, toReturn);
     }
     return toReturn;
@@ -240,10 +241,10 @@ public class Automaton implements Serializable, Cloneable {
    *         State
    */
   public Transition[] getTransitionsToState(State to) {
-    Transition[] toReturn = (Transition[]) transitionArrayToStateMap.get(to);
+    Transition[] toReturn = transitionArrayToStateMap.get(to);
     if (toReturn == null) {
-      List list = (List) transitionToStateMap.get(to);
-      toReturn = (Transition[]) list.toArray(new Transition[0]);
+      List<Transition> list = transitionToStateMap.get(to);
+      toReturn = list.toArray(new Transition[0]);
       transitionArrayToStateMap.put(to, toReturn);
     }
     return toReturn;
@@ -262,9 +263,9 @@ public class Automaton implements Serializable, Cloneable {
    */
   public Transition[] getTransitionsFromStateToState(State from, State to) {
     Transition[] t = getTransitionsFromState(from);
-    ArrayList list = new ArrayList();
+    ArrayList<Transition> list = new ArrayList<>();
     for (int i = 0; i < t.length; i++) if (t[i].getToState() == to) list.add(t[i]);
-    return (Transition[]) list.toArray(new Transition[0]);
+    return list.toArray(new Transition[0]);
   }
 
   /**
@@ -274,7 +275,7 @@ public class Automaton implements Serializable, Cloneable {
    */
   public Transition[] getTransitions() {
     if (cachedTransitions == null)
-      cachedTransitions = (Transition[]) transitions.toArray(new Transition[0]);
+      cachedTransitions = transitions.toArray(new Transition[0]);
     return cachedTransitions;
   }
 
@@ -292,11 +293,11 @@ public class Automaton implements Serializable, Cloneable {
     if (transitions.contains(trans)) return;
     if (trans.getToState() == null || trans.getFromState() == null) return;
     transitions.add(trans);
-    if (transitionFromStateMap == null) transitionFromStateMap = new HashMap();
-    List list = (List) transitionFromStateMap.get(trans.getFromState());
+    if (transitionFromStateMap == null) transitionFromStateMap = new HashMap<>();
+    List<Transition> list = transitionFromStateMap.get(trans.getFromState());
     list.add(trans);
-    if (transitionToStateMap == null) transitionToStateMap = new HashMap();
-    list = (List) transitionToStateMap.get(trans.getToState());
+    if (transitionToStateMap == null) transitionToStateMap = new HashMap<>();
+    list = transitionToStateMap.get(trans.getToState());
     list.add(trans);
     transitionArrayFromStateMap.remove(trans.getFromState());
     transitionArrayToStateMap.remove(trans.getToState());
@@ -330,9 +331,9 @@ public class Automaton implements Serializable, Cloneable {
       throw new IllegalArgumentException("Replacing transition that not already in the automaton!");
     }
     transitions.add(newTrans);
-    List list = (List) transitionFromStateMap.get(oldTrans.getFromState());
+    List<Transition> list = transitionFromStateMap.get(oldTrans.getFromState());
     list.set(list.indexOf(oldTrans), newTrans);
-    list = (List) transitionToStateMap.get(oldTrans.getToState());
+    list = transitionToStateMap.get(oldTrans.getToState());
     list.set(list.indexOf(oldTrans), newTrans);
     transitionArrayFromStateMap.remove(oldTrans.getFromState());
     transitionArrayToStateMap.remove(oldTrans.getToState());
@@ -892,7 +893,7 @@ public class Automaton implements Serializable, Cloneable {
   protected State initialState = null;
 
   /** The list of transitions in this automaton. */
-  protected Set<State> transitions;
+  protected Set<Transition> transitions;
 
   /**
    * A mapping from states to a list holding transitions from those states.
@@ -941,15 +942,15 @@ public class Automaton implements Serializable, Cloneable {
    */
   protected void clear() {
 
-    HashSet t = new HashSet(transitions);
-    for (Object o : t) removeTransition((Transition) o);
-    transitions = new HashSet();
+    HashSet<Transition> t = new HashSet<>(transitions);
+    for (Transition o : t) removeTransition(o);
+    transitions = new HashSet<>();
 
-    t = new HashSet(states);
-    for (Object o : t) removeState((State) o);
-    states = new HashSet();
+    HashSet<State> s = new HashSet<>(states);
+    for (State o : s) removeState(o);
+    states = new HashSet<>();
 
-    finalStates = new HashSet();
+    finalStates = new HashSet<>();
 
     initialState = null;
 
@@ -959,18 +960,18 @@ public class Automaton implements Serializable, Cloneable {
 
     cachedFinalStates = null;
 
-    transitionFromStateMap = new HashMap();
-    transitionToStateMap = new HashMap();
+    transitionFromStateMap = new HashMap<>();
+    transitionToStateMap = new HashMap<>();
 
-    transitionArrayFromStateMap = new HashMap();
+    transitionArrayFromStateMap = new HashMap<>();
 
-    transitionArrayToStateMap = new HashMap();
+    transitionArrayToStateMap = new HashMap<>();
 
     while (myNotes.size() != 0) {
-      AutomatonPane ap = ((Note) myNotes.get(0)).getView();
-      ap.remove((Note) myNotes.get(0));
+      AutomatonPane ap = myNotes.get(0).getView();
+      ap.remove(myNotes.get(0));
       ap.repaint();
-      deleteNote((Note) myNotes.get(0));
+      deleteNote(myNotes.get(0));
     }
   }
 }

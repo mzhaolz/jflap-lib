@@ -50,6 +50,8 @@ import edu.duke.cs.jflap.automata.turing.TMSimulator;
  * @author Thomas Finley
  */
 public class SimulateAction extends AutomatonAction {
+	private static final long serialVersionUID = 25L;
+
   private Grammar gram;
 
   /**

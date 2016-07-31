@@ -123,8 +123,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
    */
   public void step(boolean blockStep) {
     Configuration[] configs = configurations.getValidConfigurations();
-    ArrayList list = new ArrayList();
-    HashSet reject = new HashSet();
+    List<Configuration> list = new ArrayList<>();
+    HashSet<Configuration> reject = new HashSet<>();
 
     // Clear out old states.
     configurations.clearThawed();
@@ -132,7 +132,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
     if (!blockStep) { //for ordinary automaton
       for (int i = 0; i < configs.length; i++) {
         //System.out.println("HERE!");
-        ArrayList next = simulator.stepConfiguration(configs[i]);
+        List<Configuration> next = simulator.stepConfiguration(configs[i]);
         //MERLIN MERLIN MERLIN MERLIN MERLIN//
         if (next.size() == 0) { //crucial check for rejection
           //System.out.println("Rejected");

@@ -33,6 +33,7 @@ import javax.swing.tree.*;
  * @author Thomas Finley
  */
 public class BruteParsePane extends ParsePane {
+	private static final long serialVersionUID = 67L;
 
   public BruteParsePane(GrammarEnvironment environment, Grammar g) {
     super(environment, g);

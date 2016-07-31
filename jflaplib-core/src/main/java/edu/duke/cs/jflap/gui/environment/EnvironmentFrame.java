@@ -18,6 +18,7 @@ package edu.duke.cs.jflap.gui.environment;
 
 import edu.duke.cs.jflap.file.Codec;
 import edu.duke.cs.jflap.file.EncodeException;
+import edu.duke.cs.jflap.file.Encoder;
 import edu.duke.cs.jflap.file.ParseException;
 import edu.duke.cs.jflap.gui.editor.EditBlockPane;
 import edu.duke.cs.jflap.gui.editor.EditorPane;
@@ -44,6 +45,7 @@ import javax.swing.filechooser.FileFilter;
  * @author Thomas Finley
  */
 public class EnvironmentFrame extends JFrame {
+	private static final long serialVersionUID = 15L;
   /**
    * Instantiates a new <CODE>EnvironmentFrame</CODE>. This does not fill
    * the environment with anything.
@@ -194,8 +196,8 @@ public class EnvironmentFrame extends JFrame {
     // Set the file filters.
     FileFilter[] filters = Universe.CHOOSER.getChoosableFileFilters();
     for (int i = 0; i < filters.length; i++) Universe.CHOOSER.removeChoosableFileFilter(filters[i]);
-    List encoders = Universe.CODEC_REGISTRY.getEncoders(object);
-    Iterator it = encoders.iterator();
+    List<Encoder> encoders = Universe.CODEC_REGISTRY.getEncoders(object);
+    Iterator<Encoder> it = encoders.iterator();
     while (it.hasNext()) Universe.CHOOSER.addChoosableFileFilter((FileFilter) it.next());
     if (codec != null && codec.canEncode(object)) {
       Universe.CHOOSER.setFileFilter(codec);

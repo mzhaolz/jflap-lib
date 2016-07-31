@@ -32,7 +32,7 @@ public abstract class AutomatonSimulator {
    */
   public AutomatonSimulator(Automaton automaton) {
     myAutomaton = automaton;
-    myConfigurations = new HashSet();
+    myConfigurations = new HashSet<>();
   }
 
   /**
@@ -53,7 +53,7 @@ public abstract class AutomatonSimulator {
    *            the configuration to simulate the one step on
    * @param blockStep
    */
-  public abstract ArrayList stepConfiguration(Configuration config);
+  public abstract List<Configuration> stepConfiguration(Configuration config);
 
   /**
    * Returns true if the simulation of the input string on the automaton left
@@ -86,5 +86,5 @@ public abstract class AutomatonSimulator {
    * The set of configurations the machine could possibly be in at a given
    * moment in the simulation.
    */
-  protected Set myConfigurations;
+  protected Set<Configuration> myConfigurations;
 }

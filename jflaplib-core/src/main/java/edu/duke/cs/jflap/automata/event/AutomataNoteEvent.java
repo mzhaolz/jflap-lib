@@ -33,6 +33,8 @@ import edu.duke.cs.jflap.automata.Note;
  * @author Thomas Finley
  */
 public class AutomataNoteEvent extends EventObject {
+	private static final long serialVersionUID = 12L;
+
   /**
    * Instantiates a new <CODE>AutomataStateEvent</CODE>.
    *

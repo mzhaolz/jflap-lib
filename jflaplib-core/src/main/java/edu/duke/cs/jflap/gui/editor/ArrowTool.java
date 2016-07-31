@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
@@ -189,11 +190,11 @@ public class ArrowTool extends Tool {
     } else if (lastClickedTransition != null) {
       initialPointClick.setLocation(event.getPoint());
     } else {
-      ArrayList notes = getDrawer().getAutomaton().getNotes();
+      List<Note> notes = getDrawer().getAutomaton().getNotes();
       for (int k = 0; k < notes.size(); k++) {
-        ((Note) notes.get(k)).setEditable(false);
-        ((Note) notes.get(k)).setEnabled(false);
-        ((Note) notes.get(k)).setCaretColor(new Color(255, 255, 150));
+        notes.get(k).setEditable(false);
+        notes.get(k).setEnabled(false);
+        notes.get(k).setCaretColor(new Color(255, 255, 150));
       }
 
       Rectangle bounds = new Rectangle(0, 0, -1, -1);
@@ -285,8 +286,7 @@ public class ArrowTool extends Tool {
         //Point to = getView().getDrawer().pointOnState(f, angle-Math.PI*.166);
         Transition[] trans = getAutomaton().getTransitionsFromStateToState(f, t);
         for (int n = 0; n < trans.length; n++) {
-          CurvedArrow arrow =
-              (CurvedArrow) getView().getDrawer().transitionToArrowMap.get(trans[n]);
+          CurvedArrow arrow = getView().getDrawer().transitionToArrowMap.get(trans[n]);
 
           //uncomment this code for Transitions movement
           /*
@@ -350,8 +350,7 @@ public class ArrowTool extends Tool {
     //Deal with transition dragging here
     if (selectedTransition
         != null) { //simply set ...but we need to get the initial point to be clever
-      CurvedArrow ca =
-          (CurvedArrow) getView().getDrawer().transitionToArrowMap.get(selectedTransition);
+      CurvedArrow ca = getView().getDrawer().transitionToArrowMap.get(selectedTransition);
 
       Point myClickP = event.getPoint();
       Point2D control = ca.getCurve().getCtrlPt();
@@ -421,6 +420,7 @@ public class ArrowTool extends Tool {
    * remove the "Final State" option from Moore and Mealy machines.
    */
   protected class StateMenu extends JPopupMenu implements ActionListener {
+		private static final long serialVersionUID = 29L;
     public StateMenu() {
       makeFinal = new JCheckBoxMenuItem("Final");
       makeFinal.addActionListener(this);
@@ -620,14 +620,10 @@ public class ArrowTool extends Tool {
   }
 
   /**
-   * The contextual menu class for editing transitions.
-   */
-  private class TransitionMenu extends JPopupMenu {}
-
-  /**
    * The contextual menu class for context clicks in blank space.
    */
   private class EmptyMenu extends JPopupMenu implements ActionListener {
+		private static final long serialVersionUID = 31L;
     public EmptyMenu() {
       stateLabels = new JCheckBoxMenuItem("Display State Labels");
       stateLabels.addActionListener(this);
@@ -729,9 +725,6 @@ public class ArrowTool extends Tool {
    * option in Moore and Mealy machines.
    */
   protected StateMenu stateMenu = new StateMenu();
-
-  /** The transition menu. */
-  private TransitionMenu transitionMenu = new TransitionMenu();
 
   /** The empty menu. */
   private EmptyMenu emptyMenu = new EmptyMenu();

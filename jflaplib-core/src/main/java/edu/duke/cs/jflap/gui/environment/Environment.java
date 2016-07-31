@@ -24,7 +24,12 @@ import edu.duke.cs.jflap.gui.environment.tag.Tag;
 import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -44,6 +49,8 @@ import javax.swing.event.ChangeListener;
  * @author Thomas Finley
  */
 public abstract class Environment extends JPanel {
+
+	private static final long serialVersionUID = 37L;
 
   /**
    * Instantiates a new environment for the given object. This environment is
@@ -99,9 +106,9 @@ public abstract class Environment extends JPanel {
    *            the file change event to distribute
    */
   protected void distributeFileChangeEvent(FileChangeEvent event) {
-    Iterator it = fileListeners.iterator();
+    Iterator<FileChangeListener> it = fileListeners.iterator();
     while (it.hasNext()) {
-      FileChangeListener listener = (FileChangeListener) it.next();
+      FileChangeListener listener = it.next();
       listener.fileChanged(event);
     }
   }
@@ -131,7 +138,7 @@ public abstract class Environment extends JPanel {
     distributeFileChangeEvent(new FileChangeEvent(this, oldFile));
   }
 
-  public void setMultipleObjects(ArrayList objects) {
+  public void setMultipleObjects(List<Object> objects) {
     this.myObjects = objects;
   }
 
@@ -229,7 +236,7 @@ public abstract class Environment extends JPanel {
   public void setEnabledEditorTagged(boolean enabled) {
     for (int i = 0; i < tabbed.getTabCount(); i++) {
       Component c = tabbed.getComponentAt(i);
-      if (((Tag) componentTags.get(c)) instanceof EditorTag) tabbed.setEnabledAt(i, enabled);
+      if (componentTags.get(c) instanceof EditorTag) tabbed.setEnabledAt(i, enabled);
     }
   }
 
@@ -328,8 +335,8 @@ public abstract class Environment extends JPanel {
   protected void distributeChangeEvent() {
 
     ChangeEvent e = new ChangeEvent(this);
-    Iterator it = (new HashSet(changeListeners)).iterator();
-    while (it.hasNext()) ((ChangeListener) it.next()).stateChanged(e);
+    Iterator<ChangeListener> it = (new HashSet<>(changeListeners)).iterator();
+    while (it.hasNext()) it.next().stateChanged(e);
   }
 
   /**
@@ -340,7 +347,7 @@ public abstract class Environment extends JPanel {
    */
   public void remove(Component component) {
     tabbed.remove(component);
-    Tag tag = (Tag) componentTags.remove(component);
+    Tag tag = componentTags.remove(component);
 
     // Takes care of the deactivation of EditorTag tagged
     // components in the event that such action is appropriate.
@@ -361,7 +368,7 @@ public abstract class Environment extends JPanel {
    * @return the tag for the component
    */
   public Tag getTag(Component component) {
-    return (Tag) componentTags.get(component);
+    return componentTags.get(component);
   }
 
   /**
@@ -384,12 +391,12 @@ public abstract class Environment extends JPanel {
    *         tags, satisfied the satisfier
    */
   public Component[] getComponents(Satisfier satisfier) {
-    ArrayList list = new ArrayList();
+    List<Component> list = new ArrayList<>();
     for (int i = 0; i < tabbed.getTabCount(); i++) {
       Component c = tabbed.getComponentAt(i);
-      if (satisfier.satisfies(c, (Tag) componentTags.get(c))) list.add(c);
+      if (satisfier.satisfies(c, componentTags.get(c))) list.add(c);
     }
-    return (Component[]) list.toArray(new Component[0]);
+    return list.toArray(new Component[0]);
   }
 
   /**
@@ -406,7 +413,7 @@ public abstract class Environment extends JPanel {
   public boolean isPresent(Satisfier satisfier) {
     for (int i = 0; i < tabbed.getTabCount(); i++) {
       Component c = tabbed.getComponentAt(i);
-      if (satisfier.satisfies(c, (Tag) componentTags.get(c))) return true;
+      if (satisfier.satisfies(c, componentTags.get(c))) return true;
     }
     return false;
   }
@@ -456,20 +463,20 @@ public abstract class Environment extends JPanel {
   }
 
   /**For Testing multiple objects*/
-  public ArrayList myObjects;
-  public ArrayList myTestStrings;
-  public ArrayList myTransducerStrings;
+  public List<Object> myObjects;
+  public List<String> myTestStrings;
+  public List<String> myTransducerStrings;
   /** The encoder for this document. */
   private Encoder encoder = null;
 
   /** The mapping of components to their respective tag objects. */
-  private HashMap componentTags = new HashMap();
+  private HashMap<Component, Tag> componentTags = new HashMap<>();
 
   /** The tabbed pane for this environment. */
   public JTabbedPane tabbed;
 
   /** The collection of change listeners for this object. */
-  private transient HashSet changeListeners = new HashSet();
+  private transient HashSet<ChangeListener> changeListeners = new HashSet<>();
 
   /** The object that this environment centers on. */
   private Serializable theMainObject;
@@ -478,7 +485,7 @@ public abstract class Environment extends JPanel {
   private File file;
 
   /** The collection of file change listeners. */
-  private Set fileListeners = new HashSet();
+  private Set<FileChangeListener> fileListeners = new HashSet<>();
 
   /**
    * The number of "CriticalTag" tagged components. Hokey but fast.

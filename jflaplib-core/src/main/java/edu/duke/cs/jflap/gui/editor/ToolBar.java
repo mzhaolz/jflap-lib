@@ -37,6 +37,8 @@ import java.util.*;
  * @author Thomas Finley
  */
 public class ToolBar extends JToolBar implements ActionListener {
+	private static final long serialVersionUID = 6L;
+
   /**
    * Instantiates a new tool bar.
    *
@@ -82,10 +84,10 @@ public class ToolBar extends JToolBar implements ActionListener {
   private void initBar() {
     ButtonGroup group = new ButtonGroup();
     JToggleButton button = null;
-    Iterator it = tools.iterator();
+    Iterator<Tool> it = tools.iterator();
     KeyStroke key;
     while (it.hasNext()) {
-      Tool tool = (Tool) it.next();
+      Tool tool = it.next();
       button = new JToggleButton(tool.getIcon());
       buttonsToTools.put(button, tool);
       button.setToolTipText(tool.getShortcutToolTip());
@@ -106,7 +108,7 @@ public class ToolBar extends JToolBar implements ActionListener {
    * If a tool is clicked, sets the new current tool.
    */
   public void actionPerformed(ActionEvent e) {
-    Tool tool = (Tool) buttonsToTools.get(e.getSource());
+    Tool tool = buttonsToTools.get(e.getSource());
     if (tool != null) {
       adapter.setAdapter(tool);
       currentTool = tool;
@@ -144,6 +146,7 @@ public class ToolBar extends JToolBar implements ActionListener {
    * The action that clicks a button.
    */
   private class ButtonClicker extends AbstractAction {
+		private static final long serialVersionUID = 7L;
     public ButtonClicker(AbstractButton button) {
       this.button = button;
     }
@@ -159,9 +162,9 @@ public class ToolBar extends JToolBar implements ActionListener {
 
   private AutomatonDrawer drawer;
 
-  private List tools;
+  private List<Tool> tools;
 
-  private HashMap buttonsToTools = new HashMap();
+  private HashMap<JToggleButton, Tool> buttonsToTools = new HashMap<>();
 
   private ToolAdapter adapter;
 

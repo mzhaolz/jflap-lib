@@ -54,7 +54,7 @@ public class CodecRegistry {
    * @param decoder
    *            the decoder to add
    */
-  private void addDecoder(Encoder decoder) {
+  private void addDecoder(Decoder decoder) {
     decoders.add(decoder);
   }
 
@@ -68,10 +68,10 @@ public class CodecRegistry {
    *            or <CODE>null</CODE> if all encoders should be returned
    * @return the immutable list of encoders
    */
-  public List getEncoders(Serializable structure) {
+  public List<Encoder> getEncoders(Serializable structure) {
     if (structure == null) return Collections.unmodifiableList(encoders);
-    List validEncoders = new ArrayList();
-    Iterator it = encoders.iterator();
+    List<Encoder> validEncoders = new ArrayList<>();
+    Iterator<Encoder> it = encoders.iterator();
     while (it.hasNext()) {
       Codec enc = (Codec) it.next();
       if (enc.canEncode(structure)) validEncoders.add(enc);
@@ -86,13 +86,13 @@ public class CodecRegistry {
    *
    * @return the immutable list of decoders
    */
-  public List getDecoders() {
+  public List<Decoder> getDecoders() {
     return Collections.unmodifiableList(decoders);
   }
 
   /** The encoders of the registry. */
-  private List encoders = new ArrayList();
+  private List<Encoder> encoders = new ArrayList<>();
 
   /** The decoders of the registry. */
-  private List decoders = new ArrayList();
+  private List<Decoder> decoders = new ArrayList<>();
 }

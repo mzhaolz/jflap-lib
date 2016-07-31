@@ -18,6 +18,7 @@ package edu.duke.cs.jflap.automata;
 
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -31,6 +32,7 @@ import edu.duke.cs.jflap.automata.event.AutomataStateEvent;
  * @version 1.0
  */
 public class State implements Serializable {
+	private static final long serialVersionUID = 1L;
   /**
    * Instantiates a new state.
    *
@@ -176,9 +178,9 @@ public class State implements Serializable {
       labels = new String[0];
     } else {
       StringTokenizer st = new StringTokenizer(label, "\n");
-      ArrayList lines = new ArrayList();
+      List<String> lines = new ArrayList<>();
       while (st.hasMoreTokens()) lines.add(st.nextToken());
-      labels = (String[]) lines.toArray(new String[0]);
+      labels = lines.toArray(new String[0]);
     }
     getAutomaton()
         .distributeStateEvent(new AutomataStateEvent(getAutomaton(), this, false, false, true));

@@ -101,7 +101,7 @@ public class Universe {
    */
   public static EnvironmentFrame frameForFile(File file) {
     if (file == null) return null;
-    return (EnvironmentFrame) fileToFrame.get(getPath(file));
+    return fileToFrame.get(getPath(file));
   }
 
   /**
@@ -114,7 +114,7 @@ public class Universe {
    *         if there is no frame associated with this environment
    */
   public static EnvironmentFrame frameForEnvironment(Environment environment) {
-    return (EnvironmentFrame) environmentToFrame.get(environment);
+    return environmentToFrame.get(environment);
   }
 
   /**
@@ -123,7 +123,7 @@ public class Universe {
    * @return an array containing all registered environment frames
    */
   public static EnvironmentFrame[] frames() {
-    return (EnvironmentFrame[]) environmentToFrame.values().toArray(new EnvironmentFrame[0]);
+    return environmentToFrame.values().toArray(new EnvironmentFrame[0]);
   }
 
   /**
@@ -137,10 +137,10 @@ public class Universe {
   }
 
   /** The mapping of environments to frames. */
-  private static Map environmentToFrame = new HashMap();
+  private static Map<Environment, EnvironmentFrame> environmentToFrame = new HashMap<>();
 
   /** The mapping of files to frames. */
-  private static Map fileToFrame = new HashMap();
+  private static Map<String, EnvironmentFrame> fileToFrame = new HashMap<String, EnvironmentFrame>();
 
   /** The universal JFileChooser. */
   public static JFileChooser CHOOSER = null;
