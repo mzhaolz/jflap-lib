@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.automata.pda;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
 import javax.swing.JOptionPane;
@@ -91,8 +92,8 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    * @param config
    *            the configuration to simulate the one step on
    */
-  public ArrayList stepConfiguration(Configuration config) {
-    ArrayList list = new ArrayList();
+  public List<Configuration> stepConfiguration(Configuration config) {
+    List<Configuration> list = new ArrayList<>();
     PDAConfiguration configuration = (PDAConfiguration) config;
     /** get all information from configuration. */
     String unprocessedInput = configuration.getUnprocessedInput();
@@ -147,7 +148,7 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    *         the machine in a final state.
    */
   public boolean isAccepted() {
-    Iterator it = myConfigurations.iterator();
+    Iterator<Configuration> it = myConfigurations.iterator();
     while (it.hasNext()) {
       PDAConfiguration configuration = (PDAConfiguration) it.next();
       if (myAcceptance == FINAL_STATE) {
@@ -183,12 +184,14 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
     int count = 0;
     while (!myConfigurations.isEmpty()) {
       if (isAccepted()) return true;
-      ArrayList configurationsToAdd = new ArrayList();
-      Iterator it = myConfigurations.iterator();
+      List<PDAConfiguration> configurationsToAdd = new ArrayList<>();
+      Iterator<Configuration> it = myConfigurations.iterator();
       while (it.hasNext()) {
         PDAConfiguration configuration = (PDAConfiguration) it.next();
-        ArrayList configsToAdd = stepConfiguration(configuration);
-        configurationsToAdd.addAll(configsToAdd);
+        List<Configuration> configsToAdd = stepConfiguration(configuration);
+				for (Configuration config : configsToAdd) {
+					configurationsToAdd.add((PDAConfiguration) config);
+				}
         it.remove();
         count++;
         if (count > 10000) {

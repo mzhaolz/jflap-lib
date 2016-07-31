@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 
 import edu.duke.cs.jflap.automata.Automaton;
@@ -60,7 +61,7 @@ public class PDAToCFGConverter {
    * unique id)
    */
   public void initializeConverter() {
-    MAP = new HashMap();
+    MAP = new HashMap<>();
     UNIQUE_ID = 0;
   }
 
@@ -234,8 +235,8 @@ public class PDAToCFGConverter {
    * @return a list of productions created for <CODE>transition</CODE>, a
    *         transition that pushes TWO characters on the stack.
    */
-  public ArrayList getProductionsForPushTwoTransition(Transition transition, Automaton automaton) {
-    ArrayList list = new ArrayList();
+  public List<Production> getProductionsForPushTwoTransition(Transition transition, Automaton automaton) {
+    List<Production> list = new ArrayList<>();
     String fromState = transition.getFromState().getName();
     String toState = transition.getToState().getName();
     PDATransition trans = (PDATransition) transition;
@@ -290,9 +291,9 @@ public class PDAToCFGConverter {
    *         transition that pushes NO characters on the stack. This list will
    *         always contain a single produciton.
    */
-  public ArrayList getProductionsForPushLambdaTransition(
+  public List<Production> getProductionsForPushLambdaTransition(
       Transition transition, Automaton automaton) {
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     String fromState = transition.getFromState().getName();
     String toState = transition.getToState().getName();
     PDATransition trans = (PDATransition) transition;
@@ -321,8 +322,8 @@ public class PDAToCFGConverter {
    *            the automaton that transition is a part of.
    * @return a list of productions.
    */
-  public ArrayList createProductionsForTransition(Transition transition, Automaton automaton) {
-    ArrayList list = new ArrayList();
+  public List<Production> createProductionsForTransition(Transition transition, Automaton automaton) {
+    List<Production> list = new ArrayList<>();
     if (isPushLambdaTransition(transition)) {
       list.addAll(getProductionsForPushLambdaTransition(transition, automaton));
     } else if (isPushTwoTransition(transition)) {
@@ -342,7 +343,7 @@ public class PDAToCFGConverter {
    *         single variable replacing groups of characters.
    */
   public Production getSimplifiedProduction(Production production) {
-    String lhs = (String) MAP.get(production.getLHS());
+    String lhs = MAP.get(production.getLHS());
     String rhs = production.getRHS();
     int leftIndex, rightIndex; // Position of left and right parentheses.
     StringBuffer newRhs = new StringBuffer();
@@ -363,7 +364,7 @@ public class PDAToCFGConverter {
    * @return the number of unique variables
    */
   public int numberVariables() {
-    return (new HashSet(MAP.values())).size();
+    return (new HashSet<>(MAP.values())).size();
   }
 
   /**
@@ -384,7 +385,7 @@ public class PDAToCFGConverter {
 
     initializeConverter();
 
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     ContextFreeGrammar grammar = new ContextFreeGrammar();
 
     Transition[] transitions = automaton.getTransitions();
@@ -392,9 +393,9 @@ public class PDAToCFGConverter {
       list.addAll(createProductionsForTransition(transitions[k], automaton));
     }
 
-    Iterator it = list.iterator();
+    Iterator<Production> it = list.iterator();
     while (it.hasNext()) {
-      Production p = (Production) it.next();
+      Production p = it.next();
       grammar.addProduction(getSimplifiedProduction(p));
     }
 
@@ -421,13 +422,13 @@ public class PDAToCFGConverter {
    * <br> 2.  the lhs leads to a cycle. <br> 3. All variables on the right side lead to a cycle or a leaf node.
    */
   private void purgeProductionsHelper(
-      String lhs, Production[] productions, HashSet valid, int[] validProductions) {
-    ArrayList variables;
+      String lhs, Production[] productions, HashSet<String> valid, int[] validProductions) {
+    List<String> variables;
     String rhs;
     for (int i = 0; i < productions.length; i++)
       if (productions[i].getLHS().equals(lhs) && validProductions[i] == 0) {
         validProductions[i] = 1;
-        variables = new ArrayList();
+        variables = new ArrayList<>();
         rhs = new String(productions[i].getRHS());
         while (rhs.indexOf(LEFT_PAREN) > -1) {
           variables.add(rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
@@ -442,7 +443,7 @@ public class PDAToCFGConverter {
         if (validProductions[i] == 1) {
           validProductions[i] = 2;
           for (int j = 0; j < variables.size(); j++)
-            purgeProductionsHelper((String) variables.get(j), productions, valid, validProductions);
+            purgeProductionsHelper(variables.get(j), productions, valid, validProductions);
         }
       }
   }
@@ -458,8 +459,8 @@ public class PDAToCFGConverter {
    */
   public void purgeProductions(Automaton automaton, GrammarTableModel model) {
     Production[] productions = model.getProductions();
-    HashSet valid = new HashSet();
-    Stack variables, invalid;
+    HashSet<String> valid = new HashSet<>();
+    Stack<String> variables, invalid;
     boolean updated;
     int[] validProductions = new int[productions.length];
     for (int i = 0; i < productions.length; i++) validProductions[i] = 0;
@@ -469,8 +470,8 @@ public class PDAToCFGConverter {
     do {
       updated = false;
       for (int i = 0; i < validProductions.length; i++) {
-        variables = new Stack();
-        invalid = new Stack();
+        variables = new Stack<>();
+        invalid = new Stack<>();
         String rhs = productions[i].getRHS();
         while (rhs.indexOf(LEFT_PAREN) > -1) {
           variables.push(rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
@@ -480,7 +481,7 @@ public class PDAToCFGConverter {
         }
 
         while (variables.size() > 0)
-          if (!valid.contains((String) variables.peek())) invalid.push(variables.pop());
+          if (!valid.contains(variables.peek())) invalid.push(variables.pop());
           else variables.pop();
         if (invalid.size() == 0 && !valid.contains(productions[i].getLHS())) {
           updated = true;
@@ -500,8 +501,8 @@ public class PDAToCFGConverter {
 
     //Next, delete all superfluous rows and make note of those capital-letter variable
     //assignments that are freed up in a new map.
-    HashMap newMap = new HashMap();
-    HashSet freeValues = new HashSet();
+    HashMap<String, String> newMap = new HashMap<>();
+    HashSet<String>  freeValues = new HashSet<>();
     String key;
     for (int i = 0; i < 26; i++) freeValues.add("" + (char) ('A' + i));
     for (int i = validProductions.length - 1; i >= 0; i--)
@@ -509,19 +510,19 @@ public class PDAToCFGConverter {
       else {
         key = productions[i].getLHS();
         newMap.put(key, MAP.get(key));
-        if (((String) MAP.get(key)).charAt(0) <= 'Z') freeValues.remove((String) MAP.get(key));
+        if (MAP.get(key).charAt(0) <= 'Z') freeValues.remove(MAP.get(key));
       }
 
     //Finally, assign the new map to the old map, and assign one-letter variables to
     //any variables that need one.
     MAP = newMap;
-    Iterator freeIter, mapIter;
+    Iterator<String> freeIter, mapIter;
     freeIter = freeValues.iterator();
     mapIter = newMap.keySet().iterator();
 
     while (mapIter.hasNext()) {
-      key = (String) mapIter.next();
-      if (((String) MAP.get(key)).charAt(0) > 'Z') MAP.put(key, (String) freeIter.next());
+      key = mapIter.next();
+      if (MAP.get(key).charAt(0) > 'Z') MAP.put(key, freeIter.next());
     }
   }
 
@@ -529,7 +530,7 @@ public class PDAToCFGConverter {
 
   protected int UNIQUE_ID;
 
-  protected HashMap MAP;
+  protected HashMap<String, String> MAP;
 
   protected static final String LEFT_PAREN = "(";
 
