@@ -48,8 +48,8 @@ public class TMTransducer extends AutomatonTransducer {
    * @return an empty Turing machine
    */
   protected Automaton createEmptyAutomaton(Document document) {
-    Map e2t = elementsToText(document.getDocumentElement());
-    String s = (String) e2t.get(TURING_TAPES_NAME);
+    Map<String, String> e2t = elementsToText(document.getDocumentElement());
+    String s = e2t.get(TURING_TAPES_NAME);
     if (s == null) s = "1";
     try {
       int tapes = Integer.parseInt(s);
@@ -76,7 +76,7 @@ public class TMTransducer extends AutomatonTransducer {
    *            elements to text from {@link #elementsToText}
    * @return the new transition
    */
-  protected Transition createTransition(State from, State to, Node node, Map e2t, boolean isBlock) {
+  protected Transition createTransition(State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     TuringMachine tm = (TuringMachine) from.getAutomaton();
     int tapes = tm.tapes();
     String[]
@@ -88,15 +88,15 @@ public class TMTransducer extends AutomatonTransducer {
     Arrays.fill(writeStrings, "");
     Arrays.fill(moveStrings, "R");
     // Avoid undue code duplication.
-    Map tag2array = new HashMap();
+    Map<String, String[]> tag2array = new HashMap<>();
     tag2array.put(TRANSITION_READ_NAME, readStrings);
     tag2array.put(TRANSITION_WRITE_NAME, writeStrings);
     tag2array.put(TRANSITION_MOVE_NAME, moveStrings);
     // Go through the tags.
-    Iterator it = tag2array.keySet().iterator();
+    Iterator<String> it = tag2array.keySet().iterator();
     while (it.hasNext()) {
-      String tag = (String) it.next();
-      String[] array = (String[]) tag2array.get(tag);
+      String tag = it.next();
+      String[] array = tag2array.get(tag);
       NodeList nodes = ((Element) node).getElementsByTagName(tag);
       for (int i = 0; i < nodes.getLength(); i++) {
         Element elem = (Element) nodes.item(i);
@@ -159,7 +159,7 @@ public class TMTransducer extends AutomatonTransducer {
     TMTransition t = (TMTransition) transition;
     TuringMachine tm = (TuringMachine) t.getFromState().getAutomaton();
     // Add the characterizing strings for this transition.
-    Map attr = new HashMap();
+    Map<String, String> attr = new HashMap<>();
     for (int i = 0; i < tm.tapes(); i++) {
       if (tm.tapes() > 1) attr.put(TRANSITION_TAPE_NAME, "" + (i + 1));
       String read = t.getRead(i), write = t.getWrite(i);

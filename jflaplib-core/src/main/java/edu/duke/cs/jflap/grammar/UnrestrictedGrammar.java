@@ -24,6 +24,7 @@ package edu.duke.cs.jflap.grammar;
  * @author Thomas Finley
  */
 public class UnrestrictedGrammar extends Grammar {
+	private static final long serialVersionUID = 1700L;
 
   private boolean myTuringBool = false;
   /**

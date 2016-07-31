@@ -18,6 +18,7 @@ package edu.duke.cs.jflap.grammar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * The Grammar checker object can be used to check certain properties of grammar
@@ -143,7 +144,7 @@ public class GrammarChecker {
    * @return all productions in <CODE>grammar</CODE> whose lhs is <CODE>variable</CODE>.
    */
   public static Production[] getProductionsOnVariable(String variable, Grammar grammar) {
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
@@ -151,7 +152,7 @@ public class GrammarChecker {
         list.add(productions[k]);
       }
     }
-    return (Production[]) list.toArray(new Production[0]);
+    return list.toArray(new Production[0]);
   }
 
   /**
@@ -168,7 +169,7 @@ public class GrammarChecker {
    *         productions.
    */
   public static Production[] getNonUnitProductionsOnVariable(String variable, Grammar grammar) {
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
@@ -177,7 +178,7 @@ public class GrammarChecker {
         list.add(productions[k]);
       }
     }
-    return (Production[]) list.toArray(new Production[0]);
+    return list.toArray(new Production[0]);
   }
 
   /**
@@ -211,7 +212,7 @@ public class GrammarChecker {
    *         in them, either on the rhs or lhs.
    */
   public static Production[] getProductionsWithVariable(String variable, Grammar grammar) {
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
@@ -219,7 +220,7 @@ public class GrammarChecker {
         list.add(productions[k]);
       }
     }
-    return (Production[]) list.toArray(new Production[0]);
+    return list.toArray(new Production[0]);
   }
 
   /**
@@ -235,12 +236,12 @@ public class GrammarChecker {
    */
   public static Production[] getProductionsWithVariableOnRHS(String variable, Grammar grammar) {
     ProductionChecker pc = new ProductionChecker();
-    ArrayList list = new ArrayList();
+    List<Production> list = new ArrayList<>();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (ProductionChecker.isVariableOnRHS(productions[k], variable)) list.add(productions[k]);
     }
-    return (Production[]) list.toArray(new Production[0]);
+    return list.toArray(new Production[0]);
   }
 
   /**
@@ -253,13 +254,13 @@ public class GrammarChecker {
    */
   public static String[] getUnresolvedVariables(Grammar grammar) {
     String[] variables = grammar.getVariables();
-    HashSet variableSet = new HashSet();
+    HashSet<String> variableSet = new HashSet<>();
     for (int i = 0; i < variables.length; i++) variableSet.add(variables[i]);
     Production[] productions = grammar.getProductions();
     for (int i = 0; i < productions.length; i++) {
       String[] lhsVariables = productions[i].getVariablesOnLHS();
       for (int j = 0; j < lhsVariables.length; j++) variableSet.remove(lhsVariables[j]);
     }
-    return (String[]) variableSet.toArray(new String[0]);
+    return variableSet.toArray(new String[0]);
   }
 }

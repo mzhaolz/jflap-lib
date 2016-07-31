@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.grammar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
@@ -49,7 +50,7 @@ public abstract class GrammarToAutomatonConverter {
    * Initializes the converter for a new conversion by clearing its map.
    */
   public void initialize() {
-    MAP = new HashMap();
+    MAP = new HashMap<>();
   }
 
   /**
@@ -60,7 +61,7 @@ public abstract class GrammarToAutomatonConverter {
    * @return the State object mapped to <CODE>variable</CODE>
    */
   public State getStateForVariable(String variable) {
-    return (State) MAP.get(variable);
+    return MAP.get(variable);
   }
 
   /**
@@ -95,7 +96,7 @@ public abstract class GrammarToAutomatonConverter {
    *         they will accept the same language.
    */
   public Automaton convertToAutomaton(Grammar grammar) {
-    ArrayList list = new ArrayList();
+    List<Transition> list = new ArrayList<>();
     Automaton automaton = new Automaton();
     createStatesForConversion(grammar, automaton);
     Production[] productions = grammar.getProductions();
@@ -103,9 +104,9 @@ public abstract class GrammarToAutomatonConverter {
       list.add(getTransitionForProduction(productions[k]));
     }
 
-    Iterator it = list.iterator();
+    Iterator<Transition> it = list.iterator();
     while (it.hasNext()) {
-      Transition transition = (Transition) it.next();
+      Transition transition = it.next();
       automaton.addTransition(transition);
     }
     return automaton;
@@ -124,7 +125,7 @@ public abstract class GrammarToAutomatonConverter {
    */
   public abstract void createStatesForConversion(Grammar grammar, Automaton automaton);
 
-  protected HashMap MAP;
+  protected HashMap<String, State> MAP;
 
   protected String BOTTOM_OF_STACK = "Z";
 }

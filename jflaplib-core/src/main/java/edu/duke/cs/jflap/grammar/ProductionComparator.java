@@ -25,7 +25,8 @@ import java.util.Comparator;
  *
  * @author Thomas Finley
  */
-public class ProductionComparator implements Comparator {
+public class ProductionComparator implements Comparator<Production> {
+	private static final long serialVersionUID = 1500L;
   /**
    * Instantiates a comparator, getting the start variable from a given
    * grammar.
@@ -54,8 +55,8 @@ public class ProductionComparator implements Comparator {
   /**
    * Compares two productions.
    */
-  public int compare(Object o1, Object o2) {
-    Production p1 = (Production) o1, p2 = (Production) o2;
+	@Override
+  public int compare(Production p1, Production p2) {
     if (start.equals(p1.getLHS())) {
       if (p1.getLHS().equals(p2.getLHS())) return 0;
       else return -1;

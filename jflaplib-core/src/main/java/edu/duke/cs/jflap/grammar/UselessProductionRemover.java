@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -54,8 +55,8 @@ public class UselessProductionRemover {
    * @return set of all useful variables in <CODE>grammar</CODE>. A grammar
    *         is considered useful if it can derive a string.
    */
-  public static Set getCompleteUsefulVariableSet(Grammar grammar) {
-    Set set = getNewUsefulVariableSet();
+  public static Set<String> getCompleteUsefulVariableSet(Grammar grammar) {
+    Set<String> set = getNewUsefulVariableSet();
     while (areMoreVariablesThatBelongInUsefulVariableSet(grammar, set)) {
       String variable = getVariableThatBelongsInUsefulVariableSet(grammar, set);
       addToUsefulVariableSet(variable, set);
@@ -68,8 +69,8 @@ public class UselessProductionRemover {
    *
    * @return empty set.
    */
-  private static Set getNewUsefulVariableSet() {
-    return new HashSet();
+  private static Set<String> getNewUsefulVariableSet() {
+    return new HashSet<String>();
   }
 
   /**
@@ -80,7 +81,7 @@ public class UselessProductionRemover {
    * @param set
    *            the set
    */
-  public static void addToUsefulVariableSet(String variable, Set set) {
+  public static void addToUsefulVariableSet(String variable, Set<String> set) {
     set.add(variable);
   }
 
@@ -88,8 +89,8 @@ public class UselessProductionRemover {
    * Returns the set of variables that are the predicate of rules that are
    * only terminal strings.
    */
-  public static Set getTerminalProductions(Grammar grammar) {
-    Set terminalDerivers = new TreeSet();
+  public static Set<String> getTerminalProductions(Grammar grammar) {
+    Set<String> terminalDerivers = new TreeSet<>();
     Production[] p = grammar.getProductions();
     for (int i = 0; i < p.length; i++) {
       String lhs = p[i].getLHS();
@@ -117,10 +118,10 @@ public class UselessProductionRemover {
    */
   public static Grammar getTerminalGrammar(Grammar grammar) {
     Grammar g = new ContextFreeGrammar();
-    Set terminalVars = getCompleteUsefulVariableSet(grammar);
+    Set<String> terminalVars = getCompleteUsefulVariableSet(grammar);
     Production[] prods = grammar.getProductions();
     for (int i = 0; i < prods.length; i++) {
-      Set v = new HashSet(Arrays.asList(prods[i].getVariables()));
+      Set<String> v = new HashSet<>(Arrays.asList(prods[i].getVariables()));
       v.removeAll(terminalVars);
       if (v.size() > 0) continue;
       // Production has no variables that aren't terminal derivers!
@@ -141,7 +142,7 @@ public class UselessProductionRemover {
    * @return a variable that belongs in the set of useful variables for <CODE>grammar</CODE>
    *         that is not already in <CODE>set</CODE>.
    */
-  public static String getVariableThatBelongsInUsefulVariableSet(Grammar grammar, Set set) {
+  public static String getVariableThatBelongsInUsefulVariableSet(Grammar grammar, Set<String> set) {
     String[] variables = grammar.getVariables();
     for (int k = 0; k < variables.length; k++) {
       if (belongsInUsefulVariableSet(variables[k], grammar, set) && !set.contains(variables[k]))
@@ -161,10 +162,10 @@ public class UselessProductionRemover {
    * @return true if <CODE>set</CODE> contains a variable equivalent to
    *         <CODE>ch</CODE>.
    */
-  private static boolean isInUsefulVariableSet(char ch, Set set) {
-    Iterator it = set.iterator();
+  private static boolean isInUsefulVariableSet(char ch, Set<String> set) {
+    Iterator<String> it = set.iterator();
     while (it.hasNext()) {
-      String variable = (String) it.next();
+      String variable = it.next();
       char var = variable.charAt(0);
       if (ch == var) {
         return true;
@@ -186,7 +187,7 @@ public class UselessProductionRemover {
    *         all letters on the right hand side of the production are either
    *         terminals or useful variables (variables in <CODE>set</CODE>).
    */
-  private static boolean isUsefulProduction(Production production, Set set) {
+  private static boolean isUsefulProduction(Production production, Set<String> set) {
     ProductionChecker pc = new ProductionChecker();
     String rhs = production.getRHS();
     for (int k = 0; k < rhs.length(); k++) {
@@ -212,7 +213,7 @@ public class UselessProductionRemover {
    *         This includes both the left and right hand side of the
    *         production.
    */
-  public static boolean isValidProduction(Production production, Set set) {
+  public static boolean isValidProduction(Production production, Set<String> set) {
     String lhs = production.getLHS();
     for (int k = 0; k < lhs.length(); k++) {
       if (!isInUsefulVariableSet(lhs.charAt(k), set)) return false;
@@ -235,7 +236,7 @@ public class UselessProductionRemover {
    * @return true if <CODE>variable</CODE> belongs in the set of useful
    *         variables, even if it is already in <CODE>set</CODE>.
    */
-  public static boolean belongsInUsefulVariableSet(String variable, Grammar grammar, Set set) {
+  public static boolean belongsInUsefulVariableSet(String variable, Grammar grammar, Set<String> set) {
     GrammarChecker gc = new GrammarChecker();
     Production[] productions = GrammarChecker.getProductionsOnVariable(variable, grammar);
     for (int k = 0; k < productions.length; k++) {
@@ -256,7 +257,7 @@ public class UselessProductionRemover {
    *         already in the set) that belong in the set of useful variables
    *         <CODE>set</CODE>.
    */
-  public static boolean areMoreVariablesThatBelongInUsefulVariableSet(Grammar grammar, Set set) {
+  public static boolean areMoreVariablesThatBelongInUsefulVariableSet(Grammar grammar, Set<String> set) {
     if (getVariableThatBelongsInUsefulVariableSet(grammar, set) == null) return false;
     return true;
   }
@@ -274,9 +275,9 @@ public class UselessProductionRemover {
    *         derive strings) in <CODE>grammar</CODE> based on the useful
    *         variables, contained in <CODE>usefulVariableSet</CODE>.
    */
-  public static Set getCompleteProductionWithUsefulVariableSet(
-      Grammar grammar, Set usefulVariableSet) {
-    Set set = getNewProductionWithUsefulVariableSet();
+  public static Set<Production> getCompleteProductionWithUsefulVariableSet(
+      Grammar grammar, Set<String> usefulVariableSet) {
+    Set<Production> set = getNewProductionWithUsefulVariableSet();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (belongsInProductionWithUsefulVariableSet(productions[k], usefulVariableSet)) {
@@ -291,8 +292,8 @@ public class UselessProductionRemover {
    *
    * @return an empty set.
    */
-  public static Set getNewProductionWithUsefulVariableSet() {
-    return new HashSet();
+  public static Set<Production> getNewProductionWithUsefulVariableSet() {
+    return new HashSet<Production>();
   }
 
   /**
@@ -309,7 +310,7 @@ public class UselessProductionRemover {
    *         terminals and variables in <CODE>usefulVariableSet</CODE>.
    */
   public static boolean belongsInProductionWithUsefulVariableSet(
-      Production production, Set usefulVariableSet) {
+      Production production, Set<String> usefulVariableSet) {
     if (isValidProduction(production, usefulVariableSet)) {
       return true;
     }
@@ -319,7 +320,7 @@ public class UselessProductionRemover {
   /**
    * Adds <CODE>production</CODE> to <CODE>set</CODE>.
    */
-  public static void addToProductionWithUsefulVariableSet(Production production, Set set) {
+  public static void addToProductionWithUsefulVariableSet(Production production, Set<Production> set) {
     set.add(production);
   }
 
@@ -335,7 +336,7 @@ public class UselessProductionRemover {
    */
   public static void initializeVariableDependencyGraph(
       VariableDependencyGraph graph, Grammar grammar) {
-    String[] variables = (String[]) getCompleteUsefulVariableSet(grammar).toArray(new String[0]);
+    String[] variables = getCompleteUsefulVariableSet(grammar).toArray(new String[0]);
     for (int k = 0; k < variables.length; k++) {
       double theta = 2.0 * Math.PI * (double) k / (double) variables.length;
       Point point =
@@ -423,7 +424,7 @@ public class UselessProductionRemover {
   public static VariableDependencyGraph getVariableDependencyGraph(Grammar grammar) {
     VariableDependencyGraph graph = new VariableDependencyGraph();
     initializeVariableDependencyGraph(graph, grammar);
-    String[] variables = (String[]) getCompleteUsefulVariableSet(grammar).toArray(new String[0]);
+    String[] variables = getCompleteUsefulVariableSet(grammar).toArray(new String[0]);
     for (int k = 0; k < variables.length; k++) {
       String v1 = variables[k];
       for (int i = 0; i < variables.length; i++) {
@@ -450,7 +451,7 @@ public class UselessProductionRemover {
    */
   public static Transition[] getTransitionsForProduction(
       Production production, VariableDependencyGraph graph) {
-    ArrayList list = new ArrayList();
+    List<Transition> list = new ArrayList<>();
     String v1 = production.getLHS();
     ProductionChecker pc = new ProductionChecker();
     String rhs = production.getRHS();
@@ -462,7 +463,7 @@ public class UselessProductionRemover {
         list.add(getTransition(v1, buffer.toString(), graph));
       }
     }
-    return (Transition[]) list.toArray(new Transition[0]);
+    return list.toArray(new Transition[0]);
   }
 
   /**
@@ -479,13 +480,13 @@ public class UselessProductionRemover {
    *         the variable dependency graph <CODE>graph</CODE>.
    */
   public static String[] getUselessVariables(Grammar grammar, VariableDependencyGraph graph) {
-    ArrayList list = new ArrayList();
+    List<String> list = new ArrayList<>();
     UnreachableStatesDetector usd = new UnreachableStatesDetector(graph);
     State[] states = usd.getUnreachableStates();
     for (int k = 0; k < states.length; k++) {
       list.add(states[k].getName());
     }
-    return (String[]) list.toArray(new String[0]);
+    return list.toArray(new String[0]);
   }
 
   /**
@@ -516,11 +517,11 @@ public class UselessProductionRemover {
    *         simply creating a new grammar and adding all productions in
    *         <CODE>usefulProductionSet</CODE> to that grammar.
    */
-  private static Grammar getGrammarWithNoVariablesThatCantDeriveStrings(Set usefulProductionSet) {
+  private static Grammar getGrammarWithNoVariablesThatCantDeriveStrings(Set<Production> usefulProductionSet) {
     Grammar g = new ContextFreeGrammar();
-    Iterator it = usefulProductionSet.iterator();
+    Iterator<Production> it = usefulProductionSet.iterator();
     while (it.hasNext()) {
-      Production p = (Production) it.next();
+      Production p = it.next();
       g.addProduction(p);
     }
     return g;
@@ -541,10 +542,10 @@ public class UselessProductionRemover {
     if (!getCompleteUsefulVariableSet(grammar).contains(grammar.getStartVariable())) return g;
     grammar = getTerminalGrammar(grammar);
     VariableDependencyGraph graph = getVariableDependencyGraph(grammar);
-    Set useless = new HashSet(Arrays.asList(getUselessVariables(g, graph)));
+    Set<String> useless = new HashSet<>(Arrays.asList(getUselessVariables(g, graph)));
     Production[] p = grammar.getProductions();
     for (int i = 0; i < p.length; i++) {
-      Set variables = new HashSet(Arrays.asList(p[i].getVariables()));
+      Set<String> variables = new HashSet<>(Arrays.asList(p[i].getVariables()));
       variables.retainAll(useless);
       if (variables.size() > 0) continue;
       g.addProduction(p[i]);
