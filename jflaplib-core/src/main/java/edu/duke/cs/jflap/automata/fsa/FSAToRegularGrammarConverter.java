@@ -65,11 +65,11 @@ public class FSAToRegularGrammarConverter {
    *            the automaton.
    */
   public void initializeConverter(Automaton automaton) {
-    MAP = new HashMap();
+    MAP = new HashMap<>();
     State[] states = automaton.getStates();
     State initialState = automaton.getInitialState();
     // Do the variables.
-    VARIABLE = new LinkedList();
+    VARIABLE = new LinkedList<>();
     for (char c = 'A'; c <= 'Z'; c++) VARIABLE.add("" + c);
     // Map the initial state to S.
     if (initialState != null) {
@@ -77,22 +77,22 @@ public class FSAToRegularGrammarConverter {
       MAP.put(initialState, START_VARIABLE);
     }
     // Assign variables to the other states.
-    List stateList = new ArrayList(Arrays.asList(states));
+    List<State> stateList = new ArrayList<>(Arrays.asList(states));
     stateList.remove(initialState);
     Collections.sort(
         stateList,
-        new Comparator() {
-          public int compare(Object o1, Object o2) {
-            return ((State) o1).getID() - ((State) o2).getID();
+        new Comparator<State>() {
+          public int compare(State o1, State o2) {
+            return o1.getID() - o2.getID();
           }
 
           public boolean equals(Object o) {
             return false;
           }
         });
-    Iterator it = stateList.iterator();
+    Iterator<State> it = stateList.iterator();
     while (it.hasNext()) {
-      State state = (State) it.next();
+      State state = it.next();
       MAP.put(state, VARIABLE.removeFirst());
     }
   }
@@ -110,8 +110,8 @@ public class FSAToRegularGrammarConverter {
     State toState = trans.getToState();
     State fromState = trans.getFromState();
     String label = trans.getLabel();
-    String lhs = (String) MAP.get(fromState);
-    String rhs = label.concat((String) MAP.get(toState));
+    String lhs = MAP.get(fromState);
+    String rhs = label.concat(MAP.get(toState));
     Production production = new Production(lhs, rhs);
 
     return production;
@@ -134,7 +134,7 @@ public class FSAToRegularGrammarConverter {
       System.err.println(state + " IS NOT A FINAL STATE");
       return null;
     }
-    String llhs = (String) MAP.get(state);
+    String llhs = MAP.get(state);
     String lrhs = LAMBDA;
     Production lprod = new Production(llhs, lrhs);
     return lprod;
@@ -189,11 +189,11 @@ public class FSAToRegularGrammarConverter {
    *         if there is no variable corresponding to this state
    */
   public String variableForState(State state) {
-    return (String) MAP.get(state);
+    return MAP.get(state);
   }
 
   /** The map of states in the fsa to variables in the grammar. */
-  protected HashMap MAP;
+  protected HashMap<State, String> MAP;
 
   /** The start variable. */
   protected static final String START_VARIABLE = "S";
@@ -202,5 +202,5 @@ public class FSAToRegularGrammarConverter {
   protected static final String LAMBDA = "";
 
   /** The list of unclaimed variable symbols. */
-  protected LinkedList VARIABLE;
+  protected LinkedList<String> VARIABLE;
 }

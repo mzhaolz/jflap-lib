@@ -43,7 +43,7 @@ public class UselessStatesDetector {
   public static Automaton cleanAutomaton(Automaton a) {
     Automaton ac = (Automaton) a.clone();
     State[] s = ac.getStates();
-    Set useless = getUselessStates(ac);
+    Set<State> useless = getUselessStates(ac);
     for (int i = 0; i < s.length; i++) {
       if (useless.contains(s[i]) && s[i] != ac.getInitialState()) ac.removeState(s[i]);
     }
@@ -64,13 +64,13 @@ public class UselessStatesDetector {
    * @throws IllegalArgumentException
    *             if the automata does not have an initial state
    */
-  public static Set getUselessStates(Automaton a) {
+  public static Set<State> getUselessStates(Automaton a) {
     if (a.getInitialState() == null) {
       throw new IllegalArgumentException("Automata does not have an initial state!");
     }
-    Set finalized = findFinal(a);
-    Set initialized = findInitial(a);
-    Set useless = new HashSet(Arrays.asList(a.getStates()));
+    Set<State> finalized = findFinal(a);
+    Set<State> initialized = findInitial(a);
+    Set<State> useless = new HashSet<>(Arrays.asList(a.getStates()));
     finalized.retainAll(initialized);
     useless.removeAll(finalized);
     return useless;
@@ -83,8 +83,8 @@ public class UselessStatesDetector {
    *            the automaton
    * @return the set of state that can lead to a final state
    */
-  private static Set findFinal(Automaton a) {
-    Set finalized = new HashSet();
+  private static Set<State> findFinal(Automaton a) {
+    Set<State> finalized = new HashSet<>();
     finalized.addAll(Arrays.asList(a.getFinalStates()));
     boolean added = finalized.size() != 0;
     Transition[] t = a.getTransitions();
@@ -104,8 +104,8 @@ public class UselessStatesDetector {
    *            the automaton
    * @return the set of states reachable from an initial state
    */
-  private static Set findInitial(Automaton a) {
-    Set initialized = new HashSet();
+  private static Set<State> findInitial(Automaton a) {
+    Set<State> initialized = new HashSet<>();
     initialized.add(a.getInitialState());
     boolean added = true;
     Transition[] t = a.getTransitions();

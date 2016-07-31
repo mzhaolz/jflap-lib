@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.automata.fsa;
 import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.duke.cs.jflap.regular.Discretizer;
 import edu.duke.cs.jflap.automata.Automaton;
@@ -54,6 +55,7 @@ import edu.duke.cs.jflap.automata.Transition;
  * two-state generalized transition graph, and then calling getFinalExpression.
  *
  * @author Ryan Cavalcante
+ *
  */
 public class FSAToRegularExpressionConverter {
   /**
@@ -292,7 +294,7 @@ public class FSAToRegularExpressionConverter {
    */
   public static Transition[] getTransitionsForRemoveState(State state, Automaton automaton) {
     if (!isRemovable(state, automaton)) return null;
-    ArrayList list = new ArrayList();
+    List<Transition> list = new ArrayList<>();
     int k = state.getID();
     State[] states = automaton.getStates();
     for (int i = 0; i < states.length; i++) {
@@ -307,7 +309,7 @@ public class FSAToRegularExpressionConverter {
         }
       }
     }
-    return (Transition[]) list.toArray(new Transition[0]);
+    return list.toArray(new Transition[0]);
   }
 
   /**

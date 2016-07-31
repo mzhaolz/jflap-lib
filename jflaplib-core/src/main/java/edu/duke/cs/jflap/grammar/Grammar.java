@@ -32,6 +32,7 @@ import java.util.*;
  * @author Ryan Cavalcante
  */
 public abstract class Grammar implements Serializable, Cloneable {
+	private static final long serialVersionUID = 100L;
   private final Logger logger = LoggerFactory.getLogger(Grammar.class);
 
   /**
@@ -40,8 +41,8 @@ public abstract class Grammar implements Serializable, Cloneable {
    * variable.
    */
   public Grammar() {
-    myVariables = new HashSet();
-    myTerminals = new HashSet();
+    myVariables = new HashSet<>();
+    myTerminals = new HashSet<>();
     myStartVariable = null;
   }
 
@@ -61,7 +62,7 @@ public abstract class Grammar implements Serializable, Cloneable {
       return null;
     }
 
-    HashMap map = new HashMap(); // old variables to new variables
+    HashMap<String, String> map = new HashMap<>(); // old variables to new variables
 
     String[] variables = getVariables();
     for (int v = 0; v < variables.length; v++) {
@@ -72,7 +73,7 @@ public abstract class Grammar implements Serializable, Cloneable {
     }
 
     /** set start variable. */
-    g.setStartVariable((String) map.get(getStartVariable()));
+    g.setStartVariable(map.get(getStartVariable()));
 
     String[] terminals = getTerminals();
     for (int t = 0; t < terminals.length; t++) {
@@ -229,7 +230,7 @@ public abstract class Grammar implements Serializable, Cloneable {
    * @return all productions in the grammar.
    */
   public Production[] getProductions() {
-    return (Production[]) myProductions.toArray(new Production[0]);
+    return myProductions.toArray(new Production[0]);
   }
 
   /**
@@ -258,7 +259,7 @@ public abstract class Grammar implements Serializable, Cloneable {
    * @return all terminals in the grammar.
    */
   public String[] getTerminals() {
-    return (String[]) myTerminals.toArray(new String[0]);
+    return myTerminals.toArray(new String[0]);
   }
 
   /**
@@ -287,7 +288,7 @@ public abstract class Grammar implements Serializable, Cloneable {
    * @return all variables in the grammar.
    */
   public String[] getVariables() {
-    return (String[]) myVariables.toArray(new String[0]);
+    return myVariables.toArray(new String[0]);
   }
 
   /**
@@ -412,14 +413,15 @@ public abstract class Grammar implements Serializable, Cloneable {
   private String fileName = "";
 
   /** Set of Variables. */
-  protected Set myVariables;
+  protected Set<String> myVariables;
 
   /** Set of Terminals. */
-  protected Set myTerminals;
+  protected Set<String> myTerminals;
 
   /** Start variable. */
   protected String myStartVariable;
 
   /** Set of Production rules. */
-  protected List myProductions = new ArrayList();
+  protected List<Production> myProductions = new ArrayList<>();
+	
 }

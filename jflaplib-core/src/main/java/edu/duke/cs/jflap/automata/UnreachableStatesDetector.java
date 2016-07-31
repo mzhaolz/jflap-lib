@@ -62,7 +62,7 @@ public class UnreachableStatesDetector {
    *         state.
    */
   public State[] getUnreachableStates() {
-    ArrayList list = new ArrayList();
+    List<State> list = new ArrayList<>();
     State[] states = myAutomaton.getStates();
     /** Create nodes for DFS. */
     initializeNodes(states);
@@ -80,7 +80,7 @@ public class UnreachableStatesDetector {
         list.add(myNodes[k].getState());
       }
     }
-    return (State[]) list.toArray(new State[0]);
+    return list.toArray(new State[0]);
   }
 
   /**
