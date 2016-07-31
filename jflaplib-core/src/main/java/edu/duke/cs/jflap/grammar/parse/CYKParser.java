@@ -21,6 +21,10 @@ package edu.duke.cs.jflap.grammar.parse;
 
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
+import edu.duke.cs.jflap.grammar.LambdaProductionRemover;
+import edu.duke.cs.jflap.grammar.UnitProductionRemover;
+import edu.duke.cs.jflap.grammar.UselessProductionRemover;
+import edu.duke.cs.jflap.grammar.CNFConverter;
 
 import java.util.*;
 
@@ -128,6 +132,31 @@ public class CYKParser {
 		else
 			return false;
 	
+	}
+
+	/**
+	 * Thread safe, hopefully.
+	 */
+	public static boolean convertAndSolve(Grammar grammar, String target) {
+		// may not be thread safe
+		grammar = convert(grammar);
+		// CYKParser doesn't handle empty string.
+		if (target.equals("")) {
+			return BruteParser.get(grammar, target).start();	
+		}
+		// lots of repeated work to construct a new CYKParser for the same grammars
+		return new CYKParser(grammar).solve(target);
+	}
+
+	private static Grammar convert(Grammar grammar) {
+		if (grammar.isConverted()) {
+			return grammar;
+		}
+
+		grammar = UselessProductionRemover.getUselessProductionlessGrammar(grammar);
+		grammar = LambdaProductionRemover.getLambdaProductionlessGrammar(grammar);
+		grammar = UnitProductionRemover.getUnitProductionlessGrammar(grammar);
+		return CNFConverter.convert(grammar);
 	}
 	
 	/**
