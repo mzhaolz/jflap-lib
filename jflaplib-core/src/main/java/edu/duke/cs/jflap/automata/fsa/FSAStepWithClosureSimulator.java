@@ -18,6 +18,7 @@ package edu.duke.cs.jflap.automata.fsa;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import edu.duke.cs.jflap.debug.EDebug;
 
@@ -70,8 +71,8 @@ public class FSAStepWithClosureSimulator extends FSAStepByStateSimulator {
    * @param config
    *            the configuration to simulate the one step on.
    */
-  public ArrayList stepConfiguration(Configuration config) {
-    ArrayList list = new ArrayList();
+  public List<Configuration> stepConfiguration(Configuration config) {
+    List<Configuration> list = new ArrayList<>();
     FSAConfiguration configuration = (FSAConfiguration) config;
     /** get all information from configuration. */
     String unprocessedInput = configuration.getUnprocessedInput();

@@ -16,7 +16,8 @@
 
 package edu.duke.cs.jflap.automata;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The nondeterminism detector object can be used to find all the
@@ -50,7 +51,7 @@ public abstract class NondeterminismDetector {
    */
   public State[] getNondeterministicStates(Automaton automaton) {
     LambdaTransitionChecker lc = LambdaCheckerFactory.getLambdaChecker(automaton);
-    ArrayList list = new ArrayList();
+    Set<State> list = new HashSet<>();
     /* Get all states in automaton. */
     State[] states = automaton.getStates();
     /* Check each state for nondeterminism. */
@@ -79,6 +80,6 @@ public abstract class NondeterminismDetector {
         }
       }
     }
-    return (State[]) list.toArray(new State[0]);
+    return list.toArray(new State[0]);
   }
 }

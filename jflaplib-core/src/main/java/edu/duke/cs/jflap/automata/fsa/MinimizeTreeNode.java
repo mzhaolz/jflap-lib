@@ -31,6 +31,7 @@ import edu.duke.cs.jflap.automata.State;
  * @author Ryan Cavalcante
  */
 public class MinimizeTreeNode extends DefaultMutableTreeNode {
+	private static final long serialVersionUID = 600L;
   /**
    * Creates a new <CODE>MinimizeTreeNode</CODE> with <CODE>userObject</CODE>
    * as its user object and the empty string as its terminal.

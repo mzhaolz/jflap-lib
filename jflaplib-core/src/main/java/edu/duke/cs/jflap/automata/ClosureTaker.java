@@ -42,10 +42,10 @@ public class ClosureTaker {
    * @return the set of states that represent the closure of state.
    */
   public static State[] getClosure(State state, Automaton automaton) {
-    List list = new ArrayList();
+    List<State> list = new ArrayList<>();
     list.add(state);
     for (int i = 0; i < list.size(); i++) {
-      state = (State) list.get(i);
+      state = list.get(i);
       Transition transitions[] = automaton.getTransitionsFromState(state);
       for (int k = 0; k < transitions.length; k++) {
         Transition transition = transitions[k];
@@ -59,6 +59,6 @@ public class ClosureTaker {
         }
       }
     }
-    return (State[]) list.toArray(new State[0]);
+    return list.toArray(new State[0]);
   }
 }
