@@ -33,6 +33,11 @@ import edu.duke.cs.jflap.regular.RegularExpression;
  */
 public abstract class RegularAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>RegularAction</CODE>.
    *
    * @param string

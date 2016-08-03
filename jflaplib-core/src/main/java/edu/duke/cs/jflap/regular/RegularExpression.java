@@ -27,6 +27,11 @@ import java.lang.ref.Reference;
  */
 public class RegularExpression implements Serializable {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3838500080597257761L;
+
+/**
    * Instantiates a blank regular expression.
    */
   public RegularExpression() {
@@ -119,7 +124,7 @@ public class RegularExpression implements Serializable {
    * @param ref
    *            the reference to a string to change the regular expression to
    */
-  public void change(Reference ref) {
+  public void change(Reference<?> ref) {
     reference = ref;
   }
 
@@ -197,7 +202,7 @@ public class RegularExpression implements Serializable {
    */
   protected void distributeChangeEvent(String old) {
     ExpressionChangeEvent e = new ExpressionChangeEvent(this, old);
-    Iterator it = listeners.iterator();
+    Iterator<ExpressionChangeListener> it = listeners.iterator();
     while (it.hasNext()) {
       ExpressionChangeListener l = (ExpressionChangeListener) it.next();
       l.expressionChanged(e);
@@ -229,15 +234,15 @@ public class RegularExpression implements Serializable {
       throws java.io.IOException, ClassNotFoundException {
     in.defaultReadObject();
     // Reset those transient listener guys.
-    listeners = new HashSet();
+    listeners = new HashSet<ExpressionChangeListener>();
   }
 
   /** The string of the regular expression. */
   private String string;
 
   /** The set of objects that are regular expressions. */
-  private transient Set listeners = new HashSet();
+  private transient Set<ExpressionChangeListener> listeners = new HashSet<ExpressionChangeListener>();
 
   /** The referrence object that holds the change. */
-  private Reference reference = null;
+  private Reference<?> reference = null;
 }

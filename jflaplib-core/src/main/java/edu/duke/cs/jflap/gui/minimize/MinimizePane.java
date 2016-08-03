@@ -28,6 +28,8 @@ import edu.duke.cs.jflap.gui.viewer.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.tree.*;
 
@@ -39,6 +41,11 @@ import javax.swing.tree.*;
  */
 public class MinimizePane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5651430058368644401L;
+
+/**
    * Instantiates a <CODE>MinimizePane</CODE>.
    *
    * @param dfa
@@ -143,8 +150,8 @@ public class MinimizePane extends JPanel {
         new EditorPane(
             drawer,
             new ToolBox() {
-              public java.util.List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                java.util.List tools = new java.util.LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                java.util.List<Tool> tools = new LinkedList<Tool>();
                 tools.add(new ArrowMinimizeTool(view, drawer));
                 tools.add(new TransitionTool(view, drawer));
                 return tools;
@@ -170,13 +177,13 @@ public class MinimizePane extends JPanel {
     // Do graph layout.
     AutomatonGraph graph = new AutomatonGraph(newAutomaton);
     graph.addVertex(newAutomaton.getInitialState(), new Point(0, 0));
-    Iterator it = builderController.remainingTransitions.iterator();
+    Iterator<?> it = builderController.remainingTransitions.iterator();
     while (it.hasNext()) {
       Transition t = (Transition) it.next();
       graph.addEdge(t.getFromState(), t.getToState());
     }
-    GEMLayoutAlgorithm layout = new GEMLayoutAlgorithm();
-    Set constantStates = new HashSet();
+    GEMLayoutAlgorithm<State> layout = new GEMLayoutAlgorithm<>();
+    Set<State> constantStates = new HashSet<State>();
     constantStates.add(newAutomaton.getInitialState());
     layout.layout(graph, constantStates);
     graph.moveAutomatonStates();

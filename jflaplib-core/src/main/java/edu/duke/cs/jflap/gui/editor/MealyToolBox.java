@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.gui.editor;
 import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,8 +45,8 @@ public class MealyToolBox implements ToolBox {
    * view
    * @return a list of <CODE>Tool</CODE> objects.
    */
-  public List tools(AutomatonPane view, AutomatonDrawer drawer) {
-    List list = new java.util.ArrayList();
+  public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+    List<Tool> list = new ArrayList<Tool>();
     list.add(new MealyArrowTool(view, drawer));
     list.add(new StateTool(view, drawer));
     list.add(new TransitionTool(view, drawer));

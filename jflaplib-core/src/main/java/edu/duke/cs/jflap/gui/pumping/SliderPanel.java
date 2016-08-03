@@ -31,7 +31,11 @@ import javax.swing.event.*;
  *
  */
 public class SliderPanel extends JPanel {
-  private static int START_MAX = 10;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private static int START_MAX = 10;
   /**
    * The parent <code>PumpingLemmaInputPane</code> of this <code>SliderPanel</code>.
    */

@@ -31,6 +31,11 @@ import edu.duke.cs.jflap.regular.*;
  */
 public class EditorPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new editor pane for a given regular expression.
    *
    * @param expression
@@ -86,20 +91,10 @@ public class EditorPane extends JPanel {
   /** The field where the expression is displayed and edited. */
   private JTextField field = new JTextField("");
 
-  /**
-   * The expression change listener for a regular expression detects if there
-   * are changes in the environment, and if so, changes the display.
-   */
-  private ExpressionChangeListener listener =
-      new ExpressionChangeListener() {
-        public void expressionChanged(ExpressionChangeEvent e) {
-          field.setText(e.getExpression().asString());
-        }
-      };
 
   /** The reference object. */
-  private Reference ref =
-      new WeakReference(null) {
+  private Reference<?> ref =
+      new WeakReference<Object>(null) {
         public Object get() {
           return field.getText();
         }

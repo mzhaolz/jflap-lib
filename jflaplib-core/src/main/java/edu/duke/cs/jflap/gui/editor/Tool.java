@@ -126,7 +126,7 @@ public abstract class Tool extends SuperMouseAdapter {
    *         if there is no shortcut keystroke for this tool
    */
   public KeyStroke getKey() {
-    return false ? KeyStroke.getKeyStroke('a') : null;
+    return null;
   }
 
   /**

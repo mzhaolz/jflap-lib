@@ -40,19 +40,19 @@ public class LLParseTableGenerator {
    */
   public static LLParseTable generate(Grammar grammar) {
     LLParseTable table = new LLParseTable(grammar);
-    Map first = Operations.first(grammar), follow = Operations.follow(grammar);
+    Map<String, Set<String>> first = Operations.first(grammar), follow = Operations.follow(grammar);
     Production[] productions = grammar.getProductions();
     for (int i = 0; i < productions.length; i++) {
       String alpha = productions[i].getRHS();
       String A = productions[i].getLHS();
-      Set firsts = Operations.first(first, alpha);
-      Iterator it = firsts.iterator();
+      Set<?> firsts = Operations.first(first, alpha);
+      Iterator<?> it = firsts.iterator();
       while (it.hasNext()) {
         String a = (String) it.next();
         if (!a.equals("")) table.addEntry(A, a, alpha);
       }
       if (!firsts.contains("")) continue;
-      Set follows = (Set) follow.get(A);
+      Set<?> follows = (Set<?>) follow.get(A);
       it = follows.iterator();
       while (it.hasNext()) table.addEntry(A, (String) it.next(), alpha);
     }

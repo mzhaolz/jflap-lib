@@ -19,11 +19,13 @@ package edu.duke.cs.jflap.automata.graph.layout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
 import edu.duke.cs.jflap.automata.graph.Graph;
+import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.graph.AutomatonDirectedGraph;
 import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
 
@@ -32,11 +34,11 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
  *
  * @author Chris Morgan
  */
-public class TreeLayoutAlgorithm extends LayoutAlgorithm {
+public class TreeLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   /**
    * The graph used for this LayoutAlgorithm
    */
-  protected Graph graph;
+  protected Graph<V> graph;
   /**
    * If true, this is a hierarchical tree.  If false, a degree tree.
    */
@@ -71,9 +73,10 @@ public class TreeLayoutAlgorithm extends LayoutAlgorithm {
     hierarchical = hier;
   }
 
-  public void layout(Graph g, Set notMoving) {
+  @SuppressWarnings("unchecked")
+public void layout(Graph<V> g, Set<V> notMoving) {
     graph = g;
-    ArrayList vertices = getMovableVertices(graph, notMoving);
+    ArrayList<V> vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 
     /* After checking to see if the graph has movable vertices, sort the vertices
@@ -88,9 +91,9 @@ public class TreeLayoutAlgorithm extends LayoutAlgorithm {
       if (!(graph instanceof AutomatonDirectedGraph)) return;
       final AutomatonDirectedGraph adg = (AutomatonDirectedGraph) graph;
       Collections.sort(
-          vertices,
-          new Comparator() {
-            public int compare(Object o1, Object o2) {
+          (List<State>) vertices,
+          new Comparator<State>() {
+            public int compare(State o1, State o2) {
               if (adg.toDegree(o1, true) == adg.toDegree(o2, true)) return 0;
               else if (adg.toDegree(o1, true) > adg.toDegree(o2, true)) return 1;
               else return -1;
@@ -99,8 +102,8 @@ public class TreeLayoutAlgorithm extends LayoutAlgorithm {
     } else
       Collections.sort(
           vertices,
-          new Comparator() {
-            public int compare(Object o1, Object o2) {
+          new Comparator<V>() {
+            public int compare(V o1, V o2) {
               if (graph.degree(o1) == graph.degree(o2)) return 0;
               else if (graph.degree(o1) > graph.degree(o2)) return -1;
               else return 1;
@@ -108,7 +111,7 @@ public class TreeLayoutAlgorithm extends LayoutAlgorithm {
           });
 
     // Finally, add the vertices to levels and adjust them so all vertices are on the screen
-    ArrayList notPlaced = new ArrayList();
+    ArrayList<V> notPlaced = new ArrayList<>();
     notPlaced.addAll(vertices);
     Level firstLevel, counter;
     firstLevel = new Level();
@@ -135,7 +138,7 @@ public class TreeLayoutAlgorithm extends LayoutAlgorithm {
     /**
      * The list of vertices in this level.
      */
-    public ArrayList vertices;
+    public ArrayList<V> vertices;
     /**
      * The next level in the hierarchy.
      */
@@ -145,7 +148,7 @@ public class TreeLayoutAlgorithm extends LayoutAlgorithm {
      * The constructor.
      */
     public Level() {
-      vertices = new ArrayList();
+      vertices = new ArrayList<>();
       nextLevel = null;
     }
 
@@ -156,14 +159,14 @@ public class TreeLayoutAlgorithm extends LayoutAlgorithm {
      *
      * @param notPlaced
      */
-    public void processChildren(ArrayList notPlaced) {
-      VertexChain chain, lastChain;
+    public void processChildren(ArrayList<V> notPlaced) {
+      VertexChain<V> chain, lastChain;
       lastChain = null;
 
       for (int i = 0; i < vertices.size(); i++) {
         //For each vertex, add its children to a VertexChain, which helps in minimizing intralevel
         //edge overlaps.
-        chain = new VertexChain(graph);
+        chain = new VertexChain<>(graph);
         for (int j = notPlaced.size() - 1; j >= 0; j--) {
           if (graph.hasEdge(vertices.get(i), notPlaced.get(j))
               && !vertices.get(i).equals(notPlaced.get(j))) {

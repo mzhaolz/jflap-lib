@@ -31,6 +31,11 @@ import javax.swing.event.ChangeListener;
  */
 public class ZoomPane extends AutomatonPane {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a <CODE>ZoomPane</CODE> for a given <CODE>SelectionDrawer</CODE>.
    *
    * @param drawer

@@ -53,7 +53,7 @@ public class SerializedCodec extends Codec {
    * @throws ParseException
    *             if there was a problem reading the file
    */
-  public Serializable decode(File file, Map parameters) {
+  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     Serializable object = null;
     try {
       ObjectInputStream stream =
@@ -84,7 +84,7 @@ public class SerializedCodec extends Codec {
    * @throws EncodeException
    *             if there was a problem writing the file
    */
-  public File encode(Serializable structure, File file, Map parameters) {
+  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     try {
       ObjectOutputStream stream =
           new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));

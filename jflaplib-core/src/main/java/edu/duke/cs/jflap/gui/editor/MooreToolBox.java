@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.gui.editor;
 import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,8 +47,8 @@ public class MooreToolBox implements ToolBox {
    * view
    * @return a list of <CODE>Tool</CODE> objects.
    */
-  public List tools(AutomatonPane view, AutomatonDrawer drawer) {
-    List list = new java.util.ArrayList();
+  public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+	List<Tool> list = new ArrayList<Tool>();
     list.add(new MooreArrowTool(view, drawer));
     list.add(new MooreStateTool(view, drawer));
     list.add(new TransitionTool(view, drawer));

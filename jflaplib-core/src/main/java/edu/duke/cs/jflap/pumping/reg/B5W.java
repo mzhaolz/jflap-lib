@@ -28,7 +28,12 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class B5W extends RegularPumpingLemma {
 
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5646526422163373705L;
+
+public String getTitle() {
     return "b^5w: w element_of {ab}* : 2na(w) = 3nb(w)";
   }
 

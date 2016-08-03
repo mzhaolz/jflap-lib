@@ -53,7 +53,7 @@ public abstract class AutomatonSimulator {
    *            the configuration to simulate the one step on
    * @param blockStep
    */
-  public abstract List<Configuration> stepConfiguration(Configuration config);
+  public abstract List<? extends Configuration> stepConfiguration(Configuration config);
 
   /**
    * Returns true if the simulation of the input string on the automaton left

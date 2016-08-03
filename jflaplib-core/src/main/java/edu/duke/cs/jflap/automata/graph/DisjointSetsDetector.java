@@ -33,7 +33,7 @@ public class DisjointSetsDetector {
    * Instantiates a <CODE>DisjointSetsDetector</CODE>.
    */
   public DisjointSetsDetector() {
-    STATES_IN_A_SET = new ArrayList();
+    STATES_IN_A_SET = new ArrayList<State>();
   }
 
   /**
@@ -43,10 +43,10 @@ public class DisjointSetsDetector {
    * @param states
    *            the set of states to account for
    */
-  private void accountForStates(HashSet states) {
-    Iterator it = states.iterator();
+  private void accountForStates(HashSet<State> states) {
+    Iterator<State> it = states.iterator();
     while (it.hasNext()) {
-      State state = (State) it.next();
+      State state = it.next();
       if (!STATES_IN_A_SET.contains(state)) STATES_IN_A_SET.add(state);
     }
   }
@@ -85,8 +85,8 @@ public class DisjointSetsDetector {
    * @return a list of states in <CODE>automaton</CODE> that are connected
    *         directly to <CODE>state</CODE>.
    */
-  private ArrayList getStatesConnectedToState(State state, Automaton automaton) {
-    ArrayList list = new ArrayList();
+  private ArrayList<State> getStatesConnectedToState(State state, Automaton automaton) {
+    ArrayList<State> list = new ArrayList<State>();
     State[] states = automaton.getStates();
     for (int k = 0; k < states.length; k++) {
       if (areDirectlyConnected(state, states[k], automaton)) {
@@ -107,10 +107,10 @@ public class DisjointSetsDetector {
    * @param list
    *            a list of states
    */
-  private void addAllNotInSetToList(ArrayList toAdd, HashSet set, ArrayList list) {
-    Iterator it = toAdd.iterator();
+  private void addAllNotInSetToList(ArrayList<State> toAdd, HashSet<State> set, ArrayList<State> list) {
+    Iterator<State> it = toAdd.iterator();
     while (it.hasNext()) {
-      State state = (State) it.next();
+      State state = it.next();
       if (!set.contains(state)) list.add(state);
     }
   }
@@ -126,15 +126,15 @@ public class DisjointSetsDetector {
    * @return a set containing all states in <CODE>automaton</CODE>,
    *         including <CODE>state</CODE>, that are connected to <CODE>state</CODE>.
    */
-  public HashSet getSetIncludingState(State state, Automaton automaton) {
-    HashSet set = new HashSet();
-    ArrayList list = new ArrayList();
+  public HashSet<State> getSetIncludingState(State state, Automaton automaton) {
+    HashSet<State> set = new HashSet<State>();
+    ArrayList<State> list = new ArrayList<State>();
     list.add(state);
     while (!list.isEmpty()) {
-      ArrayList toAdd = new ArrayList();
-      Iterator it = list.iterator();
+      ArrayList<State> toAdd = new ArrayList<State>();
+      Iterator<State> it = list.iterator();
       while (it.hasNext()) {
-        State s = (State) it.next();
+        State s = it.next();
         toAdd.addAll(getStatesConnectedToState(s, automaton));
         set.add(s);
         it.remove();
@@ -195,19 +195,20 @@ public class DisjointSetsDetector {
    *            the automaton
    * @return an array of all the disjoint sets of states in <CODE>automaton</CODE>.
    */
-  public HashSet[] getDisjointSets(Automaton automaton) {
-    ArrayList list = new ArrayList();
-    STATES_IN_A_SET = new ArrayList();
+  @SuppressWarnings("unchecked")
+public HashSet<State>[] getDisjointSets(Automaton automaton) {
+    ArrayList<HashSet<State>> list = new ArrayList<HashSet<State>>();
+    STATES_IN_A_SET = new ArrayList<State>();
 
     while (!accountedForAllStates(automaton)) {
       State state = getUnaccountedForState(automaton);
-      HashSet set = getSetIncludingState(state, automaton);
+      HashSet<State> set = getSetIncludingState(state, automaton);
       accountForStates(set);
       list.add(set);
     }
-    return (HashSet[]) list.toArray(new HashSet[0]);
+    return list.toArray((HashSet<State>[]) new HashSet[0]);
   }
 
   /** the states accounted for in the determination of disjoint sets. */
-  protected ArrayList STATES_IN_A_SET;
+  protected ArrayList<State> STATES_IN_A_SET;
 }

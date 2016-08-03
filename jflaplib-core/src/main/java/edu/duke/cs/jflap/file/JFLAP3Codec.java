@@ -46,7 +46,7 @@ public class JFLAP3Codec extends Codec {
    * @throws ParseException
    *             if there was a problem reading the file
    */
-  public Serializable decode(File file, Map parameters) {
+  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     if (file.getName().endsWith(GRAMMAR_SUFFIX)) return readGrammar(file);
     if (file.getName().endsWith(REGULAR_EXPRESSION_SUFFIX)) return readRE(file);
     return readAutomaton(file);
@@ -61,8 +61,7 @@ public class JFLAP3Codec extends Codec {
    */
   private RegularExpression readRE(File file) {
     String rstring = ""; // If nothing found, RE is blank.
-    try {
-      BufferedReader reader = new BufferedReader(new FileReader(file));
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))){
       String line = null;
       while ((line = reader.readLine()) != null) {
         line = line.trim();
@@ -88,8 +87,8 @@ public class JFLAP3Codec extends Codec {
   private Grammar readGrammar(File file) {
     Grammar g = new UnboundGrammar();
     int lineNum = 0;
-    try {
-      BufferedReader reader = new BufferedReader(new FileReader(file));
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+      
       String line = null;
       while ((line = reader.readLine()) != null) {
         line = line.trim();
@@ -119,8 +118,7 @@ public class JFLAP3Codec extends Codec {
    * @return the automaton associated with this document
    */
   private Automaton readAutomaton(File file) {
-    try {
-      BufferedReader reader = new BufferedReader(new FileReader(file));
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))){
       // Read the automaton type.
       String line = reader.readLine().trim();
       if (line.equals(FINITE_AUTOMATON_CODE)) return readFA(reader);
@@ -387,7 +385,7 @@ public class JFLAP3Codec extends Codec {
    * @throws EncodeException
    *             if there was a problem writing the file
    */
-  public File encode(Serializable structure, File file, Map parameters) {
+  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     return file;
   }
 

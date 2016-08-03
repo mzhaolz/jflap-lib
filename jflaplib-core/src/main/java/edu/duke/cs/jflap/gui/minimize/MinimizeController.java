@@ -21,9 +21,7 @@ import edu.duke.cs.jflap.gui.tree.Trees;
 import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -98,8 +98,6 @@ public class LambdaProductionRemover {
    *         right hand side.
    */
   public static boolean isVariableWithLambdaProduction(String variable, Grammar grammar) {
-    ProductionChecker pc = new ProductionChecker();
-    GrammarChecker gc = new GrammarChecker();
     Production[] productions = GrammarChecker.getProductionsOnVariable(variable, grammar);
     for (int k = 0; k < productions.length; k++) {
       if (ProductionChecker.isLambdaProduction(productions[k])) return true;
@@ -204,7 +202,6 @@ public class LambdaProductionRemover {
    *         productions).
    */
   public static boolean isReducableToLambdaProduction(Production production, Set<String> lambdaSet) {
-    ProductionChecker pc = new ProductionChecker();
     if (ProductionChecker.areTerminalsOnRHS(production)) return false;
     String[] variables = production.getVariablesOnRHS();
     for (int j = 0; j < variables.length; j++) {
@@ -230,7 +227,6 @@ public class LambdaProductionRemover {
    */
   public static boolean belongsInLambdaSet(String variable, Grammar grammar, Set<String> lambdaSet) {
     if (isVariableWithLambdaProduction(variable, grammar)) return true;
-    GrammarChecker gc = new GrammarChecker();
     Production[] productions = GrammarChecker.getProductionsOnVariable(variable, grammar);
     for (int k = 0; k < productions.length; k++) {
       if (isReducableToLambdaProduction(productions[k], lambdaSet)) {
@@ -392,7 +388,6 @@ public class LambdaProductionRemover {
    * @return all non lambda productions in <CODE>grammar</CODE>.
    */
   public static Production[] getNonLambdaProductions(Grammar grammar) {
-    ProductionChecker pc = new ProductionChecker();
     List<Production> list = new ArrayList<>();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
@@ -421,115 +416,6 @@ public class LambdaProductionRemover {
     Grammar g = new ContextFreeGrammar();
     g.addProductions(getProductionsToAddToGrammar(grammar, getCompleteLambdaSet(grammar)));
     return g;
-  }
-
-  /**
-   * Returns true if <CODE>ch</CODE> is a character in <CODE>comb</CODE>.
-   *
-   * @param ch
-   *            the character
-   * @param comb
-   *            the string
-   * @return true if <CODE>ch</CODE> is a character in <CODE>comb</CODE>.
-   */
-  private static boolean isNotReplacedByLambda(char ch, String comb) {
-    for (int k = 0; k < comb.length(); k++) {
-      if (ch == comb.charAt(k)) return true;
-    }
-    return false;
-  }
-
-  /**
-   * Returns the production that represents the combination <CODE>comb</CODE>.
-   * (e.g. if comb is the string "AB", that means that the variables "A" and
-   * "B" in <CODE>production</CODE> should not be replaced by lambda, but
-   * that all other variables on the right hand side of <CODE>production</CODE>
-   * should be. therefore, if production was S->aABC, this function would
-   * return S->aAB).
-   *
-   * @param production
-   *            the production
-   * @param comb
-   *            the set of variables that should not be replaced by lambda.
-   * @return the production that represents the combination <CODE>comb</CODE>.
-   *         (e.g. if comb is the string "AB", that means that the variables
-   *         "A" and "B" in <CODE>production</CODE> should not be replaced
-   *         by lambda, but that all other variables on the right hand side of
-   *         <CODE>production</CODE> should be. therefore, if production was
-   *         S->aABC, this function would return S->aAB).
-   */
-  private static Production getProductionForCombination(Production production, String comb) {
-    ProductionChecker pc = new ProductionChecker();
-    String rhs = production.getRHS();
-    StringBuffer buffer = new StringBuffer();
-    for (int k = 0; k < rhs.length(); k++) {
-      char ch = rhs.charAt(k);
-      if (ProductionChecker.isTerminal(ch) || isNotReplacedByLambda(ch, comb)) buffer.append(ch);
-    }
-    Production p = new Production(production.getLHS(), buffer.toString());
-    return p;
-  }
-
-  /**
-   * Returns a string that represents the set of variables from <CODE>variables</CODE>
-   * indicated by <CODE>binary</CODE>. (e.g. if variables was the set
-   * "A,B,C", in that order, and binary was 011, this function would return
-   * "BC" since there is a one at index 1 and 2).
-   *
-   * @param binary
-   *            a binary number whose length is the same as the length of
-   *            <CODE>variables</CODE>
-   * @param variables
-   *            the set of variables that <CODE>binary</CODE> refers to.
-   * @return a string that represents the set of variables from <CODE>variables</CODE>
-   *         indicated by <CODE>binary</CODE>.
-   */
-  private static String getRepresentation(String binary, String[] variables) {
-    StringBuffer buffer = new StringBuffer();
-    for (int k = 0; k < binary.length(); k++) {
-      char ch = binary.charAt(k);
-      if (ch == ONE_CHAR) {
-        buffer.append(variables[k]);
-      }
-    }
-    return buffer.toString();
-  }
-
-  /**
-   * Returns a binary number equivalent to <CODE>binaryNum</CODE> padded
-   * with enough zeros to make it a string of length <CODE>length</CODE>.
-   *
-   * @param binaryNum
-   *            the number to pad with zeros
-   * @param length
-   *            the length to make <CODE>binaryNum</CODE>
-   * @return a binary number equivalent to <CODE>binaryNum</CODE> padded
-   *         with enough zeros to make it a string of length <CODE>length</CODE>.
-   */
-  private static String pad(String binaryNum, int length) {
-    int numZeros = length - binaryNum.length();
-    for (int k = 0; k < numZeros; k++) {
-      binaryNum = ZERO.concat(binaryNum);
-    }
-    return binaryNum;
-  }
-
-  /**
-   * Returns a list of binary numbers (as strings) that encode all possible
-   * permutations of <CODE>variables</CODE>
-   *
-   * @param variables
-   *            the set of variables
-   * @return a list of binary numbers (as strings) that encode all possible
-   *         permutations of <CODE>variables</CODE>
-   */
-  private static String[] getCombinations(String[] variables) {
-    List<String> list = new ArrayList<>();
-    for (int k = 0; k < ((int) Math.pow(2, variables.length)); k++) {
-      String comb = pad(Integer.toBinaryString(k), variables.length);
-      list.add(getRepresentation(comb, variables));
-    }
-    return list.toArray(new String[0]);
   }
 
   /** the string for zero. */

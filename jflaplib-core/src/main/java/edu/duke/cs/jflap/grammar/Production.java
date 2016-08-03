@@ -146,7 +146,6 @@ public class Production implements Serializable {
    * @return all variables on the right hand side of the production.
    */
   public String[] getVariablesOnRHS() {
-    ProductionChecker pc = new ProductionChecker();
     List<String> list = new ArrayList<>();
     for (int i = 0; i < myRHS.length(); i++) {
       char c = myRHS.charAt(i);
@@ -185,7 +184,6 @@ public class Production implements Serializable {
    * @return all terminals on the right hand side of the production.
    */
   public String[] getTerminalsOnRHS() {
-    ProductionChecker pc = new ProductionChecker();
     List<String> list = new ArrayList<>();
     for (int i = 0; i < myRHS.length(); i++) {
       char c = myRHS.charAt(i);
@@ -258,7 +256,6 @@ public class Production implements Serializable {
   public String[] getSymbolsOnRHS() {
     List<String> list = new ArrayList<>();
     for (int i = 0; i < myRHS.length(); i++) {
-      char c = myRHS.charAt(i);
       list.add(myRHS.substring(i, i + 1));
     }
     return list.toArray(new String[0]);

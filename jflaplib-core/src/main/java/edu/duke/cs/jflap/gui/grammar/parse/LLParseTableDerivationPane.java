@@ -31,6 +31,11 @@ import javax.swing.*;
  */
 public class LLParseTableDerivationPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new derivation pane for a grammar environment.
    *
    * @param environment
@@ -52,7 +57,12 @@ public class LLParseTableDerivationPane extends JPanel {
 
     LLParseTable parseTableModel =
         new LLParseTable(g) {
-          public boolean isCellEditable(int r, int c) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public boolean isCellEditable(int r, int c) {
             return controller.step != LLParseDerivationController.FINISHED
                 && super.isCellEditable(r, c);
           }
@@ -70,7 +80,12 @@ public class LLParseTableDerivationPane extends JPanel {
     GrammarTable table =
         new GrammarTable(
             new edu.duke.cs.jflap.gui.grammar.GrammarTableModel(g) {
-              public boolean isCellEditable(int r, int c) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r, int c) {
                 return false;
               }
             });
@@ -90,7 +105,6 @@ public class LLParseTableDerivationPane extends JPanel {
   }
 
   void makeParseUneditable() {
-    editable = false;
     try {
       parseTable.getCellEditor().stopCellEditing();
     } catch (NullPointerException e) {
@@ -100,6 +114,4 @@ public class LLParseTableDerivationPane extends JPanel {
   private LLParseDerivationController controller;
 
   private LLParseTablePane parseTable;
-
-  private boolean editable;
 }

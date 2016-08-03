@@ -30,6 +30,11 @@ import javax.swing.Icon;
  */
 public abstract class RestrictedAction extends AbstractAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>RestrictedAction</CODE>.
    *
    * @param string

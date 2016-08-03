@@ -48,7 +48,12 @@ import javax.swing.JOptionPane;
  */
 public class CYKParseAction extends GrammarAction {
 
-  /** The grammar environment. */
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/** The grammar environment. */
   protected GrammarEnvironment environment;
 
   /** The frame for the grammar environment. */
@@ -112,7 +117,7 @@ public class CYKParseAction extends GrammarAction {
    * @param g Original grammar that is going to be changed
    */
   protected void hypothesizeLambda(GrammarEnvironment env, Grammar g) {
-    Set lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(g);
+    Set<?> lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(g);
     if (lambdaDerivers.contains(g.getStartVariable())) {
       JOptionPane.showMessageDialog(
           env,
@@ -205,7 +210,7 @@ public class CYKParseAction extends GrammarAction {
       for (int i = 0; i < pp.length; i++) {
         pp[i] = resultList.get(i);
       }
-      pp = converter.convert(pp);
+      pp = CNFConverter.convert(pp);
       String var = g.getStartVariable();
       g = new UnrestrictedGrammar();
       g.addProductions(pp);

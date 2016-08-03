@@ -35,19 +35,19 @@ import java.awt.geom.Point2D;
  * @see LayoutAlgorithm
  * @author Chris Morgan
  */
-public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
+public class TwoCircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   /**
    * The graph onto which the vertices will be laid out
    */
-  public Graph graph;
+  public Graph<V> graph;
   /**
    * The vertices associated with the graph
    */
-  ArrayList vertices;
+  ArrayList<V> vertices;
   /**
    * Two lists that represent the division of the vertices into an inner and an outer circle
    */
-  ArrayList innerCircle, outerCircle;
+  ArrayList<V> innerCircle, outerCircle;
   /**
    * <code>VertexChains</code> that represent values in the outer circle.  Each <code>VertexChain</code> corresponds
    * to a vertex in the <code>innerCircleChain</code>, and values in each <code>outerCircleChain</code> are laid
@@ -55,11 +55,11 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
    * graph, do not necessarily have the same radius in their layouts, as this varies based on the number
    * of vertices in each <code>outerCircleChain</code>.
    */
-  CircleChain[] outerCircleChains;
+  CircleChain<V>[] outerCircleChains;
   /**
    * The <code>VertexChain</code> that represents values in the inner circle
    */
-  CircleChain innerCircleChain;
+  CircleChain<V> innerCircleChain;
 
   /**
    * Assigns some default values.  To have different values, use the other constructor.
@@ -82,11 +82,11 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph g, Set notMoving) {
+  public void layout(Graph<V> g, Set<V> notMoving) {
     //First, initialize classwide variables.
     graph = g;
-    innerCircle = new ArrayList();
-    outerCircle = new ArrayList();
+    innerCircle = new ArrayList<>();
+    outerCircle = new ArrayList<>();
     vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 
@@ -94,7 +94,7 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
     assignToCircles();
 
     //Create inner circle chain	and place it in graph
-    innerCircleChain = new CircleChain(graph, vertexDim, vertexBuffer);
+    innerCircleChain = new CircleChain<V>(graph, vertexDim, vertexBuffer);
     for (int i = 0; i < innerCircle.size(); i++) innerCircleChain.addVertex(innerCircle.get(i));
     innerCircleChain.layout(0, Math.PI, 2 * Math.PI);
     innerCircle = innerCircleChain.getVertices(); //getting correct order for outer circle chains
@@ -127,7 +127,7 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
       else outerCircle.add(vertices.get(i));
     if (innerCircle.size() == 0) {
       innerCircle = outerCircle;
-      outerCircle = new ArrayList();
+      outerCircle = new ArrayList<>();
       return;
     }
 
@@ -156,11 +156,12 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
    * assigned to the smaller of the two <code>VertexChains</code> or the smallest existing <code>VertexChain</code>,
    * respectively.
    */
-  protected void createOuterCircleChains() {
-    outerCircleChains = new CircleChain[innerCircle.size()];
+  @SuppressWarnings("unchecked")
+protected void createOuterCircleChains() {
+    outerCircleChains = (CircleChain<V>[]) new CircleChain[innerCircle.size()];
     int[] chainIndex = new int[outerCircle.size()];
     for (int i = 0; i < outerCircleChains.length; i++)
-      outerCircleChains[i] = new CircleChain(graph, vertexDim, vertexBuffer);
+      outerCircleChains[i] = new CircleChain<>(graph, vertexDim, vertexBuffer);
 
     //First add the outerCircle vertices linking to an innerCircle vertex to the corresponding chain.
     for (int i = 0; i < outerCircle.size(); i++) {
@@ -218,7 +219,7 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
    * will be adjusted accordingly.
    */
   protected void shuffleOuterChains() {
-    CircleChain currentChain, nextChain;
+    CircleChain<V> currentChain, nextChain;
     for (int i = 0; i < outerCircleChains.length; i++) {
       currentChain = outerCircleChains[i];
       if (i < outerCircleChains.length - 1) nextChain = outerCircleChains[i + 1];
@@ -241,8 +242,8 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
 
     //Point2D.Double center = new Point2D.Double(f.getWidth()/2, f.getHeight()/2);
     String[] vertices = new String[20];
-    Graph graph = new Graph();
-    LayoutAlgorithm layout = new RandomLayoutAlgorithm();
+    Graph<String> graph = new Graph<>();
+    LayoutAlgorithm<String> layout = new RandomLayoutAlgorithm<>();
     for (int i = 0; i < vertices.length; i++) {
       vertices[i] = "V" + i;
       graph.addVertex(vertices[i], new Point2D.Double(0, 0));
@@ -262,7 +263,7 @@ public class TwoCircleLayoutAlgorithm extends LayoutAlgorithm {
     graph.addEdge(vertices[3], vertices[1]);
     graph.addEdge(vertices[3], verticesadjacent(finalStates[i]).size()[0]);
     graph.addEdge(vertices[3], vertices[2]);*/
-    HashSet set = new HashSet();
+    HashSet<String> set = new HashSet<>();
     //temp.add(vertices[6]);
 
     layout.layout(graph, set);

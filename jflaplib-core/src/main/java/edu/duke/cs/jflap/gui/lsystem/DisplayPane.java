@@ -31,8 +31,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -50,6 +48,11 @@ import javax.swing.event.ChangeListener;
  */
 public class DisplayPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Implements a display pane.
    *
    * @param lsystem
@@ -112,11 +115,9 @@ public class DisplayPane extends JPanel {
    */
   private void updateDisplay() {
     int recursionDepth = spinnerModel.getNumber().intValue();
-    final List expansion = expander.expansionForLevel(recursionDepth);
+    final List<?> expansion = expander.expansionForLevel(recursionDepth);
     progressBar.setMaximum(expansion.size() * 2);
     imageDisplay.setImage(null);
-    Image renderImage = null;
-
     final javax.swing.Timer t =
         new javax.swing.Timer(
             30,
@@ -136,7 +137,7 @@ public class DisplayPane extends JPanel {
               expansionDisplay.setText(expansionString);
             } else expansionDisplay.setText("Suffice to say, quite long.");
             // Now, set the display.
-            Map parameters = lsystem.getValues();
+            Map<String, String> parameters = lsystem.getValues();
 
             t.start();
             Matrix m = new Matrix();
@@ -167,9 +168,9 @@ public class DisplayPane extends JPanel {
    */
   public void printComponent(Graphics g) {
     int recursionDepth = spinnerModel.getNumber().intValue();
-    List expansion = expander.expansionForLevel(recursionDepth);
+    List<String> expansion = expander.expansionForLevel(recursionDepth);
     // Now, set the display.
-    Map parameters = lsystem.getValues();
+    Map<String, String> parameters = lsystem.getValues();
     Matrix m = new Matrix();
     double
         pitch = pitchModel.getNumber().doubleValue(),
@@ -209,15 +210,6 @@ public class DisplayPane extends JPanel {
 
   /** The progress indicator. */
   private JProgressBar progressBar = new JProgressBar(0, 1);
-
-  /** The action for redisplaying. */
-  private Action displayAction =
-      new AbstractAction("Redisplay") {
-        public void actionPerformed(ActionEvent e) {
-          updateDisplay();
-          displayAction.setEnabled(false);
-        }
-      };
 
   /** The spinner models for the transforms. */
   private SpinnerNumberModel

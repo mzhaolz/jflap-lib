@@ -33,6 +33,10 @@ import edu.duke.cs.jflap.automata.Transition;
  */
 public class MealyTransition extends Transition {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1475133557234801895L;
+/**
    * Transition label
    */
   protected String myLabel;

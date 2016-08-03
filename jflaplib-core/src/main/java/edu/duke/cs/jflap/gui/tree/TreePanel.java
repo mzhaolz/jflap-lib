@@ -36,6 +36,11 @@ import javax.swing.JComponent;
  */
 public class TreePanel extends JComponent {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a <CODE>TreePanel</CODE> to draws the specified tree with
    * a default <CODE>TreeDrawer</CODE> object.
    *

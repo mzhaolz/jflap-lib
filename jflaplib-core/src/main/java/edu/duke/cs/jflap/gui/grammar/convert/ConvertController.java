@@ -57,7 +57,7 @@ class ConvertController {
   public ConvertController(
       GrammarViewer grammarView,
       SelectionDrawer drawer,
-      Map productionsToTransitions,
+      Map<Production, Transition> productionsToTransitions,
       Component parent) {
     this.grammarView = grammarView;
     this.drawer = drawer;
@@ -78,18 +78,11 @@ class ConvertController {
    * @return the inverse of the passed in map, or <CODE>null</CODE> if an
    *         error occurred
    */
-  private Map invert(Map map) {
-    Set entries = map.entrySet();
-    Iterator it = entries.iterator();
-    Map inverse = null;
-    try {
-      inverse = (Map) map.getClass().newInstance();
-      while (it.hasNext()) {
-        Map.Entry entry = (Map.Entry) it.next();
-        inverse.put(entry.getValue(), entry.getKey());
-      }
-    } catch (Throwable e) {
-
+  private Map<Transition, Production> invert(Map<Production, Transition> map) {
+	//TODO: Guavify this
+    Map<Transition, Production> inverse = new HashMap<>();
+    for (Production prods : map.keySet()) {
+      inverse.put(map.get(prods), prods);
     }
     return inverse;
   }
@@ -134,8 +127,8 @@ class ConvertController {
    * Puts all of the remaining uncreated transitions into the automaton.
    */
   public void complete() {
-    Collection productions = new HashSet(pToT.keySet());
-    Iterator it = productions.iterator();
+    Collection<?> productions = new HashSet<Object>(pToT.keySet());
+    Iterator<?> it = productions.iterator();
     while (it.hasNext()) {
       Production p = (Production) it.next();
       if (alreadyDone.contains(p)) continue;
@@ -201,15 +194,15 @@ class ConvertController {
   protected Automaton automaton;
 
   /** The map of productions to transitions the user should come up with. */
-  protected Map pToT;
+  protected Map<Production, Transition> pToT;
 
   /** The map of transitions to productions. */
-  protected Map tToP;
+  protected Map<Transition, Production> tToP;
 
   /**
    * The set of productions whose transitions have already been added.
    */
-  protected Set alreadyDone = new HashSet();
+  protected Set<Production> alreadyDone = new HashSet<Production>();
 
   /** The parent component. */
   protected Component parent;

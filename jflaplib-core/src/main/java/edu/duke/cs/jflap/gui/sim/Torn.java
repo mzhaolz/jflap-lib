@@ -135,7 +135,7 @@ public class Torn {
       // Do that greying out and crap.
       String before = string.substring(0, select), after = string.substring(select);
       double bLength = metrics.getStringBounds(before, g2).getWidth();
-      double aLength = metrics.getStringBounds(after, g2).getWidth();
+      metrics.getStringBounds(after, g2).getWidth();
       float aStart = bLength > width / 2.0f ? width / 2.0f : horizontalPadding + (float) bLength;
       float bStart = aStart - (float) bLength;
       g2.setColor(Color.gray);

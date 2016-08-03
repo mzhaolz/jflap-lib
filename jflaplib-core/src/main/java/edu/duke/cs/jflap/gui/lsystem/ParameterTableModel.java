@@ -24,8 +24,13 @@ import java.util.*;
  *
  * @author Thomas Finley
  */
-public class ParameterTableModel extends GrowableTableModel {
+public class ParameterTableModel<T> extends GrowableTableModel<T> {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1656054894151911750L;
+
+/**
    * Constructs an empty parameter table model.
    */
   public ParameterTableModel() {
@@ -38,12 +43,12 @@ public class ParameterTableModel extends GrowableTableModel {
    * @param parameters
    *            the mapping of parameter names to parameter objects
    */
-  public ParameterTableModel(Map parameters) {
+  public ParameterTableModel(Map<String, String> parameters) {
     this();
-    Iterator it = parameters.entrySet().iterator();
+    Iterator<Map.Entry<String,String>> it = parameters.entrySet().iterator();
     int i = 0;
     while (it.hasNext()) {
-      Map.Entry entry = (Map.Entry) it.next();
+      Map.Entry<String,String> entry = it.next();
       setValueAt(entry.getKey(), i, 0);
       setValueAt(entry.getValue(), i, 1);
       i++;
@@ -55,8 +60,9 @@ public class ParameterTableModel extends GrowableTableModel {
    *
    * @return an array with two empty strings
    */
-  public Object[] initializeRow(int row) {
-    return new Object[] {"", ""};
+  @SuppressWarnings("unchecked")
+public T[] initializeRow(int row) {
+    return (T[]) new Object[] {"", ""};
   }
 
   /**
@@ -65,10 +71,10 @@ public class ParameterTableModel extends GrowableTableModel {
    * @return the mapping from parameter names to parameters (i.e., map of
    *         contents of the left column to contents of the right column)
    */
-  public SortedMap getParameters() {
-    TreeMap map = new TreeMap();
+  public Map<T, T> getParameters() {
+    TreeMap<T, T> map = new TreeMap<>();
     for (int i = 0; i < getRowCount() - 1; i++) {
-      Object o = getValueAt(i, 0);
+      T o = getValueAt(i, 0);
       if (o.equals("")) continue;
       map.put(o, getValueAt(i, 1));
     }

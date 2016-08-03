@@ -22,9 +22,7 @@ import edu.duke.cs.jflap.grammar.LambdaProductionRemover;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnitProductionRemover;
 import edu.duke.cs.jflap.grammar.UselessProductionRemover;
-import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.transform.ChomskyPane;
 import edu.duke.cs.jflap.gui.grammar.transform.LambdaPane;
@@ -43,6 +41,11 @@ import javax.swing.JOptionPane;
  */
 public class GrammarTransformAction extends GrammarAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>GrammarTransformAction</CODE>.
    *
    * @param environment
@@ -51,7 +54,6 @@ public class GrammarTransformAction extends GrammarAction {
   public GrammarTransformAction(GrammarEnvironment environment) {
     super("Transform Grammar", null);
     this.environment = environment;
-    this.frame = Universe.frameForEnvironment(environment);
   }
 
   /**
@@ -65,7 +67,7 @@ public class GrammarTransformAction extends GrammarAction {
 
   // Changed to support the Lambda removal for Grammar, which Start variable derives Lambda.
   public static void hypothesizeLambda(GrammarEnvironment env, Grammar g) {
-    Set lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(g);
+    Set<?> lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(g);
     if (lambdaDerivers.contains(g.getStartVariable())) {
       JOptionPane.showMessageDialog(
           env,
@@ -140,7 +142,4 @@ public class GrammarTransformAction extends GrammarAction {
 
   /** The grammar environment. */
   private GrammarEnvironment environment;
-
-  /** The frame for the grammar environment. */
-  private EnvironmentFrame frame;
 }

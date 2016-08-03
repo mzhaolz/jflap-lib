@@ -34,6 +34,11 @@ import javax.swing.JOptionPane;
 public class MultipleCYKParseAction extends CYKParseAction {
 
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>BruteParseAction</CODE>.
    *
    * @param environment

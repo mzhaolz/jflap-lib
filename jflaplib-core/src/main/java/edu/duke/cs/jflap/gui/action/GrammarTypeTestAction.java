@@ -21,9 +21,7 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.ProductionChecker;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
-import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.awt.event.ActionEvent;
 
@@ -36,11 +34,13 @@ import javax.swing.JOptionPane;
  */
 public class GrammarTypeTestAction extends GrammarAction {
 
-  /** The grammar environment. */
-  private GrammarEnvironment environment;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-  /** The frame for the grammar environment. */
-  private EnvironmentFrame frame;
+/** The grammar environment. */
+  private GrammarEnvironment environment;
 
   /**
    * Instantiates a new <CODE>GrammarTypeTestAction</CODE>.
@@ -51,7 +51,6 @@ public class GrammarTypeTestAction extends GrammarAction {
   public GrammarTypeTestAction(GrammarEnvironment environment) {
     super("Test for Grammar Type", null);
     this.environment = environment;
-    this.frame = Universe.frameForEnvironment(environment);
   }
 
   /**

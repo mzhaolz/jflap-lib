@@ -92,7 +92,7 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    * @param config
    *            the configuration to simulate the one step on
    */
-  public List<Configuration> stepConfiguration(Configuration config) {
+  public List<? extends Configuration> stepConfiguration(Configuration config) {
     List<Configuration> list = new ArrayList<>();
     PDAConfiguration configuration = (PDAConfiguration) config;
     /** get all information from configuration. */
@@ -188,7 +188,7 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
       Iterator<Configuration> it = myConfigurations.iterator();
       while (it.hasNext()) {
         PDAConfiguration configuration = (PDAConfiguration) it.next();
-        List<Configuration> configsToAdd = stepConfiguration(configuration);
+        List<? extends Configuration> configsToAdd = stepConfiguration(configuration);
 				for (Configuration config : configsToAdd) {
 					configurationsToAdd.add((PDAConfiguration) config);
 				}

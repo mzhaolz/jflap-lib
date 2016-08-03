@@ -81,9 +81,6 @@ public class Main {
     // Set the AWT exception handler. This may not work in future
     // Java versions.
     try {
-      // This is a useless statement that forces the catcher to
-      // compile.
-      if (edu.duke.cs.jflap.gui.ThrowableCatcher.class == null) ;
       System.setProperty("sun.awt.exception.handler", "gui.ThrowableCatcher");
     } catch (SecurityException e) {
       System.err.println("Warning: could not set the " + "AWT exception handler.");
@@ -156,7 +153,7 @@ public class Main {
           }
 
           //Then set the Turing final state constant
-          parent = doc.getDocumentElement().getElementsByTagName(current.TURING_FINAL_NAME).item(0);
+          parent = doc.getDocumentElement().getElementsByTagName(Profile.TURING_FINAL_NAME).item(0);
           if (parent != null) {
             String turingFinal = parent.getTextContent();
             if (turingFinal.equals("true")) current.setTransitionsFromTuringFinalStateAllowed(true);
@@ -165,14 +162,14 @@ public class Main {
 
           //set the Turing Acceptance ways.
           parent =
-              doc.getDocumentElement().getElementsByTagName(current.ACCEPT_FINAL_STATE).item(0);
+              doc.getDocumentElement().getElementsByTagName(Profile.ACCEPT_FINAL_STATE).item(0);
           if (parent != null) {
             String acceptFinal = parent.getTextContent();
             if (acceptFinal.equals("true")) current.setAcceptByFinalState(true);
             else current.setAcceptByFinalState(false);
           }
 
-          parent = doc.getDocumentElement().getElementsByTagName(current.ACCEPT_HALT).item(0);
+          parent = doc.getDocumentElement().getElementsByTagName(Profile.ACCEPT_HALT).item(0);
           if (parent != null) {
             String acceptHalt = parent.getTextContent();
             if (acceptHalt.equals("true")) current.setAcceptByHalting(true);
@@ -180,7 +177,7 @@ public class Main {
           }
 
           //set the AllowStay option
-          parent = doc.getDocumentElement().getElementsByTagName(current.ALLOW_STAY).item(0);
+          parent = doc.getDocumentElement().getElementsByTagName(Profile.ALLOW_STAY).item(0);
           if (parent != null) {
             String allowStay = parent.getTextContent();
             if (allowStay.equals("true")) current.setAllowStay(true);
@@ -188,7 +185,7 @@ public class Main {
           }
 
           //Now set the Undo amount
-          parent = doc.getDocumentElement().getElementsByTagName(current.UNDO_AMOUNT_NAME).item(0);
+          parent = doc.getDocumentElement().getElementsByTagName(Profile.UNDO_AMOUNT_NAME).item(0);
           if (parent != null) {
             String number = parent.getTextContent();
             current.setNumUndo(Integer.parseInt(number));

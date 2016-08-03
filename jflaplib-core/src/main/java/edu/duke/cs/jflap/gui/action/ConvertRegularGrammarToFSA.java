@@ -27,7 +27,6 @@ import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.convert.ConvertPane;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.JOptionPane;
@@ -43,6 +42,11 @@ import javax.swing.JOptionPane;
  */
 public class ConvertRegularGrammarToFSA extends GrammarAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>GrammarOutputAction</CODE>.
    *
    * @param environment
@@ -73,7 +77,7 @@ public class ConvertRegularGrammarToFSA extends GrammarAction {
     convert.createStatesForConversion(grammar, fsa);
     AutomatonGraph graph = new AutomatonGraph(fsa);
     // Create the map of productions to transitions.
-    HashMap ptot = new HashMap();
+    HashMap<Production, Transition> ptot = new HashMap<Production, Transition>();
     Production[] prods = grammar.getProductions();
     for (int i = 0; i < prods.length; i++) {
       Transition t = convert.getTransitionForProduction(prods[i]);
@@ -83,8 +87,7 @@ public class ConvertRegularGrammarToFSA extends GrammarAction {
     // Add the view to the environment.
     final ConvertPane cp = new ConvertPane(grammar, fsa, ptot, environment);
     environment.add(cp, "Convert to FA", new CriticalTag() {});
-    Rectangle r = cp.getEditorPane().getAutomatonPane().getVisibleRect();
-    LayoutAlgorithm layout = new GEMLayoutAlgorithm();
+    LayoutAlgorithm<State> layout = new GEMLayoutAlgorithm<>();
     layout.layout(graph, null);
     graph.moveAutomatonStates();
     environment.setActive(cp);

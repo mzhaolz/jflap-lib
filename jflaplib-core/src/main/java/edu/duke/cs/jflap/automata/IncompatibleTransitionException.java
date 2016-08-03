@@ -26,4 +26,11 @@ package edu.duke.cs.jflap.automata;
  * @see edu.duke.cs.jflap.automata.Automaton#addTransition
  * @author Thomas Finley
  */
-public class IncompatibleTransitionException extends RuntimeException {}
+public class IncompatibleTransitionException extends RuntimeException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 197916993239519305L;
+	
+}

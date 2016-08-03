@@ -140,7 +140,7 @@ public class UnitController {
     // Which of the selected rows are selected unit productions?
     int[] selectedRows = pane.editingGrammarView.getSelectedRows();
     GrammarTableModel model = pane.editingGrammarModel;
-    Set selectedUnitProductions = new HashSet();
+    Set<Production> selectedUnitProductions = new HashSet<Production>();
     for (int i = selectedRows.length - 1; i >= 0; i--) {
       Production p = model.getProduction(selectedRows[i]);
       if (!ProductionChecker.isUnitProduction(p)) continue;
@@ -152,11 +152,11 @@ public class UnitController {
 
     // Determine what productions need to be added as a result of
     // each selected unit production.
-    Set toAdd = new HashSet();
-    for (Iterator it = selectedUnitProductions.iterator(); it.hasNext(); ) {
+    Set<Production> toAdd = new HashSet<Production>();
+    for (Iterator<Production> it = selectedUnitProductions.iterator(); it.hasNext(); ) {
       // This will do each selected unit production.
       Production unit = (Production) it.next();
-      for (Iterator dit = desiredProductions.iterator(); dit.hasNext(); ) {
+      for (Iterator<Production> dit = desiredProductions.iterator(); dit.hasNext(); ) {
         // Determine if this desired production is good to go.
         Production p = (Production) dit.next();
         if (p.getLHS().equals(unit.getRHS())) toAdd.add(new Production(unit.getLHS(), p.getRHS()));
@@ -164,7 +164,7 @@ public class UnitController {
     }
 
     // Add those productions!
-    for (Iterator it = toAdd.iterator(); it.hasNext(); ) {
+    for (Iterator<Production> it = toAdd.iterator(); it.hasNext(); ) {
       Production p = (Production) it.next();
       if (!currentProductions.add(p)) continue;
       pane.editingGrammarModel.addProduction(p);
@@ -341,16 +341,16 @@ public class UnitController {
   VariableDependencyGraph vdg;
 
   /** The set of transitions that should be added to the VDG. */
-  Set vdgTransitions = new HashSet();
+  Set<Transition> vdgTransitions = new HashSet<Transition>();
 
   /**
    * The set of productions that should comprise the grammar, those that
    * currently do, and those that should be removed.
    */
-  Set
-      desiredProductions = new HashSet(),
-      currentProductions = new HashSet(),
-      unitProductions = new HashSet();
+  Set<Production>
+      desiredProductions = new HashSet<Production>(),
+      currentProductions = new HashSet<Production>(),
+      unitProductions = new HashSet<Production>();
 
   /** The current step. */
   int step = 0;

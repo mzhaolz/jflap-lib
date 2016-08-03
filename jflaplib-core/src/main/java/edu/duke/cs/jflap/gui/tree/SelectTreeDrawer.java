@@ -89,8 +89,8 @@ public class SelectTreeDrawer extends DefaultTreeDrawer {
    * @return an array containing the list of all selected nodes
    */
   public TreeNode[] getSelected() {
-    Set s = new HashSet(selectedNodes.keySet());
-    Iterator it = s.iterator();
+    Set<TreeNode> s = new HashSet<TreeNode>(selectedNodes.keySet());
+    Iterator<TreeNode> it = s.iterator();
     while (it.hasNext()) {
       TreeNode n = (TreeNode) it.next();
       if (n.getParent() == null && n != getModel().getRoot()) selectedNodes.remove(n);
@@ -120,7 +120,7 @@ public class SelectTreeDrawer extends DefaultTreeDrawer {
   }
 
   /** The selected nodes, with keys as nodes. */
-  protected WeakHashMap selectedNodes = new WeakHashMap();
+  protected WeakHashMap<TreeNode, ?> selectedNodes = new WeakHashMap<TreeNode, Object>();
 
   /** The deselected node color. */
   protected Color deselectedColor = NODE_COLOR;

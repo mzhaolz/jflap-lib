@@ -75,9 +75,9 @@ public class LayoutAlgorithmFactory {
    *
    * @return A random <code>LayoutAlgorithm</code> among those defined.
    */
-  public static LayoutAlgorithm getRandomLayoutAlgorithm() {
+  public static <V> LayoutAlgorithm<V> getRandomLayoutAlgorithm() {
     Random random = new Random();
-    return getLayoutAlgorithm(Math.abs(random.nextInt() % NUM_ALGORITHMS));
+    return LayoutAlgorithmFactory.<V> getLayoutAlgorithm(Math.abs(random.nextInt() % NUM_ALGORITHMS));
   }
 
   /**
@@ -89,7 +89,7 @@ public class LayoutAlgorithmFactory {
    * @param vBuffer value for <code>vertexBuffer</code>.
    * @return A random <code>LayoutAlgorithm</code> among those defined.
    */
-  public static LayoutAlgorithm getRandomLayoutAlgorithm(
+  public static <V> LayoutAlgorithm<V> getRandomLayoutAlgorithm(
       Dimension pSize, Dimension vDim, double vBuffer) {
     Random random = new Random();
     return getLayoutAlgorithm(Math.abs(random.nextInt() % NUM_ALGORITHMS), pSize, vDim, vBuffer);
@@ -101,36 +101,36 @@ public class LayoutAlgorithmFactory {
    * @param algorithm a numerical identifier for the specific layout algorithm that should be generated.
    * @return A layout algorithm corresponding to the <code>algorithm</code> value.
    */
-  public static LayoutAlgorithm getLayoutAlgorithm(int algorithm) {
+  public static <V> LayoutAlgorithm<V> getLayoutAlgorithm(int algorithm) {
     switch (algorithm) {
       case RANDOM_CHOICE:
         return getRandomLayoutAlgorithm();
       case CIRCLE:
-        return new CircleLayoutAlgorithm();
+        return new CircleLayoutAlgorithm<V>();
       case GEM:
-        return new GEMLayoutAlgorithm();
+        return new GEMLayoutAlgorithm<V>();
       case RANDOM:
-        return new RandomLayoutAlgorithm();
+        return new RandomLayoutAlgorithm<V>();
       case SPIRAL:
-        return new SpiralLayoutAlgorithm();
+        return new SpiralLayoutAlgorithm<V>();
       case TREE_DEGREE:
-        return new TreeLayoutAlgorithm(false);
+        return new TreeLayoutAlgorithm<V>(false);
       case TREE_HIERARCHY:
-        return new TreeLayoutAlgorithm(true);
+        return new TreeLayoutAlgorithm<V>(true);
       case TWO_CIRCLE:
-        return new TwoCircleLayoutAlgorithm();
+        return new TwoCircleLayoutAlgorithm<V>();
       case VertexMover.NEGATIVE_SLOPE_DIAGONAL:
-        return new VertexMover(VertexMover.NEGATIVE_SLOPE_DIAGONAL);
+        return new VertexMover<V>(VertexMover.NEGATIVE_SLOPE_DIAGONAL);
       case VertexMover.POSITIVE_SLOPE_DIAGONAL:
-        return new VertexMover(VertexMover.POSITIVE_SLOPE_DIAGONAL);
+        return new VertexMover<V>(VertexMover.POSITIVE_SLOPE_DIAGONAL);
       case VertexMover.ROTATE:
-        return new VertexMover(VertexMover.ROTATE);
+        return new VertexMover<V>(VertexMover.ROTATE);
       case VertexMover.HORIZONTAL_CENTER:
-        return new VertexMover(VertexMover.HORIZONTAL_CENTER);
+        return new VertexMover<V>(VertexMover.HORIZONTAL_CENTER);
       case VertexMover.VERTICAL_CENTER:
-        return new VertexMover(VertexMover.VERTICAL_CENTER);
+        return new VertexMover<V>(VertexMover.VERTICAL_CENTER);
       case VertexMover.FILL:
-        return new VertexMover(VertexMover.FILL);
+        return new VertexMover<V>(VertexMover.FILL);
     }
     return null;
   }
@@ -144,37 +144,37 @@ public class LayoutAlgorithmFactory {
    * @param vBuffer value for <code>vertexBuffer</code>.
    * @return A layout algorithm corresponding to the <code>algorithm</code> value.
    */
-  public static LayoutAlgorithm getLayoutAlgorithm(
+  public static <V> LayoutAlgorithm<V> getLayoutAlgorithm(
       int algorithm, Dimension pSize, Dimension vDim, double vBuffer) {
     switch (algorithm) {
       case RANDOM_CHOICE:
-        return getRandomLayoutAlgorithm(pSize, vDim, vBuffer);
+        return LayoutAlgorithmFactory.<V> getRandomLayoutAlgorithm(pSize, vDim, vBuffer);
       case CIRCLE:
-        return new CircleLayoutAlgorithm(pSize, vDim, vBuffer);
+        return new CircleLayoutAlgorithm<V>(pSize, vDim, vBuffer);
       case GEM:
-        return new GEMLayoutAlgorithm(pSize, vDim, vBuffer);
+        return new GEMLayoutAlgorithm<V>(pSize, vDim, vBuffer);
       case RANDOM:
-        return new RandomLayoutAlgorithm(pSize, vDim, vBuffer);
+        return new RandomLayoutAlgorithm<V>(pSize, vDim, vBuffer);
       case SPIRAL:
-        return new SpiralLayoutAlgorithm(pSize, vDim, vBuffer);
+        return new SpiralLayoutAlgorithm<V>(pSize, vDim, vBuffer);
       case TREE_DEGREE:
-        return new TreeLayoutAlgorithm(pSize, vDim, vBuffer, false);
+        return new TreeLayoutAlgorithm<V>(pSize, vDim, vBuffer, false);
       case TREE_HIERARCHY:
-        return new TreeLayoutAlgorithm(pSize, vDim, vBuffer, true);
+        return new TreeLayoutAlgorithm<V>(pSize, vDim, vBuffer, true);
       case TWO_CIRCLE:
-        return new TwoCircleLayoutAlgorithm(pSize, vDim, vBuffer);
+        return new TwoCircleLayoutAlgorithm<V>(pSize, vDim, vBuffer);
       case VertexMover.NEGATIVE_SLOPE_DIAGONAL:
-        return new VertexMover(pSize, vDim, vBuffer, VertexMover.NEGATIVE_SLOPE_DIAGONAL);
+        return new VertexMover<V>(pSize, vDim, vBuffer, VertexMover.NEGATIVE_SLOPE_DIAGONAL);
       case VertexMover.POSITIVE_SLOPE_DIAGONAL:
-        return new VertexMover(pSize, vDim, vBuffer, VertexMover.POSITIVE_SLOPE_DIAGONAL);
+        return new VertexMover<V>(pSize, vDim, vBuffer, VertexMover.POSITIVE_SLOPE_DIAGONAL);
       case VertexMover.ROTATE:
-        return new VertexMover(pSize, vDim, vBuffer, VertexMover.ROTATE);
+        return new VertexMover<V>(pSize, vDim, vBuffer, VertexMover.ROTATE);
       case VertexMover.HORIZONTAL_CENTER:
-        return new VertexMover(pSize, vDim, vBuffer, VertexMover.HORIZONTAL_CENTER);
+        return new VertexMover<V>(pSize, vDim, vBuffer, VertexMover.HORIZONTAL_CENTER);
       case VertexMover.VERTICAL_CENTER:
-        return new VertexMover(pSize, vDim, vBuffer, VertexMover.VERTICAL_CENTER);
+        return new VertexMover<V>(pSize, vDim, vBuffer, VertexMover.VERTICAL_CENTER);
       case VertexMover.FILL:
-        return new VertexMover(pSize, vDim, vBuffer, VertexMover.FILL);
+        return new VertexMover<V>(pSize, vDim, vBuffer, VertexMover.FILL);
     }
     return null;
   }

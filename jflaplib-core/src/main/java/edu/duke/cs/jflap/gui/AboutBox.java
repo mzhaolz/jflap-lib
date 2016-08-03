@@ -31,6 +31,11 @@ import java.awt.event.*;
  */
 public class AboutBox extends JWindow {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1931685156030518714L;
+
+/**
    * Instantiates a new <TT>AboutBox</TT>.
    *
    * @param owner
@@ -51,19 +56,6 @@ public class AboutBox extends JWindow {
   }
 
   /**
-   * Returns a label with the appropriate string.
-   *
-   * @param string
-   *            the string to display
-   * @return a properly created JLabel visible on this frame
-   */
-  private static JLabel getLabel(String string) {
-    JLabel label = new JLabel(string);
-    if (IMAGE != null) label.setForeground(Color.black);
-    return label;
-  }
-
-  /**
    * Instantiates a new <TT>AboutBox</TT> with no specified owner.
    */
   public AboutBox() {
@@ -74,7 +66,6 @@ public class AboutBox extends JWindow {
    * Displays this about box, and plays the clip.
    */
   public void displayBox() {
-    boolean toPlay = !isVisible();
     pack();
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     Dimension boxSize = getPreferredSize();

@@ -61,10 +61,10 @@ public class Expander {
    * @throws IllegalArgumentException
    *             if the level is less than 0
    */
-  public List expansionForLevel(int level) {
+  public List<String> expansionForLevel(int level) {
     if (level < 0) throw new IllegalArgumentException("Recursion level " + level + " impossible!");
-    if (level < cachedExpansions.size()) return (List) cachedExpansions.get(level);
-    List lastOne = (List) cachedExpansions.get(cachedExpansions.size() - 1);
+    if (level < cachedExpansions.size()) return cachedExpansions.get(level);
+    List<String> lastOne = cachedExpansions.get(cachedExpansions.size() - 1);
     for (int i = cachedExpansions.size(); i <= level; i++)
       cachedExpansions.add(lastOne = expand(lastOne));
     return lastOne;
@@ -77,7 +77,7 @@ public class Expander {
    *            the list of symbols to expand
    * @return the expansion of the passed in symbols
    */
-  private List expand(List symbols) {
+  private List<String> expand(List<String> symbols) {
     if (contexts == null) return expandNoContext(symbols);
     return expandContext(symbols);
   }
@@ -90,12 +90,12 @@ public class Expander {
    *            the list of symbols to expand
    * @return the expansion of the passed in symbols
    */
-  private List expandNoContext(List symbols) {
-    List ne = new ArrayList();
+  private List<String> expandNoContext(List<String> symbols) {
+    List<String> ne = new ArrayList<>();
     for (int i = 0; i < symbols.size(); i++) {
-      String s = (String) symbols.get(i);
-      List[] replacements = lsystem.getReplacements(s);
-      List replacement = null;
+      String s = symbols.get(i);
+      List<String>[] replacements = lsystem.getReplacements(s);
+      List<String> replacement = null;
       switch (replacements.length) {
         case 0:
           // This cannot be replaced, so we skip to the next symbol.
@@ -111,7 +111,7 @@ public class Expander {
           replacement = replacements[stochiastic.nextInt(replacements.length)];
           break;
       }
-      Iterator it2 = replacement.iterator();
+      Iterator<String> it2 = replacement.iterator();
       while (it2.hasNext()) ne.add(it2.next()); // Add replacements!
     }
     return ne;
@@ -126,17 +126,17 @@ public class Expander {
    *            the list of symbols to expand
    * @return the expansion of the passed in symbols
    */
-  private List expandContext(List symbols) {
-    List ne = new ArrayList();
+  private List<String> expandContext(List<String> symbols) {
+    List<String> ne = new ArrayList<>();
     for (int i = 0; i < symbols.size(); i++) {
-      String s = (String) symbols.get(i);
-      ArrayList replacementsList = new ArrayList();
+      String s = symbols.get(i);
+      List<List<String>> replacementsList = new ArrayList<>();
       for (int j = 0; j < contexts.length; j++) {
-        List[] l = contexts[j].matches(symbols, i);
+        List<String>[] l = contexts[j].matches(symbols, i);
         for (int k = 0; k < l.length; k++) replacementsList.add(l[k]);
       }
-      List[] replacements = (List[]) replacementsList.toArray(EMPTY_ARRAY);
-      List replacement = null;
+      List<String>[] replacements = replacementsList.toArray(EMPTY_ARRAY);
+      List<String> replacement = null;
       switch (replacements.length) {
         case 0:
           // This cannot be replaced, so we skip to the next symbol.
@@ -152,7 +152,7 @@ public class Expander {
           replacement = replacements[stochiastic.nextInt(replacements.length)];
           break;
       }
-      Iterator it2 = replacement.iterator();
+      Iterator<String> it2 = replacement.iterator();
       while (it2.hasNext()) ne.add(it2.next()); // Add replacements!
     }
     return ne;
@@ -162,16 +162,14 @@ public class Expander {
    * Initializes the contexts.
    */
   private final void initializeContexts() {
-    Iterator symbolIt = lsystem.getSymbolsWithReplacements().iterator();
-    Set searchLengths = new HashSet();
-    Integer one = new Integer(1); // It'll be quite common...
-    ArrayList contextsList = new ArrayList();
+    Iterator<String> symbolIt = lsystem.getSymbolsWithReplacements().iterator();
+    ArrayList<Context> contextsList = new ArrayList<>();
     boolean hasContexts = false;
     // Build the contexts.
     while (symbolIt.hasNext()) {
-      String symbol = (String) symbolIt.next();
-      List tokens = LSystem.tokenify(symbol);
-      List[] replacements = lsystem.getReplacements(symbol);
+      String symbol = symbolIt.next();
+      List<String> tokens = LSystem.tokenify(symbol);
+      List<String>[] replacements = lsystem.getReplacements(symbol);
       int context = 0;
       switch (tokens.size()) {
         case 0:
@@ -181,7 +179,7 @@ public class Expander {
           break;
         default: // More than 1 symbol!
           try {
-            context = Integer.parseInt((String) tokens.get(0));
+            context = Integer.parseInt(tokens.get(0));
             tokens.get(context + 1); // Just to check.
           } catch (NumberFormatException e) {
             // Not a number in the first symbol.
@@ -196,7 +194,7 @@ public class Expander {
       contextsList.add(new Context(tokens, context, replacements));
     }
     // Set the array.
-    if (hasContexts) contexts = (Context[]) contextsList.toArray(new Context[0]);
+    if (hasContexts) contexts = contextsList.toArray(new Context[0]);
   }
 
   /**
@@ -213,7 +211,7 @@ public class Expander {
      * @param results
      *            the results of matching
      */
-    public Context(List tokens, int center, List[] results) {
+    public Context(List<String> tokens, int center, List<String>[] results) {
       this.tokens = tokens;
       this.center = center;
       this.results = results;
@@ -228,10 +226,10 @@ public class Expander {
      * @return the resulting replacement lists for the center token if there
      *         was a match, or an empty array otherwise
      */
-    public List[] matches(List list, int centerList) {
+    public List<String>[] matches(List<String> list, int centerList) {
       centerList -= center;
       try {
-        List sub = list.subList(centerList, centerList + tokens.size());
+        List<String> sub = list.subList(centerList, centerList + tokens.size());
         if (sub.equals(tokens)) return results;
       } catch (IndexOutOfBoundsException e) {
       }
@@ -255,13 +253,13 @@ public class Expander {
     }
 
     /** The token list to match. */
-    protected List tokens;
+    protected List<String> tokens;
 
     /** The center index. */
     protected int center;
 
     /** The result of finding a matching. */
-    protected List[] results;
+    protected List<String>[] results;
   }
 
   /** The L-system we are expanding. */
@@ -271,7 +269,7 @@ public class Expander {
   private Random stochiastic;
 
   /** The cached expansions. At index 0 is the axiom. */
-  private List cachedExpansions = new ArrayList();
+  private List<List<String>> cachedExpansions = new ArrayList<>();
 
   /** For generating random seeds. */
   private static final Random RANDOM = new Random();
@@ -280,5 +278,6 @@ public class Expander {
   private Context[] contexts = null;
 
   /** An empty list. */
-  protected static final List[] EMPTY_ARRAY = new List[0];
+  @SuppressWarnings("unchecked")
+protected static final List<String>[] EMPTY_ARRAY = (List<String>[]) new List[0];
 }

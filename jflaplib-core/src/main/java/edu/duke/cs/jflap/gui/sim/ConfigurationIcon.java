@@ -142,10 +142,6 @@ public abstract class ConfigurationIcon implements Icon {
   /** The point where states are drawn. */
   private static final Point STATE_POINT = new Point(STATE_RADIUS * 2, STATE_RADIUS);
 
-  /** If there is a building block, this is where you draw the current state */
-  private static final Point BB_POINT =
-      new Point((int) (STATE_POINT.getX() * 3.5), (int) STATE_POINT.getY());
-
   /** Draws the arrow from the building block to the current state */
   // private static final CurvedArrow ARROW_DRAWER =
   // new CurvedArrow(new Point((int) (STATE_POINT.getX() + STATE_RADIUS),

@@ -47,6 +47,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class ConvertFSAToGrammarAction extends ConvertAutomatonToGrammarAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>ConvertFSAToGrammarAction</CODE>.
    *
    * @param environment
@@ -71,7 +76,7 @@ public class ConvertFSAToGrammarAction extends ConvertAutomatonToGrammarAction {
       return false;
     }
     // Check for transitions with capital letters.
-    Set bad = new HashSet();
+    Set<Transition> bad = new HashSet<Transition>();
     Transition[] t = getAutomaton().getTransitions();
     for (int i = 0; i < t.length; i++) {
       if (((FSATransition) t[i]).getLabel().matches(".*[A-Z].*")) {
@@ -93,7 +98,7 @@ public class ConvertFSAToGrammarAction extends ConvertAutomatonToGrammarAction {
       messagePanel.add(messageLabel, BorderLayout.SOUTH);
       // Display the message.
       drawer.clearSelected();
-      Iterator it = bad.iterator();
+      Iterator<Transition> it = bad.iterator();
       while (it.hasNext()) drawer.addSelected((Transition) it.next());
       messageLabel.setText("Capital letters are reserved for grammar variables.");
       JOptionPane.showMessageDialog(

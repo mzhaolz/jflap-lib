@@ -20,6 +20,7 @@ import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.TooltipAction;
 import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
 import edu.duke.cs.jflap.gui.editor.EditorPane;
+import edu.duke.cs.jflap.gui.editor.Tool;
 import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.viewer.AutomatonDraggerPane;
@@ -31,6 +32,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -46,6 +49,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class ConversionPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2853526626829551932L;
+
+/**
    * Instantiates a new <CODE>ConversionPane</CODE>.
    *
    * @param nfa
@@ -72,8 +80,6 @@ public class ConversionPane extends JPanel {
             controller.performFirstLayout();
             editor.getAutomatonPane().repaint();
           }
-
-          boolean doneBefore = false;
         });
   }
 
@@ -89,8 +95,8 @@ public class ConversionPane extends JPanel {
         new EditorPane(
             drawer,
             new ToolBox() {
-              public java.util.List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                java.util.List tools = new java.util.LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                List<Tool> tools = new LinkedList<Tool>();
                 tools.add(new ArrowNontransitionTool(view, drawer));
                 tools.add(new TransitionExpanderTool(view, drawer, controller));
                 tools.add(new StateExpanderTool(view, drawer, controller));
@@ -111,13 +117,23 @@ public class ConversionPane extends JPanel {
     toolbar.addSeparator();
     toolbar.add(
         new TooltipAction("Complete", "This will finish all expansion.") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1587659531575512768L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.complete();
           }
         });
     toolbar.add(
         new TooltipAction("Done?", "Are we finished?") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = -3054950168721834336L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.done();
           }
         });

@@ -27,7 +27,12 @@ import edu.duke.cs.jflap.pumping.*;
  *
  */
 public class AiBjCk extends ContextFreePumpingLemma {
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4161793826486881891L;
+
+public String getTitle() {
     return "a^i b^j c^k : i > j, i > k";
   }
 

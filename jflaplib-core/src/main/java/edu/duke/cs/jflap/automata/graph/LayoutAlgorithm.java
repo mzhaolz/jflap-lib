@@ -26,7 +26,7 @@ import java.util.Set;
  *
  * @author Thomas Finley & Chris Morgan
  */
-public abstract class LayoutAlgorithm {
+public abstract class LayoutAlgorithm<V> {
   /**
    * The size of the canvas on which the <code>LayoutAlgorithm</code> will be implemented on.
    */
@@ -67,7 +67,7 @@ public abstract class LayoutAlgorithm {
    * @param notMoving
    *            the set of vertices that will not move at all.
    */
-  public abstract void layout(Graph graph, Set notMoving);
+  public abstract void layout(Graph<V> graph, Set<V> notMoving);
 
   /**
    * Method that can make sure that all vertices are visible in the screen.  The
@@ -91,7 +91,7 @@ public abstract class LayoutAlgorithm {
    *            the given size.
    */
   public static void shiftOntoScreen(
-      Graph graph, Dimension size, Dimension buffer, boolean scaleOnlyOverflow) {
+      Graph<?> graph, Dimension size, Dimension buffer, boolean scaleOnlyOverflow) {
     if (size == null || size.getHeight() == 0 || size.getWidth() == 0) return;
 
     Object[] vertices = graph.vertices();
@@ -155,9 +155,9 @@ public abstract class LayoutAlgorithm {
    *
    * @return the list of vertices
    */
-  public static ArrayList getMovableVertices(Graph graph, Set notMoving) {
-    Object[] vArray = graph.vertices();
-    ArrayList vertices = new ArrayList();
+  public static <V> ArrayList<V> getMovableVertices(Graph<V> graph, Set<V> notMoving) {
+    V[] vArray = graph.vertices();
+    ArrayList<V> vertices = new ArrayList<>();
     for (int i = 0; i < vArray.length; i++)
       if (notMoving == null || !notMoving.contains(vArray[i])) vertices.add(vArray[i]);
     return vertices;
@@ -170,7 +170,7 @@ public abstract class LayoutAlgorithm {
    * @param graph - the graph the points are listed in
    * @param vertices - a list of objects whose points need to be changed
    */
-  public static void cartesianToPolar(Graph graph, ArrayList vertices) {
+  public static void cartesianToPolar(Graph<?> graph, ArrayList<?> vertices) {
     double theta, r;
     Point2D cartesian;
     for (int i = 0; i < vertices.size(); i++) {
@@ -190,7 +190,7 @@ public abstract class LayoutAlgorithm {
    * @param graph - the graph the points are listed in
    * @param vertices - a list of objects whose points need to be changed
    */
-  public static void polarToCartesian(Graph graph, ArrayList vertices) {
+  public static void polarToCartesian(Graph<?> graph, ArrayList<?> vertices) {
     Point2D polar, cartesian;
     for (int i = 0; i < vertices.size(); i++) {
       polar = graph.pointForVertex(vertices.get(i));

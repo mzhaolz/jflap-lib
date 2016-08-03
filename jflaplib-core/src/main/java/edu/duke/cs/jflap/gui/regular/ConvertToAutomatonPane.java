@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.gui.regular;
 
 import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
+import edu.duke.cs.jflap.gui.editor.Tool;
 import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.environment.RegularEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
@@ -49,6 +50,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class ConvertToAutomatonPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Creates a new conversion pane for the conversion of a regular expression
    * to an automaton.
    *
@@ -57,7 +63,7 @@ public class ConvertToAutomatonPane extends JPanel {
    */
   public ConvertToAutomatonPane(RegularEnvironment environment) {
     this.environment = environment;
-    JFrame frame = Universe.frameForEnvironment(environment);
+    Universe.frameForEnvironment(environment);
 
     setLayout(new BorderLayout());
 
@@ -92,8 +98,8 @@ public class ConvertToAutomatonPane extends JPanel {
         new edu.duke.cs.jflap.gui.editor.EditorPane(
             automatonDrawer,
             new ToolBox() {
-              public List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                LinkedList tools = new LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                LinkedList<Tool> tools = new LinkedList<Tool>();
                 tools.add(new ArrowNontransitionTool(view, drawer));
                 tools.add(new RegularToAutomatonTransitionTool(view, drawer, controller));
                 tools.add(new DeexpressionifyTransitionTool(view, drawer, controller));
@@ -137,28 +143,48 @@ public class ConvertToAutomatonPane extends JPanel {
   /** The actions. */
   AbstractAction doStepAction =
       new AbstractAction("Do Step") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.completeStep();
         }
       };
 
   AbstractAction doAllAction =
       new AbstractAction("Do All") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.completeAll();
         }
       };
 
   AbstractAction exportAction =
       new AbstractAction("Export") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.export();
         }
       };
 
   AbstractAction exportAction2 =
       new AbstractAction("Export Now") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.exportToTab();
         }
       };

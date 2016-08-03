@@ -24,7 +24,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
-import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 
 /**
@@ -35,6 +34,11 @@ import javax.swing.KeyStroke;
  */
 public class SaveAsAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>SaveAction</CODE>.
    *
    * @param environment
@@ -46,7 +50,6 @@ public class SaveAsAction extends RestrictedAction {
         ACCELERATOR_KEY,
         KeyStroke.getKeyStroke(KeyEvent.VK_S, MAIN_MENU_MASK + InputEvent.SHIFT_MASK));
     this.environment = environment;
-    this.fileChooser = Universe.CHOOSER;
   }
 
   /**
@@ -74,7 +77,4 @@ public class SaveAsAction extends RestrictedAction {
 
   /** The environment that this save action gets it's object from. */
   protected Environment environment;
-
-  /** The file chooser. */
-  private JFileChooser fileChooser;
 }

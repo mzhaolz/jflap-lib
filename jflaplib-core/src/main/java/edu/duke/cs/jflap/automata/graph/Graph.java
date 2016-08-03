@@ -27,7 +27,7 @@ import java.awt.geom.Rectangle2D;
  *
  * @author Thomas Finley
  */
-public class Graph {
+public class Graph<T> {
   /** Creates a new empty graph structure. */
   public Graph() {}
 
@@ -38,7 +38,7 @@ public class Graph {
   }
 
   /** Returns the degree of a vertex. */
-  public int degree(Object vertex) {
+  public int degree(T vertex) {
     return adjacent(vertex).size();
   }
 
@@ -48,37 +48,37 @@ public class Graph {
   }
 
   /** Returns the set of vertices a vertex is adjacent to. */
-  public Set adjacent(Object vertex) {
-    if (!verticesToNeighbors.containsKey(vertex)) verticesToNeighbors.put(vertex, new HashSet());
-    return (Set) verticesToNeighbors.get(vertex);
+  public Set<T> adjacent(T from) {
+    if (!verticesToNeighbors.containsKey(from)) verticesToNeighbors.put(from, new HashSet<T>());
+    return verticesToNeighbors.get(from);
   }
 
   /** Adds an edge between two vertices. */
-  public void addEdge(Object vertex1, Object vertex2) {
+  public void addEdge(T vertex1, T vertex2) {
     adjacent(vertex1).add(vertex2);
     adjacent(vertex2).add(vertex1);
   }
 
   /** Removes an edge between two vertices. */
-  public void removeEdge(Object vertex1, Object vertex2) {
+  public void removeEdge(T vertex1, T vertex2) {
     adjacent(vertex1).remove(vertex2);
     adjacent(vertex2).remove(vertex1);
   }
 
   /** Returns if an edge exists between two vertices. */
-  public boolean hasEdge(Object vertex1, Object vertex2) {
+  public boolean hasEdge(T vertex1, T vertex2) {
     return adjacent(vertex1).contains(vertex2);
   }
 
   /** Adds a vertex. */
   public void addVertex(Object vertex, Point2D point) {
-    verticesToPoints.put(vertex, point.clone());
+    verticesToPoints.put(vertex, (Point2D) point.clone());
   }
 
   /** Removes a vertex. */
-  public void removeVertex(Object vertex) {
-    Set others = adjacent(vertex);
-    Iterator it = others.iterator();
+  public void removeVertex(T vertex) {
+    Set<T> others = adjacent(vertex);
+    Iterator<T> it = others.iterator();
     while (it.hasNext()) adjacent(it.next()).remove(vertex);
     verticesToNeighbors.remove(vertex);
     verticesToPoints.remove(vertex);
@@ -95,8 +95,9 @@ public class Graph {
   }
 
   /** Returns the list of vertex objects. */
-  public Object[] vertices() {
-    return verticesToPoints.keySet().toArray();
+  @SuppressWarnings("unchecked")
+public T[] vertices() {
+    return (T[]) verticesToPoints.keySet().toArray();
   }
 
   /**
@@ -139,7 +140,7 @@ public class Graph {
     return sb.toString();
   }
 
-  protected Map verticesToPoints = new HashMap();
+  protected Map<Object, Point2D> verticesToPoints = new HashMap<Object, Point2D>();
 
-  protected Map verticesToNeighbors = new HashMap();
+  protected Map<T, HashSet<T>> verticesToNeighbors = new HashMap<>();
 }

@@ -20,7 +20,6 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
 
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -46,8 +45,6 @@ public class AutomatonSizeSlider extends JSlider {
 
   /** The drawer of the automaton */
   private AutomatonDrawer drawer;
-
-  private double currentScale = 1;
 
   /**
    * Constructs the AutomatonSizeSlider

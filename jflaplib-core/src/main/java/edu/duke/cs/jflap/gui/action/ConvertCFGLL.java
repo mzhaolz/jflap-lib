@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import edu.duke.cs.jflap.automata.State;
+import edu.duke.cs.jflap.automata.Transition;
 import edu.duke.cs.jflap.automata.graph.*;
 import edu.duke.cs.jflap.automata.graph.layout.GEMLayoutAlgorithm;
 import edu.duke.cs.jflap.automata.pda.PushdownAutomaton;
@@ -38,6 +40,11 @@ import javax.swing.JOptionPane;
  */
 public class ConvertCFGLL extends GrammarAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>ConvertCFGLL</CODE> action.
    *
    * @param environment
@@ -64,7 +71,7 @@ public class ConvertCFGLL extends GrammarAction {
     CFGToPDALLConverter convert = new CFGToPDALLConverter();
     convert.createStatesForConversion(grammar, pda);
     // Create the map of productions to transitions.
-    HashMap ptot = new HashMap();
+    HashMap<Production, Transition> ptot = new HashMap<Production, Transition>();
     Production[] prods = grammar.getProductions();
     for (int i = 0; i < prods.length; i++)
       ptot.put(prods[i], convert.getTransitionForProduction(prods[i]));
@@ -74,7 +81,7 @@ public class ConvertCFGLL extends GrammarAction {
 
     // Do the layout of the states.
     AutomatonGraph graph = new AutomatonGraph(pda);
-    LayoutAlgorithm layout = new GEMLayoutAlgorithm();
+    LayoutAlgorithm<State> layout = new GEMLayoutAlgorithm<>();
     layout.layout(graph, null);
     graph.moveAutomatonStates();
     environment.setActive(cp);

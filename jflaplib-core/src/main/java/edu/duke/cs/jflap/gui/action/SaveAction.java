@@ -32,6 +32,11 @@ import javax.swing.KeyStroke;
  */
 public class SaveAction extends SaveAsAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>SaveAction</CODE>.
    *
    * @param environment

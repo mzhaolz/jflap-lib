@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.automata.graph;
 
 import edu.duke.cs.jflap.automata.Automaton;
+import edu.duke.cs.jflap.automata.State;
 
 /**
  * Constructs a graph of an automaton, but does not, for each edge, classify
@@ -45,7 +46,7 @@ public class AutomatonDirectedGraph extends AutomatonGraph {
    * @param from the object from which this edge is pointing.
    * @param to the object to which this edge is pointing.
    */
-  public void addEdge(Object from, Object to) {
+  public void addEdge(State from, State to) {
     adjacent(from).add(to);
   }
 
@@ -54,7 +55,7 @@ public class AutomatonDirectedGraph extends AutomatonGraph {
    * @param from the object from which this edge is pointing.
    * @param to the object to which this edge is pointing.
    */
-  public void removeEdge(Object from, Object to) {
+  public void removeEdge(State from, State to) {
     adjacent(from).remove(to);
   }
 
@@ -65,10 +66,10 @@ public class AutomatonDirectedGraph extends AutomatonGraph {
    * @param excludeSameVertexEdges boolean that if <i>true</i> will exclude edges
    * leading from and to the same vertex from consideration.
    */
-  public int fromDegree(Object from, boolean excludeSameVertexEdges) {
+  public int fromDegree(State from, boolean excludeSameVertexEdges) {
     if (!excludeSameVertexEdges) return degree(from);
     int count = 0;
-    Object[] vertices = verticesToNeighbors.keySet().toArray();
+    State[] vertices = verticesToNeighbors.keySet().toArray(new State[0]);
     for (int i = 0; i < vertices.length; i++)
       if (hasEdge(from, vertices[i]) && !vertices[i].equals(from)) count++;
     return count;
@@ -81,9 +82,9 @@ public class AutomatonDirectedGraph extends AutomatonGraph {
    * @param excludeSameVertexEdges boolean that if <i>true</i> will exclude edges
    * leading from and to the same vertex from consideration.
    */
-  public int toDegree(Object to, boolean excludeSameVertexEdges) {
+  public int toDegree(State to, boolean excludeSameVertexEdges) {
     int count = 0;
-    Object[] vertices = verticesToNeighbors.keySet().toArray();
+    State[] vertices = verticesToNeighbors.keySet().toArray(new State[0]);
     for (int i = 0; i < vertices.length; i++)
       if (hasEdge(vertices[i], to) && (!vertices[i].equals(to) || !excludeSameVertexEdges)) count++;
     return count;

@@ -28,6 +28,11 @@ import javax.swing.*;
  */
 public class ImageDisplayComponent extends JComponent implements Scrollable {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>ImageDisplayComponent</CODE> without an image
    * at this time.
    */

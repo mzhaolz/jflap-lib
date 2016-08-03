@@ -46,6 +46,11 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  */
 public class OpenAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>OpenAction</CODE>.
    */
   public OpenAction() {
@@ -122,8 +127,8 @@ public class OpenAction extends RestrictedAction {
   public static Codec[] makeFilters() {
     // Set up the file filters.
     Universe.CHOOSER.resetChoosableFileFilters();
-    List decoders = Universe.CODEC_REGISTRY.getDecoders();
-    Iterator it = decoders.iterator();
+    List<?> decoders = Universe.CODEC_REGISTRY.getDecoders();
+    Iterator<?> it = decoders.iterator();
     while (it.hasNext()) Universe.CHOOSER.addChoosableFileFilter((FileFilter) it.next());
     Universe.CHOOSER.setFileFilter(Universe.CHOOSER.getAcceptAllFileFilter());
 
@@ -237,6 +242,11 @@ public class OpenAction extends RestrictedAction {
   /** The exception class for when a file could not be read properly. */
   protected static class FileReadException extends RuntimeException {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Instantiates a file read exception with a given message.
      *
      * @param message

@@ -57,7 +57,6 @@ public class RightLinearGrammarToFSAConverter extends GrammarToAutomatonConverte
    * @return the equivalent transition.
    */
   public Transition getTransitionForProduction(Production production) {
-    ProductionChecker pc = new ProductionChecker();
     String lhs = production.getLHS();
     State from = getStateForVariable(lhs);
 

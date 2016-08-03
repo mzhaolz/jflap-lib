@@ -19,6 +19,8 @@ package edu.duke.cs.jflap.gui.tree;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.geom.*;
+import java.awt.geom.Point2D.Float;
+
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.*;
@@ -228,42 +230,14 @@ public class DefaultTreeDrawer implements TreeDrawer, TreeModelListener {
    *            the size that the tree, if drawn, would be drawn in
    */
   public TreeNode nodeAtPoint(Point2D point, Dimension2D size) {
-    Iterator it = nodeToPoint.entrySet().iterator();
+    Iterator<Map.Entry<TreeNode, Point2D.Float>> it = nodeToPoint.entrySet().iterator();
     while (it.hasNext()) {
-
-      Map.Entry entry = (Map.Entry) it.next();
+      Map.Entry<TreeNode, Point2D.Float> entry = it.next();
       Point2D p = scalePoint((Point2D) entry.getValue(), size);
       TreeNode node = (TreeNode) entry.getKey();
       if (nodeDrawer.onNode(node, point.getX() - p.getX(), point.getY() - p.getY())) return node;
     }
     return null;
-  }
-
-  /**
-   * Recursively sets the points of the tree.
-   *
-   * @param node
-   *            the current node in the tree
-   * @param depth
-   *            the total depth of the tree
-   * @param thisDepth
-   *            the depth of this particular node
-   * @param width
-   *            the array of all widths
-   * @param widthSofar
-   *            the widths sofar
-   */
-  private void setPoints(TreeNode node, int depth, int thisDepth, int[] width, int[] widthSofar) {
-    // Scale points along ([0,1], [0,1]).
-    float x = (float) (widthSofar[thisDepth] + 1) / (float) (width[thisDepth] + 1);
-    float y = (float) (thisDepth + 1) / (float) (depth + 2);
-    nodeToPoint.put(node, new Point2D.Float(x, y));
-    // Update the depth and width figures.
-    widthSofar[thisDepth++]++;
-    // Recurse on children.
-    TreeNode[] children = Trees.children(node);
-    for (int i = 0; i < children.length; i++)
-      setPoints(children[i], depth, thisDepth, width, widthSofar);
   }
 
   /**
@@ -368,7 +342,7 @@ public class DefaultTreeDrawer implements TreeDrawer, TreeModelListener {
   private TreeModel tree;
 
   /** The mapping of nodes to points. */
-  private Map nodeToPoint = new HashMap();
+  private Map<TreeNode, Float> nodeToPoint = new HashMap<>();
 
   /**
    * True if visible set denotes invisible nodes (default is visible), false
@@ -377,7 +351,7 @@ public class DefaultTreeDrawer implements TreeDrawer, TreeModelListener {
   private boolean defaultVisible = true;
 
   /** The set of visible/invisible nodes. */
-  private WeakHashMap visibleNodes = new WeakHashMap();
+  private WeakHashMap<TreeNode, ?> visibleNodes = new WeakHashMap<TreeNode, Object>();
 
   /** The drawer for the nodes. */
   private NodeDrawer nodeDrawer = new DefaultNodeDrawer();

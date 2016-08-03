@@ -31,9 +31,6 @@ import java.io.Serializable;
 import java.io.File;
 
 import edu.duke.cs.jflap.gui.action.OpenAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.swing.JButton;
 
 /**
@@ -45,7 +42,12 @@ import javax.swing.JButton;
  * @author Thomas Finley, Henry Qin
  */
 public class TuringMachine extends Automaton {
-  private static final Logger logger = LoggerFactory.getLogger(TuringMachine.class);
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -297306935840189114L;
+
+private static final Logger logger = LoggerFactory.getLogger(TuringMachine.class);
   /**
    * Creates a 1-tape Turing machine with no states and no transitions.
    */
@@ -71,7 +73,7 @@ public class TuringMachine extends Automaton {
    *
    * @return the <CODE>Class</CODE> object for <CODE>automata.tm.TMTransition</CODE>
    */
-  protected Class getTransitionClass() {
+  protected Class<? extends Transition> getTransitionClass() {
     return edu.duke.cs.jflap.automata.turing.TMTransition.class;
   }
 

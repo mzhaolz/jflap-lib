@@ -86,5 +86,5 @@ public class SelectNodeDrawer extends DefaultNodeDrawer {
   }
 
   /** The selected nodes, with keys as nodes. */
-  protected WeakHashMap selectedNodes = new WeakHashMap();
+  protected WeakHashMap<TreeNode, ?> selectedNodes = new WeakHashMap<TreeNode, Object>();
 }

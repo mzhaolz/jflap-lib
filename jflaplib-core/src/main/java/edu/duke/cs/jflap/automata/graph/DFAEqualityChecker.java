@@ -42,7 +42,7 @@ public class DFAEqualityChecker {
    *            the matchings of states in the first automaton to states in
    *            the second automaton
    */
-  private boolean hypothesize(State state1, State state2, Map matching) {
+  private boolean hypothesize(State state1, State state2, Map<State, State> matching) {
     {
       // Does state one already have a counterpart?
       State counterpart = (State) matching.get(state1);
@@ -54,7 +54,7 @@ public class DFAEqualityChecker {
         return false;
     }
 
-    Map labelToTrans1 = new HashMap(), labelToTrans2 = new HashMap();
+    Map<String, Transition> labelToTrans1 = new HashMap<String, Transition>(), labelToTrans2 = new HashMap<String, Transition>();
     Transition[] t1 = state1.getAutomaton().getTransitionsFromState(state1);
     Transition[] t2 = state2.getAutomaton().getTransitionsFromState(state2);
     // If they're not even the same length...
@@ -96,6 +96,6 @@ public class DFAEqualityChecker {
   public boolean equals(FiniteStateAutomaton one, FiniteStateAutomaton two) {
     // Make sure they have the same number of states.
     if (one.getStates().length != two.getStates().length) return false;
-    return hypothesize(one.getInitialState(), two.getInitialState(), new HashMap());
+    return hypothesize(one.getInitialState(), two.getInitialState(), new HashMap<State, State>());
   }
 }

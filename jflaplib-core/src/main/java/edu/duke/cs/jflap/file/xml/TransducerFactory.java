@@ -80,7 +80,7 @@ public class TransducerFactory {
    *             if the structure does not map to a transducer
    */
   public static Transducer getTransducer(Serializable structure) {
-    Class c = structure.getClass();
+    Class<?> c = structure.getClass();
     // Cycle through the superclasses.
     while (c != null) {
       Object o = classToTransducer.get(c);
@@ -108,7 +108,7 @@ public class TransducerFactory {
   private static Transducer instantiate(Object object) {
     if (object instanceof Class) {
       try {
-        return (Transducer) ((Class) object).newInstance();
+        return (Transducer) ((Class<?>) object).newInstance();
       } catch (Throwable e) {
         throw new IllegalArgumentException("Could not instantiate " + object + "!");
       }
@@ -133,7 +133,7 @@ public class TransducerFactory {
    * @param transducer
    *            either a transducer instance, or a transducer class
    */
-  private static void add(String type, Class structureClass, Object transducer) {
+  private static void add(String type, Class<?> structureClass, Object transducer) {
     if (type == null) type = ((Transducer) transducer).getType();
     typeToTransducer.put(type, transducer);
     classToTransducer.put(structureClass, transducer);
@@ -143,8 +143,8 @@ public class TransducerFactory {
    * Initializes the maps.
    */
   static {
-    typeToTransducer = new HashMap();
-    classToTransducer = new HashMap();
+    typeToTransducer = new HashMap<String, Object>();
+    classToTransducer = new HashMap<Class<?>, Object>();
     add(null, edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton.class, new FSATransducer());
     add(null, edu.duke.cs.jflap.automata.pda.PushdownAutomaton.class, new PDATransducer());
     add(null, edu.duke.cs.jflap.automata.turing.TuringMachine.class, new TMTransducer());
@@ -164,8 +164,8 @@ public class TransducerFactory {
   }
 
   /** Mapping of DOM "type" tags to a corresponding transducer class. */
-  private static Map typeToTransducer;
+  private static Map<String, Object> typeToTransducer;
 
   /** Mapping of structure classes to a corresponding transducer class. */
-  private static Map classToTransducer;
+  private static Map<Class<?>, Object> classToTransducer;
 }

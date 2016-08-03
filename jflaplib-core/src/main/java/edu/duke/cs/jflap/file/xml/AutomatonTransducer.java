@@ -274,7 +274,6 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    * @see #readStates
    */
   protected void readTransitions(Node parent, Automaton automaton, Map<Integer, State> id2state) {
-    Map<Integer, State> i2s = new HashMap<>();
     if (parent == null || automaton == null) return;
     NodeList allNodes = parent.getChildNodes();
     List<Node> tNodes = new ArrayList<>();
@@ -361,7 +360,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
     // appeared without the <x> and <y> tags.
     if (locStates.size() == automaton.getStates().length) return;
     AutomatonGraph graph = new AutomatonGraph(automaton);
-    LayoutAlgorithm layout = new GEMLayoutAlgorithm();
+    LayoutAlgorithm<State> layout = new GEMLayoutAlgorithm<>();
     for (int i = 0; i < 3; i++)
       // Do it a few times...
       layout.layout(graph, locStates);
@@ -384,7 +383,6 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    */
   public java.io.Serializable fromDOM(Document document) {
     automatonMap.clear();
-    Automaton a = createEmptyAutomaton(document);
     Node parent = document.getDocumentElement().getElementsByTagName(AUTOMATON_NAME).item(0);
     if (parent == null) parent = document.getDocumentElement();
     return readAutomaton(parent, document);
@@ -421,7 +419,8 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
       Map<String, String> e2t = elementsToText(noteNode);
 
       java.awt.Point p = new java.awt.Point();
-      boolean hasLocation = true;
+      @SuppressWarnings("unused")
+	boolean hasLocation = true;
       Object obj = (e2t).get(NOTE_TEXT_NAME);
       if (obj == null) continue;
       String textString = obj.toString();
@@ -611,7 +610,6 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    */
   public Document toDOM(java.io.Serializable structure) {
     Automaton automaton = (Automaton) structure;
-    originalAutomaton = automaton;
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();
     se.appendChild(createAutomatonElement(doc, automaton, AUTOMATON_NAME));
@@ -679,8 +677,6 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
 
   private Map<String, Automaton> automatonMap = new HashMap<>();
 
-  private Automaton originalAutomaton = null;
-
   private static final String AUTOMATON_NAME = "automaton";
 
   /** The comment for the list of Automatons. */
@@ -743,6 +739,4 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
   /** The tag name for the text of the note elements. */
   public static final String NOTE_TEXT_NAME = "text";
 
-  /**The tag name for the block transition */
-  private static final String IS_BLOCK = "block";
 }

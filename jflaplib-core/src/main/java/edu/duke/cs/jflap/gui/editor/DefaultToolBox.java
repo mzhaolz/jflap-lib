@@ -39,8 +39,8 @@ public class DefaultToolBox implements ToolBox {
    *            the drawer that will draw the automaton in the view
    * @return a list of <CODE>Tool</CODE> objects.
    */
-  public List tools(AutomatonPane view, AutomatonDrawer drawer) {
-    List list = new java.util.ArrayList();
+  public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+    List<Tool> list = new java.util.ArrayList<Tool>();
     list.add(new ArrowTool(view, drawer));
     list.add(new StateTool(view, drawer));
     list.add(new TransitionTool(view, drawer));

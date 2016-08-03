@@ -27,7 +27,12 @@ import edu.duke.cs.jflap.pumping.*;
  *
  */
 public class ABnAk extends RegularPumpingLemma {
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2542738704518014246L;
+
+public String getTitle() {
     return "(ab)^n a^k : n > k, k >= 0";
   }
 

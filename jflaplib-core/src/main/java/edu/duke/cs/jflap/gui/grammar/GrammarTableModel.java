@@ -34,8 +34,13 @@ import javax.swing.Icon;
  *
  * @author Thomas Finley
  */
-public class GrammarTableModel extends GrowableTableModel {
+public class GrammarTableModel  extends GrowableTableModel<Object> {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a <CODE>GrammarTableModel</CODE>.
    */
   public GrammarTableModel() {
@@ -119,7 +124,7 @@ public class GrammarTableModel extends GrowableTableModel {
    * @return an array of the productions
    */
   public Production[] getProductions() {
-    ArrayList list = new ArrayList();
+    ArrayList<Production> list = new ArrayList<Production>();
     for (int i = 0; i < getRowCount() - 1; i++) {
       Production production = getProduction(i);
       if (production != null) list.add(production);
@@ -161,7 +166,7 @@ public class GrammarTableModel extends GrowableTableModel {
    * @param column
    *            the column to get the class for
    */
-  public Class getColumnClass(int column) {
+  public Class<?> getColumnClass(int column) {
     return column == 1 ? Icon.class : String.class;
   }
 

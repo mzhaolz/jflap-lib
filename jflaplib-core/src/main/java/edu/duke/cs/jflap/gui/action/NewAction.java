@@ -42,6 +42,11 @@ import edu.duke.cs.jflap.automata.mealy.MooreMachine;
  */
 public class NewAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>NewAction</CODE>.
    */
   public NewAction() {
@@ -99,6 +104,11 @@ public class NewAction extends RestrictedAction {
   /** The dialog box that allows one to create new environments. */
   private static class NewDialog extends JFrame {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Instantiates a <CODE>NewDialog</CODE> instance.
      */
     public NewDialog() {

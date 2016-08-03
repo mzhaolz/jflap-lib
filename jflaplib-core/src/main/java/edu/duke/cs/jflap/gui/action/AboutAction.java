@@ -27,6 +27,11 @@ import java.awt.event.ActionEvent;
  */
 public class AboutAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>AboutAction</CODE>.
    */
   public AboutAction() {

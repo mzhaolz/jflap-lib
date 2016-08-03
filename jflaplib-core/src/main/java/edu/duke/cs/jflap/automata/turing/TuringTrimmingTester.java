@@ -17,9 +17,6 @@
 package edu.duke.cs.jflap.automata.turing;
 
 import edu.duke.cs.jflap.grammar.Production;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -113,7 +110,8 @@ public class TuringTrimmingTester {
     }
   }
 
-  public static void main(String[] args) {
+  @SuppressWarnings("unused")
+public static void main(String[] args) {
     TuringTrimmingTester t = new TuringTrimmingTester("productions.txt");
   }
 }

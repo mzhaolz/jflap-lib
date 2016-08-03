@@ -27,6 +27,11 @@ import edu.duke.cs.jflap.automata.Automaton;
  */
 public class MealyMachine extends Automaton {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8772972310960249224L;
+
+/**
    * Creates a Mealy machine with no states or transitions.
    *
    */
@@ -41,7 +46,7 @@ public class MealyMachine extends Automaton {
    * @return the <code>Class</code> object for the <code>
    * MealyTransition</code>
    */
-  protected Class getTransitionClass() {
+  protected Class<? extends MealyTransition> getTransitionClass() {
     return MealyTransition.class;
   }
 }

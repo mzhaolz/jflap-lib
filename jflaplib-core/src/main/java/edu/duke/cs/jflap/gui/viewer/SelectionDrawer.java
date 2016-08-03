@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -85,7 +87,7 @@ public class SelectionDrawer extends AutomatonDrawer {
   protected void drawTransitions(Graphics g) {
     java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
     super.drawTransitions(g);
-    Iterator it = selectedTransitions.iterator();
+    Iterator<Serializable> it = selectedTransitions.iterator();
     while (it.hasNext()) {
       Transition t = (Transition) it.next();
       try {
@@ -177,7 +179,7 @@ public class SelectionDrawer extends AutomatonDrawer {
    *
    * @return the set of selected states
    */
-  protected Set selected() {
+  protected Set<Serializable> selected() {
     return selected;
   }
 
@@ -186,7 +188,7 @@ public class SelectionDrawer extends AutomatonDrawer {
    *
    * @return the set of selected transitions
    */
-  protected Set selectedTransitions() {
+  protected Set<Serializable> selectedTransitions() {
     return selectedTransitions;
   }
 
@@ -283,16 +285,16 @@ public class SelectionDrawer extends AutomatonDrawer {
    */
   protected void distributeChangeEvent() {
     ChangeEvent e = new ChangeEvent(this);
-    Iterator it = listeners.iterator();
+    Iterator<ChangeListener> it = listeners.iterator();
     while (it.hasNext()) ((ChangeListener) it.next()).stateChanged(e);
   }
 
   /** The set of selected states, and the set of selected transitions. */
-  private Set selected = new HashSet(), selectedTransitions = new HashSet();
+  private Set<Serializable> selected = new HashSet<Serializable>(), selectedTransitions = new HashSet<Serializable>();
 
   /** The color to draw selected states in. */
   protected static final Color SELECTED_COLOR = StateDrawer.STATE_COLOR.darker().darker();
 
   /** This set of listeners. */
-  private Set listeners = new HashSet();
+  private Set<ChangeListener> listeners = new HashSet<ChangeListener>();
 }

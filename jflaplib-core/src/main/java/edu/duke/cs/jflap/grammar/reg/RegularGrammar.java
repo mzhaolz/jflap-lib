@@ -27,6 +27,11 @@ import edu.duke.cs.jflap.grammar.*;
  */
 public class RegularGrammar extends Grammar {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8696933610880692417L;
+
+/**
    * Creates an instance of <CODE>RegularGrammar</CODE>. The created
    * instance has no productions, no terminals, no variables, and specifically
    * no start variable.
@@ -110,9 +115,6 @@ public class RegularGrammar extends Grammar {
 
   /** The int to represent a right-linear grammar. */
   protected static final int RIGHT_LINEAR = 1;
-
-  /** The production checker. */
-  private static final ProductionChecker PC = new ProductionChecker();
 
   @Override
   public boolean isConverted() {

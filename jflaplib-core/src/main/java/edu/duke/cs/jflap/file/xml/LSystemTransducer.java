@@ -44,8 +44,8 @@ public class LSystemTransducer extends AbstractTransducer {
    *            the list to convert to a string
    * @return a string containing the elements of the list
    */
-  private static String listAsString(List list) {
-    Iterator it = list.iterator();
+  private static String listAsString(List<?> list) {
+    Iterator<?> it = list.iterator();
     if (!it.hasNext()) return "";
     StringBuffer sb = new StringBuffer();
     sb.append(it.next());
@@ -64,7 +64,7 @@ public class LSystemTransducer extends AbstractTransducer {
    *            the node the encapsulates a production
    */
   private static Production[] createRules(Node node) {
-    Map e2t = elementsToText(node);
+    Map<?, ?> e2t = elementsToText(node);
     String left = (String) e2t.get(RULE_LEFT_NAME);
     if (left == null) left = "";
     NodeList list = ((Element) node).getElementsByTagName(RULE_RIGHT_NAME);
@@ -90,7 +90,7 @@ public class LSystemTransducer extends AbstractTransducer {
   public static Element createRuleElement(Document document, LSystem lsystem, String left) {
     Element re = createElement(document, RULE_NAME, null, null);
     re.appendChild(createElement(document, RULE_LEFT_NAME, null, left));
-    List[] replacements = lsystem.getReplacements(left);
+    List<String>[] replacements = lsystem.getReplacements(left);
     for (int i = 0; i < replacements.length; i++) {
       re.appendChild(createElement(document, RULE_RIGHT_NAME, null, listAsString(replacements[i])));
     }
@@ -137,11 +137,11 @@ public class LSystemTransducer extends AbstractTransducer {
    *            the DOM document to read parameters from
    * @return the mapping of parameter names to values
    */
-  private Map readParameters(Document document) {
-    Map p = new HashMap();
+  private Map<String, String> readParameters(Document document) {
+    Map<String, String> p = new HashMap<String, String>();
     NodeList list = document.getDocumentElement().getElementsByTagName(PARAMETER_NAME);
     for (int i = 0; i < list.getLength(); i++) {
-      Map e2t = elementsToText(list.item(i));
+      Map<?, ?> e2t = elementsToText(list.item(i));
       String
           name = (String) e2t.get(PARAMETER_NAME_NAME),
           value = (String) e2t.get(PARAMETER_VALUE_NAME);
@@ -163,7 +163,7 @@ public class LSystemTransducer extends AbstractTransducer {
   public java.io.Serializable fromDOM(Document document) {
     String axiom = readAxiom(document);
     Grammar rules = readGrammar(document);
-    Map parameters = readParameters(document);
+    Map<String, String> parameters = readParameters(document);
     return new LSystem(axiom, rules, parameters);
   }
 
@@ -183,12 +183,12 @@ public class LSystemTransducer extends AbstractTransducer {
     se.appendChild(createComment(doc, COMMENT_AXIOM));
     se.appendChild(createElement(doc, AXIOM_NAME, null, listAsString(lsystem.getAxiom())));
     // Add the rewriting rules.
-    Set symbols = lsystem.getSymbolsWithReplacements();
-    Iterator it = symbols.iterator();
+    Set<?> symbols = lsystem.getSymbolsWithReplacements();
+    Iterator<?> it = symbols.iterator();
     if (it.hasNext()) se.appendChild(createComment(doc, COMMENT_RULE));
     while (it.hasNext()) se.appendChild(createRuleElement(doc, lsystem, (String) it.next()));
     // Add the parameters.
-    Map parameters = lsystem.getValues();
+    Map<?, ?> parameters = lsystem.getValues();
     it = parameters.keySet().iterator();
     if (it.hasNext()) se.appendChild(createComment(doc, COMMENT_PARAMETER));
     while (it.hasNext()) {

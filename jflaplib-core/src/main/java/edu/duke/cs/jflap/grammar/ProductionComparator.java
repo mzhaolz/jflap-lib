@@ -26,8 +26,7 @@ import java.util.Comparator;
  * @author Thomas Finley
  */
 public class ProductionComparator implements Comparator<Production> {
-	private static final long serialVersionUID = 1500L;
-  /**
+	/**
    * Instantiates a comparator, getting the start variable from a given
    * grammar.
    *

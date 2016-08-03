@@ -31,6 +31,11 @@ import javax.swing.KeyStroke;
  */
 public class QuitAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>QuitAction</CODE>.
    */
   public QuitAction() {

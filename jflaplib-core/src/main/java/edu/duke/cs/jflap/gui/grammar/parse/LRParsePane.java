@@ -28,6 +28,11 @@ import javax.swing.*;
  */
 public class LRParsePane extends ParsePane {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiaes a new LR parse pane.
    *
    * @param environment
@@ -41,7 +46,12 @@ public class LRParsePane extends ParsePane {
     super(environment, grammar);
     this.table =
         new LRParseTable(table) {
-          public boolean isCellEditable(int r, int c) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public boolean isCellEditable(int r, int c) {
             return false;
           }
         };

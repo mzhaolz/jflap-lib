@@ -40,6 +40,11 @@ import javax.swing.event.TableModelListener;
  */
 public class GrammarEnvironment extends Environment {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>GrammarEnvironment</CODE> with the given
    * <CODE>GrammarInputPane</CODE>.
    *
@@ -91,7 +96,7 @@ public class GrammarEnvironment extends Environment {
    * @return the <CODE>Grammar</CODE> for this environment of the specified
    *         type
    */
-  public Grammar getGrammar(Class grammarClass) {
+  public Grammar getGrammar(Class<? extends Grammar> grammarClass) {
     return input.getGrammar(grammarClass);
   }
 

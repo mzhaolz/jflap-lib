@@ -124,7 +124,7 @@ public class UselessController {
           pane.mainLabel.setText("Modify the grammar to remove useless productions.");
           Grammar g = UselessProductionRemover.getUselessProductionlessGrammar(grammar);
           Production[] p = grammar.getProductions(), p2 = g.getProductions();
-          Set usefulProductions = new HashSet(Arrays.asList(p2));
+          Set<Production> usefulProductions = new HashSet<Production>(Arrays.asList(p2));
           for (int i = 0; i < p.length; i++) {
             if (usefulProductions.contains(p[i])) continue;
             uselessProductions.add(p[i]);
@@ -295,22 +295,22 @@ public class UselessController {
   // Variables related to the VDG.
 
   /** The set of variables that derive terminals. */
-  Set terminalVariables;
+  Set<String> terminalVariables;
 
   /** The set of variables discovered by the user that derive terminals. */
-  Set derivedTerminalVariables = new TreeSet();
+  Set<String> derivedTerminalVariables = new TreeSet<String>();
 
   /** The variable dependency graph. */
   VariableDependencyGraph vdg = new VariableDependencyGraph();
 
   /** The set of transitions that should be added to the VDG. */
-  Set vdgTransitions = new HashSet();
+  Set<Transition> vdgTransitions = new HashSet<Transition>();
 
   /**
    * The set of productions that should comprise the grammar, those that
    * currently do, and those that should be removed.
    */
-  Set currentProductions = new HashSet(), uselessProductions = new HashSet();
+  Set<Production> currentProductions = new HashSet<Production>(), uselessProductions = new HashSet<Production>();
 
   /** The current step. */
   int step = 0;

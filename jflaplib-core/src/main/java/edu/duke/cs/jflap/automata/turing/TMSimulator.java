@@ -110,7 +110,6 @@ public class TMSimulator extends AutomatonSimulator {
     for (int i = 0; i < tapes.length; i++) tapes[i] = new Tape(inputs[i]);
     Configuration[] configs = new Configuration[1];
     TMState initialState = (TMState) myAutomaton.getInitialState();
-    TuringMachine tm = initialState.getInnerTM();
     configs[0] = new TMConfiguration(initialState, null, tapes, myFilters);
 
     return configs;

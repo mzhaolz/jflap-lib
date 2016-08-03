@@ -23,17 +23,8 @@ package edu.duke.cs.jflap.pumping;
  */
 public class LanguageTester {
 
-  private void test(PumpingLemma p, String[] s, int n) {
-    for (int i = 0; i < s.length; i++) {
-      System.out.println("Lemma " + n + " String " + s[i] + " ... " + p.isInLang(s[i]));
-    }
-    System.out.println();
-  }
-
   public static void main(String[] args) {
-    PumpingLemma r;
-    LanguageTester t = new LanguageTester();
-    String[] s;
+    new LanguageTester();
 
     /*		r = new ABnAk();
     s = new String[] {"abababaa", "ababab", "ab", "ababac", "aba", "abc", "a", "b", ""};

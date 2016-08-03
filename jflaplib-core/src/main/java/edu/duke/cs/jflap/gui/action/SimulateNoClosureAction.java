@@ -37,6 +37,11 @@ import edu.duke.cs.jflap.automata.pda.PushdownAutomaton;
  */
 public class SimulateNoClosureAction extends SimulateAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>SimulateNoClosureAction</CODE>.
    *
    * @param automaton

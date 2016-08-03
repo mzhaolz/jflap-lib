@@ -77,11 +77,11 @@ public class ConversionController {
   }
 
   private void initializeGraph() {
-    Map stateToSet = new HashMap(); // Different...
+    Map<State, Set<State>> stateToSet = new HashMap<State, Set<State>>(); // Different...
     State[] s = answer.getStates();
     Transition[] t = answer.getTransitions();
     for (int i = 0; i < s.length; i++) {
-      Set fromNfa = new HashSet(Arrays.asList(getStatesForString(s[i].getLabel(), nfa)));
+      Set<State> fromNfa = new HashSet<State>(Arrays.asList(getStatesForString(s[i].getLabel(), nfa)));
       stateToSet.put(s[i], fromNfa);
       // setToState.put(s[i], fromNfa);
       graph.addVertex(fromNfa, s[i].getPoint());
@@ -93,8 +93,8 @@ public class ConversionController {
 
   public void performFirstLayout() {
     view.validate();
-    Set isonodes = new HashSet();
-    Set initialSet = (Set) stateToSet.get(dfa.getInitialState());
+    Set<Set<State>> isonodes = new HashSet<Set<State>>();
+    Set<State> initialSet = (Set<State>) stateToSet.get(dfa.getInitialState());
     isonodes.add(initialSet);
     graph.addVertex(initialSet, new Point(0, 0));
     layout.layout(graph, isonodes);
@@ -109,7 +109,7 @@ public class ConversionController {
 
   private State[] getStatesForString(String label, Automaton automaton) {
     StringTokenizer tokenizer = new StringTokenizer(label, " \t\n\r\f,q");
-    ArrayList states = new ArrayList();
+    ArrayList<State> states = new ArrayList<State>();
     while (tokenizer.hasMoreTokens())
       states.add(automaton.getStateWithID(Integer.parseInt(tokenizer.nextToken())));
     states.remove(null);
@@ -125,7 +125,7 @@ public class ConversionController {
    *             if the state registered conflicts with any existing
    */
   private void registerState(State state) {
-    Set set = new HashSet(Arrays.asList(getStatesForString(state.getLabel(), nfa)));
+    Set<State> set = new HashSet<State>(Arrays.asList(getStatesForString(state.getLabel(), nfa)));
     State inMap = (State) setToState.get(set);
     EDebug.print(set);
     EDebug.print(inMap);
@@ -149,11 +149,11 @@ public class ConversionController {
    *            the state to expand
    */
   public void expandState(State state) {
-    List createdStates = converter.expandState(state, nfa, dfa);
+    List<?> createdStates = converter.expandState(state, nfa, dfa);
     // We want to lay out those states.
     // First, get the sets of states the new states represent.
-    Set iso = new HashSet(setToState.keySet()), added = new HashSet();
-    Iterator it = createdStates.iterator();
+    Set<Set<State>> iso = new HashSet<Set<State>>(setToState.keySet());
+    Iterator<?> it = createdStates.iterator();
     while (it.hasNext()) {
       State dfaState = (State) it.next();
       registerState(dfaState);
@@ -267,7 +267,7 @@ public class ConversionController {
    * This method will expand all states in an automaton.
    */
   public void complete() {
-    final LinkedList stateQueue = new LinkedList();
+    final LinkedList<State> stateQueue = new LinkedList<State>();
     // Add all states to the state queue.
     stateQueue.addAll(Arrays.asList(dfa.getStates()));
     // When a state is added to the DFA, make sure we know about it.
@@ -340,23 +340,17 @@ public class ConversionController {
    * automatically placed. Here, vertex objects are the sets of states from
    * the original NFA.
    */
-  private Graph graph = new Graph();
-
-  /**
-   * Whether the user has interacted with the layout of the automaton in such
-   * a way as the automatic layout needs to be redone.
-   */
-  private boolean validLayout = false;
+  private Graph<Set<State>> graph = new Graph<>();
 
   /** The layout algorithm. */
-  private LayoutAlgorithm layout = new GEMLayoutAlgorithm();
+  private LayoutAlgorithm<Set<State>> layout = new GEMLayoutAlgorithm<>();
 
   /**
    * Maps a set of NFA states to a DFA state. This structure is maintained in
    * part through the <CODE>registerState</CODE> method.
    */
-  private Map setToState = new HashMap();
+  private Map<Set<State>, State> setToState = new HashMap<Set<State>, State>();
 
   /** Maps a state to a set of NFA states. */
-  private Map stateToSet = new HashMap();
+  private Map<State, Set<State>> stateToSet = new HashMap<State, Set<State>>();
 }

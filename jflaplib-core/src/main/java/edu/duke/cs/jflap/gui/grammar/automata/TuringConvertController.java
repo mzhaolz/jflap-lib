@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 import edu.duke.cs.jflap.grammar.ConvertedUnrestrictedGrammar;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
-import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
 import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 import edu.duke.cs.jflap.automata.State;
@@ -118,7 +117,7 @@ public class TuringConvertController extends ConvertController {
 
     Collections.sort(
         productions,
-        new Comparator() {
+        new Comparator<Object>() {
           public int compare(Object o1, Object o2) {
             Production p1 = (Production) o1, p2 = (Production) o2;
             if ("S".equals(p1.getLHS())) {
@@ -197,67 +196,5 @@ public class TuringConvertController extends ConvertController {
           convertPane, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
       return null;
     }
-  }
-
-  /**
-   * Trimming the grammar. Gets rid of variable V(aa) to regular variable "A" or "B"
-   * NOTE: It is no longer used in this class
-   * @param prods
-   * @return
-   */
-  private Grammar trim(Production[] prods) {
-    char ch = 'A';
-    for (int i = 0; i < prods.length; i++) {
-      String lhs = prods[i].getLHS();
-      if (ch == 'S' || ch == 'T') {
-        ch++;
-      }
-      int aa = lhs.indexOf("V(");
-      while (aa > -1) {
-
-        //		System.out.println("in 1st "+lhs+"===>    ");
-        int bb = lhs.indexOf(")");
-        String var = "";
-        if ((aa + bb + 1) > lhs.length()) {
-          var = lhs.substring(aa, aa + bb);
-          lhs = lhs.substring(0, aa) + ch;
-        } else {
-          var = lhs.substring(aa, aa + bb + 1);
-          lhs = lhs.substring(0, aa) + ch + lhs.substring(aa + bb);
-        }
-        //	System.out.println(var+ " and new lhs is = "+lhs);
-        aa = lhs.indexOf("V(");
-
-        //	System.out.println(var+" converted to : "+ch);
-
-        //	lhs.replaceAll("V"+aa[j], "A");
-        for (int k = 0; k < prods.length; k++) {
-
-          String inner_lhs = prods[k].getLHS();
-          String inner_rhs = prods[k].getRHS();
-          int a = inner_lhs.indexOf(var);
-          if (a > -1) {
-            //		System.out.println("in inner lhs  "+inner_lhs+"   ===>    ");
-            inner_lhs = inner_lhs.substring(0, a) + "" + ch + inner_lhs.substring(a + var.length());
-            //		System.out.println(inner_lhs);
-          }
-          a = inner_rhs.indexOf(var);
-          if (a > -1) {
-            //			System.out.println("in inner rhs   "+inner_rhs+"   ===>    ");
-
-            inner_rhs = inner_rhs.substring(0, a) + "" + ch + inner_rhs.substring(a + var.length());
-            //			System.out.println(inner_rhs);
-
-          }
-          prods[k] = new Production(inner_lhs, inner_rhs);
-        }
-        ch = (char) (ch + 1);
-
-        //	System.out.println(lhs);
-      }
-    }
-    Grammar g = new UnrestrictedGrammar();
-    g.addProductions(prods);
-    return g;
   }
 }

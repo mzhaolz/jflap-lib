@@ -33,6 +33,11 @@ import javax.swing.KeyStroke;
  */
 public class LSystemDisplay extends LSystemAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>BruteParseAction</CODE>.
    *
    * @param environment

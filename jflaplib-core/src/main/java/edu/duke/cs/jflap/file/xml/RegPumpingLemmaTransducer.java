@@ -84,7 +84,7 @@ public class RegPumpingLemmaTransducer extends PumpingLemmaTransducer {
     elem.appendChild(createElement(doc, Y_NAME, null, "" + pl.getY().length()));
 
     //Encode the list of attempts.
-    ArrayList attempts = pl.getAttempts();
+    ArrayList<?> attempts = pl.getAttempts();
     if (attempts != null && attempts.size() > 0)
       for (int i = 0; i < attempts.size(); i++)
         elem.appendChild(createElement(doc, ATTEMPT, null, (String) attempts.get(i)));

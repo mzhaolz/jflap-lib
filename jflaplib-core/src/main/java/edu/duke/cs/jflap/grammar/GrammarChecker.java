@@ -54,7 +54,6 @@ public class GrammarChecker {
    * @return true if <CODE>grammar</CODE> is a right-linear grammar.
    */
   public static boolean isRightLinearGrammar(Grammar grammar) {
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (!ProductionChecker.isRightLinear(productions[k])) return false;
@@ -71,7 +70,6 @@ public class GrammarChecker {
    * @return true if <CODE>grammar</CODE> is a left-linear grammar.
    */
   public static boolean isLeftLinearGrammar(Grammar grammar) {
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (!ProductionChecker.isLeftLinear(productions[k])) return false;
@@ -88,7 +86,6 @@ public class GrammarChecker {
    * @return true if <CODE>grammar</CODE> is a context-free grammar.
    */
   public static boolean isContextFreeGrammar(Grammar grammar) {
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (!ProductionChecker.isRestrictedOnLHS(productions[k])) return false;
@@ -105,7 +102,6 @@ public class GrammarChecker {
    * @return true if <CODE>variable</CODE> is in any production of <CODE>grammar</CODE>.
    */
   public static boolean isVariableInProductions(Grammar grammar, String variable) {
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (ProductionChecker.isVariableInProduction(variable, productions[k])) {
@@ -124,7 +120,6 @@ public class GrammarChecker {
    * @return true if <CODE>terminal</CODE> is in any production in <CODE>grammar</CODE>.
    */
   public static boolean isTerminalInProductions(Grammar grammar, String terminal) {
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (ProductionChecker.isTerminalInProduction(terminal, productions[k])) {
@@ -145,7 +140,6 @@ public class GrammarChecker {
    */
   public static Production[] getProductionsOnVariable(String variable, Grammar grammar) {
     List<Production> list = new ArrayList<>();
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (variable.equals(productions[k].getLHS())) {
@@ -170,7 +164,6 @@ public class GrammarChecker {
    */
   public static Production[] getNonUnitProductionsOnVariable(String variable, Grammar grammar) {
     List<Production> list = new ArrayList<>();
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (variable.equals(productions[k].getLHS())
@@ -213,7 +206,6 @@ public class GrammarChecker {
    */
   public static Production[] getProductionsWithVariable(String variable, Grammar grammar) {
     List<Production> list = new ArrayList<>();
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {
       if (ProductionChecker.isVariableInProduction(variable, productions[k])) {
@@ -235,7 +227,6 @@ public class GrammarChecker {
    *         on the right hand side.
    */
   public static Production[] getProductionsWithVariableOnRHS(String variable, Grammar grammar) {
-    ProductionChecker pc = new ProductionChecker();
     List<Production> list = new ArrayList<>();
     Production[] productions = grammar.getProductions();
     for (int k = 0; k < productions.length; k++) {

@@ -27,7 +27,12 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class BBABAnAn extends RegularPumpingLemma {
 
-  public String getHTMLTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4681597859261204781L;
+
+public String getHTMLTitle() {
     return "<i>bba(ba)<sup>n</sup>a<sup>n-1</sup></i>";
   }
 

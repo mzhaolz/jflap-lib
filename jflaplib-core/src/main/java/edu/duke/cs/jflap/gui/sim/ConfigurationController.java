@@ -109,8 +109,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
    * will remove all of the open configuration trace windows.
    */
   public void cleanup() {
-    Collection windows = configurationToTraceWindow.values();
-    Iterator it = windows.iterator();
+    Collection<TraceWindow> windows = configurationToTraceWindow.values();
+    Iterator<TraceWindow> it = windows.iterator();
     while (it.hasNext()) ((TraceWindow) it.next()).dispose();
     configurationToTraceWindow.clear();
   }
@@ -132,7 +132,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
     if (!blockStep) { //for ordinary automaton
       for (int i = 0; i < configs.length; i++) {
         //System.out.println("HERE!");
-        List<Configuration> next = simulator.stepConfiguration(configs[i]);
+        List<? extends Configuration> next = simulator.stepConfiguration(configs[i]);
         //MERLIN MERLIN MERLIN MERLIN MERLIN//
         if (next.size() == 0) { //crucial check for rejection
           //System.out.println("Rejected");
@@ -148,7 +148,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
 
         if (configs.length == 0) break; //bit of a hack, but not much time to debug right now.
 
-        List next = ((TMSimulator) simulator).stepBlock((TMConfiguration) configs[0]);
+        List<Configuration> next = ((TMSimulator) simulator).stepBlock((TMConfiguration) configs[0]);
         //MERLIN MERLIN MERLIN MERLIN MERLIN//
         if (next.size() == 0) { //crucial check for rejection
           //System.out.println("Rejected");
@@ -160,7 +160,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
     }
 
     // Replace them with the successors.
-    Iterator it = list.iterator();
+    Iterator<Configuration> it = list.iterator();
     while (it.hasNext()) {
       Configuration config = (Configuration) it.next();
       configurations.add(config);
@@ -484,7 +484,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
    * no trace window for that configuration, then that trace window no longer
    * exists.
    */
-  private HashMap configurationToTraceWindow = new HashMap();
+  private HashMap<Configuration, TraceWindow> configurationToTraceWindow = new HashMap<Configuration, TraceWindow>();
 
   /**
    * This is the set of original configurations when the configuration pane

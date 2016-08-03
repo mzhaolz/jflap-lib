@@ -32,7 +32,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -248,8 +247,6 @@ public class ArrowTool extends Tool {
     } else if (lastClickedTransition != null) {
       if (event.isPopupTrigger()) return;
       Point p = event.getPoint();
-      int x = p.x - initialPointClick.x;
-      int y = p.y - initialPointClick.y;
       State f = lastClickedTransition.getFromState(), t = lastClickedTransition.getToState();
       if (f == t) {
 
@@ -279,8 +276,6 @@ public class ArrowTool extends Tool {
         // Don't want self loops moving twice the speed...
         //t.getPoint().translate(x, y);
         //t.setPoint(t.getPoint());
-        double circlex = (p.x - f.getPoint().x);
-        double circley = (p.y - f.getPoint().y);
         //double angle = Math.atan2(circley, circlex);
         //Point from = getView().getDrawer().pointOnState(f, angle+Math.PI*.166);
         //Point to = getView().getDrawer().pointOnState(f, angle-Math.PI*.166);
@@ -670,7 +665,7 @@ public class ArrowTool extends Tool {
         getView().getDrawer().shouldDrawStateLabels(item.isSelected());
       } else if (item == layoutGraph) {
         AutomatonGraph g = new AutomatonGraph(getAutomaton());
-        LayoutAlgorithm alg = new GEMLayoutAlgorithm();
+        LayoutAlgorithm<State> alg = new GEMLayoutAlgorithm<>();
         alg.layout(g, null);
         g.moveAutomatonStates();
         getView().fitToBounds(30);
@@ -696,7 +691,6 @@ public class ArrowTool extends Tool {
     private Point myPoint;
 
     private JCheckBoxMenuItem stateLabels;
-    private Note curNote;
     private JMenuItem layoutGraph;
     private JMenuItem addNote;
     private JMenuItem renameStates, adaptView;
@@ -710,9 +704,6 @@ public class ArrowTool extends Tool {
 
   /** The transition that was last clicked. */
   private Transition lastClickedTransition = null;
-
-  /** The note that was last clicked. */
-  private Note lastClickedNote = null;
 
   /** The initial point of the state. */
   private Point initialPointState = new Point();

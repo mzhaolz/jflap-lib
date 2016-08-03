@@ -27,7 +27,6 @@ import javax.swing.JOptionPane;
 
 import edu.duke.cs.jflap.automata.AutomatonChecker;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
-import edu.duke.cs.jflap.automata.fsa.Minimizer;
 
 /**
  * This action allows the user to manually minimize a DFA using a minimization
@@ -37,6 +36,11 @@ import edu.duke.cs.jflap.automata.fsa.Minimizer;
  */
 public class MinimizeTreeAction extends FSAAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>MinimizeTreeAction</CODE>.
    *
    * @param automaton
@@ -84,7 +88,4 @@ public class MinimizeTreeAction extends FSAAction {
 
   /** The environment. */
   private Environment environment;
-
-  /** That which minimizes a DFA. */
-  private static Minimizer minimizer = new Minimizer();
 }

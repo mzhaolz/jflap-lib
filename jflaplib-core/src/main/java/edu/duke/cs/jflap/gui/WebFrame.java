@@ -45,6 +45,11 @@ import javax.swing.text.html.HTMLDocument;
 
 public class WebFrame extends JFrame {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * This constructs a new <TT>WebFrame</TT> that initializes its display to
    * the location shown.
    *
@@ -191,26 +196,6 @@ public class WebFrame extends JFrame {
   }
 
   /**
-   * Sets the display of the browser to the url
-   *
-   * @param url
-   *            the name of the url
-   */
-  private void setDisplay(URL url) {
-    try {
-      myBrowserDisplay.setPage(url);
-    } catch (IOException e) {
-      // Display an alert to that effect.
-      System.err.println(e);
-      JOptionPane.showMessageDialog(
-          this, "Could not access URL " + url + "!", "Web Error", JOptionPane.ERROR_MESSAGE);
-      myURLHistory.remove(myCurrentPosition);
-      myCurrentPosition--;
-    }
-    setEnabledStates();
-  }
-
-  /**
    * Go to a completely new page, clearing all visited history past this
    * point.
    *
@@ -221,7 +206,7 @@ public class WebFrame extends JFrame {
     myCurrentPosition++;
     try {
       while (true) {
-        String removed = (String) myURLHistory.remove(myCurrentPosition);
+        myURLHistory.remove(myCurrentPosition);
       }
     } catch (Throwable e) {
 
@@ -293,7 +278,7 @@ public class WebFrame extends JFrame {
   private JEditorPane myBrowserDisplay = new JEditorPane();
 
   /** The vector that holds old addresses. */
-  private ArrayList myURLHistory = new ArrayList();
+  private ArrayList<String> myURLHistory = new ArrayList<String>();
 
   /** Our current position in the vector of addresses. */
   private int myCurrentPosition = -1;

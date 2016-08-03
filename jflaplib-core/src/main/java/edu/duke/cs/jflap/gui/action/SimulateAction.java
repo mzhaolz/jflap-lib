@@ -195,8 +195,8 @@ public class SimulateAction extends AutomatonAction {
             File f = null;
             if (retval == JFileChooser.APPROVE_OPTION) {
               f = ourChooser.getSelectedFile();
-              try {
-                Scanner sc = new Scanner(f);
+              try (Scanner sc = new Scanner(f)){
+                
                 if (tapes != 0) {
                   String[] input = new String[tapes];
                   for (int i = 0; i < tapes; i++) {
@@ -276,11 +276,9 @@ public class SimulateAction extends AutomatonAction {
    * Performs the action.
    */
   public void actionPerformed(ActionEvent e) {
-    boolean blockEdit = false;
     if (environment.getActive() instanceof EditBlockPane) {
       EditBlockPane newPane = (EditBlockPane) environment.getActive();
       automaton = newPane.getAutomaton();
-      blockEdit = true;
     }
     if (!automatonActionPermissible((Component) e.getSource())) return;
     Object input = initialInput((Component) e.getSource(), "");
@@ -350,7 +348,7 @@ public class SimulateAction extends AutomatonAction {
     else if (automaton instanceof TuringMachine
         && !Universe.curProfile.transitionsFromTuringFinalStateAllowed()) {
       TuringMachine turingMachine = (TuringMachine) automaton;
-      Object[] finalStates = turingMachine.getFinalStates();
+      State[] finalStates = turingMachine.getFinalStates();
       AutomatonDirectedGraph graph = new AutomatonDirectedGraph(turingMachine);
       for (int i = 0; i < finalStates.length; i++)
         if (graph.fromDegree(finalStates[i], false) > 0) {

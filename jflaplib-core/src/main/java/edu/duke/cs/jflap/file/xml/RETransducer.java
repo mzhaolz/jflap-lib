@@ -45,7 +45,7 @@ public class RETransducer extends AbstractTransducer {
    * @return the {@link edu.duke.cs.jflap.regular.RegularExpression} instance
    */
   public java.io.Serializable fromDOM(Document document) {
-    Map e2t = elementsToText(document.getDocumentElement());
+    Map<?, ?> e2t = elementsToText(document.getDocumentElement());
     String expression = (String) e2t.get(EXPRESSION_NAME);
     if (expression == null)
       if (e2t.containsKey(EXPRESSION_NAME))

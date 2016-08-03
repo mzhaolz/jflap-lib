@@ -34,7 +34,6 @@ public class ToolAdapter extends SuperMouseAdapter {
    *            the automaton pane this tool adapter is listening to
    */
   public ToolAdapter(AutomatonPane pane) {
-    this.pane = pane;
   }
 
   /**
@@ -119,7 +118,4 @@ public class ToolAdapter extends SuperMouseAdapter {
 
   /** The current adapter */
   private SuperMouseAdapter adapter = new SuperMouseAdapter() {};
-
-  /** The automaton pane that this tool adapter is part of. */
-  private AutomatonPane pane = null;
 }

@@ -43,7 +43,7 @@ public class Discretizer {
    * @return an array of the subexpressions
    */
   public static String[] or(String expression) {
-    ArrayList se = new ArrayList(); // Subexpressions.
+    ArrayList<String> se = new ArrayList<String>(); // Subexpressions.
     int start = 0;
     int level = 0;
     for (int i = 0; i < expression.length(); i++) {
@@ -68,7 +68,7 @@ public class Discretizer {
    * @return an array of the subexpressions
    */
   public static String[] cat(String expression) {
-    ArrayList se = new ArrayList(); // Subexpressions.
+    ArrayList<String> se = new ArrayList<String>(); // Subexpressions.
     int start = 0;
     int level = 0;
     for (int i = 0; i < expression.length(); i++) {

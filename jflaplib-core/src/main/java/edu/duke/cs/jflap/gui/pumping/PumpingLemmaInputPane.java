@@ -36,20 +36,14 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public abstract class PumpingLemmaInputPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * The maximum size of the window. It should fit onto most
    * screens.
    */
   protected static Dimension MAX_SIZE = new Dimension(640, 580);
-  /**
-   * The instruction that prompts the user to view the animation.
-   */
-  private static String PROMPT_ANIM = "Click \"Step\" in Box 5 to step the animation.";
-  /**
-   * The instruction that prompts the user to view the animation or add the case.
-   */
-  private static String PROMPT_CASE =
-      "Click \"Step\" in Box 5 to step the animation or "
-          + "\"Add\" in the right panel to add this case.";
   /**
    * The <code>PumpingLemma</code> that we are demonstrating.
    */

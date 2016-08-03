@@ -47,7 +47,6 @@ public class CYKTracer {
   private Grammar myOriginalGrammar;
   private ArrayList<Production> myTrace;
   private ArrayList<Production> myAnswer;
-  private Production[] myOriginalProductions;
   private HashMap<ArrayList<Production>, Production> myLambdaStepMap;
   private HashMap<ArrayList<Production>, Production> myUnitStepMap;
   private ArrayList<Production> myTempCNF;
@@ -57,12 +56,11 @@ public class CYKTracer {
     myOriginalGrammar = grammar;
     myTrace = trace;
     myAnswer = new ArrayList<Production>();
-    myOriginalProductions = myOriginalGrammar.getProductions();
     initializeLambdaStepMap();
   }
 
   private void initializeLambdaStepMap() {
-    Set lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(myOriginalGrammar);
+    Set<String> lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(myOriginalGrammar);
     Grammar g = myOriginalGrammar;
     //System.out.println("LD = "+lambdaDerivers);
     if (lambdaDerivers.size() > 0) {
@@ -78,6 +76,7 @@ public class CYKTracer {
 
       controller.doStep();
 
+			//TODO: Check that this is fixed once GUI package is fixed.
       for (Production production : (HashSet<Production>) controller.getLambdaSet()) {
         directLambdaProductions.put(production.getLHS(), production);
       }
@@ -251,7 +250,7 @@ public class CYKTracer {
       for (int i = 0; i < pp.length; i++) {
         pp[i] = resultList.get(i);
       }
-      pp = converter.convert(pp);
+      pp = CNFConverter.convert(pp);
       //System.out.println("CONverted : "+Arrays.asList(pp));
       for (int i = 0; i < pp.length; i++) {
         originalToCNF.put(resultList.get(i), pp[i]);

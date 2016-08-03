@@ -93,7 +93,12 @@ public abstract class TableTransitionCreator extends TransitionCreator {
               : new TipLambdaCellRenderer(model.getColumnName(i));
     JTable table =
         new JTable(createModel(transition)) {
-          public TableCellRenderer getCellRenderer(int r, int c) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public TableCellRenderer getCellRenderer(int r, int c) {
             return renders[c];
           }
 
@@ -147,7 +152,7 @@ public abstract class TableTransitionCreator extends TransitionCreator {
           "Odd 'focusCycleRoot' exception thrown " + "from the depths of Java again.");
     }
     if (!cancel) {
-      TableModel oldModel = createModel(transition);
+      createModel(transition);
       Transition t = modifyTransition(transition, editingTable.getModel());
       if (t != null) {
         if (isNew) {
@@ -282,7 +287,12 @@ public abstract class TableTransitionCreator extends TransitionCreator {
 
   /** The cell renderer. */
   private static class TipLambdaCellRenderer extends LambdaCellRenderer {
-    public TipLambdaCellRenderer(String replace, String tip) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public TipLambdaCellRenderer(String replace, String tip) {
       super(replace);
       setToolTipText(tip);
     }

@@ -298,19 +298,6 @@ public class CNFConverter {
     }
 
     /**
-     * Returns an array of RHSes for a given LHS.
-     *
-     * @param lhs
-     *            the LHS to check for
-     * @return an array of RHSes, or an empty array if this LHS does not
-     *         appear in the grammar
-     */
-    public String[] getRight(String lhs) {
-      Set<String> rhses = lhsToRhs.get(lhs);
-      return rhses.toArray(new String[0]);
-    }
-
-    /**
      * Returns a LHS for a given RHS, if that RHS is unique for a LHS.
      *
      * @param lhs

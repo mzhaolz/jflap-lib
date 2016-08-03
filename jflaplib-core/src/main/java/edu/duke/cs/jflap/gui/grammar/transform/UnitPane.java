@@ -25,9 +25,13 @@ import edu.duke.cs.jflap.gui.environment.FrameFactory;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.grammar.*;
 import edu.duke.cs.jflap.gui.viewer.*;
-import java.awt.*;
+
+import java.awt.BorderLayout;
 import java.awt.event.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -38,6 +42,11 @@ import javax.swing.event.*;
  */
 public class UnitPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new unit removing pane.
    *
    * @param environment
@@ -88,8 +97,8 @@ public class UnitPane extends JPanel {
         new EditorPane(
             vdgDrawer,
             new ToolBox() {
-              public java.util.List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                java.util.List t = new LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                List<Tool> t = new LinkedList<Tool>();
                 t.add(
                     new ArrowNontransitionTool(view, drawer) {
                       public void mouseClicked(MouseEvent e) {
@@ -141,7 +150,12 @@ public class UnitPane extends JPanel {
     grammarTable =
         new GrammarTable(
             new GrammarTableModel(grammar) {
-              public boolean isCellEditable(int r, int c) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r, int c) {
                 return false;
               }
             });
@@ -246,9 +260,8 @@ public class UnitPane extends JPanel {
     final String S = grammar.getStartVariable();
     Arrays.sort(
         p,
-        new Comparator() {
-          public int compare(Object o1, Object o2) {
-            Production p1 = (Production) o1, p2 = (Production) o2;
+        new Comparator<Production>() {
+          public int compare(Production p1, Production p2) {
             if (S.equals(p1.getLHS())) {
               if (p1.getLHS().equals(p2.getLHS())) return 0;
               else return -1;
@@ -333,28 +346,48 @@ public class UnitPane extends JPanel {
   // These are general controls.
   AbstractAction doStepAction =
       new AbstractAction("Do Step") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.doStep();
         }
       };
 
   AbstractAction doAllAction =
       new AbstractAction("Do All") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.doAll();
         }
       };
 
   AbstractAction proceedAction =
       new AbstractAction("Proceed") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           GrammarTransformAction.hypothesizeUseless(environment, getGrammar());
         }
       };
 
   AbstractAction exportAction =
       new AbstractAction("Export") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           FrameFactory.createFrame(getGrammar());
         }
       };
@@ -374,7 +407,12 @@ public class UnitPane extends JPanel {
   /** The editing grammar table mode. */
   GrammarTableModel editingGrammarModel =
       new GrammarTableModel() {
-        public boolean isCellEditable(int r, int c) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public boolean isCellEditable(int r, int c) {
           if (!editingActive) return false;
           if (controller.step != UnitController.PRODUCTION_MODIFY) return false;
           if (c == 1) return false;
@@ -395,7 +433,12 @@ public class UnitPane extends JPanel {
   /** The delete action for deleting rows. */
   AbstractAction deleteAction =
       new AbstractAction("Delete") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           deleteActivated();
         }
       };
@@ -403,7 +446,12 @@ public class UnitPane extends JPanel {
   /** The complete selected action. */
   AbstractAction completeSelectedAction =
       new AbstractAction("Complete Selected") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           cancelEditing();
           controller.doSelected();
         }

@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.gui.regular;
 
 import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
+import edu.duke.cs.jflap.gui.editor.Tool;
 import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
@@ -46,6 +47,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class ConvertPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Creates a new conversion pane for the conversion of an automaton to a
    * regular expression.
    *
@@ -75,8 +81,8 @@ public class ConvertPane extends JPanel {
         new edu.duke.cs.jflap.gui.editor.EditorPane(
             automatonDrawer,
             new ToolBox() {
-              public List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                LinkedList tools = new LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                LinkedList<Tool> tools = new LinkedList<Tool>();
                 tools.add(new ArrowNontransitionTool(view, drawer));
                 tools.add(new RegularStateTool(view, drawer, controller));
                 tools.add(new RegularTransitionTool(view, drawer, controller));
@@ -91,14 +97,24 @@ public class ConvertPane extends JPanel {
     bar.add(
         new JButton(
             new AbstractAction("Do It") {
-              public void actionPerformed(ActionEvent e) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
                 controller.moveNextStep();
               }
             }));
     bar.add(
         new JButton(
             new AbstractAction("Export") {
-              public void actionPerformed(ActionEvent e) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
                 controller.export();
               }
             }));

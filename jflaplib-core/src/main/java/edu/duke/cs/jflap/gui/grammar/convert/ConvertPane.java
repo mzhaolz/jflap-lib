@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.gui.grammar.convert;
 
 import edu.duke.cs.jflap.automata.Automaton;
+import edu.duke.cs.jflap.automata.Transition;
 import edu.duke.cs.jflap.grammar.*;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.TableTextSizeSlider;
@@ -26,6 +27,8 @@ import edu.duke.cs.jflap.gui.viewer.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 
 /**
@@ -36,6 +39,11 @@ import javax.swing.*;
  */
 public class ConvertPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5288648720223862725L;
+
+/**
    * Instantiates a <CODE>ConvertPane</CODE>.
    *
    * @param grammar
@@ -50,10 +58,7 @@ public class ConvertPane extends JPanel {
    *            the environment to which this pane will be added
    */
   public ConvertPane(
-      Grammar grammar, Automaton automaton, Map productionsToTransitions, Environment env) {
-    this.grammar = grammar;
-    this.automaton = automaton;
-
+      Grammar grammar, Automaton automaton, Map<Production, Transition> productionsToTransitions, Environment env) {
     this.setLayout(new BorderLayout());
     JSplitPane split = SplitPaneFactory.createSplit(env, true, .4, null, null);
     this.add(split, BorderLayout.CENTER);
@@ -69,8 +74,8 @@ public class ConvertPane extends JPanel {
         new EditorPane(
             automatonDrawer,
             new ToolBox() {
-              public java.util.List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                LinkedList tools = new LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                LinkedList<Tool> tools = new LinkedList<Tool>();
                 tools.add(new ArrowNontransitionTool(view, drawer));
                 tools.add(new TransitionTool(view, drawer));
                 return tools;
@@ -94,25 +99,45 @@ public class ConvertPane extends JPanel {
     bar.addSeparator();
     bar.add(
         new AbstractAction("Show All") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 976825934777026919L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.complete();
           }
         });
     bar.add(
         new AbstractAction("Create Selected") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = -3148925991091992877L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.createForSelected();
           }
         });
     bar.add(
         new AbstractAction("Done?") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 7142173663791405435L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.isDone();
           }
         });
     bar.add(
         new AbstractAction("Export") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 9189517666052681184L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.export();
           }
         });
@@ -128,17 +153,11 @@ public class ConvertPane extends JPanel {
     return editorPane;
   }
 
-  /** The grammar that this convertpane holds. */
-  private Grammar grammar;
-
   /** The grammar viewer. */
   private GrammarViewer grammarViewer;
 
   /** The automaton selection drawer. */
   private SelectionDrawer automatonDrawer;
-
-  /** The automaton. */
-  private Automaton automaton;
 
   /** The editor pane. */
   private EditorPane editorPane;

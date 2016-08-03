@@ -28,7 +28,12 @@ import edu.duke.cs.jflap.pumping.LemmaMath;
  */
 public class WW1WrGrtrThanEq extends ContextFreePumpingLemma {
 
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4941517762785350617L;
+
+public String getTitle() {
     return "w w1 w^R : |w1| >= 5, w & w1 element_of {ab}*";
   }
 

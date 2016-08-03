@@ -51,7 +51,11 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  * @author Stephen Reading
  */
 public class TestAction extends RestrictedAction {
-  private JFileChooser fileChooser;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private JFileChooser fileChooser;
 
   /**
    * Instantiates a new <CODE>Turing Test Action</CODE>.
@@ -80,7 +84,7 @@ public class TestAction extends RestrictedAction {
     }
   }
 
-  public ArrayList chooseFile(Component source, boolean fromPerformAction) {
+  public ArrayList<Object> chooseFile(Component source, boolean fromPerformAction) {
     File tempFile = fileChooser.getCurrentDirectory();
     fileChooser.setCurrentDirectory(tempFile.getParentFile());
     fileChooser.setCurrentDirectory(tempFile);
@@ -120,8 +124,6 @@ public class TestAction extends RestrictedAction {
       }
     }
 
-    if (files == null) return null;
-
     myEnvFrame.getEnvironment().setMultipleObjects(myObjects);
 
     return myObjects;
@@ -150,7 +152,7 @@ public class TestAction extends RestrictedAction {
   }
 
   public void performAction(Component source) {
-    ArrayList files = null;
+    ArrayList<Object> files = null;
     boolean sameType = false;
     while (files == null || sameType == false) {
       if (myEnvFrame != null) {
@@ -183,8 +185,8 @@ public class TestAction extends RestrictedAction {
     int result = fileChooser.showOpenDialog(source);
     //open text file of inputs and outputs
 
-    ArrayList testStrings = new ArrayList();
-    ArrayList transStrings = new ArrayList();
+    ArrayList<String> testStrings = new ArrayList<String>();
+    ArrayList<String> transStrings = new ArrayList<String>();
     if (result != JFileChooser.APPROVE_OPTION) {
     } else {
       File textFile = fileChooser.getSelectedFile();
@@ -268,7 +270,7 @@ public class TestAction extends RestrictedAction {
   public static Environment openFile(File file, Codec[] codecs, boolean makeFrame) {
     ParseException p = null;
 
-    for (int i = 0; i < codecs.length; i++) {
+    for (int i = 0; i < codecs.length;) {
       try {
         //                System.out.println("openFile(File, Codec[], boolean) called");
         Serializable object = codecs[i].decode(file, null);
@@ -312,6 +314,6 @@ public class TestAction extends RestrictedAction {
     throw p;
   }
 
-  public static ArrayList myObjects = new ArrayList();
+  public static ArrayList<Object> myObjects = new ArrayList<Object>();
   public static EnvironmentFrame myEnvFrame;
 }

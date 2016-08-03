@@ -45,12 +45,17 @@ public abstract class LRParseTableGenerator {
   public static LRParseTable generate(
       Grammar grammar,
       FiniteStateAutomaton gotoGraph,
-      Map stateToItems,
-      Map itemsToState,
-      Map followSets) {
+      Map<?, ?> stateToItems,
+      Map<?, ?> itemsToState,
+      Map<?, ?> followSets) {
     LRParseTable pt =
         new LRParseTable(grammar, gotoGraph) {
-          public boolean isCellEditable(int row, int column) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = -5184185403146892760L;
+
+		public boolean isCellEditable(int row, int column) {
             return false;
           }
         };
@@ -69,8 +74,8 @@ public abstract class LRParseTableGenerator {
     // Find the acceptance and reduction.
     State[] finals = gotoGraph.getFinalStates();
     for (int i = 0; i < finals.length; i++) {
-      Set items = (Set) stateToItems.get(finals[i]);
-      Iterator it = items.iterator();
+      Set<?> items = (Set<?>) stateToItems.get(finals[i]);
+      Iterator<?> it = items.iterator();
       while (it.hasNext()) {
         Production p = (Production) it.next();
         if (p.getLHS().length() == 2) {
@@ -84,8 +89,8 @@ public abstract class LRParseTableGenerator {
               new Production(p.getLHS(), p.getRHS().substring(0, p.getRHS().length() - 1));
           int j = 0;
           while (!p2.equals(ps[j])) j++;
-          Set follow = (Set) followSets.get(p.getLHS());
-          Iterator fit = follow.iterator();
+          Set<?> follow = (Set<?>) followSets.get(p.getLHS());
+          Iterator<?> fit = follow.iterator();
           while (fit.hasNext()) {
             String followSymbol = (String) fit.next();
             pt.appendValueAt("r" + j, finals[i].getID(), followSymbol);

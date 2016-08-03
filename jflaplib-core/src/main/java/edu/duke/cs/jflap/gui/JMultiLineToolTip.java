@@ -34,9 +34,12 @@ import javax.swing.plaf.basic.BasicToolTipUI;
  * @author Zafir Anjum
  */
 public class JMultiLineToolTip extends JToolTip {
-  private static final String uiClassID = "ToolTipUI";
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-  String tipText;
+String tipText;
 
   JComponent component;
 

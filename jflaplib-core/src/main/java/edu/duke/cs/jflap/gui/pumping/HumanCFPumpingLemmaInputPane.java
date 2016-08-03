@@ -31,15 +31,10 @@ import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
  */
 public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
   /**
-   * Message displayed if computer wins.
-   */
-  private static String I_WIN =
-      "I WIN. Do you want to play again or concede " + "that the language is not context-free?";
-  /**
-   * Message displayed if player wins.
-   */
-  private static String YOU_WIN = "YOU WIN. Does this mean the language is context-free?";
-  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * The <code>SliderPanel</code> that controls <i>u</i> of the decomposition.
    */
   private SliderPanel myUPanel;

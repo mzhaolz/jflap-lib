@@ -23,7 +23,6 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;

@@ -64,7 +64,12 @@ public class PDATransitionCreator extends TableTransitionCreator {
   protected TableModel createModel(Transition transition) {
     final PDATransition t = (PDATransition) transition;
     return new AbstractTableModel() {
-      public Object getValueAt(int row, int column) {
+      /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+	public Object getValueAt(int row, int column) {
         return s[column];
       }
 

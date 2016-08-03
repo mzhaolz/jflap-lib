@@ -30,7 +30,11 @@ import javax.swing.event.ChangeListener;
  */
 public class TableTextSizeSlider extends JSlider {
 
-  static final int FONT_SIZE_MIN = 1;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+static final int FONT_SIZE_MIN = 1;
   static final int FONT_SIZE_MAX = 600;
   static final int FONT_SIZE_INIT = 200;
   static final String TABLE_SIZE_TITLE = "Table Text Size";

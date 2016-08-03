@@ -32,21 +32,25 @@ import java.awt.geom.*;
  */
 public class Canvas extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * A list of labels.
    */
-  private ArrayList myLabelText;
+  private ArrayList<Text> myLabelText;
   /**
    * A list of the initial text on the canvas.
    */
-  private ArrayList myInitialText;
+  private ArrayList<Text> myInitialText;
   /**
    * A list of the text that should be animated.
    */
-  private ArrayList myMovingText;
+  private ArrayList<Text> myMovingText;
   /**
    * A list of the text that has already moved (animated) to its final position.
    */
-  private ArrayList myFinalText;
+  private ArrayList<Text> myFinalText;
   /**
    * A point marking the first row, where the initial text is painted.
    */
@@ -79,10 +83,10 @@ public class Canvas extends JPanel {
   public Canvas() {
     super(new BorderLayout());
 
-    myLabelText = new ArrayList();
-    myInitialText = new ArrayList();
-    myMovingText = new ArrayList();
-    myFinalText = new ArrayList();
+    myLabelText = new ArrayList<Text>();
+    myInitialText = new ArrayList<Text>();
+    myMovingText = new ArrayList<Text>();
+    myFinalText = new ArrayList<Text>();
     wait = true;
     this.setMinimumSize(MIN_SIZE);
     this.setPreferredSize(MIN_SIZE);

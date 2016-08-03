@@ -58,8 +58,8 @@ public class PDAStepWithClosureSimulator extends PDAStepByStateSimulator {
    * @param config
    *            the configuration to simulate the one step on
    */
-  public ArrayList stepConfiguration(Configuration config) {
-    ArrayList list = new ArrayList();
+  public ArrayList<PDAConfiguration> stepConfiguration(Configuration config) {
+    ArrayList<PDAConfiguration> list = new ArrayList<PDAConfiguration>();
     PDAConfiguration configuration = (PDAConfiguration) config;
     /** get all information from configuration. */
     String unprocessedInput = configuration.getUnprocessedInput();

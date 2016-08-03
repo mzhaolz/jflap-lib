@@ -27,7 +27,7 @@ import edu.duke.cs.jflap.automata.graph.Graph;
  * @see VertexChain
  * @author Chris Morgan
  */
-public class CircleChain extends VertexChain {
+public class CircleChain<V> extends VertexChain<V> {
   /**
    * Distance from the center of the graph of the <code>CircleChain</code>.  The polar coordinate <i>r</i> for all
    * vertices in the <code>CircleChain</code>.
@@ -52,7 +52,7 @@ public class CircleChain extends VertexChain {
    * @param vBuffer
    *     value for <code>vertexBuffer</code>.
    */
-  public CircleChain(Graph g, Dimension vDim, double vBuffer) {
+  public CircleChain(Graph<V> g, Dimension vDim, double vBuffer) {
     super(g);
     radius = 0;
     vertexDim = vDim;

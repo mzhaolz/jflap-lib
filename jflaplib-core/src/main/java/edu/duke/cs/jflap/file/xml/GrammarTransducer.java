@@ -49,7 +49,7 @@ public class GrammarTransducer extends AbstractTransducer {
    *            the node the encapsulates a production
    */
   public static Production createProduction(Node node) {
-    Map e2t = elementsToText(node);
+    Map<?, ?> e2t = elementsToText(node);
     String left = (String) e2t.get(PRODUCTION_LEFT_NAME);
     String right = (String) e2t.get(PRODUCTION_RIGHT_NAME);
     if (left == null) left = "";

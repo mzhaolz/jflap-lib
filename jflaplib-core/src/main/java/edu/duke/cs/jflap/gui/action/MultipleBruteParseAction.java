@@ -18,9 +18,7 @@ package edu.duke.cs.jflap.gui.action;
 
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
-import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -32,6 +30,11 @@ import java.awt.event.ActionEvent;
  */
 public class MultipleBruteParseAction extends GrammarAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>BruteParseAction</CODE>.
    *
    * @param environment
@@ -40,7 +43,6 @@ public class MultipleBruteParseAction extends GrammarAction {
   public MultipleBruteParseAction(GrammarEnvironment environment) {
     super("Multiple Brute Force Parse", null);
     this.environment = environment;
-    this.frame = Universe.frameForEnvironment(environment);
   }
 
   /**
@@ -59,7 +61,4 @@ public class MultipleBruteParseAction extends GrammarAction {
 
   /** The grammar environment. */
   private GrammarEnvironment environment;
-
-  /** The frame for the grammar environment. */
-  private EnvironmentFrame frame;
 }

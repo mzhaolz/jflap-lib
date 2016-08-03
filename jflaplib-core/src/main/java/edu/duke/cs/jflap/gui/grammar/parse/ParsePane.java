@@ -37,6 +37,11 @@ import javax.swing.tree.*;
  */
 abstract class ParsePane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new parse pane. This will not place components. A call to
    * {@link #initView} by a subclass is necessary.
    *
@@ -84,11 +89,21 @@ abstract class ParsePane extends JPanel {
     grammarTable =
         new GrammarTable(
             new GrammarTableModel(grammar) {
-              public boolean isCellEditable(int r, int c) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r, int c) {
                 return false;
               }
             }) {
-          public String getToolTipText(java.awt.event.MouseEvent event) {
+          /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+		public String getToolTipText(java.awt.event.MouseEvent event) {
             try {
               int row = rowAtPoint(event.getPoint());
               return getGrammarModel().getProduction(row).toString() + " is production " + row;
@@ -167,7 +182,7 @@ abstract class ParsePane extends JPanel {
     // Set up the view customizer controls.
     toolbar.addSeparator();
 
-    final JComboBox box = new JComboBox(getViewChoices());
+    final JComboBox<?> box = new JComboBox<Object>(getViewChoices());
     box.setSelectedIndex(0);
     ActionListener listener =
         new ActionListener() {
@@ -285,7 +300,12 @@ abstract class ParsePane extends JPanel {
   /** The action for the stepping control. */
   public AbstractAction stepAction =
       new AbstractAction("Step") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           step();
         }
       };
@@ -293,7 +313,12 @@ abstract class ParsePane extends JPanel {
   /** The action for the start control. */
   AbstractAction startAction =
       new AbstractAction("Start") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           input(inputField.getText());
         }
       };
@@ -314,7 +339,12 @@ abstract class ParsePane extends JPanel {
   /** The table model for the derivations. */
   DefaultTableModel derivationModel =
       new DefaultTableModel(new String[] {"Production", "Derivation"}, 0) {
-        public boolean isCellEditable(int r, int c) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public boolean isCellEditable(int r, int c) {
           return false;
         }
       };

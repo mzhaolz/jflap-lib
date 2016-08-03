@@ -27,7 +27,11 @@ import edu.duke.cs.jflap.automata.Automaton;
  * @author Henry Qin
  */
 public class TMState extends State {
-  private TuringMachine myInnerTuringMachine;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2825886205807641375L;
+private TuringMachine myInnerTuringMachine;
 
   public TMState(int id, Point point, Automaton tm) { //do we really need a pointer to the parent?
     super(id, point, tm);

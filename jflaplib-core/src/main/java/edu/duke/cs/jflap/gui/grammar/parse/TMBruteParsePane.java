@@ -35,7 +35,11 @@ import javax.swing.tree.*;
  */
 public class TMBruteParsePane extends BruteParsePane {
 
-  private Grammar myTrimmedGrammar;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private Grammar myTrimmedGrammar;
   /**
    * Instantiates a new brute force parse pane.
    *

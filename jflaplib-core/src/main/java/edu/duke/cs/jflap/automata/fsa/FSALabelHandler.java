@@ -103,7 +103,7 @@ public class FSALabelHandler {
 
   public static void splitLabel(Transition transition, Automaton automaton) {
     FSATransition trans = (FSATransition) transition;
-    State from = transition.getFromState(), f = from, to = transition.getToState();
+    State from = transition.getFromState(), to = transition.getToState();
     automaton.removeTransition(trans);
     String label = trans.getLabel();
     for (int i = label.charAt(label.indexOf("[") + 1);

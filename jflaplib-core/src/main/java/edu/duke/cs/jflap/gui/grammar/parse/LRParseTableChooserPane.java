@@ -30,6 +30,11 @@ import javax.swing.table.*;
  */
 public class LRParseTableChooserPane extends LRParseTablePane {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new parse table pane.
    *
    * @param table
@@ -50,10 +55,10 @@ public class LRParseTableChooserPane extends LRParseTablePane {
     for (int r = 0; r < table.getRowCount(); r++)
       for (int c = 1; c < table.getColumnCount(); c++) {
         cellEditors[r][c] = null;
-        SortedSet set = table.getSetAt(r, c);
+        SortedSet<?> set = table.getSetAt(r, c);
         if (set.size() <= 1) continue;
         table.setValueAt(set.first(), r, c);
-        cellEditors[r][c] = new DefaultCellEditor(new JComboBox(set.toArray()));
+        cellEditors[r][c] = new DefaultCellEditor(new JComboBox<Object>(set.toArray()));
       }
   }
 

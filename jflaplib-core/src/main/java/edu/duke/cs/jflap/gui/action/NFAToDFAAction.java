@@ -34,6 +34,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class NFAToDFAAction extends FSAAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>NFAToDFAAction</CODE>.
    *
    * @param automaton

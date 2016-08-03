@@ -28,6 +28,11 @@ package edu.duke.cs.jflap.file;
  */
 public class DataException extends RuntimeException {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1918740200556208694L;
+
+/**
    * Creates a generic data exception.
    */
   public DataException() {

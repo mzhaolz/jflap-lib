@@ -28,7 +28,12 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class AnBk extends RegularPumpingLemma {
 
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1481440241152133955L;
+
+public String getTitle() {
     return "a^n b^k : n is odd or k is even";
   }
 
