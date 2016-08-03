@@ -241,7 +241,7 @@ class LRParseController {
     IntStack stack = new IntStack();
     stack.push(0);
     Production[] productions = grammar.getProductions();
-    ArrayList nodeList = new ArrayList();
+    ArrayList<TreeNode> nodeList = new ArrayList<TreeNode>();
     while (true) {
       int state = stack.peekInt();
       String read = "" + string.charAt(p);
@@ -329,14 +329,15 @@ class LRParseController {
   /** The array of nodes as they are added. */
   private TreeNode[] nodes;
 
-  private static class IntStack extends Stack {
-    int push(int item) {
+  private static class IntStack extends Stack<Object> {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	int push(int item) {
       push(new Integer(item));
       return item;
-    }
-
-    int popInt() {
-      return ((Integer) pop()).intValue();
     }
 
     int peekInt() {

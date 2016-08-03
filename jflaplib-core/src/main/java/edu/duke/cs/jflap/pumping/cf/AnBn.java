@@ -28,7 +28,12 @@ import edu.duke.cs.jflap.pumping.LemmaMath;
  *
  */
 public class AnBn extends ContextFreePumpingLemma {
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2621561938235244043L;
+
+public String getTitle() {
     return "a^n b^n : n >= 0";
   }
 

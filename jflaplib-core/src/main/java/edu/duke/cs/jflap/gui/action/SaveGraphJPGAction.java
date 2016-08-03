@@ -22,7 +22,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 
 /**
@@ -32,12 +31,13 @@ import javax.swing.JMenu;
  * @author Jonathan Su, Henry Qin
  */
 public class SaveGraphJPGAction extends RestrictedAction {
-  /** The environment that this save action gets it's object from. */
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/** The environment that this save action gets it's object from. */
   protected Environment environment;
   protected JMenu myMenu;
-
-  /** The file chooser. */
-  private JFileChooser fileChooser;
 
   /**
    * Instantiates a new <CODE>SaveGraphBMPAction</CODE>.

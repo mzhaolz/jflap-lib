@@ -26,23 +26,23 @@ import edu.duke.cs.jflap.automata.graph.Graph;
  *
  * @author Chris Morgan
  */
-public class VertexChain {
+public class VertexChain<T>{
   /**
    * List of vertices in the chain.
    */
-  ArrayList vertices;
+  ArrayList<T> vertices;
   /**
    * The graph from which edge information is processed.
    */
-  Graph graph;
+  Graph<T> graph;
 
   /**
    * Constructor.
    *
    * @param g - The graph from which edge information is processed.
    */
-  public VertexChain(Graph g) {
-    vertices = new ArrayList();
+  public VertexChain(Graph<T> g) {
+    vertices = new ArrayList<>();
     graph = g;
   }
 
@@ -51,7 +51,7 @@ public class VertexChain {
    *
    * @return the object in the given index.
    */
-  public Object get(int index) {
+  public T get(int index) {
     return vertices.get(index);
   }
 
@@ -60,7 +60,7 @@ public class VertexChain {
    *
    * @return the vertices in the chain.
    */
-  public ArrayList getVertices() {
+  public ArrayList<T> getVertices() {
     return vertices;
   }
 
@@ -78,7 +78,7 @@ public class VertexChain {
    *
    * @return whether the given vertex has an edge to a <code>VertexChain</code> member.
    */
-  public boolean isEdgeToChainMember(Object vertex) {
+  public boolean isEdgeToChainMember(T vertex) {
     if (getDegreeInChain(vertex) > 0) return true;
     return false;
   }
@@ -89,7 +89,7 @@ public class VertexChain {
    *
    * @return the given vertex's degree with respect to the <code>VertexChain</code>.
    */
-  public int getDegreeInChain(Object vertex) {
+  public int getDegreeInChain(T vertex) {
     int count = 0;
     for (int i = 0; i < vertices.size(); i++)
       if (graph.hasEdge(vertex, vertices.get(i)) && !vertices.get(i).equals(vertex)) count++;
@@ -114,9 +114,10 @@ public class VertexChain {
    *     if true, the subchain will be placed to the right of the <code>destIndex's</code> vertex.
    *     If false, to the left.
    */
-  public void orientSubChain(
+  @SuppressWarnings("unchecked")
+public void orientSubChain(
       int destIndex, int matchingIndex, int start, int end, boolean shuffleDirection) {
-    Object[] toMove = new Object[end - start + 1];
+    T[] toMove = (T[]) new Object[end - start + 1];
     int dest, chainSize;
     chainSize = size();
     if (destIndex > 0 && destIndex >= start) dest = destIndex + start - end - 1;
@@ -141,7 +142,7 @@ public class VertexChain {
    *
    * @param vertex the vertex to be added
    */
-  public void addVertex(Object vertex) {
+  public void addVertex(T vertex) {
     int destIndex, subChainBound;
     for (int i = 0; i < size(); i++)
       if (graph.hasEdge(vertex, get(i))) {
@@ -185,7 +186,7 @@ public class VertexChain {
    * @param graph
    *     the graph used to search for edges
    */
-  public static void alignTwoChains(VertexChain first, VertexChain next, Graph graph) {
+  public static <T> void alignTwoChains(VertexChain<T> first, VertexChain<T> next, Graph<T> graph) {
     int fstart, fend, nstart, nend;
     for (int j = 0; j < first.size(); j++)
       for (int k = 0; k < next.size(); k++)

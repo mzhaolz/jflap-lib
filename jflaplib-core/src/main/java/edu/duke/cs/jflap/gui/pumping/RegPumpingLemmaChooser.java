@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.gui.pumping;
 
 import java.util.*;
+
 import edu.duke.cs.jflap.pumping.reg.*;
 
 /**
@@ -28,11 +29,16 @@ import edu.duke.cs.jflap.pumping.reg.*;
  */
 public class RegPumpingLemmaChooser extends PumpingLemmaChooser {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Adds all the regular pumping lemmas.
    *
    */
   public RegPumpingLemmaChooser() {
-    myList = new ArrayList();
+    myList = new ArrayList<>();
 
     //old languages
     myList.add(new AnBn());

@@ -30,6 +30,10 @@ import edu.duke.cs.jflap.automata.graph.AutomatonGraph;
  */
 public class LayoutStorageAction extends AutomatonAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * The automaton whose layout will be saved and possibly restored.
    */
   private Automaton automaton;
@@ -56,7 +60,12 @@ public class LayoutStorageAction extends AutomatonAction {
     automaton = a;
     restoreAction =
         new AutomatonAction(restoreString, null) {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
             graph.moveAutomatonStates();
           }
         };

@@ -24,6 +24,8 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
 import edu.duke.cs.jflap.gui.grammar.*;
 import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
+import java.io.Serializable;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -118,8 +120,8 @@ public abstract class ConvertController {
    * @param productions
    *            the collection that holds productions to add
    */
-  private void addProductions(Collection productions) {
-    Iterator it = productions.iterator();
+  private void addProductions(Collection<Production> productions) {
+    Iterator<Production> it = productions.iterator();
     if (!it.hasNext()) return;
     GrammarTableModel model = table.getGrammarModel();
     int min = 1000000000, max = 0;
@@ -168,10 +170,10 @@ public abstract class ConvertController {
    *         if no object remains to have its productions revealed
    */
   public Object revealRandomProductions() {
-    Iterator it = objectToProduction.entrySet().iterator();
+    Iterator<Map.Entry<Serializable, Production[]>> it = objectToProduction.entrySet().iterator();
     while (it.hasNext()) {
-      Map.Entry entry = (Map.Entry) it.next();
-      Object key = entry.getKey();
+      Map.Entry<Serializable, Production[]> entry = it.next();
+      Serializable key = entry.getKey();
       if (alreadyDone.contains(key)) continue;
       Production[] p = (Production[]) objectToProduction.get(key);
       addProductions(Arrays.asList(p));
@@ -188,11 +190,11 @@ public abstract class ConvertController {
    * @return the number of objects revealed
    */
   public int revealAllProductions() {
-    Set remaining = new HashSet(objectToProduction.keySet());
+    Set<Serializable> remaining = new HashSet<Serializable>(objectToProduction.keySet());
     remaining.removeAll(alreadyDone);
     int number = remaining.size();
-    Iterator it = remaining.iterator();
-    Collection ps = new ArrayList();
+    Iterator<Serializable> it = remaining.iterator();
+    Collection<Production> ps = new ArrayList<Production>();
     while (it.hasNext()) {
       Production[] p = (Production[]) objectToProduction.get(it.next());
       ps.addAll(Arrays.asList(p));
@@ -209,7 +211,7 @@ public abstract class ConvertController {
    * @return an array of the objects which as yet have not been transformed
    */
   public Object[] highlightUntransformed() {
-    HashSet unselectedSet = new HashSet(objectToProduction.keySet());
+    HashSet<Serializable> unselectedSet = new HashSet<Serializable>(objectToProduction.keySet());
     unselectedSet.removeAll(alreadyDone);
     Object[] unselected = unselectedSet.toArray();
     drawer.clearSelected();
@@ -311,16 +313,16 @@ public abstract class ConvertController {
    * If there are no productions for an object, the map will not contain the
    * key.
    */
-  protected HashMap objectToProduction = new HashMap();
+  protected HashMap<Serializable, Production[]> objectToProduction = new HashMap<Serializable, Production[]>();
 
   /**
    * The mapping of productions to whatever object they correspond to, which
    * will be either a state or a transition.
    */
-  protected HashMap productionToObject = new HashMap();
+  protected HashMap<Production, Serializable> productionToObject = new HashMap<Production, Serializable>();
 
   /** Which objects have already been added? */
-  protected HashSet alreadyDone = new HashSet();
+  protected HashSet<Object> alreadyDone = new HashSet<Object>();
 
   /**
    * The convert pane that holds the automaton pane and the grammar table.

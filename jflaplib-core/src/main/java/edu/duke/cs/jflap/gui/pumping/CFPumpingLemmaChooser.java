@@ -28,11 +28,16 @@ import java.util.ArrayList;
  */
 public class CFPumpingLemmaChooser extends PumpingLemmaChooser {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Adds all the context-free pumping lemmas.
    *
    */
   public CFPumpingLemmaChooser() {
-    myList = new ArrayList();
+    myList = new ArrayList<>();
 
     //old languages
     myList.add(new AnBnCn());

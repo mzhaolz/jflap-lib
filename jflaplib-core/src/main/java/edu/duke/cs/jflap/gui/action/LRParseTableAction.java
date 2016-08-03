@@ -17,9 +17,7 @@
 package edu.duke.cs.jflap.gui.action;
 
 import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.*;
 import edu.duke.cs.jflap.gui.grammar.parse.*;
 import java.awt.event.ActionEvent;
@@ -31,6 +29,11 @@ import java.awt.event.ActionEvent;
  */
 public class LRParseTableAction extends GrammarAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>GrammarOutputAction</CODE>.
    *
    * @param environment
@@ -39,7 +42,6 @@ public class LRParseTableAction extends GrammarAction {
   public LRParseTableAction(GrammarEnvironment environment) {
     super("Build SLR(1) Parse Table", null);
     this.environment = environment;
-    this.frame = Universe.frameForEnvironment(environment);
   }
 
   /**
@@ -56,7 +58,4 @@ public class LRParseTableAction extends GrammarAction {
 
   /** The grammar environment. */
   private GrammarEnvironment environment;
-
-  /** The frame for the grammar environment. */
-  private EnvironmentFrame frame;
 }

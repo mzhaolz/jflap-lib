@@ -25,7 +25,12 @@ import edu.duke.cs.jflap.pumping.*;
  * @author Jinghui Lim & Chris Morgan
  */
 public class Palindrome extends RegularPumpingLemma {
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6526761464406572765L;
+
+public String getTitle() {
     return "w w^R : w element_of {ab}*";
   }
 

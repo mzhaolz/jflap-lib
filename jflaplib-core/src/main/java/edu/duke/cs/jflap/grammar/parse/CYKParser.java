@@ -262,7 +262,7 @@ public class CYKParser {
   }
 }
 
-final class OrderCorrectly implements Comparator {
+final class OrderCorrectly implements Comparator<Object> {
   public int compare(Object o1, Object o2) {
     String str1 = (String) o1;
     String str2 = (String) o2;

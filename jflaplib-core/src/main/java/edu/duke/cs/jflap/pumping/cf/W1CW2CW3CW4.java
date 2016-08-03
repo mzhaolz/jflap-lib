@@ -30,7 +30,12 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
 
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 56169474941404352L;
+
+public String getTitle() {
     return "w1cw2cw3cw4 : w1 = w2 or w3 = w4, wi element_of {ab}*, |wi| >= 5";
   }
 

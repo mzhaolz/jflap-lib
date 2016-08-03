@@ -61,13 +61,13 @@ public class MooreTransducer extends MealyTransducer {
    * @param isBlock
    * @return the new transition
    */
-  protected Transition createTransition(State from, State to, Node node, Map e2t, boolean isBlock) {
+  protected Transition createTransition(State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     /*
      * The boolean isBlock seems to be ignored in FSATransducer.java, so I'm ignoring
      * it here too.
      */
-    String label = (String) e2t.get(TRANSITION_READ_NAME);
-    String output = (String) e2t.get(TRANSITION_OUTPUT_NAME);
+    String label = e2t.get(TRANSITION_READ_NAME);
+    String output = e2t.get(TRANSITION_OUTPUT_NAME);
     if (label == null) label = "";
     if (output == null) output = "";
     return new MooreTransition(from, to, label, output);

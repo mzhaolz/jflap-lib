@@ -28,7 +28,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -72,12 +71,9 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
   private Grammar myOriginalGrammar;
   private Grammar myCNFGrammar;
-  private Environment myEnvironment;
-
   public MultipleCYKSimulateAction(Grammar original, Grammar cnf, Environment environment) {
     super(original, environment);
     myOriginalGrammar = original;
-    myEnvironment = environment;
     myCNFGrammar = cnf;
   }
 
@@ -112,8 +108,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
             File f = null;
             if (retval == JFileChooser.APPROVE_OPTION) {
               f = ourChooser.getSelectedFile();
-              try {
-                Scanner sc = new Scanner(f);
+              try (Scanner sc = new Scanner(f)) {
                 int last = model.getRowCount() - 1;
                 while (sc.hasNext()) {
                   String temp = sc.next();
@@ -142,9 +137,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
             InputTableModel model = (InputTableModel) table.getModel();
 
             if (getObject() instanceof Grammar) {
-              String[][] inputs = model.getInputs();
-              int uniqueInputs = inputs.length;
-              Grammar currentGram = (Grammar) getObject();
+              model.getInputs();
+              getObject();
               CYKParsePane parsePane =
                   new CYKParsePane(
                       (GrammarEnvironment) getEnvironment(),
@@ -221,8 +215,6 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
             private static final long serialVersionUID = 53L;
 
             public void actionPerformed(ActionEvent arg0) {
-              //add input
-              int inputsNeeded = 1;
               boolean turing = false;
               if (getEnvironment().myObjects.get(0) instanceof TuringMachine) {
                 turing = true;
@@ -301,7 +293,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
                 getEnvironment().myObjects.remove(k);
                 int row = table.getSelectedRow();
 
-                int objSize = getEnvironment().myObjects.size();
+                getEnvironment().myObjects.size();
                 int stringSize = getEnvironment().myTestStrings.size();
 
                 int beginOffset = row % stringSize;

@@ -33,11 +33,11 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
  * @see LayoutAlgorithm
  * @author Chris Morgan
  */
-public class SpiralLayoutAlgorithm extends LayoutAlgorithm {
+public class SpiralLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   /**
    * The graph used for this LayoutAlgorithm
    */
-  private Graph graph;
+  private Graph<V> graph;
 
   /**
    * Assigns some default values.  To have different values, use the other constructor.
@@ -60,20 +60,20 @@ public class SpiralLayoutAlgorithm extends LayoutAlgorithm {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph g, Set notMoving) {
+  public void layout(Graph<V> g, Set<V> notMoving) {
     graph = g;
-    ArrayList vertices = getMovableVertices(graph, notMoving);
+    ArrayList<V> vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 
     /* After checking to see if the graph has movable vertices, sort the vertices
      * degree in the graph, and then insert them in a VertexChain to minimize
      * edge intersections.
      */
-    VertexChain chain = new VertexChain(graph);
+    VertexChain<V> chain = new VertexChain<>(graph);
     Collections.sort(
         vertices,
-        new Comparator() {
-          public int compare(Object o1, Object o2) {
+        new Comparator<V>() {
+          public int compare(V o1, V o2) {
             if (graph.degree(o1) == graph.degree(o2)) return 0;
             else if (graph.degree(o1) > graph.degree(o2)) return -1;
             else return 1;

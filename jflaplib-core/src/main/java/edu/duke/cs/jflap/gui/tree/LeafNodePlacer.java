@@ -17,6 +17,7 @@
 package edu.duke.cs.jflap.gui.tree;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.tree.TreeModel;
@@ -43,9 +44,9 @@ public class LeafNodePlacer implements NodePlacer {
    * @return a map from the nodes of the tree to points where those nodes
    *         should be drawn
    */
-  public Map placeNodes(TreeModel tree, NodeDrawer drawer) {
-    HashMap nodeToPoint = new HashMap();
-    int[] width = Trees.width(tree);
+  public Map<TreeNode, Float> placeNodes(TreeModel tree, NodeDrawer drawer) {
+    HashMap<TreeNode, Float> nodeToPoint = new HashMap<TreeNode, Float>();
+    Trees.width(tree);
     TreeNode[] leaves = Trees.leaves(tree);
     int depth = Trees.depth(tree);
     setPoints((TreeNode) tree.getRoot(), depth, 0, leaves.length, new int[] {0}, nodeToPoint);
@@ -69,7 +70,7 @@ public class LeafNodePlacer implements NodePlacer {
    *            the mapping of nodes to points
    */
   private void setPoints(
-      TreeNode node, int depth, int thisDepth, int leaves, int[] sofar, Map nodeToPoint) {
+      TreeNode node, int depth, int thisDepth, int leaves, int[] sofar, Map<TreeNode, Float> nodeToPoint) {
     TreeNode[] children = Trees.children(node);
     float y = (float) (thisDepth + 1) / (float) (depth + 2);
     if (children.length == 0) {

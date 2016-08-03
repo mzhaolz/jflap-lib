@@ -35,6 +35,10 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class CasePanel extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * The preferred size of the <code>CasePanel</code>. The width is set
    * to the maximum length of the longest description of any case.
    */
@@ -43,7 +47,7 @@ public class CasePanel extends JPanel {
    * An <code>ArrayList</code> of <code>String</code>s each of which
    * describes a done case.
    */
-  private ArrayList myCases;
+  private ArrayList<?> myCases;
   /**
    * Each row of this <code>JTable</code> displays a case.
    */
@@ -110,7 +114,7 @@ public class CasePanel extends JPanel {
   public CasePanel(PumpingLemma l, PumpingLemmaInputPane p) {
     myPane = p;
     myLemma = l;
-    myCases = new ArrayList();
+    myCases = new ArrayList<Object>();
     setLayout(new BorderLayout());
     add(new JLabel("Cases:"), BorderLayout.NORTH);
     add(initTable(), BorderLayout.CENTER);
@@ -131,7 +135,11 @@ public class CasePanel extends JPanel {
     myTable =
         new JTable(
             new AbstractTableModel() {
-              public final String[] COLUMN_NAMES = new String[] {"#", "Description"};
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+			public final String[] COLUMN_NAMES = new String[] {"#", "Description"};
 
               public Object getValueAt(int r, int c) {
                 if (c == 0) return Integer.toString(r + 1);

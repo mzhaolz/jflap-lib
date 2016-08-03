@@ -27,8 +27,13 @@ import java.util.*;
  *
  * @author Thomas Finley
  */
-public abstract class GrowableTableModel extends AbstractTableModel implements Cloneable {
+public abstract class GrowableTableModel<T> extends AbstractTableModel implements Cloneable {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7046174616169431065L;
+
+/**
    * This instantiates a <CODE>GrowableTableModel</CODE>.
    *
    * @param columns
@@ -46,7 +51,7 @@ public abstract class GrowableTableModel extends AbstractTableModel implements C
    * @param model
    *            the model to copy
    */
-  public GrowableTableModel(GrowableTableModel model) {
+  public GrowableTableModel(GrowableTableModel<T> model) {
     copy(model);
   }
 
@@ -67,13 +72,14 @@ public abstract class GrowableTableModel extends AbstractTableModel implements C
    * @param model
    *            the model to copy
    */
-  public void copy(GrowableTableModel model) {
+  @SuppressWarnings("unchecked")
+public void copy(GrowableTableModel<T> model) {
     columns = model.getColumnCount();
     data.clear();
-    Iterator it = model.data.iterator();
+    Iterator<T[]> it = model.data.iterator();
     while (it.hasNext()) {
-      Object[] oldRow = (Object[]) it.next();
-      Object[] row = new Object[columns];
+      T[] oldRow = it.next();
+      T[] row = (T[]) new Object[columns];
       for (int i = 0; i < oldRow.length; i++) row[i] = oldRow[i];
       data.add(row);
     }
@@ -91,8 +97,9 @@ public abstract class GrowableTableModel extends AbstractTableModel implements C
    *         <CODE>Object</CODE> array of size equal to the number of
    *         columns with contents set to <CODE>null</CODE>
    */
-  protected Object[] initializeRow(int row) {
-    Object[] newRow = new Object[getColumnCount()];
+  @SuppressWarnings("unchecked")
+protected T[] initializeRow(int row) {
+    T[] newRow = (T[]) new Object[getColumnCount()];
     Arrays.fill(newRow, null);
     return newRow;
   }
@@ -139,7 +146,7 @@ public abstract class GrowableTableModel extends AbstractTableModel implements C
    * @throws IllegalArgumentException
    *             if the data array length differs from the number of columns
    */
-  public void insertRow(Object[] newData, int row) {
+  public void insertRow(T[] newData, int row) {
     if (newData.length != columns)
       throw new IllegalArgumentException(
           "Data length is " + newData.length + ", should be " + columns + ".");
@@ -156,8 +163,8 @@ public abstract class GrowableTableModel extends AbstractTableModel implements C
    *            the column of the object to retrieve
    * @return the object at that location
    */
-  public Object getValueAt(int row, int column) {
-    return ((Object[]) data.get(row))[column];
+  public T getValueAt(int row, int column) {
+    return ((T[]) data.get(row))[column];
   }
 
   public void setValueAt(Object newData, int row, int column) {
@@ -177,5 +184,5 @@ public abstract class GrowableTableModel extends AbstractTableModel implements C
   protected int columns;
 
   /** Each row is stored as an array of objects in this list. */
-  protected List data = new ArrayList();
+  protected List<T[]> data = new ArrayList<>();
 }

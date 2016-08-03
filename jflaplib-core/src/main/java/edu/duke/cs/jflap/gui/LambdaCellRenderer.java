@@ -31,6 +31,11 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class LambdaCellRenderer extends DefaultTableCellRenderer {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new lambda cell renderer with the specified string to
    * substitute for the empty string in the event that we display the empty
    * string.

@@ -30,7 +30,12 @@ import javax.swing.table.TableModel;
  * @author Thomas Finley
  */
 public class LeftTable extends HighlightTable {
-  public LeftTable() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+public LeftTable() {
     initView();
   }
 

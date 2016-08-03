@@ -42,7 +42,12 @@ import javax.swing.*;
  */
 public class UserControlParsePane extends BruteParsePane {
 
-  /** The parser that is going to be used **/
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/** The parser that is going to be used **/
   private UserParser myParser;
 
   /** Index of the selected production rule **/
@@ -58,10 +63,10 @@ public class UserControlParsePane extends BruteParsePane {
   private int myPreviousCount = 0;
 
   /** DefaultListModel to show current string at the bottom of the pane **/
-  private DefaultListModel myJListModel;
+  private DefaultListModel<String> myJListModel;
 
   /** JList to show the current string and allow user to click on the variables **/
-  private JList myStringJList;
+  private JList<String> myStringJList;
 
   /** Target string that user is trying to derive **/
   private String myTarget;
@@ -89,8 +94,8 @@ public class UserControlParsePane extends BruteParsePane {
     GrammarTable g = initGrammarTable(grammar);
     JScrollPane grammarTable = new JScrollPane(g);
 
-    myJListModel = new DefaultListModel();
-    myStringJList = new JList(myJListModel);
+    myJListModel = new DefaultListModel<String>();
+    myStringJList = new JList<String>(myJListModel);
     myStringJList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 
     addMultipleSelectionToJList();
@@ -118,7 +123,12 @@ public class UserControlParsePane extends BruteParsePane {
   private void addMultipleSelectionToJList() {
     myStringJList.setSelectionModel(
         new DefaultListSelectionModel() {
-          public void setSelectionInterval(int index0, int index1) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void setSelectionInterval(int index0, int index1) {
             if (isSelectedIndex(index0)) super.removeSelectionInterval(index0, index1);
             else super.addSelectionInterval(index0, index1);
           }
@@ -215,7 +225,12 @@ public class UserControlParsePane extends BruteParsePane {
     toolbar.add(startAction);
     myPreviousAction =
         new AbstractAction("Previous") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
             previous();
           }
         };
@@ -227,7 +242,7 @@ public class UserControlParsePane extends BruteParsePane {
     // Set up the view customizer controls.
     toolbar.addSeparator();
 
-    final JComboBox box = new JComboBox(getViewChoices());
+    final JComboBox<?> box = new JComboBox<Object>(getViewChoices());
     box.setSelectedIndex(0);
     ActionListener listener =
         new ActionListener() {

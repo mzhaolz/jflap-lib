@@ -310,7 +310,7 @@ public class Profile {
   }
 
   protected static Element createElement(
-      Document document, String tagname, Map attributes, String text) {
+      Document document, String tagname, Map<?, ?> attributes, String text) {
     // Create the new element.
     Element element = document.createElement(tagname);
 

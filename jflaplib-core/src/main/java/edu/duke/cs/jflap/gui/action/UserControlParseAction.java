@@ -18,9 +18,7 @@ package edu.duke.cs.jflap.gui.action;
 
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
-import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.parse.UserControlParsePane;
 
@@ -34,11 +32,13 @@ import java.awt.event.ActionEvent;
  */
 public class UserControlParseAction extends GrammarAction {
 
-  /** The grammar environment. */
-  private GrammarEnvironment environment;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-  /** The frame for the grammar environment. */
-  private EnvironmentFrame frame;
+/** The grammar environment. */
+  private GrammarEnvironment environment;
 
   /**
    * Instantiates a new <CODE>BruteParseAction</CODE>.
@@ -49,7 +49,6 @@ public class UserControlParseAction extends GrammarAction {
   public UserControlParseAction(GrammarEnvironment environment) {
     super("User Control Parse", null);
     this.environment = environment;
-    this.frame = Universe.frameForEnvironment(environment);
   }
 
   public static boolean isApplicable(Object object) {

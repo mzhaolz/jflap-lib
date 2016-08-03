@@ -19,8 +19,9 @@ package edu.duke.cs.jflap.automata.graph.layout;
 import java.awt.geom.Point2D;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -36,7 +37,7 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
  *
  * @author Thomas Finley
  */
-public class GEMLayoutAlgorithm extends LayoutAlgorithm {
+public class GEMLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
 
   /**
    * Default constructor.
@@ -61,9 +62,9 @@ public class GEMLayoutAlgorithm extends LayoutAlgorithm {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph graph, Set isovertices) {
-    if (isovertices == null) isovertices = EMPTY_SET;
-    Object[] vArray = graph.vertices();
+  public void layout(Graph<V> graph, Set<V> isovertices) {
+    if (isovertices == null) isovertices = Collections.emptySet();
+    V[] vArray = graph.vertices();
     int Rmax = 120 * (vArray.length - isovertices.size());
     double Tglobal = Tmin + 1.0;
 
@@ -72,15 +73,19 @@ public class GEMLayoutAlgorithm extends LayoutAlgorithm {
     // that will remain unchanged due to isovertex status.
     double optimalEdgeLength = OPTIMAL_EDGE_LENGTH;
     if (isovertices.size() > 0) {
-      Object[] iso = isovertices.toArray();
       int count = 0;
       double lengths = 0.0;
-      for (int i = 0; i < iso.length; i++)
-        for (int j = i + 1; j < iso.length; j++) {
-          if (!graph.hasEdge(iso[i], iso[j])) continue;
-          lengths += graph.pointForVertex(iso[i]).distance(graph.pointForVertex(iso[j]));
+      Iterator<V> it1 = isovertices.iterator();
+      Iterator<V> it2 = isovertices.iterator();
+      while (it1.hasNext()) {
+        while (it2.hasNext()) {
+          V v1 = it1.next();
+          V v2 = it2.next();
+          if (!graph.hasEdge(v1, v2)) continue;
+          lengths += graph.pointForVertex(v1).distance(graph.pointForVertex(v2));
           count++;
         }
+      }
       if (count > 0) optimalEdgeLength = lengths / (double) count;
     }
 
@@ -88,7 +93,7 @@ public class GEMLayoutAlgorithm extends LayoutAlgorithm {
     double[] c = new double[] {0.0, 0.0};
 
     // Initialize the record for each vertex.
-    records = new HashMap();
+    records = new HashMap<Object, Record>();
     for (int i = 0; i < vArray.length; i++) {
       Record r = new Record();
       r.point = graph.pointForVertex(vArray[i]);
@@ -99,7 +104,7 @@ public class GEMLayoutAlgorithm extends LayoutAlgorithm {
     }
 
     // Iterate until done.
-    ArrayList vertices = new ArrayList();
+    ArrayList<V> vertices = new ArrayList<>();
     for (int i = 0; i < Rmax && Tglobal > Tmin; i++) {
       if (vertices.isEmpty()) {
         vertices = getMovableVertices(graph, isovertices);
@@ -108,7 +113,7 @@ public class GEMLayoutAlgorithm extends LayoutAlgorithm {
 
       // Choose a vertex V to update.
       int index = RANDOM.nextInt(vertices.size());
-      Object vertex = vertices.remove(index);
+      V vertex = vertices.remove(index);
       Record record = (Record) records.get(vertex);
       Point2D point = graph.pointForVertex(vertex);
 
@@ -162,7 +167,7 @@ public class GEMLayoutAlgorithm extends LayoutAlgorithm {
        * if ((i+1) % (vArray.length - isovertices.size()) == 0)
        * component.paintImmediately(component.getBounds());
        */
-    }
+    	}
 
     //Finally, shift all points onto the screen.
     shiftOntoScreen(graph, size, vertexDim, true);
@@ -170,21 +175,15 @@ public class GEMLayoutAlgorithm extends LayoutAlgorithm {
 
   private static final Random RANDOM = new Random();
 
-  private Map records;
-
-  private static final Set EMPTY_SET = new HashSet();
+  private Map<Object, Record> records;
 
   private static class Record {
     Point2D point = new Point2D.Double();
 
-    double[] lastImpulse = {0.0, 0.0};
-
     double temperature = Tmin;
-
-    double skew = 0.0;
   }
 
-  private static final double Tmax = 256.0, Tmin = 3.0;
+  private static final double Tmin = 3.0;
   private static final double OPTIMAL_EDGE_LENGTH = 100.0, GRAVITATIONAL_CONSTANT = 1.0 / 16.0;
   /*
    * private static final double alphaO

@@ -28,9 +28,6 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.duke.cs.jflap.automata.Automaton;
-import edu.duke.cs.jflap.automata.State;
-
 /**
  * The <CODE>CloseAction</CODE> is an action for removing tabs in an
  * environment. It automatically detects changes in the activation of panes in
@@ -41,6 +38,11 @@ import edu.duke.cs.jflap.automata.State;
  */
 public class CloseAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a <CODE>CloseAction</CODE>.
    *
    * @param environment
@@ -66,14 +68,10 @@ public class CloseAction extends RestrictedAction {
    *            the action event
    */
   public void actionPerformed(ActionEvent e) {
-    boolean editor = false;
-    Automaton inside = null;
-    State block = null;
     if (environment.getActive() instanceof EditBlockPane) {
-      editor = true;
       EditBlockPane blockEditor = (EditBlockPane) environment.getActive();
-      inside = blockEditor.getAutomaton();
-      block = blockEditor.getBlock();
+      blockEditor.getAutomaton();
+      blockEditor.getBlock();
     }
     environment.remove(environment.getActive());
     //		if (editor) {

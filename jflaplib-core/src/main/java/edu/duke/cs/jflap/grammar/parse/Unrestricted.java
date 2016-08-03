@@ -43,7 +43,7 @@ public class Unrestricted {
    * @param smaller
    *            the "smaller" set, as returned by {@link #smallerSymbols}
    */
-  public static int minimumLength(String string, Set smaller) {
+  public static int minimumLength(String string, Set<String> smaller) {
     int length = 0;
     for (int j = 0; j < string.length(); j++)
       if (!smaller.contains(string.substring(j, j + 1))) length++;
@@ -76,8 +76,8 @@ public class Unrestricted {
    * @param grammar
    *            the grammar to find the "small" symbols for
    */
-  public static Set smallerSymbols(Grammar grammar) {
-    Set smaller = new HashSet();
+  public static Set<String> smallerSymbols(Grammar grammar) {
+    Set<String> smaller = new HashSet<>();
     Production[] prods = grammar.getProductions();
     boolean added;
     do {
@@ -133,7 +133,7 @@ public class Unrestricted {
     // Which symbols in the grammar may possibly lead to just
     // terminals? First, we just add all those symbols with just
     // terminals on the right hand side.
-    Set terminating = new HashSet();
+    Set<String> terminating = new HashSet<>();
     // Add those variables that lead to success.
     boolean[] added = new boolean[prods.length];
     for (int i = 0; i < prods.length; i++) {
@@ -149,7 +149,7 @@ public class Unrestricted {
       changed = false;
       // If a production has only "terminating" variables, add it.
       for (int i = 0; i < prods.length; i++) {
-        List l = Arrays.asList(prods[i].getVariablesOnRHS());
+        List<String> l = Arrays.asList(prods[i].getVariablesOnRHS());
         if (!added[i] && terminating.containsAll(l)) {
           terminating.addAll(Arrays.asList(prods[i].getSymbols()));
           added[i] = changed = true;

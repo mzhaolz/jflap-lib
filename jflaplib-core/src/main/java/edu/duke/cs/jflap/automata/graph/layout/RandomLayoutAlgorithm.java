@@ -34,19 +34,19 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
  * @see LayoutAlgorithm
  * @author Chris Morgan
  */
-public class RandomLayoutAlgorithm extends LayoutAlgorithm {
+public class RandomLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   /**
    * A list of all movable vertices.
    */
-  private ArrayList vertices;
+  private ArrayList<V> vertices;
   /**
    * A list of all randomly generated points.
    */
-  private ArrayList points;
+  private ArrayList<Point2D> points;
   /**
    * The <code>VertexChain</code> used to minimize edge collision.
    */
-  private VertexChain chain;
+  private VertexChain<V> chain;
 
   /**
    * Assigns some default values.  To have different values, use the other constructor.
@@ -71,14 +71,14 @@ public class RandomLayoutAlgorithm extends LayoutAlgorithm {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph graph, Set notMoving) {
+  public void layout(Graph<V> graph, Set<V> notMoving) {
     //First, check to see that movable vertices exist
     vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 
     //Then, generate random points and assign the vertices to a
     //VertexChain to minimize a few edge collisions
-    chain = new VertexChain(graph);
+    chain = new VertexChain<V>(graph);
     assignPointsAndVertices();
 
     //Then minimize vertex overlap.
@@ -99,7 +99,7 @@ public class RandomLayoutAlgorithm extends LayoutAlgorithm {
   private void assignPointsAndVertices() {
     double x, y;
     Random random = new Random();
-    points = new ArrayList();
+    points = new ArrayList<Point2D>();
     for (int i = 0; i < vertices.size(); i++) {
       x = random.nextDouble() * (size.getWidth() - vertexBuffer * 2);
       y = random.nextDouble() * (size.getHeight() - vertexBuffer * 2);
@@ -114,14 +114,14 @@ public class RandomLayoutAlgorithm extends LayoutAlgorithm {
    */
   private void lessenVertexOverlap() {
     //First, sort the vertices by their x and y values
-    ArrayList xOrder, yOrder;
-    xOrder = new ArrayList();
-    yOrder = new ArrayList();
+    ArrayList<Point2D> xOrder, yOrder;
+    xOrder = new ArrayList<Point2D>();
+    yOrder = new ArrayList<Point2D>();
     xOrder.addAll(points);
     yOrder.addAll(points);
     Collections.sort(
         xOrder,
-        new Comparator() {
+        new Comparator<Object>() {
           public int compare(Object o1, Object o2) {
             if (((Point2D) o1).getX() == ((Point2D) o2).getX()) return 0;
             else if (((Point2D) o1).getX() < ((Point2D) o2).getX()) return 1;
@@ -130,7 +130,7 @@ public class RandomLayoutAlgorithm extends LayoutAlgorithm {
         });
     Collections.sort(
         yOrder,
-        new Comparator() {
+        new Comparator<Object>() {
           public int compare(Object o1, Object o2) {
             if (((Point2D) o1).getY() == ((Point2D) o2).getY()) return 0;
             else if (((Point2D) o1).getY() < ((Point2D) o2).getY()) return 1;
@@ -166,14 +166,14 @@ public class RandomLayoutAlgorithm extends LayoutAlgorithm {
    * that the vertices assigned to them will spiral toward the center as one progresses through the chain.
    */
   private void findCorrectPointOrder() {
-    ArrayList notProcessedPoints, newPointOrder;
+    ArrayList<Point2D> notProcessedPoints, newPointOrder;
     Point2D current, anchor, minPoint;
     double currentTheta, minTheta, anchorTheta;
 
     anchor = new Point2D.Double(0, 0);
     anchorTheta = 0;
-    newPointOrder = new ArrayList();
-    notProcessedPoints = new ArrayList();
+    newPointOrder = new ArrayList<Point2D>();
+    notProcessedPoints = new ArrayList<Point2D>();
     notProcessedPoints.addAll(points);
 
     //Find the angle of all points relative to the last point placed and "anchorTheta".  Then place

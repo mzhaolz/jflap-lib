@@ -541,7 +541,7 @@ public class MenuBarCreator {
   private static JMenu getConvertMenu(EnvironmentFrame frame, int specialCaseForTuringConverted) {
     Environment environment = frame.getEnvironment();
     JMenu menu = new JMenu("Convert");
-    Serializable object = environment.getObject();
+    environment.getObject();
 
     return menu;
   }
@@ -556,7 +556,7 @@ public class MenuBarCreator {
   private static JMenu getHelpMenu(EnvironmentFrame frame) {
     Environment environment = frame.getEnvironment();
     JMenu menu = new JMenu("Help");
-    Serializable object = environment.getObject();
+    environment.getObject();
 
     //Currently commented out, but can be restored if the help menus are fixed.
     //addItem(menu, new EnvironmentHelpAction(environment));
@@ -565,7 +565,12 @@ public class MenuBarCreator {
     addItem(
         menu,
         new AbstractAction("Help...") {
-          public void actionPerformed(ActionEvent event) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent event) {
             JOptionPane.showMessageDialog(
                 null,
                 "For help, feel free to access the JFLAP tutorial at\n"

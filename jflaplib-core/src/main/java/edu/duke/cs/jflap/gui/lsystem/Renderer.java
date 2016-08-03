@@ -22,7 +22,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -164,18 +163,16 @@ public class Renderer {
    *             not set
    */
   public Image render(
-      List symbols, Map parameters, Matrix matrix, Graphics2D graphics, Point2D origin) {
+      List<?> symbols, Map<String, String> parameters, Matrix matrix, Graphics2D graphics, Point2D origin) {
     BufferedImage image = null;
     Rectangle2D bounds = new Rectangle2D.Double();
     if (graphics != null && graphics.getClip() == null)
       throw new IllegalArgumentException("Graphics needs a non-null clip!");
     if (matrix == null) matrix = new Matrix();
-    totalSymbols = symbols.size() * 2;
     completedSymbols = 0;
     isActive = true;
     for (int i = 0; i < 2; i++) {
       areDrawing = i == 1;
-      drawnSofar = 0;
       // Set up the initial conditions.
       turtleStack.clear();
       currentTurtle = new Turtle();
@@ -234,11 +231,11 @@ public class Renderer {
             ourBounds.getX() - newBounds.getX(), ourBounds.getY() - newBounds.getY());
       }
       // Do the initial parameters.
-      Iterator it = parameters.entrySet().iterator();
+      Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
       while (it.hasNext()) {
-        Map.Entry entry = (Map.Entry) it.next();
+        Map.Entry<String, String> entry = it.next();
         try {
-          assign((String) entry.getKey(), (String) entry.getValue());
+          assign(entry.getKey(), entry.getValue());
         } catch (Throwable e) {
           // We have an error in the handler!
         }
@@ -248,10 +245,11 @@ public class Renderer {
       capLinePath();
       // Repeatedly read symbols, and call the appropriate
       // command handler.
-      it = symbols.iterator();
+      // TODO: Holy shit, it's on their head if this works.
+      Iterator<?> itt = symbols.iterator();
       while (it.hasNext()) {
         completedSymbols++;
-        String symbol = (String) it.next();
+        String symbol = (String) itt.next();
         Renderer.CommandHandler handler = getHandler(symbol);
         if (handler != null) {
           try {
@@ -328,7 +326,7 @@ public class Renderer {
   }
 
   /** The command handler maps from symbols to the appropriate handler. */
-  private Map handlers = new HashMap();
+  private Map<String, CommandHandler> handlers = new HashMap<String, CommandHandler>();
 
   /**
    * <CODE>true</CODE> if we are actually drawing, elsewise we're in the
@@ -340,7 +338,7 @@ public class Renderer {
   private boolean isActive = false;
 
   /** The stack of turtles. */
-  private Stack turtleStack = new Stack();
+  private Stack<Turtle> turtleStack = new Stack<>();
 
   /** The current turtle. */
   private Turtle currentTurtle;
@@ -354,26 +352,20 @@ public class Renderer {
   /** Lines paths. */
   private GeneralPath linePath = new GeneralPath();
 
-  /** The number of objects drawn sofar. */
-  private int drawnSofar;
-
   /** The number of symbols completed sofar. */
   private int completedSymbols;
 
-  /** The number of symbols to process. */
-  private int totalSymbols;
-
   /** The set of words that can be assigned to. */
-  public static Set ASSIGN_WORDS;
+  public static Set<String> ASSIGN_WORDS;
 
   /** The set of words that cannot be assigned a numerical value. */
-  public static Set NONASSIGN_WORDS;
+  public static Set<String> NONASSIGN_WORDS;
 
   static {
-    Set s = new TreeSet();
+    Set<String> s = new TreeSet<String>();
     s.add("color");
     s.add("polygonColor");
-    NONASSIGN_WORDS = Collections.unmodifiableSet(new HashSet(s));
+    NONASSIGN_WORDS = Collections.unmodifiableSet(new HashSet<String>(s));
     s.add("angle");
     s.add("lineWidth");
     s.add("lineIncrement");
@@ -441,7 +433,6 @@ public class Renderer {
 
     private boolean forward;
 
-    private Line2D line = new Line2D.Double();
   }
 
   /**
@@ -507,7 +498,7 @@ public class Renderer {
    */
   private class PushTurtleHandler extends CommandHandler {
     public final void handle(String symbol) {
-      turtleStack.push(currentTurtle.clone());
+      turtleStack.push((Turtle) currentTurtle.clone());
     }
   }
 
@@ -628,7 +619,6 @@ public class Renderer {
       g.fill(polygon);
       polygon = null;
       g.setColor(currentTurtle.color);
-      drawnSofar++;
     }
   }
 

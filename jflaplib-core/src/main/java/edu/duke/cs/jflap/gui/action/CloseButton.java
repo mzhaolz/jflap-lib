@@ -24,8 +24,6 @@ import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.duke.cs.jflap.automata.Automaton;
-import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 
 import edu.duke.cs.jflap.gui.editor.EditBlockPane;
@@ -46,6 +44,10 @@ import edu.duke.cs.jflap.gui.environment.tag.Tag;
  */
 public class CloseButton extends javax.swing.JButton {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * The environment to handle closing tabs for.
    */
   private Environment env;
@@ -71,20 +73,17 @@ public class CloseButton extends javax.swing.JButton {
 
           public void actionPerformed(ActionEvent e) {
             boolean editor = false;
-            Automaton inside = null;
-            State block = null;
             if (env.getActive() instanceof EditBlockPane) {
               editor = true;
               EditBlockPane blockEditor = (EditBlockPane) env.getActive();
-              inside = blockEditor.getAutomaton();
-              block = blockEditor.getBlock();
+              blockEditor.getAutomaton();
+              blockEditor.getBlock();
             }
             env.remove(env.getActive());
             if (editor) {
               EditorPane higherEditor = (EditorPane) env.getActive();
               assert (higherEditor.getAutomaton() instanceof TuringMachine);
-              TuringMachine higher = (TuringMachine) higherEditor.getAutomaton();
-              //MERLIN MERLIN MERLIN MERLIN MERLIN//
+              higherEditor.getAutomaton();
 
               //                        higher.replaceBlock(block, inside); this shouldn't be necessary if we are not making a clone, but editing the real thing.
             }

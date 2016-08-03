@@ -48,7 +48,7 @@ class LLParseController {
    */
   public void initialize(String string) {
     dehighlight();
-    ArrayList nodes = new ArrayList();
+    ArrayList<MutableTreeNode> nodes = new ArrayList<MutableTreeNode>();
     tree = parseTree(string, pane.grammar, pane.table, nodes);
     pane.treeDrawer.setModel(tree);
     pane.treeDrawer.hideAll();
@@ -58,7 +58,7 @@ class LLParseController {
     // Initialize those global structures! :)
     NODES = (TreeNode[]) nodes.toArray(new TreeNode[0]);
     STRING = string + "$";
-    STACK = new Stack();
+    STACK = new Stack<TreeNode>();
     P = 0;
     NODECOUNT = 0;
     stepMode = INITIALIZE;
@@ -82,14 +82,6 @@ class LLParseController {
     Object[] o = STACK.toArray();
     StringBuffer sb = new StringBuffer();
     for (int i = o.length - 1; i >= 0; i--) sb.append(o[i]);
-    return sb.toString();
-  }
-
-  /**
-   * Returns the current string derivation.
-   */
-  private String derivationString() {
-    StringBuffer sb = new StringBuffer();
     return sb.toString();
   }
 
@@ -218,20 +210,6 @@ class LLParseController {
   }
 
   /**
-   * Highlights a row in the grammar table.
-   *
-   * @param row
-   *            the row to highlight
-   */
-  private void highlight(int row) {
-    pane.grammarTable.highlight(row, 0);
-    // pane.grammarTable.highlight(row,1);
-    pane.grammarTable.highlight(row, 2);
-    pane.tablePanel.repaint();
-    pane.grammarTable.repaint();
-  }
-
-  /**
    * Dehighlights stuff.
    */
   private void dehighlight() {
@@ -274,10 +252,10 @@ class LLParseController {
    * @return the parse tree
    */
   private DefaultTreeModel parseTree(
-      String string, Grammar grammar, LLParseTable table, List nodes) {
+      String string, Grammar grammar, LLParseTable table, List<MutableTreeNode> nodes) {
     int p = 0;
     string = string + "$";
-    Stack stack = new Stack();
+    Stack<MutableTreeNode> stack = new Stack<MutableTreeNode>();
     MutableTreeNode root = new DefaultMutableTreeNode(grammar.getStartVariable());
     stack.push(root);
     nodes.add(root);
@@ -323,7 +301,6 @@ class LLParseController {
 
   // VARIABLES FOR THE PARSING STEPPING
   // These would be local variables in a parse function...
-  private Production[] productions;
 
   private int P;
 
@@ -331,7 +308,7 @@ class LLParseController {
 
   private int NODECOUNT;
 
-  private Stack STACK;
+  private Stack<TreeNode> STACK;
 
   private TreeNode[] NODES;
 
@@ -343,9 +320,6 @@ class LLParseController {
 
   /** The parse tree. */
   private DefaultTreeModel tree;
-
-  /** The array of nodes as they are added. */
-  private TreeNode[] nodes;
 
   /** The current mode for the step function. */
   private int stepMode = INITIALIZE;

@@ -31,14 +31,17 @@ import javax.swing.JToolBar;
  */
 class BuilderControlPanel extends JToolBar {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>BuilderControlPanel</CODE>.
    *
    * @param controller
    *            the builder controller to call methods of
    */
   public BuilderControlPanel(BuilderController controller) {
-    // super(new GridLayout(1,0));
-    this.controller = controller;
     initView(this, controller);
   }
 
@@ -54,7 +57,12 @@ class BuilderControlPanel extends JToolBar {
     toolbar.add(
         new JButton(
             new TooltipAction("Hint", "Adds one transition.") {
-              public void actionPerformed(ActionEvent e) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
                 controller.hint();
               }
             }));
@@ -62,7 +70,12 @@ class BuilderControlPanel extends JToolBar {
     toolbar.add(
         new JButton(
             new TooltipAction("Complete", "Adds all transitions.") {
-              public void actionPerformed(ActionEvent e) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
                 controller.complete();
               }
             }));
@@ -70,12 +83,14 @@ class BuilderControlPanel extends JToolBar {
     toolbar.add(
         new JButton(
             new TooltipAction("Done?", "Checks if the automaton is done.") {
-              public void actionPerformed(ActionEvent e) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
                 controller.done();
               }
             }));
   }
-
-  /** The builder controller to call methods of. */
-  private BuilderController controller;
 }

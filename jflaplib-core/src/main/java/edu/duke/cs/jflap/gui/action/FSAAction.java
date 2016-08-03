@@ -30,6 +30,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public abstract class FSAAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>FSAAction</CODE>.
    *
    * @param string

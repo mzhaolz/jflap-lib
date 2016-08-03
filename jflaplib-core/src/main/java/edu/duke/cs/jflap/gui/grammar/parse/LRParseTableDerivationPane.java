@@ -27,6 +27,9 @@ import edu.duke.cs.jflap.gui.viewer.*;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.swing.*;
 
 /**
@@ -36,6 +39,11 @@ import javax.swing.*;
  */
 public class LRParseTableDerivationPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4943642076082505718L;
+
+/**
    * Instantiates a new derivation pane for a grammar environment.
    *
    * @param environment
@@ -78,11 +86,21 @@ public class LRParseTableDerivationPane extends JPanel {
     GrammarTable table =
         new GrammarTable(
             new edu.duke.cs.jflap.gui.grammar.GrammarTableModel(augmentedGrammar) {
-              public boolean isCellEditable(int r, int c) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = -1924821563768876735L;
+
+			public boolean isCellEditable(int r, int c) {
                 return false;
               }
             }) {
-          public String getToolTipText(MouseEvent event) {
+          /**
+				 * 
+				 */
+				private static final long serialVersionUID = -2552664496135499191L;
+
+		public String getToolTipText(MouseEvent event) {
             try {
               int row = rowAtPoint(event.getPoint());
               return getGrammarModel().getProduction(row).toString() + " is production " + row;
@@ -119,8 +137,8 @@ public class LRParseTableDerivationPane extends JPanel {
         new EditorPane(
             drawer,
             new ToolBox() {
-              public java.util.List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                java.util.List tools = new java.util.LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                java.util.List<Tool> tools = new LinkedList<Tool>();
                 tools.add(
                     new ArrowNontransitionTool(view, drawer) {
                       public boolean shouldAllowOnlyFinalStateChange() {

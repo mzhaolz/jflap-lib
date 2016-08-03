@@ -27,6 +27,11 @@ import edu.duke.cs.jflap.automata.State;
  */
 public class VDGTransition extends Transition {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3634071195722205983L;
+
+/**
    * Instantiates a new <CODE>VDGTransition</CODE> object.
    *
    * @param from

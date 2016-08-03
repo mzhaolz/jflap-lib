@@ -37,9 +37,13 @@ import edu.duke.cs.jflap.automata.State;
  */
 public class MooreMachine extends MealyMachine {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7904161369858271129L;
+/**
    * Map of states (keys) to output (values).
    */
-  private Map myMap;
+  private Map<State, String> myMap;
 
   /**
    * Creates a Moore machine with no states or transitions.
@@ -47,7 +51,7 @@ public class MooreMachine extends MealyMachine {
    */
   public MooreMachine() {
     super();
-    myMap = new HashMap();
+    myMap = new HashMap<State, String>();
   }
 
   /**
@@ -57,7 +61,7 @@ public class MooreMachine extends MealyMachine {
    * @return the <code>Class</code> object for the <code>
    * MooreTransition</code>
    */
-  protected Class getTransitionClass() {
+  protected Class<MooreTransition> getTransitionClass() {
     return MooreTransition.class;
   }
 

@@ -35,6 +35,11 @@ import java.util.*;
  */
 public abstract class HelpAction extends RestrictedAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>HelpAction</CODE>.
    */
   public HelpAction() {
@@ -75,7 +80,7 @@ public abstract class HelpAction extends RestrictedAction {
   public static String getURL(Object object) {
     String url = (String) HELP_MAP.get(object);
     if (url != null) return url;
-    Class c = object instanceof Class ? (Class) object : object.getClass();
+    Class<?> c = object instanceof Class ? (Class<?>) object : object.getClass();
     while (c != null) {
       url = (String) HELP_MAP.get(c);
       if (url != null) return url;
@@ -104,7 +109,7 @@ public abstract class HelpAction extends RestrictedAction {
   }
 
   /** The mapping of objects to URLs. */
-  private static final WeakHashMap HELP_MAP = new WeakHashMap();
+  private static final WeakHashMap<Object, String> HELP_MAP = new WeakHashMap<Object, String>();
 
   /** The default URL in case there is no help for a subject. */
   public static final String DEFAULT_HELP = "/DOCS/nohelp.html";

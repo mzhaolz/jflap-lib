@@ -30,6 +30,7 @@ import javax.swing.JToolBar;
 
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
+import edu.duke.cs.jflap.gui.editor.Tool;
 import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
@@ -45,10 +46,9 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 public class AddTrapStatePane extends JPanel {
 
   /**
-   * The environment that holds the automaton. The automaton from the
-   * environment is itself not modified.
-   */
-  private AutomatonEnvironment myEnvironment;
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
   /**
    * The copy of the original automaton, which will be modified throughout
@@ -82,8 +82,8 @@ public class AddTrapStatePane extends JPanel {
         new edu.duke.cs.jflap.gui.editor.EditorPane(
             automatonDrawer,
             new ToolBox() {
-              public List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                LinkedList tools = new LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                LinkedList<Tool> tools = new LinkedList<Tool>();
                 tools.add(new ArrowNontransitionTool(view, drawer));
                 tools.add(new TrapStateTool(view, drawer, controller));
                 tools.add(new TrapTransitionTool(view, drawer, controller));
@@ -97,7 +97,12 @@ public class AddTrapStatePane extends JPanel {
     bar.add(
         new JButton(
             new AbstractAction("Do All") {
-              public void actionPerformed(ActionEvent e) {
+			/**
+				 * 
+				 */
+				private static final long serialVersionUID = 3085654730397188499L;
+
+			public void actionPerformed(ActionEvent e) {
                 controller.doAll();
               }
             }));

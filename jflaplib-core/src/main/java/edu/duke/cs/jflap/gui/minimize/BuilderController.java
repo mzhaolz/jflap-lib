@@ -75,7 +75,7 @@ class BuilderController {
    * to be created.
    */
   private void determineTransitions() {
-    remainingTransitions = new HashSet();
+    remainingTransitions = new HashSet<>();
     State[] states = minDfa.getStates();
     for (int i = 0; i < states.length; i++)
       remainingTransitions.addAll(minimizer.getTransitionsForState(states[i], minDfa, dfa, tree));
@@ -111,7 +111,7 @@ class BuilderController {
       JOptionPane.showMessageDialog(view, "All transitions are in place already!");
       return;
     }
-    Iterator it = new HashSet(remainingTransitions).iterator();
+    Iterator<?> it = new HashSet<Object>(remainingTransitions).iterator();
     Transition t = (Transition) it.next();
     minDfa.addTransition(t);
   }
@@ -124,7 +124,7 @@ class BuilderController {
       JOptionPane.showMessageDialog(view, "All transitions are in place already!");
       return;
     }
-    Iterator it = new HashSet(remainingTransitions).iterator();
+    Iterator<?> it = new HashSet<Object>(remainingTransitions).iterator();
     while (it.hasNext()) {
       Transition t = (Transition) it.next();
       minDfa.addTransition(t);
@@ -176,5 +176,5 @@ class BuilderController {
   private Component view;
 
   /** The set of transitions that must be created. */
-  Set remainingTransitions;
+  Set<Transition> remainingTransitions;
 }

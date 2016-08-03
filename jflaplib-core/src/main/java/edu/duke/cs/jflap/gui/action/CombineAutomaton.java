@@ -34,6 +34,11 @@ import javax.swing.*;
  */
 public class CombineAutomaton extends AutomatonAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new action to combine automatons.
    *
    * @param environment
@@ -51,7 +56,7 @@ public class CombineAutomaton extends AutomatonAction {
    *            the action event
    */
   public void actionPerformed(ActionEvent e) {
-    JComboBox combo = new JComboBox();
+    JComboBox<EnvironmentFrame> combo = new JComboBox<EnvironmentFrame>();
     // Figure out what existing environments in the program have
     // the type of automaton that we need.
     EnvironmentFrame[] frames = Universe.frames();
@@ -107,7 +112,7 @@ public class CombineAutomaton extends AutomatonAction {
     if (bounds2 == null) bounds2 = new Rectangle2D.Float();
     double d = bounds1.getY() + bounds1.getHeight() - bounds2.getY() + 20.0;
     State[] otherStates = other.getStates();
-    Map otherToNew = new HashMap();
+    Map<State, State> otherToNew = new HashMap<State, State>();
     for (int i = 0; i < otherStates.length; i++) {
       State s = otherStates[i];
       Point p = new Point(s.getPoint().x, s.getPoint().y + (int) d);

@@ -42,6 +42,11 @@ import edu.duke.cs.jflap.automata.Automaton;
  */
 public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a <CODE>ConvertAutomatonToGrammarAction</CODE>.
    *
    * @param environment
@@ -114,26 +119,46 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
     JToolBar bar = new JToolBar();
     bar.add(
         new TooltipAction("Hint", "Shows the productions for one object.") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.revealRandomProductions();
           }
         });
     bar.add(
         new TooltipAction("Show All", "Shows all productions remaining.") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.revealAllProductions();
           }
         });
     bar.addSeparator();
     bar.add(
         new TooltipAction("What's Left?", "Highlights remaining objects to convert.") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.highlightUntransformed();
           }
         });
     bar.add(
         new TooltipAction("Export", "Exports a finished grammar to a new window.") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
             controller.exportGrammar();
           }
         });
@@ -191,7 +216,4 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
 
   /** The automaton to convert. */
   private Automaton automaton;
-
-  /** The convert controller for the automaton to grammar process. */
-  private ConvertController controller;
 }

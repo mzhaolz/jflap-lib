@@ -37,7 +37,6 @@ import javax.swing.border.BevelBorder;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.automata.pda.PDAToCFGConverter;
 import edu.duke.cs.jflap.automata.pda.PDATransition;
 import edu.duke.cs.jflap.automata.pda.PushdownAutomaton;
 
@@ -48,6 +47,11 @@ import edu.duke.cs.jflap.automata.pda.PushdownAutomaton;
  */
 public class ConvertPDAToGrammarAction extends ConvertAutomatonToGrammarAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>ConvertFSAToGrammarAction</CODE>.
    *
    * @param environment
@@ -84,14 +88,14 @@ public class ConvertPDAToGrammarAction extends ConvertAutomatonToGrammarAction {
     }
     // Are all transitions to the final state okay?
     Transition[] toFinal = getAutomaton().getTransitionsToState(finalStates[0]);
-    HashSet bad = new HashSet();
+    HashSet<PDATransition> bad = new HashSet<PDATransition>();
     for (int i = 0; i < toFinal.length; i++) {
       PDATransition t = (PDATransition) toFinal[i];
       if (!t.getStringToPop().equals("Z")) bad.add(t);
     }
     if (bad.size() != 0) {
       drawer.clearSelected();
-      Iterator it = bad.iterator();
+      Iterator<PDATransition> it = bad.iterator();
       while (it.hasNext()) drawer.addSelected((Transition) it.next());
       messageLabel.setText("Transitions to final must pop only 'Z'.");
       JOptionPane.showMessageDialog(
@@ -109,7 +113,7 @@ public class ConvertPDAToGrammarAction extends ConvertAutomatonToGrammarAction {
     }
     if (bad.size() != 0) {
       drawer.clearSelected();
-      Iterator it = bad.iterator();
+      Iterator<PDATransition> it = bad.iterator();
       while (it.hasNext()) drawer.addSelected((Transition) it.next());
       messageLabel.setText("Transitions must pop 1 and push 0 or 2.");
       JOptionPane.showMessageDialog(
@@ -150,13 +154,4 @@ public class ConvertPDAToGrammarAction extends ConvertAutomatonToGrammarAction {
       ConvertPane pane, SelectionDrawer drawer, Automaton automaton) {
     return new PDAConvertController(pane, drawer, (PushdownAutomaton) automaton);
   }
-
-  /** The environment this action is part of. */
-  private AutomatonEnvironment environment;
-
-  /** The automaton to convert. */
-  private PushdownAutomaton automaton;
-
-  /** The grammar converter. */
-  private PDAToCFGConverter converter = new PDAToCFGConverter();
 }

@@ -23,6 +23,7 @@ import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.action.GrammarTransformAction;
 import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
 import edu.duke.cs.jflap.gui.editor.EditorPane;
+import edu.duke.cs.jflap.gui.editor.Tool;
 import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.editor.TransitionTool;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
@@ -41,6 +42,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
@@ -61,6 +63,11 @@ import javax.swing.event.ListSelectionListener;
  */
 public class UselessPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new useless production removing pane.
    *
    * @param environment
@@ -111,8 +118,8 @@ public class UselessPane extends JPanel {
         new EditorPane(
             vdgDrawer,
             new ToolBox() {
-              public java.util.List tools(AutomatonPane view, AutomatonDrawer drawer) {
-                java.util.List t = new LinkedList();
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                List<Tool> t = new LinkedList<Tool>();
                 t.add(new ArrowNontransitionTool(view, drawer));
                 t.add(new TransitionTool(view, drawer));
                 return t;
@@ -154,7 +161,12 @@ public class UselessPane extends JPanel {
     grammarTable =
         new GrammarTable(
             new GrammarTableModel(grammar) {
-              public boolean isCellEditable(int r, int c) {
+              /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r, int c) {
                 return false;
               }
             });
@@ -294,21 +306,36 @@ public class UselessPane extends JPanel {
   // These are general controls.
   AbstractAction doStepAction =
       new AbstractAction("Do Step") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.doStep();
         }
       };
 
   AbstractAction doAllAction =
       new AbstractAction("Do All") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           controller.doAll();
         }
       };
 
   AbstractAction proceedAction =
       new AbstractAction("Proceed") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           Grammar g = getGrammar();
           if (g == null) {
             JOptionPane.showMessageDialog(
@@ -324,7 +351,12 @@ public class UselessPane extends JPanel {
 
   AbstractAction exportAction =
       new AbstractAction("Export") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           Grammar g = getGrammar();
           if (g == null) {
             JOptionPane.showMessageDialog(
@@ -344,16 +376,15 @@ public class UselessPane extends JPanel {
   /** Simple kludge to allow us to add stuff to the table without fear. */
   boolean editingActive = false;
 
-  /** The editing row in the table. */
-  private int editingRow = -1;
-
-  /** Which columsn of the editing row have been edited yet? */
-  private boolean editingColumn[] = new boolean[2];
-
   /** The editing grammar table mode. */
   GrammarTableModel editingGrammarModel =
       new GrammarTableModel() {
-        public boolean isCellEditable(int r, int c) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public boolean isCellEditable(int r, int c) {
           return false;
         }
       };
@@ -364,7 +395,12 @@ public class UselessPane extends JPanel {
   /** The delete action for deleting rows. */
   AbstractAction deleteAction =
       new AbstractAction("Delete") {
-        public void actionPerformed(ActionEvent e) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
           deleteActivated();
         }
       };

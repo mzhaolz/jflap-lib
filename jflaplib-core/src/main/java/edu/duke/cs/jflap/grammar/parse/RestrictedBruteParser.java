@@ -40,9 +40,8 @@ public class RestrictedBruteParser extends BruteParser {
 
   public boolean isPossibleDerivation(String derivation) {
     if (Unrestricted.minimumLength(derivation, smaller) > target.length()) return false;
-    int targetSearched = 0;
     boolean startBookend = false, endBookend = false;
-    ArrayList discrete = new ArrayList();
+    ArrayList<String> discrete = new ArrayList<String>();
     StringBuffer sb = new StringBuffer();
     int start = -1;
 

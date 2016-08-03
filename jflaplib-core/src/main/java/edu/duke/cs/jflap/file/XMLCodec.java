@@ -22,8 +22,6 @@ import java.net.URI;
 import java.util.Map;
 import javax.xml.parsers.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -80,7 +78,7 @@ public class XMLCodec extends Codec {
    * @throws ParseException
    *             if there was a problem reading the file
    */
-  public Serializable decode(File file, Map parameters) {
+  public <K, V> Serializable decode(File file, Map<K,V> parameters) {
     try {
       return decode(new FileInputStream(file));
     } catch (FileNotFoundException e) {
@@ -103,7 +101,7 @@ public class XMLCodec extends Codec {
    * @throws EncodeException
    *             if there was a problem writing the file
    */
-  public File encode(Serializable structure, File file, Map parameters) {
+  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     Transducer transducer = null;
     try {
       transducer = TransducerFactory.getTransducer(structure);

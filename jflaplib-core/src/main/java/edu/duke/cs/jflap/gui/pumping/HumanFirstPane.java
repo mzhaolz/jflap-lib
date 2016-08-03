@@ -34,6 +34,10 @@ import edu.duke.cs.jflap.pumping.PumpingLemma;
  */
 public abstract class HumanFirstPane extends PumpingLemmaInputPane {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * The goal of the user, which is to try to find a valid pumping lemma.
    */
   private static String OBJECTIVE = "Find a valid partition that can be pumped.";
@@ -46,11 +50,6 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
    */
   private static String DESCRIBE_W =
       "I have selected w such that |w| >= m. It is displayed in Box 2.";
-  /**
-   * The instruction that prompts for the decomposition of <i>w</i>.
-   */
-  private static String PROMPT_DECOMPOSITION =
-      "Please select the decomposition of w in Box 3 using the sliders.";
   /**
    * The description that explains the selection of <i>i</i>.
    */

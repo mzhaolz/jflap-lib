@@ -33,11 +33,11 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
  *
  * @author Chris Morgan
  */
-public class CircleLayoutAlgorithm extends LayoutAlgorithm {
+public class CircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   /**
    * This list contains all the boxes that are used in this algorithm.
    */
-  private ArrayList boxes;
+  private ArrayList<Box> boxes;
 
   /**
    * Assigns some default values.
@@ -60,11 +60,11 @@ public class CircleLayoutAlgorithm extends LayoutAlgorithm {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph graph, Set notMoving) {
-    ArrayList vertices = getMovableVertices(graph, notMoving);
+  public void layout(Graph<V> graph, Set<V> notMoving) {
+    ArrayList<V> vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 
-    boxes = new ArrayList();
+    boxes = new ArrayList<Box>();
     for (int i = 0; i < vertices.size(); i++)
       if (!addToExistingBox(vertices.get(i))) {
         Box box = new Box(graph, vertexDim, vertexBuffer);
@@ -72,9 +72,9 @@ public class CircleLayoutAlgorithm extends LayoutAlgorithm {
         boxes.add(box);
       }
 
-    for (int i = boxes.size() - 1; i > 0; i--) mergeIfPossible((Box) boxes.get(i), i);
+    for (int i = boxes.size() - 1; i > 0; i--) mergeIfPossible(boxes.get(i), i);
 
-    for (int i = 0; i < boxes.size(); i++) ((Box) boxes.get(i)).layoutInCircleAndPack();
+    for (int i = 0; i < boxes.size(); i++) boxes.get(i).layoutInCircleAndPack();
 
     shiftOntoScreen(graph, size, vertexDim, true);
   }
@@ -84,10 +84,10 @@ public class CircleLayoutAlgorithm extends LayoutAlgorithm {
    *
    * return Whether the given vertex was added.
    */
-  private boolean addToExistingBox(Object vertex) {
+  private boolean addToExistingBox(V vertex) {
     for (int i = 0; i < boxes.size(); i++)
-      if (((Box) boxes.get(i)).isEdgeToChainMember(vertex)) {
-        ((Box) boxes.get(i)).addVertex(vertex);
+      if (boxes.get(i).isEdgeToChainMember(vertex)) {
+        boxes.get(i).addVertex(vertex);
         return true;
       }
     return false;
@@ -106,7 +106,7 @@ public class CircleLayoutAlgorithm extends LayoutAlgorithm {
   private void mergeIfPossible(Box current, int max) {
     Box toSearch;
     for (int j = max - 1; j >= 0; j--) {
-      toSearch = (Box) boxes.get(j);
+      toSearch = boxes.get(j);
       for (int k = 0; k < current.size(); k++)
         if (toSearch.isEdgeToChainMember(current.get(k))) {
           toSearch.merge(current);
@@ -122,7 +122,7 @@ public class CircleLayoutAlgorithm extends LayoutAlgorithm {
    *
    * @author Chris Morgan
    */
-  private class Box extends CircleChain {
+  private class Box extends CircleChain<V> {
     /**
      * The size of the square in which only this box may layout values.
      */
@@ -148,7 +148,7 @@ public class CircleLayoutAlgorithm extends LayoutAlgorithm {
      * @param vBuffer
      *     value for <code>vertexBuffer</code>.
      */
-    public Box(Graph g, Dimension vDim, double vBuffer) {
+    public Box(Graph<V> g, Dimension vDim, double vBuffer) {
       super(g, vDim, vBuffer);
       upperLeft = new Point2D.Double(0, 0);
       right = null;
@@ -203,7 +203,7 @@ public class CircleLayoutAlgorithm extends LayoutAlgorithm {
               (int) (2 * (getRadius() + vertexBuffer) + vertexDim.width),
               (int) (2 * (getRadius() + vertexBuffer) + vertexDim.height));
       if (boxes.indexOf(this) != 0) {
-        setUpperLeft((Box) boxes.get(0));
+        setUpperLeft(boxes.get(0));
         for (int i = 0; i < size(); i++)
           graph.moveVertex(
               get(i),

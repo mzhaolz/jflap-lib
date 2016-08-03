@@ -36,6 +36,11 @@ import edu.duke.cs.jflap.automata.graph.FSAEqualityChecker;
  */
 public class DFAEqualityAction extends FSAAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>DFAEqualityAction</CODE>.
    *
    * @param automaton
@@ -59,7 +64,7 @@ public class DFAEqualityAction extends FSAAction {
    *            the action event
    */
   public void actionPerformed(ActionEvent e) {
-    JComboBox combo = new JComboBox();
+    JComboBox<EnvironmentFrame> combo = new JComboBox<EnvironmentFrame>();
     // Figure out what existing environments in the program have
     // the type of structure that we need.
     EnvironmentFrame[] frames = Universe.frames();

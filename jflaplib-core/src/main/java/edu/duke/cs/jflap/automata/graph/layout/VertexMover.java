@@ -29,7 +29,7 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
  * This class contains a few simple vertex movement options that do not individually need a
  * separate class.
  */
-public class VertexMover extends LayoutAlgorithm {
+public class VertexMover<V> extends LayoutAlgorithm<V> {
 
   /**
    * Code for reflecting across a horizontal line through the graph's center.
@@ -83,8 +83,8 @@ public class VertexMover extends LayoutAlgorithm {
     command = c;
   }
 
-  public void layout(Graph graph, Set notMoving) {
-    ArrayList vertices = getMovableVertices(graph, notMoving);
+  public void layout(Graph<V> graph, Set<V> notMoving) {
+    ArrayList<?> vertices = getMovableVertices(graph, notMoving);
 
     //Check whether to fill the screen first, because other commands will call the other
     //shiftOntoScreen method.
@@ -151,4 +151,5 @@ public class VertexMover extends LayoutAlgorithm {
     //Finally, shift onto the screen
     shiftOntoScreen(graph, size, vertexDim, true);
   }
+
 }

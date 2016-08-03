@@ -188,7 +188,6 @@ public class UselessProductionRemover {
    *         terminals or useful variables (variables in <CODE>set</CODE>).
    */
   private static boolean isUsefulProduction(Production production, Set<String> set) {
-    ProductionChecker pc = new ProductionChecker();
     String rhs = production.getRHS();
     for (int k = 0; k < rhs.length(); k++) {
       char ch = rhs.charAt(k);
@@ -237,7 +236,6 @@ public class UselessProductionRemover {
    *         variables, even if it is already in <CODE>set</CODE>.
    */
   public static boolean belongsInUsefulVariableSet(String variable, Grammar grammar, Set<String> set) {
-    GrammarChecker gc = new GrammarChecker();
     Production[] productions = GrammarChecker.getProductionsOnVariable(variable, grammar);
     for (int k = 0; k < productions.length; k++) {
       if (isUsefulProduction(productions[k], set)) return true;
@@ -364,8 +362,6 @@ public class UselessProductionRemover {
    *         on the left hand side).
    */
   public static boolean isDependentOn(String v1, String v2, Grammar grammar) {
-    GrammarChecker gc = new GrammarChecker();
-    ProductionChecker pc = new ProductionChecker();
     Production[] productions = GrammarChecker.getProductionsOnVariable(v1, grammar);
     for (int k = 0; k < productions.length; k++) {
       if (ProductionChecker.isVariableInProduction(v2, productions[k])) {
@@ -453,7 +449,6 @@ public class UselessProductionRemover {
       Production production, VariableDependencyGraph graph) {
     List<Transition> list = new ArrayList<>();
     String v1 = production.getLHS();
-    ProductionChecker pc = new ProductionChecker();
     String rhs = production.getRHS();
     for (int k = 0; k < rhs.length(); k++) {
       char ch = rhs.charAt(k);
@@ -499,32 +494,10 @@ public class UselessProductionRemover {
    *            the grammar
    */
   public static void removeProductionsForVariable(String variable, Grammar grammar) {
-    GrammarChecker gc = new GrammarChecker();
     Production[] productions = GrammarChecker.getProductionsWithVariable(variable, grammar);
     for (int k = 0; k < productions.length; k++) {
       grammar.removeProduction(productions[k]);
     }
-  }
-
-  /**
-   * Returns a grammar with no variables that can not derive strings, by
-   * simply creating a new grammar and adding all productions in <CODE>usefulProductionSet</CODE>
-   * to that grammar.
-   *
-   * @param usefulProductionSet
-   *            the set of useful productions
-   * @return a grammar with no variables that can not derive strings, by
-   *         simply creating a new grammar and adding all productions in
-   *         <CODE>usefulProductionSet</CODE> to that grammar.
-   */
-  private static Grammar getGrammarWithNoVariablesThatCantDeriveStrings(Set<Production> usefulProductionSet) {
-    Grammar g = new ContextFreeGrammar();
-    Iterator<Production> it = usefulProductionSet.iterator();
-    while (it.hasNext()) {
-      Production p = it.next();
-      g.addProduction(p);
-    }
-    return g;
   }
 
   /**

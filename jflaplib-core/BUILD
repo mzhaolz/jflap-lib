@@ -1,6 +1,6 @@
 java_library(
 	name = "jflaplib_core",
-	srcs = glob(["**/*.java"]),
+	srcs = glob(["**/*.java"], exclude = ["**/LRParser.java"]),
 	visibility = [ "//visibility:public" ],
 	deps = [
 			"@org_apache_xmlgraphics_batik_anim//jar",

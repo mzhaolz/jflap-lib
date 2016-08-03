@@ -31,8 +31,6 @@ import java.util.List;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The FSA to regular grammar converter can be used to convert a finite state

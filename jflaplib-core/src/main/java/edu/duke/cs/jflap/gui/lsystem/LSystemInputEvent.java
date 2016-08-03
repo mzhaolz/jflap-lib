@@ -29,6 +29,11 @@ import java.util.EventObject;
  */
 public class LSystemInputEvent extends EventObject {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>LSystemInputEvent</CODE>.
    *
    * @param input

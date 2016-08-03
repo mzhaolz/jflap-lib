@@ -32,7 +32,7 @@ import java.awt.geom.Point2D;
  *
  * @author Thomas Finley
  */
-public class AutomatonGraph extends Graph {
+public class AutomatonGraph extends Graph<State> {
   /**
    * Constructures a graph using an automaton.
    *

@@ -65,7 +65,11 @@ public class MooreTransitionCreator extends MealyTransitionCreator {
   protected TableModel createModel(Transition transition) {
     final MooreTransition t = (MooreTransition) transition;
     return new AbstractTableModel() {
-      String s[] = new String[] {t.getLabel()};
+      /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+	String s[] = new String[] {t.getLabel()};
 
       public Object getValueAt(int r, int c) {
         return s[c];

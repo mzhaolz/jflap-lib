@@ -47,7 +47,12 @@ import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;
  */
 public class CYKParsePane extends BruteParsePane {
 
-  /** The parser that is going to be used **/
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/** The parser that is going to be used **/
   private CYKParser myParser;
 
   /** The action for the stepping control. */
@@ -66,7 +71,7 @@ public class CYKParsePane extends BruteParsePane {
 
   private Production[] myAnswers;
 
-  private LinkedList myQueue;
+  private LinkedList<ParseNode> myQueue;
 
   private int myIndex;
 
@@ -199,7 +204,7 @@ public class CYKParsePane extends BruteParsePane {
     		System.out.println(myAnswers[i].getLHS()+" -> "+myAnswers[i].getRHS());
     */
     myCurrentAnswerNode = new ParseNode(grammar.getStartVariable(), new Production[0], new int[0]);
-    myQueue = new LinkedList();
+    myQueue = new LinkedList<ParseNode>();
     myQueue.add(myCurrentAnswerNode);
     myIndex = 0;
     stepForward();
@@ -245,7 +250,12 @@ public class CYKParsePane extends BruteParsePane {
     toolbar.add(startAction);
     myStepAction =
         new AbstractAction("Step") {
-          public void actionPerformed(ActionEvent e) {
+          /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+		public void actionPerformed(ActionEvent e) {
             stepForward();
           }
         };
@@ -255,7 +265,7 @@ public class CYKParsePane extends BruteParsePane {
     // Set up the view customizer controls.
     toolbar.addSeparator();
 
-    final JComboBox box = new JComboBox(getViewChoices());
+    final JComboBox<?> box = new JComboBox<Object>(getViewChoices());
     box.setSelectedIndex(0);
     ActionListener listener =
         new ActionListener() {

@@ -33,6 +33,11 @@ import javax.swing.JOptionPane;
  */
 public class ConvertFSAToREAction extends FSAAction {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates a new <CODE>ConvertFSAToREAction</CODE>.
    *
    * @param environment

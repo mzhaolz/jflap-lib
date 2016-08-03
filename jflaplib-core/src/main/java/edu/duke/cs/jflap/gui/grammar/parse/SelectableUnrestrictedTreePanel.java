@@ -17,8 +17,8 @@
 package edu.duke.cs.jflap.gui.grammar.parse;
 
 import edu.duke.cs.jflap.grammar.parse.ParseNode;
+import edu.duke.cs.jflap.gui.tree.DefaultNodeDrawer;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
@@ -40,11 +40,12 @@ import javax.swing.tree.TreeNode;
  */
 public class SelectableUnrestrictedTreePanel extends UnrestrictedTreePanel {
 
-  private boolean myClicked = false;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private boolean myClicked = false;
   private Point2D myClickedNodePoint;
-
-  private Color myColor;
-  private static final Color CLICKED_COLOR = new Color(100, 120, 120);
 
   /**
    * Constructor for SelectableUnrestrictedTreePanel
@@ -52,7 +53,6 @@ public class SelectableUnrestrictedTreePanel extends UnrestrictedTreePanel {
    */
   public SelectableUnrestrictedTreePanel(BruteParsePane pane) {
     super(pane);
-    myColor = super.INNER;
   }
 
   /**
@@ -66,17 +66,17 @@ public class SelectableUnrestrictedTreePanel extends UnrestrictedTreePanel {
   public TreeNode nodeAtPoint(Point2D point) {
     double x1 = point.getX();
     double y1 = point.getY();
-    Iterator it = nodeToPoint.entrySet().iterator();
+    Iterator<Map.Entry<UnrestrictedTreeNode, Point2D>> it = nodeToPoint.entrySet().iterator();
     while (it.hasNext()) {
-      Map.Entry e = (Map.Entry) it.next();
-      Point2D tempPoint = (Point2D) e.getValue();
+      Map.Entry<UnrestrictedTreeNode, Point2D> e = it.next();
+      Point2D tempPoint = e.getValue();
       double x2 = tempPoint.getX();
       double y2 = tempPoint.getY();
-      if (Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) <= Math.pow(nodeDrawer.NODE_RADIUS, 2)) {
+      if (Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) <= Math.pow(DefaultNodeDrawer.NODE_RADIUS, 2)) {
         myClicked = true;
         myClickedNodePoint = new Point2D.Double(x2, y2);
         //		repaint();
-        return (TreeNode) e.getKey();
+        return e.getKey();
       }
     }
     return null;

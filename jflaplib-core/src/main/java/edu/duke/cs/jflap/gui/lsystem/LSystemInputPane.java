@@ -25,6 +25,8 @@ import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -36,6 +38,11 @@ import javax.swing.event.*;
  */
 public class LSystemInputPane extends JPanel {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates an empty <CODE>LSystemInputPane</CODE>.
    */
   public LSystemInputPane() {
@@ -65,12 +72,12 @@ public class LSystemInputPane extends JPanel {
     // Create the axiom text field.
     axiomField = new JTextField(listAsString(lsystem.getAxiom()));
     // Create the grammar view that holds replacement productions.
-    Set replacements = lsystem.getSymbolsWithReplacements();
-    Iterator it = replacements.iterator();
+    Set<?> replacements = lsystem.getSymbolsWithReplacements();
+    Iterator<?> it = replacements.iterator();
     UnboundGrammar g = new UnboundGrammar();
     while (it.hasNext()) {
       String symbol = (String) it.next();
-      java.util.List[] r = lsystem.getReplacements(symbol);
+      List<String>[] r = lsystem.getReplacements(symbol);
       for (int i = 0; i < r.length; i++) {
         Production p = new Production(symbol, listAsString(r[i]));
         g.addProduction(p);
@@ -78,7 +85,7 @@ public class LSystemInputPane extends JPanel {
     }
     productionInputPane = new GrammarInputPane(g);
     // Create the parameter table model.
-    parameterModel = new ParameterTableModel(lsystem.getValues());
+    parameterModel = new ParameterTableModel<String>(lsystem.getValues());
     // We may as well use this as our cached system.
     cachedSystem = lsystem;
   }
@@ -180,8 +187,8 @@ public class LSystemInputPane extends JPanel {
    *            the list to convert to a string
    * @return a string containing the elements of the list
    */
-  public static String listAsString(java.util.List list) {
-    Iterator it = list.iterator();
+  public static String listAsString(java.util.List<?> list) {
+    Iterator<?> it = list.iterator();
     if (!it.hasNext()) return "";
     StringBuffer sb = new StringBuffer();
     sb.append(it.next());
@@ -242,8 +249,8 @@ public class LSystemInputPane extends JPanel {
    */
   protected void fireLSystemInputEvent() {
     cachedSystem = null;
-    Iterator it = lSystemInputListeners.iterator();
-    while (it.hasNext()) ((LSystemInputListener) (it.next())).lSystemChanged(reusedEvent);
+    Iterator<LSystemInputListener> it = lSystemInputListeners.iterator();
+    while (it.hasNext()) (it.next()).lSystemChanged(reusedEvent);
   }
 
   /**
@@ -275,13 +282,13 @@ public class LSystemInputPane extends JPanel {
   private GrammarInputPane productionInputPane;
 
   /** The parameter table model. */
-  private ParameterTableModel parameterModel;
+  private ParameterTableModel<String> parameterModel;
 
   /** The parameter table view. */
   private HighlightTable parameterTable;
 
   /** The set of input listeners. */
-  private Set lSystemInputListeners = new HashSet();
+  private Set<LSystemInputListener> lSystemInputListeners = new HashSet<LSystemInputListener>();
 
   /** The event reused in firing off the notifications. */
   private LSystemInputEvent reusedEvent = new LSystemInputEvent(this);

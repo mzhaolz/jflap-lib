@@ -26,7 +26,12 @@ import edu.duke.cs.jflap.pumping.*;
  *
  */
 public class WW extends ContextFreePumpingLemma {
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6607037930496485667L;
+
+public String getTitle() {
     return "ww : w element_of {ab}*";
   }
 
@@ -300,7 +305,6 @@ public class WW extends ContextFreePumpingLemma {
   }
 
   public boolean isInLang(String s) {
-    int a, b;
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
 

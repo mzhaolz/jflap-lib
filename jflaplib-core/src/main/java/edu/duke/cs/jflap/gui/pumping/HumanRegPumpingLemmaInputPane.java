@@ -31,21 +31,10 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
   /**
-   * Message displayed if computer wins.
-   */
-  private static String I_WIN =
-      "I WIN. Do you want to play again or concede " + "that the language is not regular?";
-  /**
-   * Message displayed if player wins.
-   */
-  private static String YOU_WIN = "YOU WIN. Does this mean the language is regular?";
-  /**
-   * The instruction that prompts for the decomposition of <i>w</i>.
-   */
-  private static String PROMPT_DECOMPOSITION =
-      "Please select the decomposition of w into xyz using the sliders.";
-
-  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
    * Creates a <code>HumanRegPumpingInputPane</code> for a <code>RegularPumpingLemma</code>.
    *
    * @param l the <code>RegularPumpingLemma</code> we want to run

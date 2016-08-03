@@ -175,22 +175,6 @@ public class NFAToDFA {
   }
 
   /**
-   * Returns true if <CODE>states</CODE> contains <CODE>state</CODE>
-   *
-   * @param state
-   *            the state.
-   * @param states
-   *            the states.
-   * @return true if <CODE>states</CODE> contains <CODE>state</CODE>
-   */
-  private boolean containsState(State state, State[] states) {
-    for (int k = 0; k < states.length; k++) {
-      if (states[k] == state) return true;
-    }
-    return false;
-  }
-
-  /**
    * Returns true if <CODE>states1</CODE> and <CODE>states2</CODE> are
    * identical (i.e. they contain exactly the same states, and no extras).
    *

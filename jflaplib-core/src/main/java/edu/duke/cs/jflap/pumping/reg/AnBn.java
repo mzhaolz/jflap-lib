@@ -25,7 +25,12 @@ import edu.duke.cs.jflap.pumping.*;
  * @author Jinghui Lim & Chris Morgan
  */
 public class AnBn extends RegularPumpingLemma {
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4276138054767348836L;
+
+public String getTitle() {
     return "a^n b^n : n >= 0";
   }
 

@@ -153,18 +153,6 @@ public class State implements Serializable {
     return name;
   }
 
-  private String digitizer(int number) {
-    if (number == 0) return "\u2080";
-    String s = digitizer(number / 10, 1);
-    return s + (SS + (char) (number % 10));
-  }
-
-  private String digitizer(int number, int supp) {
-    if (number == 0) return "";
-    String s = digitizer(number / 10, 1);
-    return s + (SS + (char) (number % 10));
-  }
-
   /**
    * Sets the "label" for a state, an optional description for the state.
    *
@@ -276,9 +264,6 @@ public class State implements Serializable {
 
   /** The name of the state. */
   String name = null;
-
-  /** The subscript unicode start point. */
-  private static final char SS = '\u2080';
 
   /** The automaton this state belongs to. */
   private Automaton automaton = null;

@@ -22,9 +22,6 @@ import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.event.*;
 import edu.duke.cs.jflap.gui.JMultiLineToolTip;
 import edu.duke.cs.jflap.gui.editor.EditorPane;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;

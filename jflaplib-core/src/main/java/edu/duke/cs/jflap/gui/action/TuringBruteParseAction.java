@@ -19,9 +19,7 @@ package edu.duke.cs.jflap.gui.action;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
-import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.parse.TMBruteParsePane;
 
@@ -35,11 +33,13 @@ import java.util.HashMap;
  */
 public class TuringBruteParseAction extends GrammarAction {
 
-  /** The grammar environment. */
-  private GrammarEnvironment environment;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-  /** The frame for the grammar environment. */
-  private EnvironmentFrame frame;
+/** The grammar environment. */
+  private GrammarEnvironment environment;
 
   private HashMap<String, String> myVariableMap;
 
@@ -52,7 +52,6 @@ public class TuringBruteParseAction extends GrammarAction {
   public TuringBruteParseAction(GrammarEnvironment environment) {
     super("Parser for Converted Grammar from TM", null);
     this.environment = environment;
-    this.frame = Universe.frameForEnvironment(environment);
   }
 
   public void actionPerformed(ActionEvent arg0) {
@@ -62,7 +61,6 @@ public class TuringBruteParseAction extends GrammarAction {
     Grammar g_trimmed = trim(p);
     //		FrameFactory.createFrame(g_trimed);
 
-    if (g == null) return;
     TMBruteParsePane bpp = new TMBruteParsePane(environment, g, g_trimmed, myVariableMap, null);
     environment.add(bpp, "Parser for Converted Grammar from TM", new CriticalTag() {});
     environment.setActive(bpp);

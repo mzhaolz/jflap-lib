@@ -26,8 +26,6 @@ import javax.swing.*;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.AutomatonSimulator;
 import edu.duke.cs.jflap.automata.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Input GUI BOX
@@ -36,7 +34,12 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class InputBox extends JFrame {
-  private final Logger logger = LoggerFactory.getLogger(InputBox.class);
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private final Logger logger = LoggerFactory.getLogger(InputBox.class);
 
   private String myInputString;
 

@@ -20,6 +20,13 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.gui.event.SelectionEvent;
 import edu.duke.cs.jflap.gui.event.SelectionListener;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -34,6 +41,11 @@ import javax.swing.table.*;
  */
 public class GrammarViewer extends JTable {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 877608254800510232L;
+
+/**
    * Instantiates a new <CODE>GrammarViewer</CODE>.
    *
    * @param grammar
@@ -94,9 +106,9 @@ public class GrammarViewer extends JTable {
    * Distributes a selection event.
    */
   protected void distributeSelectionEvent() {
-    java.util.Iterator it = selectionListeners.iterator();
+    Iterator<SelectionListener> it = selectionListeners.iterator();
     while (it.hasNext()) {
-      SelectionListener listener = (SelectionListener) it.next();
+      SelectionListener listener = it.next();
       listener.selectionChanged(EVENT);
     }
   }
@@ -135,20 +147,17 @@ public class GrammarViewer extends JTable {
   /** The grammar to display. */
   private Grammar grammar;
 
-  /** The button group. */
-  private ButtonGroup bgroup = new ButtonGroup();
-
   /** The data of the table. */
   private Object[][] data;
 
   /** The mapping of productions to a row (rows stored as Integer). */
-  private java.util.Map productionToRow = new java.util.HashMap();
+  private Map<Production, Integer> productionToRow = new HashMap<>();
 
   /** The selection event. */
   private SelectionEvent EVENT = new SelectionEvent(this);
 
   /** The set of selection listeners. */
-  private java.util.Set selectionListeners = new java.util.HashSet();
+  private Set<SelectionListener> selectionListeners = new HashSet<>();
 
   private ListSelectionListener listSelectListener =
       new ListSelectionListener() {
@@ -161,11 +170,16 @@ public class GrammarViewer extends JTable {
    * The model for this table.
    */
   private class GrammarTableModel extends DefaultTableModel {
-    public boolean isCellEditable(int row, int column) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1542867493683971894L;
+
+	public boolean isCellEditable(int row, int column) {
       return false;
     }
 
-    public Class getColumnClass(int columnIndex) {
+    public Class<?> getColumnClass(int columnIndex) {
       if (columnIndex == 1) return Boolean.class;
       return super.getColumnClass(columnIndex);
     }

@@ -26,6 +26,11 @@ import java.io.Serializable;
  */
 public class Tape implements Serializable {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4594263170222158421L;
+
+/**
    * Instantiates an empty tape object.
    */
   public Tape() {

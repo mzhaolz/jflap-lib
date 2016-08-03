@@ -25,7 +25,6 @@ import edu.duke.cs.jflap.automata.turing.TMConfiguration;
 import javax.swing.event.TableModelListener;
 import javax.swing.event.TableModelEvent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +39,7 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  *
  * @author Thomas Finley
  */
-public class InputTableModel extends GrowableTableModel {
+public class InputTableModel extends GrowableTableModel<Object> {
   private static final long serialVersionUID = 69L;
   /**
    * This instantiates an <CODE>InputTableModel</CODE>.

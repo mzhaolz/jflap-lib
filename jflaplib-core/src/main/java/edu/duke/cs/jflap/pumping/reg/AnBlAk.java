@@ -27,7 +27,12 @@ import edu.duke.cs.jflap.pumping.*;
  *
  */
 public class AnBlAk extends RegularPumpingLemma {
-  public String getTitle() {
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7114226724693300070L;
+
+public String getTitle() {
     return "a^n b^l a^k : n > 5, l > 3, k <= l";
   }
 

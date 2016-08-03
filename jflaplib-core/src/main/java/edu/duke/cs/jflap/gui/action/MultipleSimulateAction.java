@@ -308,8 +308,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             File f = null;
             if (retval == JFileChooser.APPROVE_OPTION) {
               f = ourChooser.getSelectedFile();
-              try {
-                Scanner sc = new Scanner(f);
+              try (Scanner sc = new Scanner(f)) {
                 int last = model.getRowCount() - 1;
                 /*int tapes = 0;
                 if(getObject() instanceof Automaton)
@@ -408,8 +407,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
                       (r % (uniqueInputs)) * (tapes + 1));
               }
             } else if (getObject() instanceof Grammar) {
-              String[][] inputs = model.getInputs();
-              int uniqueInputs = inputs.length;
+              model.getInputs();
               Grammar currentGram = (Grammar) getObject();
               BruteParsePane parsePane =
                   new BruteParsePane((GrammarEnvironment) getEnvironment(), currentGram, model);
@@ -541,8 +539,6 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
           new AbstractAction("Add input string") {
 						private static final long serialVersionUID = 77L;
             public void actionPerformed(ActionEvent arg0) {
-              //add input
-              int inputsNeeded = 1;
               boolean turing = false;
               if (getEnvironment().myObjects.get(0) instanceof TuringMachine) {
                 turing = true;
@@ -622,7 +618,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
                 getEnvironment().myObjects.remove(k);
                 int row = table.getSelectedRow();
 
-                int objSize = getEnvironment().myObjects.size();
+                getEnvironment().myObjects.size();
                 int stringSize = getEnvironment().myTestStrings.size();
 
                 int beginOffset = row % stringSize;
@@ -950,6 +946,4 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
   private static String[] RESULT = {"Accept", "Reject", "Cancelled"};
 
   protected JPanel myPanel = null;
-
-  private static Color[] RESULT_COLOR = {Color.green, Color.red, Color.black};
 }

@@ -34,6 +34,7 @@ import javax.swing.table.AbstractTableModel;
  * @author Thomas Finley
  */
 public class LRParseTable extends AbstractTableModel implements Serializable, Cloneable {
+	private static final long serialVersionUID = 12000L;
   /**
    * Instantiates a new LR parse table.
    *
@@ -43,14 +44,14 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
    *            the goto graph for the grammar
    */
   public LRParseTable(Grammar grammar, FiniteStateAutomaton fsa) {
-    ArrayList term = new ArrayList(Arrays.asList(grammar.getTerminals()));
-    ArrayList vars = new ArrayList(Arrays.asList(grammar.getVariables()));
+    List<String> term = new ArrayList<>(Arrays.asList(grammar.getTerminals()));
+    List<String> vars = new ArrayList<>(Arrays.asList(grammar.getVariables()));
     this.grammar = grammar;
     Collections.sort(term);
     Collections.sort(vars);
     term.add("$");
-    terminals = (String[]) term.toArray(new String[0]);
-    variables = (String[]) vars.toArray(new String[0]);
+    terminals = term.toArray(new String[0]);
+    variables = vars.toArray(new String[0]);
 
     for (int i = 0; i < terminals.length; i++)
       symbolsToColumn.put(terminals[i], new Integer(i + 1));
@@ -131,7 +132,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
    * @throws IllegalArgumentException
    *             if symbol is not in the grammar
    */
-  public SortedSet getSetAt(int id, String symbol) {
+  public SortedSet<String> getSetAt(int id, String symbol) {
     return getSetAt(id, columnForSymbol(symbol));
   }
 
@@ -162,7 +163,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
    *             if symbol is not in the grammar
    */
   public int columnForSymbol(String symbol) {
-    Integer in = (Integer) symbolsToColumn.get(symbol);
+    Integer in = symbolsToColumn.get(symbol);
     if (in == null) {
       throw new IllegalArgumentException(symbol + " is not in the grammar!");
     }
@@ -243,14 +244,14 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
    */
   private String[] parseValues(String input, int column) {
     StringTokenizer st = new StringTokenizer(input);
-    SortedSet values = new TreeSet();
+    SortedSet<String> values = new TreeSet<>();
     while (st.hasMoreTokens()) {
       String token = st.nextToken();
       token = parseValue(token, column);
       if (token == null) continue;
       values.add(token);
     }
-    return (String[]) values.toArray(new String[0]);
+    return values.toArray(new String[0]);
   }
 
   /**
@@ -324,9 +325,9 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
    *            the column index
    * @return the set of parse directives at a location
    */
-  public SortedSet getSetAt(int row, int column) {
+  public SortedSet<String> getSetAt(int row, int column) {
     StringTokenizer st = new StringTokenizer(entries[row][column]);
-    SortedSet set = new TreeSet();
+    SortedSet<String> set = new TreeSet<>();
     while (st.hasMoreTokens()) set.add(st.nextToken());
     return set;
   }
@@ -409,5 +410,5 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
   private Grammar grammar;
 
   /** The mapping of grammar symbols to an Integer indicating the column. */
-  private Map symbolsToColumn = new HashMap();
+  private Map<String, Integer> symbolsToColumn = new HashMap<>();
 }

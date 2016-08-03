@@ -31,21 +31,23 @@ import java.io.Serializable;
  * @author Thomas Finley
  */
 public class LLParseTable extends AbstractTableModel implements Serializable, Cloneable {
+	private static final long serialVersionUID = 11000L;
   /**
    * Instantiates a new <CODE>LLParseTable</CODE> for a given grammar.
    *
    * @param grammar
    *            the grammar to create the table for
    */
-  public LLParseTable(Grammar grammar) {
+  @SuppressWarnings("unchecked")
+public LLParseTable(Grammar grammar) {
     variables = grammar.getVariables();
     Arrays.sort(variables);
     terminals = grammar.getTerminals();
     Arrays.sort(terminals);
 
-    entries = new SortedSet[variables.length][terminals.length + 1];
+    entries = (SortedSet<String>[][]) new SortedSet[variables.length][terminals.length + 1];
     for (int i = 0; i < entries.length; i++)
-      for (int j = 0; j < entries[i].length; j++) entries[i][j] = new TreeSet();
+      for (int j = 0; j < entries[i].length; j++) entries[i][j] = new TreeSet<>();
   }
 
   /**
@@ -54,12 +56,13 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
    * @param table
    *            the table to copy
    */
-  public LLParseTable(LLParseTable table) {
+  @SuppressWarnings("unchecked")
+public LLParseTable(LLParseTable table) {
     variables = table.variables;
     terminals = table.terminals;
-    entries = new SortedSet[variables.length][terminals.length + 1];
+    entries = (SortedSet<String>[][]) new SortedSet[variables.length][terminals.length + 1];
     for (int i = 0; i < entries.length; i++)
-      for (int j = 0; j < entries[i].length; j++) entries[i][j] = new TreeSet(table.entries[i][j]);
+      for (int j = 0; j < entries[i].length; j++) entries[i][j] = new TreeSet<String>(table.entries[i][j]);
   }
 
   /**
@@ -166,14 +169,14 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
   public String[][] getDifferences(LLParseTable table) {
     if (!Arrays.equals(variables, table.variables) || !Arrays.equals(terminals, table.terminals))
       throw new IllegalArgumentException("Tables differ in variables or terminals.");
-    ArrayList differences = new ArrayList();
+    List<String[]> differences = new ArrayList<>();
     for (int v = 0; v < entries.length; v++)
       for (int t = 0; t < entries[v].length; t++)
         if (!entries[v][t].equals(table.entries[v][t])) {
           if (t == terminals.length) differences.add(new String[] {variables[v], "$"});
           else differences.add(new String[] {variables[v], terminals[t]});
         }
-    return (String[][]) differences.toArray(new String[0][0]);
+    return differences.toArray(new String[0][0]);
   }
 
   /**
@@ -259,7 +262,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
    *             if either variable or lookahead is not a variable or terminal
    *             (or $) respectively in the grammar
    */
-  public SortedSet get(String variable, String lookahead) {
+  public SortedSet<String> get(String variable, String lookahead) {
     int[] r = getLocation(variable, lookahead);
     return Collections.unmodifiableSortedSet(entries[r[0]][r[1]]);
   }
@@ -277,7 +280,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
    *             if either variable or lookahead is not a variable or terminal
    *             (or $) respectively in the grammar
    */
-  public void set(Set productions, String variable, String lookahead) {
+  public void set(Set<String> productions, String variable, String lookahead) {
     int[] r = getLocation(variable, lookahead);
     entries[r[0]][r[1]].clear();
     entries[r[0]][r[1]].addAll(productions);
@@ -321,13 +324,13 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
    * @param set
    *            the set to put in a space delimited string
    */
-  private String spaceSet(Set set) {
-    Iterator it = set.iterator();
+  private String spaceSet(Set<String> set) {
+    Iterator<String> it = set.iterator();
     boolean first = true;
     StringBuffer sb = new StringBuffer();
     while (it.hasNext()) {
       if (!first) sb.append(" ");
-      String s = (String) it.next();
+      String s = it.next();
       sb.append(s.equals("") ? "!" : s);
       first = false;
     }
@@ -344,7 +347,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
    *            the set to add to
    * @return the number of elements processed
    */
-  private int despaceSet(String string, Set set) {
+  private int despaceSet(String string, Set<String> set) {
     set.clear();
     StringTokenizer st = new StringTokenizer(string);
     while (st.hasMoreTokens()) {
@@ -413,7 +416,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
   private String[] variables;
 
   /** The entries in the parse table. */
-  private SortedSet[][] entries;
+  private SortedSet<String>[][] entries;
 
   /** Is the table noneditable? */
   private boolean frozen = false;

@@ -77,7 +77,7 @@ public class LLParseDerivationController {
         return true;
       case FIRST_SETS:
       case FOLLOW_SETS:
-        Map sets = step == FIRST_SETS ? targetFirstSets : targetFollowSets;
+        Map<?, ?> sets = step == FIRST_SETS ? targetFirstSets : targetFollowSets;
         int col = step == FIRST_SETS ? 1 : 2;
         FirstFollowModel ffm = firstFollow.getFFModel();
         try {
@@ -140,13 +140,13 @@ public class LLParseDerivationController {
     switch (step) {
       case FIRST_SETS:
       case FOLLOW_SETS:
-        Map sets = step == FIRST_SETS ? targetFirstSets : targetFollowSets;
+        Map<?, ?> sets = step == FIRST_SETS ? targetFirstSets : targetFollowSets;
         int col = step == FIRST_SETS ? 1 : 2;
         FirstFollowModel ffm = firstFollow.getFFModel();
         // Get each variable.
         for (int i = 0; i < ffm.getRowCount(); i++) {
           String var = (String) ffm.getValueAt(i, 0);
-          ffm.setSet((Set) sets.get(var), i, col);
+          ffm.setSet((Set<?>) sets.get(var), i, col);
         }
         try {
           firstFollow.getCellEditor().stopCellEditing();
@@ -158,9 +158,9 @@ public class LLParseDerivationController {
       case PARSE_TABLE:
         LLParseTable pt = parseTable.getParseTable();
         for (int r = 0; r < pt.getRowCount(); r++) {
-          String var = (String) pt.getValueAt(r, 0);
+          pt.getValueAt(r, 0);
           for (int c = 1; c < pt.getColumnCount(); c++) {
-            int cv = parseTable.convertColumnIndexToView(c);
+            parseTable.convertColumnIndexToView(c);
             pt.setValueAt(targetParseTable.getValueAt(r, c), r, c);
           }
         }
@@ -185,7 +185,7 @@ public class LLParseDerivationController {
     switch (step) {
       case FIRST_SETS:
       case FOLLOW_SETS:
-        Map sets = step == FIRST_SETS ? targetFirstSets : targetFollowSets;
+        Map<?, ?> sets = step == FIRST_SETS ? targetFirstSets : targetFollowSets;
         int col = step == FIRST_SETS ? 1 : 2;
         FirstFollowModel ffm = firstFollow.getFFModel();
         int viewCol = firstFollow.convertColumnIndexToView(col);
@@ -193,7 +193,7 @@ public class LLParseDerivationController {
           if (!firstFollow.isCellSelected(i, viewCol)) continue;
           // ////System.out.println("Doing row "+i);
           String var = (String) ffm.getValueAt(i, 0);
-          ffm.setSet((Set) sets.get(var), i, col);
+          ffm.setSet((Set<?>) sets.get(var), i, col);
         }
         try {
           firstFollow.getCellEditor().stopCellEditing();
@@ -204,7 +204,7 @@ public class LLParseDerivationController {
       case PARSE_TABLE:
         LLParseTable pt = parseTable.getParseTable();
         for (int r = 0; r < pt.getRowCount(); r++) {
-          String var = (String) pt.getValueAt(r, 0);
+          pt.getValueAt(r, 0);
           for (int c = 1; c < pt.getColumnCount(); c++) {
             int cv = parseTable.convertColumnIndexToView(c);
             if (!parseTable.isCellSelected(r, cv)) continue;
@@ -317,10 +317,10 @@ public class LLParseDerivationController {
   static final int FIRST_SETS = 0, FOLLOW_SETS = 1, PARSE_TABLE = 2, FINISHED = 3;
 
   /** The target first sets. */
-  Map targetFirstSets;
+  Map<?, ?> targetFirstSets;
 
   /** The target follow sets. */
-  Map targetFollowSets;
+  Map<?, ?> targetFollowSets;
 
   /** The grammar. */
   Grammar grammar;
@@ -335,31 +335,56 @@ public class LLParseDerivationController {
   AbstractAction
       doSelectedAction =
           new AbstractAction("Do Selected") {
-            public void actionPerformed(ActionEvent e) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
               completeSelected();
             }
           },
       doStepAction =
           new AbstractAction("Do Step") {
-            public void actionPerformed(ActionEvent e) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
               completeStep();
             }
           },
       doAllAction =
           new AbstractAction("Do All") {
-            public void actionPerformed(ActionEvent e) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
               completeAll();
             }
           },
       nextAction =
           new AbstractAction("Next") {
-            public void actionPerformed(ActionEvent e) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
               nextStep();
             }
           },
       parseAction =
           new AbstractAction("Parse") {
-            public void actionPerformed(ActionEvent e) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
               parse();
             }
           };

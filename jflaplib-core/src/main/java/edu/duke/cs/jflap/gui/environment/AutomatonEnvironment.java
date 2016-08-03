@@ -27,6 +27,11 @@ import edu.duke.cs.jflap.automata.event.AutomataNoteListener;
 
 public class AutomatonEnvironment extends Environment {
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+/**
    * Instantiates an <CODE>AutomatonEnvironment</CODE> for the given
    * automaton. By default this method will set up an environment with an
    * editor pane for this automaton.

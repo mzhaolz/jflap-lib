@@ -38,7 +38,12 @@ import javax.swing.tree.*;
  */
 public class UnrestrictedTreePanel extends TreePanel {
 
-  private HashMap<String, String> myVariableMap;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+private HashMap<String, String> myVariableMap;
   /**
    * Instantiates an unrestricted tree panel.
    *
@@ -62,8 +67,8 @@ public class UnrestrictedTreePanel extends TreePanel {
   public String getTB() {
     StringBuffer total = new StringBuffer();
     for (int i = 0; i < top.length; i++) {
-      List t = new LinkedList();
-      List b = new LinkedList();
+      List<List<UnrestrictedTreeNode>> t = new LinkedList<List<UnrestrictedTreeNode>>();
+      List<List<UnrestrictedTreeNode>> b = new LinkedList<List<UnrestrictedTreeNode>>();
       for (int j = 0; j < top[i].length; j++) t.add(Arrays.asList(top[i][j]));
       for (int j = 0; j < bottom[i].length; j++) b.add(Arrays.asList(bottom[i][j]));
       total.append("T." + i + ": " + t + "\n");
@@ -73,12 +78,12 @@ public class UnrestrictedTreePanel extends TreePanel {
   }
 
   private UnrestrictedTreeNode[] levelNodes(int level) {
-    List list = new ArrayList();
+    List<UnrestrictedTreeNode> list = new ArrayList<UnrestrictedTreeNode>();
     if (top[level] != null) {
       for (int i = 0; i < top[level].length; i++)
         for (int j = 0; j < top[level][i].length; j++) list.add(top[level][i][j]);
     }
-    return (UnrestrictedTreeNode[]) list.toArray(new UnrestrictedTreeNode[0]);
+    return list.toArray(new UnrestrictedTreeNode[0]);
   }
 
   private void bridgeTo(int level) {
@@ -86,8 +91,8 @@ public class UnrestrictedTreePanel extends TreePanel {
     Production[] prods = solutionParseNodes[level].getProductions();
     int[] prodStarts = solutionParseNodes[level].getSubstitutions();
     int length = 0, prodNum = 0;
-    List bottomList = new LinkedList();
-    List topList = new LinkedList();
+    List<UnrestrictedTreeNode[]> bottomList = new LinkedList<UnrestrictedTreeNode[]>();
+    List<UnrestrictedTreeNode[]> topList = new LinkedList<UnrestrictedTreeNode[]>();
     UnrestrictedTreeNode[] U = new UnrestrictedTreeNode[0];
     UnrestrictedTreeNode[][] UU = new UnrestrictedTreeNode[0][0];
     for (int i = 0; i < prev.length; i++) {
@@ -103,8 +108,8 @@ public class UnrestrictedTreePanel extends TreePanel {
       } else if (length == prodStarts[prodNum]) {
         // Starting a production.
 
-        List currentBottom = new LinkedList();
-        List currentTop = new LinkedList();
+        List<UnrestrictedTreeNode> currentBottom = new LinkedList<UnrestrictedTreeNode>();
+        List<UnrestrictedTreeNode> currentTop = new LinkedList<UnrestrictedTreeNode>();
         String rhs = prods[prodNum].getRHS();
         String lhs = prods[prodNum].getLHS();
         while (length < prodStarts[prodNum] + lhs.length()) {
@@ -113,7 +118,7 @@ public class UnrestrictedTreePanel extends TreePanel {
           length += prev[i].length();
           i++;
         }
-        UnrestrictedTreeNode[] b = (UnrestrictedTreeNode[]) currentBottom.toArray(U);
+        UnrestrictedTreeNode[] b = currentBottom.toArray(U);
         i--;
         for (int j = 0; j < rhs.length(); j++) {
           UnrestrictedTreeNode node = new UnrestrictedTreeNode("" + rhs.charAt(j));
@@ -129,12 +134,12 @@ public class UnrestrictedTreePanel extends TreePanel {
           nodeToParentGroup.put(node, b);
         }
         bottomList.add(b);
-        topList.add((UnrestrictedTreeNode[]) currentTop.toArray(U));
+        topList.add(currentTop.toArray(U));
         prodNum++;
       }
     }
-    bottom[level - 1] = (UnrestrictedTreeNode[][]) bottomList.toArray(UU);
-    top[level] = (UnrestrictedTreeNode[][]) topList.toArray(UU);
+    bottom[level - 1] = bottomList.toArray(UU);
+    top[level] = topList.toArray(UU);
   }
 
   /**
@@ -333,12 +338,11 @@ public class UnrestrictedTreePanel extends TreePanel {
     if (metaWidth == -1.0) setMetaWidth();
     metaHeight = top.length;
     Point2D p = new Point2D.Double();
-    nodeToPoint = new HashMap();
+    nodeToPoint = new HashMap<UnrestrictedTreeNode, Point2D>();
     for (int l = 0; l <= level; l++) {
       double total = 0.0;
       UnrestrictedTreeNode[][] GG = l < level ? bottom[l] : top[l];
       for (int gr = 0; gr < GG.length && (level != l || gr <= group); gr++) {
-        double x, y;
         UnrestrictedTreeNode[] G = GG[gr];
         if (l <= level - 2 || (l == level - 1 && gr <= group)) {
           // Want the node on the bottom level.
@@ -355,17 +359,17 @@ public class UnrestrictedTreePanel extends TreePanel {
             if (l == G[i].highest) {
               // This group is just starting.
               Point2D point = getPoint(G[i].highest, total + G[i].weight / 2.0, null);
-              Double D = (Double) nodeToParentWeights.get(G[i]);
+              Double D = nodeToParentWeights.get(G[i]);
               if (D != null) {
                 double pweight = D.doubleValue();
                 getPoint(l - 1, pweight, p);
                 g.drawLine((int) point.getX(), (int) point.getY(), (int) p.getX(), (int) p.getY());
               }
               // Draw the brackets.
-              UnrestrictedTreeNode[] parent = (UnrestrictedTreeNode[]) nodeToParentGroup.get(G[i]);
+              UnrestrictedTreeNode[] parent = nodeToParentGroup.get(G[i]);
               if (parent != null && parent.length != 1) {
-                Point2D alpha = (Point2D) nodeToPoint.get(parent[0]);
-                Point2D beta = (Point2D) nodeToPoint.get(parent[parent.length - 1]);
+                Point2D alpha = nodeToPoint.get(parent[0]);
+                Point2D beta = nodeToPoint.get(parent[parent.length - 1]);
                 g.setColor(BRACKET);
                 int radius = (int) DefaultNodeDrawer.NODE_RADIUS;
                 int ax = (int) (alpha.getX() - radius - 3);
@@ -398,17 +402,17 @@ public class UnrestrictedTreePanel extends TreePanel {
             if (l == G[i].highest) {
               // This node is just starting too.
               Point2D point = getPoint(G[i].highest, total + G[i].weight / 2.0, null);
-              Double D = (Double) nodeToParentWeights.get(G[i]);
+              Double D = nodeToParentWeights.get(G[i]);
               if (D != null) {
                 double pweight = D.doubleValue();
                 getPoint(l - 1, pweight, p);
                 g.drawLine((int) point.getX(), (int) point.getY(), (int) p.getX(), (int) p.getY());
               }
               // Draw the brackets.
-              UnrestrictedTreeNode[] parent = (UnrestrictedTreeNode[]) nodeToParentGroup.get(G[i]);
+              UnrestrictedTreeNode[] parent = nodeToParentGroup.get(G[i]);
               if (parent != null && parent.length != 1) {
-                Point2D alpha = (Point2D) nodeToPoint.get(parent[0]);
-                Point2D beta = (Point2D) nodeToPoint.get(parent[parent.length - 1]);
+                Point2D alpha = nodeToPoint.get(parent[0]);
+                Point2D beta = nodeToPoint.get(parent[parent.length - 1]);
                 g.setColor(BRACKET);
                 int radius = (int) DefaultNodeDrawer.NODE_RADIUS;
                 int ax = (int) (alpha.getX() - radius - 3);
@@ -441,11 +445,11 @@ public class UnrestrictedTreePanel extends TreePanel {
       }
     }
     // Do the drawing of the nodes.
-    Iterator it = nodeToPoint.entrySet().iterator();
+    Iterator<Map.Entry<UnrestrictedTreeNode, Point2D>> it = nodeToPoint.entrySet().iterator();
 
     while (it.hasNext()) {
-      Map.Entry e = (Map.Entry) it.next();
-      paintNode(g, ((UnrestrictedTreeNode) e.getKey()), (Point2D) e.getValue());
+      Map.Entry<UnrestrictedTreeNode, Point2D> e = it.next();
+      paintNode(g, (e.getKey()), e.getValue());
     }
   }
 
@@ -552,12 +556,12 @@ public class UnrestrictedTreePanel extends TreePanel {
   protected UnrestrictedTreeNode[][][] bottom = null;
 
   /** The mapping of nodes to the center weight points of parent edges. */
-  protected Map nodeToParentWeights = new HashMap();
+  protected Map<UnrestrictedTreeNode, Double> nodeToParentWeights = new HashMap<UnrestrictedTreeNode, Double>();
 
   /** The mapping of nodes to their parent group. */
-  protected Map nodeToParentGroup = new HashMap();
+  protected Map<UnrestrictedTreeNode, UnrestrictedTreeNode[]> nodeToParentGroup = new HashMap<UnrestrictedTreeNode, UnrestrictedTreeNode[]>();
 
-  protected Map nodeToPoint;
+  protected Map<UnrestrictedTreeNode, Point2D> nodeToPoint;
 
   /** The node drawer. */
   protected DefaultNodeDrawer nodeDrawer = new DefaultNodeDrawer();

@@ -142,5 +142,5 @@ public class MinimizeNodeDrawer extends DefaultNodeDrawer {
   }
 
   /** The map of nodes to labels. */
-  private HashMap labels = new HashMap();
+  private HashMap<TreeNode, String> labels = new HashMap<TreeNode, String>();
 }

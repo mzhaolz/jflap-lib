@@ -23,6 +23,8 @@ import javax.swing.tree.*;
 /**
  * This class does LR parsing. It is a test class only.
  *
+ * An IntStack that has things other than ints? Wtf?
+ *
  * @author Thomas Finley
  */
 public abstract class LRParser {
@@ -55,7 +57,7 @@ public abstract class LRParser {
         return;
       } else if (entry.charAt(0) == 's') {
         // Shift!
-        stack.push(read); // Push the symbol.
+        //stack.push(read); // Push the symbol.
         stack.push(Integer.parseInt(entry.substring(1)));
         p++; // Move to next input symbol.
       } else if (entry.charAt(0) == 'r') {
@@ -64,7 +66,7 @@ public abstract class LRParser {
         Production red = productions[prodNumber];
         for (int i = 0; i < 2 * red.getRHS().length(); i++) stack.pop();
         state = stack.peekInt();
-        stack.push(red.getLHS());
+        //stack.push(red.getLHS());
         stack.push(Integer.parseInt(table.getValueAt(state, red.getLHS())));
         // //System.out.println(red);
       } else if (entry.charAt(0) == 'a') {
@@ -91,7 +93,7 @@ public abstract class LRParser {
     IntStack stack = new IntStack();
     stack.push(0);
     Production[] productions = grammar.getProductions();
-    int nodeNum = 0;
+    //int nodeNum = 0;
     while (true) {
       int state = stack.peekInt();
       String read = "" + string.charAt(p);
@@ -106,45 +108,42 @@ public abstract class LRParser {
         return new DefaultTreeModel(node);
       } else if (entry.charAt(0) == 's') {
         // Shift!
-        TreeNode node = new DefaultMutableTreeNode(read, false);
-        stack.push(node); // Push the symbol.
+        //TreeNode node = new DefaultMutableTreeNode(read, false);
+        //stack.push(node); // Push the symbol.
         stack.push(Integer.parseInt(entry.substring(1)));
         p++; // Move to next input symbol.
       } else if (entry.charAt(0) == 'r') {
         // Reduce!
         int prodNumber = Integer.parseInt(entry.substring(1));
         Production red = productions[prodNumber];
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode(red.getLHS());
+        //DefaultMutableTreeNode node = new DefaultMutableTreeNode(red.getLHS());
         for (int i = 0; i < red.getRHS().length(); i++) {
           stack.pop(); // Pops the state.
-          MutableTreeNode c = (MutableTreeNode) stack.pop();
-          node.insert(c, 0);
+          //MutableTreeNode c = (MutableTreeNode) stack.pop();
+          //node.insert(c, 0);
           // Pops the symbol.
         }
         state = stack.peekInt();
-        stack.push(node);
+        //stack.push(node);
         stack.push(Integer.parseInt(table.getValueAt(state, red.getLHS())));
         // //System.out.println(red);
       } else if (entry.charAt(0) == 'a') {
         // //System.out.println("Acceptance!");
         stack.pop();
-        return new DefaultTreeModel((TreeNode) stack.pop());
+        //return new DefaultTreeModel((TreeNode) stack.pop());
       }
     }
   }
 
-  private static class IntStack extends Stack {
+  private static class IntStack extends Stack<Integer> {
+		private static final long serialVersionUID = 15000L;
     int push(int item) {
       push(new Integer(item));
       return item;
     }
 
-    int popInt() {
-      return ((Integer) pop()).intValue();
-    }
-
     int peekInt() {
-      return ((Integer) peek()).intValue();
+      return peek().intValue();
     }
   }
 }

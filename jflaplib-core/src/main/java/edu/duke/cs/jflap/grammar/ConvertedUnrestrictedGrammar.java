@@ -24,7 +24,6 @@ package edu.duke.cs.jflap.grammar;
 public class ConvertedUnrestrictedGrammar extends Grammar {
 	private static final long serialVersionUID = 1200L;
 
-  private boolean myTuringBool = false;
   /**
    * Every production is all right except those with lambda in the left hand
    * side of the production.
