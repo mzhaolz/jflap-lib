@@ -29,11 +29,11 @@ import edu.duke.cs.jflap.pumping.*;
 public class W1BnW2 extends ContextFreePumpingLemma {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -1655390282899834206L;
+   *
+   */
+  private static final long serialVersionUID = -1655390282899834206L;
 
-public String getTitle() {
+  public String getTitle() {
     return "w1 + b^n + w2 : na(w1) < na(w2) & na(w1) < n, w1 & w2 element_of {ab}*";
   }
 

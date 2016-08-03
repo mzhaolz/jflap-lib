@@ -36,11 +36,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class MinimizeTreeAction extends FSAAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>MinimizeTreeAction</CODE>.
    *
    * @param automaton

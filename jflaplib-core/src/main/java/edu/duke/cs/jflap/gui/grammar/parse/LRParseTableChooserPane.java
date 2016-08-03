@@ -30,11 +30,11 @@ import javax.swing.table.*;
  */
 public class LRParseTableChooserPane extends LRParseTablePane {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new parse table pane.
    *
    * @param table

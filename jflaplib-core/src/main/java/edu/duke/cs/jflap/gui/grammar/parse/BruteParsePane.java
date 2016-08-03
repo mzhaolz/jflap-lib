@@ -294,11 +294,11 @@ public class BruteParsePane extends ParsePane {
   protected Action pauseResumeAction =
       new AbstractAction("Pause") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 7061257043999196412L;
+         *
+         */
+        private static final long serialVersionUID = 7061257043999196412L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           synchronized (parser) {
             if (parser == null) return;
             if (parser.isActive()) parser.pause();

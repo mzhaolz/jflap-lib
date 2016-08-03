@@ -26,11 +26,11 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class AnEven extends RegularPumpingLemma {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 6813155572111784226L;
+   *
+   */
+  private static final long serialVersionUID = 6813155572111784226L;
 
-public String getTitle() {
+  public String getTitle() {
     return "a^n : n is even";
   }
 

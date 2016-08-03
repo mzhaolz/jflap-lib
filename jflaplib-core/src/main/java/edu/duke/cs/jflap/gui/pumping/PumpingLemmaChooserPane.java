@@ -34,10 +34,10 @@ import javax.swing.*;
  */
 public class PumpingLemmaChooserPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * The list of puming lemmas to choose from.
    */
   PumpingLemmaChooser myChooser;
@@ -145,10 +145,10 @@ public class PumpingLemmaChooserPane extends JPanel {
    */
   private class PumpingLemmaChooseButton extends JButton {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	/**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    /**
      * The button's environment.
      */
     private Environment myEnvironment;

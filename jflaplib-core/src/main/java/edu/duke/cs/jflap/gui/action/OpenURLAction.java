@@ -23,11 +23,11 @@ import java.awt.event.ActionEvent;
 public class OpenURLAction extends RestrictedAction {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-public OpenURLAction() {
+  public OpenURLAction() {
     super("Open URL", null);
   }
 

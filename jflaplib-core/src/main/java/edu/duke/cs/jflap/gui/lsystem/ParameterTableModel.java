@@ -26,11 +26,11 @@ import java.util.*;
  */
 public class ParameterTableModel<T> extends GrowableTableModel<T> {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1656054894151911750L;
+   *
+   */
+  private static final long serialVersionUID = 1656054894151911750L;
 
-/**
+  /**
    * Constructs an empty parameter table model.
    */
   public ParameterTableModel() {
@@ -45,10 +45,10 @@ public class ParameterTableModel<T> extends GrowableTableModel<T> {
    */
   public ParameterTableModel(Map<String, String> parameters) {
     this();
-    Iterator<Map.Entry<String,String>> it = parameters.entrySet().iterator();
+    Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
     int i = 0;
     while (it.hasNext()) {
-      Map.Entry<String,String> entry = it.next();
+      Map.Entry<String, String> entry = it.next();
       setValueAt(entry.getKey(), i, 0);
       setValueAt(entry.getValue(), i, 1);
       i++;
@@ -61,7 +61,7 @@ public class ParameterTableModel<T> extends GrowableTableModel<T> {
    * @return an array with two empty strings
    */
   @SuppressWarnings("unchecked")
-public T[] initializeRow(int row) {
+  public T[] initializeRow(int row) {
     return (T[]) new Object[] {"", ""};
   }
 

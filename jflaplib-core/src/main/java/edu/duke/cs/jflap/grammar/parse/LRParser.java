@@ -136,7 +136,8 @@ public abstract class LRParser {
   }
 
   private static class IntStack extends Stack<Integer> {
-		private static final long serialVersionUID = 15000L;
+    private static final long serialVersionUID = 15000L;
+
     int push(int item) {
       push(new Integer(item));
       return item;

@@ -40,11 +40,11 @@ import edu.duke.cs.jflap.automata.State;
  */
 public class NondeterminismAction extends AutomatonAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>NondeterminismAction</CODE>.
    *
    * @param automaton
@@ -89,11 +89,11 @@ public class NondeterminismAction extends AutomatonAction {
    */
   private class NondeterminismPane extends JPanel {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public NondeterminismPane(AutomatonPane ap) {
+    public NondeterminismPane(AutomatonPane ap) {
       super(new BorderLayout());
       ap.addMouseListener(new ArrowDisplayOnlyTool(ap, ap.getDrawer()));
       add(ap, BorderLayout.CENTER);

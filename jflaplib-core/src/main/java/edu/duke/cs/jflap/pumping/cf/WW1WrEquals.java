@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.*;
 public class WW1WrEquals extends ContextFreePumpingLemma {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 9179931471363918962L;
+   *
+   */
+  private static final long serialVersionUID = 9179931471363918962L;
 
-public String getTitle() {
+  public String getTitle() {
     return "w w1 w^R : |w| = |w1|, w & w1 element_of {ab}*";
   }
 

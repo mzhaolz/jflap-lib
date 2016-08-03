@@ -64,11 +64,11 @@ public class FSATransitionCreator extends TableTransitionCreator {
     final FSATransition t = (FSATransition) transition;
     return new AbstractTableModel() {
       /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+       *
+       */
+      private static final long serialVersionUID = 1L;
 
-	public Object getValueAt(int row, int column) {
+      public Object getValueAt(int row, int column) {
         return s;
       }
 

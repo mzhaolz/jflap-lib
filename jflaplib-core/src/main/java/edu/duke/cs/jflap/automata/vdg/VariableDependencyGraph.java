@@ -27,11 +27,11 @@ import edu.duke.cs.jflap.automata.Automaton;
  */
 public class VariableDependencyGraph extends Automaton {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 4142341500255014699L;
+   *
+   */
+  private static final long serialVersionUID = 4142341500255014699L;
 
-/**
+  /**
    * Creates a variable dependency graph with no states and no transitions.
    */
   public VariableDependencyGraph() {

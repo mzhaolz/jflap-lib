@@ -34,11 +34,11 @@ import java.awt.*;
  */
 public class GrammarInputPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates an empty <CODE>GrammarInputPane</CODE>.
    */
   public GrammarInputPane() {

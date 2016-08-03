@@ -33,11 +33,11 @@ import javax.swing.event.*;
  */
 public class LambdaPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new lambda pane.
    *
    * @param environment
@@ -117,11 +117,11 @@ public class LambdaPane extends JPanel {
         new GrammarTable(
             new GrammarTableModel(grammar) {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public boolean isCellEditable(int r, int c) {
+              public boolean isCellEditable(int r, int c) {
                 return false;
               }
             });
@@ -302,11 +302,11 @@ public class LambdaPane extends JPanel {
   AbstractAction doStepAction =
       new AbstractAction("Do Step") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.doStep();
         }
       };
@@ -314,11 +314,11 @@ public class LambdaPane extends JPanel {
   AbstractAction doAllAction =
       new AbstractAction("Do All") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.doAll();
         }
       };
@@ -326,11 +326,11 @@ public class LambdaPane extends JPanel {
   AbstractAction proceedAction =
       new AbstractAction("Proceed") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           edu.duke.cs.jflap.gui.action.GrammarTransformAction.hypothesizeUnit(
               environment, getGrammar());
         }
@@ -339,11 +339,11 @@ public class LambdaPane extends JPanel {
   AbstractAction exportAction =
       new AbstractAction("Export") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           FrameFactory.createFrame(editingGrammarView.getGrammar(grammar.getClass()));
         }
       };
@@ -364,11 +364,11 @@ public class LambdaPane extends JPanel {
   GrammarTableModel editingGrammarModel =
       new GrammarTableModel() {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public boolean isCellEditable(int r, int c) {
+        public boolean isCellEditable(int r, int c) {
           if (controller.step != LambdaController.PRODUCTION_MODIFY) return false;
           if (c == 1) return false;
           if (editingRow == -1) {
@@ -389,11 +389,11 @@ public class LambdaPane extends JPanel {
   AbstractAction deleteAction =
       new AbstractAction("Delete") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           deleteActivated();
         }
       };
@@ -402,11 +402,11 @@ public class LambdaPane extends JPanel {
   AbstractAction completeSelectedAction =
       new AbstractAction("Complete Selected") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           cancelEditing();
           for (int i = 0; i < grammarTable.getRowCount() - 1; i++)
             if (grammarTable.isRowSelected(i)) controller.expandRowProduction(i);

@@ -28,11 +28,11 @@ import java.io.Serializable;
  */
 public class Matrix implements Cloneable, Serializable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new identity matrix.
    */
   public Matrix() {

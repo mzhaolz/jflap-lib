@@ -29,11 +29,11 @@ import java.awt.event.ActionEvent;
  */
 public class LRParseTableAction extends GrammarAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>GrammarOutputAction</CODE>.
    *
    * @param environment

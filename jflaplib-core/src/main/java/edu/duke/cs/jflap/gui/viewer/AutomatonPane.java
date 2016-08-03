@@ -33,6 +33,9 @@ import java.util.List;
 
 import javax.swing.*;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 /**
  * A simple view that draws an automaton.
  *

@@ -28,11 +28,11 @@ import javax.swing.table.AbstractTableModel;
  */
 public class TransitionTableModel extends AbstractTableModel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>TransitionTableModel</CODE>.
    *
    * @param transitions

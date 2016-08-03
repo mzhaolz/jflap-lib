@@ -111,7 +111,7 @@ public class TuringTrimmingTester {
   }
 
   @SuppressWarnings("unused")
-public static void main(String[] args) {
+  public static void main(String[] args) {
     TuringTrimmingTester t = new TuringTrimmingTester("productions.txt");
   }
 }

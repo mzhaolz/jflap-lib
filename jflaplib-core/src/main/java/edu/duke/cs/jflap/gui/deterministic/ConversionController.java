@@ -81,7 +81,8 @@ public class ConversionController {
     State[] s = answer.getStates();
     Transition[] t = answer.getTransitions();
     for (int i = 0; i < s.length; i++) {
-      Set<State> fromNfa = new HashSet<State>(Arrays.asList(getStatesForString(s[i].getLabel(), nfa)));
+      Set<State> fromNfa =
+          new HashSet<State>(Arrays.asList(getStatesForString(s[i].getLabel(), nfa)));
       stateToSet.put(s[i], fromNfa);
       // setToState.put(s[i], fromNfa);
       graph.addVertex(fromNfa, s[i].getPoint());

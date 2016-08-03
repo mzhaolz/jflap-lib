@@ -33,10 +33,10 @@ import edu.duke.cs.jflap.gui.environment.Environment;
  */
 public class LayoutAlgorithmAction extends AutomatonAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * The amount of space it is assumed that the <code>environment</code> will use for menus,
    * buttons, framseBorders, etc.  It is not the shape of a height*width box, but rather it simply
    * stores the relative height and width taken up when starting from the respective borders.
@@ -84,7 +84,7 @@ public class LayoutAlgorithmAction extends AutomatonAction {
     else vertexBuffer = 50;
     AutomatonGraph graph = LayoutAlgorithmFactory.getAutomatonGraph(algorithm, automaton);
     LayoutAlgorithm<State> layout =
-        LayoutAlgorithmFactory.<State> getLayoutAlgorithm(
+        LayoutAlgorithmFactory.<State>getLayoutAlgorithm(
             algorithm,
             new Dimension(
                 (int) environment.getSize().getWidth() - (int) assumedUsedSpace.getWidth(),

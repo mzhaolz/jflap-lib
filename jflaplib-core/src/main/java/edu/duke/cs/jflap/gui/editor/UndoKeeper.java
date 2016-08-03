@@ -24,6 +24,9 @@ import java.util.LinkedList;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class will store the states between actions, that we may undo them.
  * Since there should be one set of states per active window, this class should be instantiated

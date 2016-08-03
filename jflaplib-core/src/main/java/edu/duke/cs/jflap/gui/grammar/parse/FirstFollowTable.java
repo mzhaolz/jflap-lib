@@ -33,11 +33,11 @@ import javax.swing.table.*;
  */
 public class FirstFollowTable extends LeftTable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new first follow table for a grammar.
    *
    * @param grammar
@@ -87,11 +87,11 @@ public class FirstFollowTable extends LeftTable {
    */
   private static class SetsCellRenderer extends DefaultTableCellRenderer {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(
+    public Component getTableCellRendererComponent(
         JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
       JLabel l =
           (JLabel)

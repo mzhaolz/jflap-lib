@@ -29,11 +29,11 @@ import java.util.*;
  */
 public abstract class GrowableTableModel<T> extends AbstractTableModel implements Cloneable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 7046174616169431065L;
+   *
+   */
+  private static final long serialVersionUID = 7046174616169431065L;
 
-/**
+  /**
    * This instantiates a <CODE>GrowableTableModel</CODE>.
    *
    * @param columns
@@ -73,7 +73,7 @@ public abstract class GrowableTableModel<T> extends AbstractTableModel implement
    *            the model to copy
    */
   @SuppressWarnings("unchecked")
-public void copy(GrowableTableModel<T> model) {
+  public void copy(GrowableTableModel<T> model) {
     columns = model.getColumnCount();
     data.clear();
     Iterator<T[]> it = model.data.iterator();
@@ -98,7 +98,7 @@ public void copy(GrowableTableModel<T> model) {
    *         columns with contents set to <CODE>null</CODE>
    */
   @SuppressWarnings("unchecked")
-protected T[] initializeRow(int row) {
+  protected T[] initializeRow(int row) {
     T[] newRow = (T[]) new Object[getColumnCount()];
     Arrays.fill(newRow, null);
     return newRow;

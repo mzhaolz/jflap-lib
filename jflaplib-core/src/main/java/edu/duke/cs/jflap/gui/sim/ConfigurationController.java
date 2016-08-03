@@ -148,7 +148,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
 
         if (configs.length == 0) break; //bit of a hack, but not much time to debug right now.
 
-        List<Configuration> next = ((TMSimulator) simulator).stepBlock((TMConfiguration) configs[0]);
+        List<Configuration> next =
+            ((TMSimulator) simulator).stepBlock((TMConfiguration) configs[0]);
         //MERLIN MERLIN MERLIN MERLIN MERLIN//
         if (next.size() == 0) { //crucial check for rejection
           //System.out.println("Rejected");
@@ -484,7 +485,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
    * no trace window for that configuration, then that trace window no longer
    * exists.
    */
-  private HashMap<Configuration, TraceWindow> configurationToTraceWindow = new HashMap<Configuration, TraceWindow>();
+  private HashMap<Configuration, TraceWindow> configurationToTraceWindow =
+      new HashMap<Configuration, TraceWindow>();
 
   /**
    * This is the set of original configurations when the configuration pane

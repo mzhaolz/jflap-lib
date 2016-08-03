@@ -36,11 +36,11 @@ import javax.swing.JPanel;
  */
 public class LambdaHighlightAction extends AutomatonAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-public LambdaHighlightAction(Automaton automaton, Environment environment) {
+  public LambdaHighlightAction(Automaton automaton, Environment environment) {
     super("Highlight " + Universe.curProfile.getEmptyString() + "-Transitions", null);
     this.automaton = automaton;
     this.environment = environment;
@@ -75,11 +75,11 @@ public LambdaHighlightAction(Automaton automaton, Environment environment) {
    */
   private class LambdaPane extends JPanel {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public LambdaPane(AutomatonPane ap) {
+    public LambdaPane(AutomatonPane ap) {
       super(new BorderLayout());
       add(ap, BorderLayout.CENTER);
       add(

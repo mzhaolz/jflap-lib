@@ -31,11 +31,11 @@ import edu.duke.cs.jflap.automata.Transition;
  */
 public class MooreTransition extends MealyTransition {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 5185452526813901295L;
+   *
+   */
+  private static final long serialVersionUID = 5185452526813901295L;
 
-/**
+  /**
    * Instantiates a new <code>MooreTransition</code> object and changes
    * the output of the state <code>to</code> to <code>output</code>.
    *

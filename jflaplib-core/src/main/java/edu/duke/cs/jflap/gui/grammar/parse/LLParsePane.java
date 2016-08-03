@@ -29,11 +29,11 @@ import edu.duke.cs.jflap.gui.tree.*;
  */
 public class LLParsePane extends ParsePane {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiaes a new LL parse pane.
    *
    * @param environment
@@ -48,11 +48,11 @@ public class LLParsePane extends ParsePane {
     this.table =
         new LLParseTable(table) {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public boolean isCellEditable(int r, int c) {
+          public boolean isCellEditable(int r, int c) {
             return false;
           }
         };

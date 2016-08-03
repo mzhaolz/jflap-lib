@@ -34,13 +34,13 @@ import javax.swing.Icon;
  *
  * @author Thomas Finley
  */
-public class GrammarTableModel  extends GrowableTableModel<Object> {
+public class GrammarTableModel extends GrowableTableModel<Object> {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a <CODE>GrammarTableModel</CODE>.
    */
   public GrammarTableModel() {

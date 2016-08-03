@@ -41,10 +41,10 @@ import javax.swing.tree.TreeNode;
 public class SelectableUnrestrictedTreePanel extends UnrestrictedTreePanel {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-private boolean myClicked = false;
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  private boolean myClicked = false;
   private Point2D myClickedNodePoint;
 
   /**
@@ -72,7 +72,8 @@ private boolean myClicked = false;
       Point2D tempPoint = e.getValue();
       double x2 = tempPoint.getX();
       double y2 = tempPoint.getY();
-      if (Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) <= Math.pow(DefaultNodeDrawer.NODE_RADIUS, 2)) {
+      if (Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)
+          <= Math.pow(DefaultNodeDrawer.NODE_RADIUS, 2)) {
         myClicked = true;
         myClickedNodePoint = new Point2D.Double(x2, y2);
         //		repaint();

@@ -39,19 +39,18 @@ import edu.duke.cs.jflap.automata.Configuration;
  */
 public class ConfigurationPane extends JPanel implements ActionListener {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Creates a <CODE>ConfigurationPane</CODE>. The instance as created has
    * no configurations loaded into it yet.
    *
    * @param automaton
    *            the automaton that configurations will come from
    */
-  public ConfigurationPane(Automaton automaton) {
-  }
+  public ConfigurationPane(Automaton automaton) {}
 
   /**
    * Adds a configuration to the configuration pane.
@@ -321,11 +320,13 @@ public class ConfigurationPane extends JPanel implements ActionListener {
   }
 
   /** The map from configurations to their buttons. */
-  private HashMap<Configuration, ConfigurationButton> configurationToButtonMap = new HashMap<Configuration, ConfigurationButton>();
+  private HashMap<Configuration, ConfigurationButton> configurationToButtonMap =
+      new HashMap<Configuration, ConfigurationButton>();
 
   /** The set of selected configurations. */
   private HashSet<Configuration> selected = new HashSet<Configuration>();
 
   /** The set of listeners to selection events. */
-  private transient HashSet<ConfigurationSelectionListener> selectionListeners = new HashSet<ConfigurationSelectionListener>();
+  private transient HashSet<ConfigurationSelectionListener> selectionListeners =
+      new HashSet<ConfigurationSelectionListener>();
 }

@@ -35,11 +35,11 @@ import javax.swing.plaf.basic.BasicToolTipUI;
  */
 public class JMultiLineToolTip extends JToolTip {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-String tipText;
+  String tipText;
 
   JComponent component;
 

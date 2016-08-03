@@ -35,10 +35,10 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class CasePanel extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * The preferred size of the <code>CasePanel</code>. The width is set
    * to the maximum length of the longest description of any case.
    */
@@ -136,10 +136,10 @@ public class CasePanel extends JPanel {
         new JTable(
             new AbstractTableModel() {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
-			public final String[] COLUMN_NAMES = new String[] {"#", "Description"};
+               *
+               */
+              private static final long serialVersionUID = 1L;
+              public final String[] COLUMN_NAMES = new String[] {"#", "Description"};
 
               public Object getValueAt(int r, int c) {
                 if (c == 0) return Integer.toString(r + 1);

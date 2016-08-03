@@ -163,7 +163,11 @@ public class Renderer {
    *             not set
    */
   public Image render(
-      List<?> symbols, Map<String, String> parameters, Matrix matrix, Graphics2D graphics, Point2D origin) {
+      List<?> symbols,
+      Map<String, String> parameters,
+      Matrix matrix,
+      Graphics2D graphics,
+      Point2D origin) {
     BufferedImage image = null;
     Rectangle2D bounds = new Rectangle2D.Double();
     if (graphics != null && graphics.getClip() == null)
@@ -432,7 +436,6 @@ public class Renderer {
     private boolean pendown;
 
     private boolean forward;
-
   }
 
   /**

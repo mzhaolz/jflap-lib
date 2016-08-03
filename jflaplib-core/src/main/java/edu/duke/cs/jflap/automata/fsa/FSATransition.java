@@ -30,7 +30,7 @@ import edu.duke.cs.jflap.automata.State;
  * @author Thomas Finley
  */
 public class FSATransition extends Transition {
-	private static final long serialVersionUID = 500L;
+  private static final long serialVersionUID = 500L;
   /**
    * Instantiates a new <CODE>FSATransition</CODE> object.
    *

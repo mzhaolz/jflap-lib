@@ -32,7 +32,7 @@ import java.util.*;
 // Oh, I'm just doing fine. Thank you very much. Just very well.
 // Oh, just fine! Thank you. Very well. Mmm-hmm! I'm just...
 public class LSystem implements Serializable {
-	private static final long serialVersionUID = 10000L;
+  private static final long serialVersionUID = 10000L;
   /**
    * Constructs an empty L-System.
    */
@@ -100,7 +100,7 @@ public class LSystem implements Serializable {
     Iterator<Map.Entry<String, List<List<String>>>> it = reps.entrySet().iterator();
     symbolToReplacements = new TreeMap<>();
     @SuppressWarnings("unchecked")
-	List<String>[] emptyListArray = (List<String>[]) new List[0];
+    List<String>[] emptyListArray = (List<String>[]) new List[0];
     while (it.hasNext()) {
       Map.Entry<String, List<List<String>>> entry = it.next();
       List<List<String>> l = entry.getValue();
@@ -175,5 +175,5 @@ public class LSystem implements Serializable {
 
   /** An empty list array. */
   @SuppressWarnings("unchecked")
-private static final List<String>[] EMPTY_LIST = (List<String>[]) new List[0];
+  private static final List<String>[] EMPTY_LIST = (List<String>[]) new List[0];
 }

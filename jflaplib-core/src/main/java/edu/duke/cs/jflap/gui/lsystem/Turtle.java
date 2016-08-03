@@ -32,11 +32,11 @@ import java.util.*;
  */
 class Turtle implements Cloneable, Serializable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a turtle.
    */
   public Turtle() {
@@ -689,11 +689,11 @@ class Turtle implements Cloneable, Serializable {
   public final Point2D position =
       new Point2D.Double(0.0, 0.0) {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void setLocation(double x, double y) {
+        public void setLocation(double x, double y) {
           // This should ensure our bounds are always kept up
           // to date. Excellent...
           oldPosition.setLocation(this);

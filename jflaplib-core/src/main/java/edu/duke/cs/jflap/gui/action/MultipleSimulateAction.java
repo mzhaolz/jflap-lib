@@ -291,7 +291,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
     //Load inputs
     bar.add(
         new AbstractAction("Load Inputs") {
-					private static final long serialVersionUID = 71L;
+          private static final long serialVersionUID = 71L;
 
           public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
@@ -337,7 +337,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
     // Add the running input thing.
     bar.add(
         new AbstractAction("Run Inputs") {
-					private static final long serialVersionUID = 72L;
+          private static final long serialVersionUID = 72L;
+
           public void actionPerformed(ActionEvent e) {
             try {
               // Make sure any recent changes are registered.
@@ -430,7 +431,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
       // Add the clear button.
       bar.add(
           new AbstractAction("Clear") {
-						private static final long serialVersionUID = 73L;
+            private static final long serialVersionUID = 73L;
+
             public void actionPerformed(ActionEvent e) {
               try {
                 // Make sure any recent changes are registered.
@@ -454,7 +456,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
       else if (Universe.curProfile.getEmptyString().equals(Profile.EPSILON)) empty = "Epsilon";
       bar.add(
           new AbstractAction("Enter " + empty /*"Enter Lambda"*/) {
-						private static final long serialVersionUID = 74L;
+            private static final long serialVersionUID = 74L;
+
             public void actionPerformed(ActionEvent e) {
               int row = table.getSelectedRow();
               if (row == -1) return;
@@ -466,7 +469,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
     if (getObject() instanceof Automaton) {
       bar.add(
           new AbstractAction("View Trace") {
-						private static final long serialVersionUID = 75L;
+            private static final long serialVersionUID = 75L;
+
             public void actionPerformed(ActionEvent e) {
               int[] rows = table.getSelectedRows();
               InputTableModel tm = (InputTableModel) table.getModel();
@@ -514,7 +518,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
       bar.add(
           new AbstractAction("Edit File") {
-						private static final long serialVersionUID = 76L;
+            private static final long serialVersionUID = 76L;
+
             public void actionPerformed(ActionEvent arg0) {
               int k = getMachineIndexBySelectedRow(table);
               if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -537,7 +542,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
       bar.add(
           new AbstractAction("Add input string") {
-						private static final long serialVersionUID = 77L;
+            private static final long serialVersionUID = 77L;
+
             public void actionPerformed(ActionEvent arg0) {
               boolean turing = false;
               if (getEnvironment().myObjects.get(0) instanceof TuringMachine) {
@@ -557,8 +563,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
               //add expected output
               if (turing) {
-                Object output =
-                    initialInput(getEnvironment().getActive(), "Expected Output?");
+                Object output = initialInput(getEnvironment().getActive(), "Expected Output?");
 
                 if (output instanceof String) {
                   String s = (String) output;
@@ -575,9 +580,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
               }
               //add expected result
               Object result =
-                  initialInput(
-                      getEnvironment().getActive(),
-                      "Expected Result? (Accept or Reject)");
+                  initialInput(getEnvironment().getActive(), "Expected Result? (Accept or Reject)");
 
               if (result instanceof String) {
                 String s = (String) result;
@@ -600,7 +603,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
       bar.add(
           new AbstractAction("Add file") {
-						private static final long serialVersionUID = 79L;
+            private static final long serialVersionUID = 79L;
+
             public void actionPerformed(ActionEvent arg0) {
               TestAction test = new TestAction();
               test.chooseFile(getEnvironment().getActive(), false);
@@ -611,7 +615,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
       bar.add(
           new AbstractAction("Remove file") {
-						private static final long serialVersionUID = 80L;
+            private static final long serialVersionUID = 80L;
+
             public void actionPerformed(ActionEvent arg0) {
               int k = getMachineIndexBySelectedRow(table);
               if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -634,7 +639,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
       bar.add(
           new AbstractAction("Save Results") {
-						private static final long serialVersionUID = 81L;
+            private static final long serialVersionUID = 81L;
+
             public void actionPerformed(ActionEvent arg0) {
               final JFrame frame = new JFrame("Save Location");
 
@@ -678,8 +684,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
                           if (!badname) {
                             Universe.CHOOSER.setFileFilter(null);
                             Universe.CHOOSER.setDialogTitle("Choose directory to save files in");
-                            Universe.CHOOSER.setFileSelectionMode(
-                                JFileChooser.DIRECTORIES_ONLY);
+                            Universe.CHOOSER.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                             int result = Universe.CHOOSER.showSaveDialog(frame);
                             if (result != JFileChooser.APPROVE_OPTION) break;
                             file = Universe.CHOOSER.getSelectedFile();
@@ -931,7 +936,8 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
    * identify what type of component is active according to its class.
    */
   public class MultiplePane extends JPanel {
-		private static final long serialVersionUID = 99L;
+    private static final long serialVersionUID = 99L;
+
     public MultiplePane(JSplitPane split) {
       super(new BorderLayout());
       add(split, BorderLayout.CENTER);

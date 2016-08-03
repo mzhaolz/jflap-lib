@@ -34,11 +34,12 @@ import javax.swing.filechooser.FileFilter;
  */
 public class SaveGraphGIFAction extends RestrictedAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/** The environment that this save action gets it's object from. */
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /** The environment that this save action gets it's object from. */
   protected Environment environment;
+
   protected JMenu myMenu;
 
   /**

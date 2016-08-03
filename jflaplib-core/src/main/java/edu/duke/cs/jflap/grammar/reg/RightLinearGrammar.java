@@ -27,11 +27,11 @@ import edu.duke.cs.jflap.grammar.ProductionChecker;
  */
 public class RightLinearGrammar extends RegularGrammar {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -382389939198490632L;
+   *
+   */
+  private static final long serialVersionUID = -382389939198490632L;
 
-/**
+  /**
    * The production checker makes sure that the production added is a proper
    * right linear production.
    *
@@ -44,5 +44,4 @@ public class RightLinearGrammar extends RegularGrammar {
     if (!ProductionChecker.isRightLinear(production))
       throw new IllegalArgumentException("The production is not right linear.");
   }
-
 }

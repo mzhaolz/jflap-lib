@@ -28,7 +28,7 @@ import java.util.*;
  * @author Thomas Finley
  */
 public class TMTransition extends Transition {
-	private static final long serialVersionUID = 1000L;
+  private static final long serialVersionUID = 1000L;
 
   //added for turing to grammar conversion
   private int tapes;
@@ -112,12 +112,7 @@ public class TMTransition extends Transition {
    */
   public Transition copy(State from, State to) {
     String[] s = new String[0];
-    return new TMTransition(
-        from,
-        to,
-        toRead.toArray(s),
-        toWrite.toArray(s),
-        direction.toArray(s));
+    return new TMTransition(from, to, toRead.toArray(s), toWrite.toArray(s), direction.toArray(s));
   }
 
   /**

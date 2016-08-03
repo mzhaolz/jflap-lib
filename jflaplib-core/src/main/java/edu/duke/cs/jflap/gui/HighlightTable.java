@@ -36,11 +36,11 @@ import javax.swing.table.TableModel;
  */
 public class HighlightTable extends JTable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -2677814269165786293L;
+   *
+   */
+  private static final long serialVersionUID = -2677814269165786293L;
 
-public HighlightTable() {}
+  public HighlightTable() {}
 
   public HighlightTable(TableModel dm) {
     super(dm);
@@ -176,5 +176,6 @@ public HighlightTable() {}
       };
 
   /** The mapping of single indices to their respective renderers. */
-  private Map<Integer, TableCellRenderer> highlightRenderers = new HashMap<Integer, TableCellRenderer>();
+  private Map<Integer, TableCellRenderer> highlightRenderers =
+      new HashMap<Integer, TableCellRenderer>();
 }

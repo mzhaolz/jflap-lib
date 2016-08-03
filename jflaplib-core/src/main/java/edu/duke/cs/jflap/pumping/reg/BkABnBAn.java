@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.*;
 public class BkABnBAn extends RegularPumpingLemma {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -6541146292359541038L;
+   *
+   */
+  private static final long serialVersionUID = -6541146292359541038L;
 
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>b<sup>k</sup>(ab)<sup>n</sup>(ba)<sup>n</sup></i> : <i>k</i> "
         + GREATER_OR_EQ
         + " 4"

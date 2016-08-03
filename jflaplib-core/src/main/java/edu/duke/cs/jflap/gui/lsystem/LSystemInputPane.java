@@ -38,11 +38,11 @@ import javax.swing.event.*;
  */
 public class LSystemInputPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates an empty <CODE>LSystemInputPane</CODE>.
    */
   public LSystemInputPane() {

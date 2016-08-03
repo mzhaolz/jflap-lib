@@ -39,8 +39,10 @@ import edu.duke.cs.jflap.automata.event.AutomataTransitionListener;
 import edu.duke.cs.jflap.automata.event.AutomataNoteEvent;
 import edu.duke.cs.jflap.automata.event.AutomataNoteListener;
 import edu.duke.cs.jflap.automata.mealy.MooreMachine;
-
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * The automata object is the root class for the representation of all forms of

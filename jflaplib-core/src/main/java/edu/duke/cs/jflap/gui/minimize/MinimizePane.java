@@ -41,11 +41,11 @@ import javax.swing.tree.*;
  */
 public class MinimizePane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 5651430058368644401L;
+   *
+   */
+  private static final long serialVersionUID = 5651430058368644401L;
 
-/**
+  /**
    * Instantiates a <CODE>MinimizePane</CODE>.
    *
    * @param dfa

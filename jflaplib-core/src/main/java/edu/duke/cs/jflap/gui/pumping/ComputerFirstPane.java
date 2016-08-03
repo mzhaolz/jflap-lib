@@ -33,10 +33,10 @@ import edu.duke.cs.jflap.pumping.PumpingLemma;
  */
 public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * The goal of the user, which is to try to force a contradiction.
    */
   private static String OBJECTIVE = "Prevent the computer from finding a valid partition.";

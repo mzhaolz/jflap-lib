@@ -28,10 +28,10 @@ import java.io.Serializable;
  */
 public abstract class RegularPumpingLemma extends PumpingLemma implements Serializable, Cloneable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -872745022331620433L;
-/**
+   *
+   */
+  private static final long serialVersionUID = -872745022331620433L;
+  /**
    * The <i>x</i> segment of the <i>w</i>.
    */
   protected String x;

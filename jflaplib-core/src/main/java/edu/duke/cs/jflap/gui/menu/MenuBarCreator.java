@@ -566,11 +566,11 @@ public class MenuBarCreator {
         menu,
         new AbstractAction("Help...") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             JOptionPane.showMessageDialog(
                 null,
                 "For help, feel free to access the JFLAP tutorial at\n"

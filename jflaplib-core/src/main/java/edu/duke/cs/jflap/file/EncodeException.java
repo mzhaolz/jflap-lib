@@ -25,11 +25,11 @@ package edu.duke.cs.jflap.file;
  */
 public class EncodeException extends RuntimeException {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -4483833205748423210L;
+   *
+   */
+  private static final long serialVersionUID = -4483833205748423210L;
 
-/**
+  /**
    * Creates a generic encoder exception.
    */
   public EncodeException() {

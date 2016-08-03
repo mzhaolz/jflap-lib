@@ -27,11 +27,11 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class WW extends ContextFreePumpingLemma {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -6607037930496485667L;
+   *
+   */
+  private static final long serialVersionUID = -6607037930496485667L;
 
-public String getTitle() {
+  public String getTitle() {
     return "ww : w element_of {ab}*";
   }
 

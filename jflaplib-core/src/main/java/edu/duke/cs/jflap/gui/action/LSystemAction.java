@@ -33,11 +33,11 @@ import javax.swing.Icon;
  */
 public abstract class LSystemAction extends RestrictedAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>LSystemAction</CODE>.
    *
    * @param env

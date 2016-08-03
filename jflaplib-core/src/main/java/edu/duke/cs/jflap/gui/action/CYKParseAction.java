@@ -49,11 +49,11 @@ import javax.swing.JOptionPane;
 public class CYKParseAction extends GrammarAction {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/** The grammar environment. */
+  /** The grammar environment. */
   protected GrammarEnvironment environment;
 
   /** The frame for the grammar environment. */

@@ -48,7 +48,7 @@ public class MooreToolBox implements ToolBox {
    * @return a list of <CODE>Tool</CODE> objects.
    */
   public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
-	List<Tool> list = new ArrayList<Tool>();
+    List<Tool> list = new ArrayList<Tool>();
     list.add(new MooreArrowTool(view, drawer));
     list.add(new MooreStateTool(view, drawer));
     list.add(new TransitionTool(view, drawer));

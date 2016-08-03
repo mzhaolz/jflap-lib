@@ -31,11 +31,11 @@ import javax.swing.table.*;
  */
 public class FirstFollowModel extends AbstractTableModel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>FirstFollowModel</CODE>.
    *
    * @param grammar

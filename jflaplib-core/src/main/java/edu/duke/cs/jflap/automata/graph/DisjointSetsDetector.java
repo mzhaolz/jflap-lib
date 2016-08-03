@@ -107,7 +107,8 @@ public class DisjointSetsDetector {
    * @param list
    *            a list of states
    */
-  private void addAllNotInSetToList(ArrayList<State> toAdd, HashSet<State> set, ArrayList<State> list) {
+  private void addAllNotInSetToList(
+      ArrayList<State> toAdd, HashSet<State> set, ArrayList<State> list) {
     Iterator<State> it = toAdd.iterator();
     while (it.hasNext()) {
       State state = it.next();
@@ -196,7 +197,7 @@ public class DisjointSetsDetector {
    * @return an array of all the disjoint sets of states in <CODE>automaton</CODE>.
    */
   @SuppressWarnings("unchecked")
-public HashSet<State>[] getDisjointSets(Automaton automaton) {
+  public HashSet<State>[] getDisjointSets(Automaton automaton) {
     ArrayList<HashSet<State>> list = new ArrayList<HashSet<State>>();
     STATES_IN_A_SET = new ArrayList<State>();
 

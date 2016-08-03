@@ -34,7 +34,7 @@ import javax.swing.table.AbstractTableModel;
  * @author Thomas Finley
  */
 public class LRParseTable extends AbstractTableModel implements Serializable, Cloneable {
-	private static final long serialVersionUID = 12000L;
+  private static final long serialVersionUID = 12000L;
   /**
    * Instantiates a new LR parse table.
    *

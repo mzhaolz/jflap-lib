@@ -76,7 +76,7 @@ public class CYKTracer {
 
       controller.doStep();
 
-			//TODO: Check that this is fixed once GUI package is fixed.
+      //TODO: Check that this is fixed once GUI package is fixed.
       for (Production production : (HashSet<Production>) controller.getLambdaSet()) {
         directLambdaProductions.put(production.getLHS(), production);
       }

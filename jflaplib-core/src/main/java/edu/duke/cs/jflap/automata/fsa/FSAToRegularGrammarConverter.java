@@ -31,7 +31,8 @@ import java.util.List;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
-
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 /**
  * The FSA to regular grammar converter can be used to convert a finite state
  * automaton into an equivalent regular grammar. The fsa and grammar will be

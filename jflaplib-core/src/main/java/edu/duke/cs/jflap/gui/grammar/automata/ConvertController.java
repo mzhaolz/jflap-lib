@@ -313,13 +313,15 @@ public abstract class ConvertController {
    * If there are no productions for an object, the map will not contain the
    * key.
    */
-  protected HashMap<Serializable, Production[]> objectToProduction = new HashMap<Serializable, Production[]>();
+  protected HashMap<Serializable, Production[]> objectToProduction =
+      new HashMap<Serializable, Production[]>();
 
   /**
    * The mapping of productions to whatever object they correspond to, which
    * will be either a state or a transition.
    */
-  protected HashMap<Production, Serializable> productionToObject = new HashMap<Production, Serializable>();
+  protected HashMap<Production, Serializable> productionToObject =
+      new HashMap<Production, Serializable>();
 
   /** Which objects have already been added? */
   protected HashSet<Object> alreadyDone = new HashSet<Object>();

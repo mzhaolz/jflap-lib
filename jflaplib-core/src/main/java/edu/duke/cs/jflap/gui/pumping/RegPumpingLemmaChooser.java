@@ -29,11 +29,11 @@ import edu.duke.cs.jflap.pumping.reg.*;
  */
 public class RegPumpingLemmaChooser extends PumpingLemmaChooser {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Adds all the regular pumping lemmas.
    *
    */

@@ -27,11 +27,11 @@ import edu.duke.cs.jflap.grammar.*;
  */
 public class ContextFreeGrammar extends Grammar {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -391633005565888029L;
+   *
+   */
+  private static final long serialVersionUID = -391633005565888029L;
 
-/**
+  /**
    * Creates an instance of <CODE>ContextFreeGrammar</CODE>. The created
    * instance has no productions, no terminals, no variables, and specifically
    * no start variable.

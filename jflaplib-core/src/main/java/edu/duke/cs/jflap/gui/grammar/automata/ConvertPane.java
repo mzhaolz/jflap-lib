@@ -37,11 +37,11 @@ import javax.swing.JSplitPane;
  */
 public class ConvertPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>ConvertPane</CODE>.
    */
   public ConvertPane(AutomatonEnvironment environment, Automaton automaton) {
@@ -91,11 +91,11 @@ public class ConvertPane extends JPanel {
       new GrammarTable(
           new edu.duke.cs.jflap.gui.grammar.GrammarTableModel() {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-			public boolean isCellEditable(int r, int c) {
+            public boolean isCellEditable(int r, int c) {
               return false;
             }
           });

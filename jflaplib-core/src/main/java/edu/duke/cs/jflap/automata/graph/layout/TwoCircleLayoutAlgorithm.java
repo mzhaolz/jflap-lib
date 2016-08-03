@@ -157,7 +157,7 @@ public class TwoCircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
    * respectively.
    */
   @SuppressWarnings("unchecked")
-protected void createOuterCircleChains() {
+  protected void createOuterCircleChains() {
     outerCircleChains = (CircleChain<V>[]) new CircleChain[innerCircle.size()];
     int[] chainIndex = new int[outerCircle.size()];
     for (int i = 0; i < outerCircleChains.length; i++)

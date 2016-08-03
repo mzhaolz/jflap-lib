@@ -41,11 +41,11 @@ import javax.swing.table.*;
  */
 public class GrammarViewer extends JTable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 877608254800510232L;
+   *
+   */
+  private static final long serialVersionUID = 877608254800510232L;
 
-/**
+  /**
    * Instantiates a new <CODE>GrammarViewer</CODE>.
    *
    * @param grammar
@@ -171,11 +171,11 @@ public class GrammarViewer extends JTable {
    */
   private class GrammarTableModel extends DefaultTableModel {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -1542867493683971894L;
+     *
+     */
+    private static final long serialVersionUID = -1542867493683971894L;
 
-	public boolean isCellEditable(int row, int column) {
+    public boolean isCellEditable(int row, int column) {
       return false;
     }
 

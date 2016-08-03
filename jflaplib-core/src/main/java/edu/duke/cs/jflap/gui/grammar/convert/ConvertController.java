@@ -79,7 +79,7 @@ class ConvertController {
    *         error occurred
    */
   private Map<Transition, Production> invert(Map<Production, Transition> map) {
-	//TODO: Guavify this
+    //TODO: Guavify this
     Map<Transition, Production> inverse = new HashMap<>();
     for (Production prods : map.keySet()) {
       inverse.put(map.get(prods), prods);

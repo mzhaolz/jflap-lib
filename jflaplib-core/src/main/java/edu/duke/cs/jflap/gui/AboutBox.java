@@ -31,11 +31,11 @@ import java.awt.event.*;
  */
 public class AboutBox extends JWindow {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1931685156030518714L;
+   *
+   */
+  private static final long serialVersionUID = 1931685156030518714L;
 
-/**
+  /**
    * Instantiates a new <TT>AboutBox</TT>.
    *
    * @param owner

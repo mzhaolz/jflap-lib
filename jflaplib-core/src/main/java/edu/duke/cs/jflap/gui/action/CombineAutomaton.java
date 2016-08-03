@@ -34,11 +34,11 @@ import javax.swing.*;
  */
 public class CombineAutomaton extends AutomatonAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new action to combine automatons.
    *
    * @param environment

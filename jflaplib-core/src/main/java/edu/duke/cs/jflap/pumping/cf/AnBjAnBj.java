@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class AnBjAnBj extends ContextFreePumpingLemma {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 8053241957316656330L;
+   *
+   */
+  private static final long serialVersionUID = 8053241957316656330L;
 
-public String getTitle() {
+  public String getTitle() {
     return "a^n b^j a^n b^j : n >= 0, j >= 0";
   }
 

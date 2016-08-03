@@ -37,7 +37,7 @@ public class StateRenamer {
     State[] s = a.getStates();
     int maxId = s.length - 1;
     Set<Integer> untaken = new HashSet<>();
-		Set<State> reassign = new HashSet<>(Arrays.asList(s));
+    Set<State> reassign = new HashSet<>(Arrays.asList(s));
     for (int i = 0; i <= maxId; i++) untaken.add(new Integer(i));
     for (int i = 0; i < s.length; i++)
       if (untaken.remove(new Integer(s[i].getID()))) reassign.remove(s[i]);

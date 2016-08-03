@@ -31,10 +31,10 @@ import edu.duke.cs.jflap.pumping.PumpingLemma;
  */
 public abstract class PumpingLemmaChooser implements Serializable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * The list of pumping lemmas
    */
   protected ArrayList<PumpingLemma> myList;

@@ -31,7 +31,7 @@ import java.io.Serializable;
  * @author Thomas Finley
  */
 public class LLParseTable extends AbstractTableModel implements Serializable, Cloneable {
-	private static final long serialVersionUID = 11000L;
+  private static final long serialVersionUID = 11000L;
   /**
    * Instantiates a new <CODE>LLParseTable</CODE> for a given grammar.
    *
@@ -39,7 +39,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
    *            the grammar to create the table for
    */
   @SuppressWarnings("unchecked")
-public LLParseTable(Grammar grammar) {
+  public LLParseTable(Grammar grammar) {
     variables = grammar.getVariables();
     Arrays.sort(variables);
     terminals = grammar.getTerminals();
@@ -57,12 +57,13 @@ public LLParseTable(Grammar grammar) {
    *            the table to copy
    */
   @SuppressWarnings("unchecked")
-public LLParseTable(LLParseTable table) {
+  public LLParseTable(LLParseTable table) {
     variables = table.variables;
     terminals = table.terminals;
     entries = (SortedSet<String>[][]) new SortedSet[variables.length][terminals.length + 1];
     for (int i = 0; i < entries.length; i++)
-      for (int j = 0; j < entries[i].length; j++) entries[i][j] = new TreeSet<String>(table.entries[i][j]);
+      for (int j = 0; j < entries[i].length; j++)
+        entries[i][j] = new TreeSet<String>(table.entries[i][j]);
   }
 
   /**

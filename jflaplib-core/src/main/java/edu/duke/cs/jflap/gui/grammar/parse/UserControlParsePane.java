@@ -43,11 +43,11 @@ import javax.swing.*;
 public class UserControlParsePane extends BruteParsePane {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/** The parser that is going to be used **/
+  /** The parser that is going to be used **/
   private UserParser myParser;
 
   /** Index of the selected production rule **/
@@ -124,11 +124,11 @@ public class UserControlParsePane extends BruteParsePane {
     myStringJList.setSelectionModel(
         new DefaultListSelectionModel() {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public void setSelectionInterval(int index0, int index1) {
+          public void setSelectionInterval(int index0, int index1) {
             if (isSelectedIndex(index0)) super.removeSelectionInterval(index0, index1);
             else super.addSelectionInterval(index0, index1);
           }
@@ -226,11 +226,11 @@ public class UserControlParsePane extends BruteParsePane {
     myPreviousAction =
         new AbstractAction("Previous") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             previous();
           }
         };

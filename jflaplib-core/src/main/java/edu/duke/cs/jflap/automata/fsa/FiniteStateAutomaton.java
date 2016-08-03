@@ -25,7 +25,7 @@ import edu.duke.cs.jflap.automata.Automaton;
  * @author Thomas Finley
  */
 public class FiniteStateAutomaton extends Automaton {
-	private static final long serialVersionUID = 300L;
+  private static final long serialVersionUID = 300L;
   /**
    * Creates a finite state automaton with no states and no transitions.
    */

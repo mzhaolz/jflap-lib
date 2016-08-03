@@ -24,11 +24,11 @@ import javax.swing.table.TableModel;
 
 public class JTableExtender extends JTable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-public JTableExtender(TableModel model, MultipleSimulateAction mult) {
+  public JTableExtender(TableModel model, MultipleSimulateAction mult) {
     super(model);
     myMultSimAct = mult;
   }

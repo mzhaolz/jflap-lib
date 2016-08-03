@@ -71,6 +71,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
 
   private Grammar myOriginalGrammar;
   private Grammar myCNFGrammar;
+
   public MultipleCYKSimulateAction(Grammar original, Grammar cnf, Environment environment) {
     super(original, environment);
     myOriginalGrammar = original;

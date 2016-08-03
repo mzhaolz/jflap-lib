@@ -38,11 +38,11 @@ import edu.duke.cs.jflap.automata.Transition;
 public class AddTrapStateToDFAAction extends FSAAction {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/** The automaton. */
+  /** The automaton. */
   private Automaton automaton;
 
   /** The environment. */

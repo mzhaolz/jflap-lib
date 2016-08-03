@@ -71,7 +71,12 @@ public class DefaultNodePlacer implements NodePlacer {
    *            the mapping of nodes to points built
    */
   private void setPoints(
-      TreeNode node, int depth, int thisDepth, int[] width, int[] widthSofar, Map<TreeNode, Float> nodeToPoint) {
+      TreeNode node,
+      int depth,
+      int thisDepth,
+      int[] width,
+      int[] widthSofar,
+      Map<TreeNode, Float> nodeToPoint) {
     // Scale points along ([0,1], [0,1]).
     float x = (float) (widthSofar[thisDepth] + 1) / (float) (width[thisDepth] + 1);
     float y = (float) (thisDepth + 1) / (float) (depth + 2);

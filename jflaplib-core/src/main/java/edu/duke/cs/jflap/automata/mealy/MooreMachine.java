@@ -37,10 +37,10 @@ import edu.duke.cs.jflap.automata.State;
  */
 public class MooreMachine extends MealyMachine {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -7904161369858271129L;
-/**
+   *
+   */
+  private static final long serialVersionUID = -7904161369858271129L;
+  /**
    * Map of states (keys) to output (values).
    */
   private Map<State, String> myMap;

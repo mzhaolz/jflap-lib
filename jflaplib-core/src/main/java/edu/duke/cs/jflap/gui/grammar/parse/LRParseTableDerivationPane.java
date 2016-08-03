@@ -39,11 +39,11 @@ import javax.swing.*;
  */
 public class LRParseTableDerivationPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -4943642076082505718L;
+   *
+   */
+  private static final long serialVersionUID = -4943642076082505718L;
 
-/**
+  /**
    * Instantiates a new derivation pane for a grammar environment.
    *
    * @param environment
@@ -87,20 +87,20 @@ public class LRParseTableDerivationPane extends JPanel {
         new GrammarTable(
             new edu.duke.cs.jflap.gui.grammar.GrammarTableModel(augmentedGrammar) {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = -1924821563768876735L;
+               *
+               */
+              private static final long serialVersionUID = -1924821563768876735L;
 
-			public boolean isCellEditable(int r, int c) {
+              public boolean isCellEditable(int r, int c) {
                 return false;
               }
             }) {
           /**
-				 * 
-				 */
-				private static final long serialVersionUID = -2552664496135499191L;
+           *
+           */
+          private static final long serialVersionUID = -2552664496135499191L;
 
-		public String getToolTipText(MouseEvent event) {
+          public String getToolTipText(MouseEvent event) {
             try {
               int row = rowAtPoint(event.getPoint());
               return getGrammarModel().getProduction(row).toString() + " is production " + row;

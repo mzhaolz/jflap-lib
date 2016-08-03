@@ -279,5 +279,5 @@ public class Expander {
 
   /** An empty list. */
   @SuppressWarnings("unchecked")
-protected static final List<String>[] EMPTY_ARRAY = (List<String>[]) new List[0];
+  protected static final List<String>[] EMPTY_ARRAY = (List<String>[]) new List[0];
 }

@@ -151,5 +151,4 @@ public class VertexMover<V> extends LayoutAlgorithm<V> {
     //Finally, shift onto the screen
     shiftOntoScreen(graph, size, vertexDim, true);
   }
-
 }

@@ -34,10 +34,10 @@ import edu.duke.cs.jflap.pumping.PumpingLemma;
  */
 public abstract class HumanFirstPane extends PumpingLemmaInputPane {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * The goal of the user, which is to try to find a valid pumping lemma.
    */
   private static String OBJECTIVE = "Find a valid partition that can be pumped.";

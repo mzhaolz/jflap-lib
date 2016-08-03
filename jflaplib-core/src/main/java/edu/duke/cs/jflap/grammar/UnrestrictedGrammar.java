@@ -24,7 +24,7 @@ package edu.duke.cs.jflap.grammar;
  * @author Thomas Finley
  */
 public class UnrestrictedGrammar extends Grammar {
-	private static final long serialVersionUID = 1700L;
+  private static final long serialVersionUID = 1700L;
 
   /**
    * Every production is all right except those with lambda in the left hand

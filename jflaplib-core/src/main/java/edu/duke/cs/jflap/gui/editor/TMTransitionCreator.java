@@ -124,11 +124,11 @@ public class TMTransitionCreator extends TableTransitionCreator {
     final TMTransition t = (TMTransition) transition;
     return new AbstractTableModel() {
       /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+       *
+       */
+      private static final long serialVersionUID = 1L;
 
-	public Object getValueAt(int row, int column) {
+      public Object getValueAt(int row, int column) {
         return s[row][column];
       }
 
@@ -171,11 +171,11 @@ public class TMTransitionCreator extends TableTransitionCreator {
       directionColumn.setCellEditor(
           new DefaultCellEditor(BOX) {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-			public Component getTableCellEditorComponent(
+            public Component getTableCellEditorComponent(
                 JTable table, Object value, boolean isSelected, int row, int column) {
               final JComboBox<?> c =
                   (JComboBox<?>)
@@ -262,11 +262,11 @@ public class TMTransitionCreator extends TableTransitionCreator {
   private static final Action CHANGE_ACTION =
       new AbstractAction() {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           JComboBox<?> box = (JComboBox<?>) e.getSource();
           box.setSelectedItem(e.getActionCommand().toUpperCase());
         }

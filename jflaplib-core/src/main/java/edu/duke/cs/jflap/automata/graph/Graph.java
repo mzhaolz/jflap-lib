@@ -96,7 +96,7 @@ public class Graph<T> {
 
   /** Returns the list of vertex objects. */
   @SuppressWarnings("unchecked")
-public T[] vertices() {
+  public T[] vertices() {
     return (T[]) verticesToPoints.keySet().toArray();
   }
 

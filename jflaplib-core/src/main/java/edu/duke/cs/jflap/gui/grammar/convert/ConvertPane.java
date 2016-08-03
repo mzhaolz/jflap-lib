@@ -39,11 +39,11 @@ import javax.swing.*;
  */
 public class ConvertPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -5288648720223862725L;
+   *
+   */
+  private static final long serialVersionUID = -5288648720223862725L;
 
-/**
+  /**
    * Instantiates a <CODE>ConvertPane</CODE>.
    *
    * @param grammar
@@ -58,7 +58,10 @@ public class ConvertPane extends JPanel {
    *            the environment to which this pane will be added
    */
   public ConvertPane(
-      Grammar grammar, Automaton automaton, Map<Production, Transition> productionsToTransitions, Environment env) {
+      Grammar grammar,
+      Automaton automaton,
+      Map<Production, Transition> productionsToTransitions,
+      Environment env) {
     this.setLayout(new BorderLayout());
     JSplitPane split = SplitPaneFactory.createSplit(env, true, .4, null, null);
     this.add(split, BorderLayout.CENTER);
@@ -100,44 +103,44 @@ public class ConvertPane extends JPanel {
     bar.add(
         new AbstractAction("Show All") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 976825934777026919L;
+           *
+           */
+          private static final long serialVersionUID = 976825934777026919L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.complete();
           }
         });
     bar.add(
         new AbstractAction("Create Selected") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = -3148925991091992877L;
+           *
+           */
+          private static final long serialVersionUID = -3148925991091992877L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.createForSelected();
           }
         });
     bar.add(
         new AbstractAction("Done?") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 7142173663791405435L;
+           *
+           */
+          private static final long serialVersionUID = 7142173663791405435L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.isDone();
           }
         });
     bar.add(
         new AbstractAction("Export") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 9189517666052681184L;
+           *
+           */
+          private static final long serialVersionUID = 9189517666052681184L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.export();
           }
         });

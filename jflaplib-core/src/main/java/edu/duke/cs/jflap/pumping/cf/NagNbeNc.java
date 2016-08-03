@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class NagNbeNc extends ContextFreePumpingLemma {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -5991854603963403362L;
+   *
+   */
+  private static final long serialVersionUID = -5991854603963403362L;
 
-public String getTitle() {
+  public String getTitle() {
     return "w element_of {abc}* : na(w) > nb(w) = nc(w)";
   }
 

@@ -32,10 +32,10 @@ import java.awt.geom.*;
  */
 public class Canvas extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * A list of labels.
    */
   private ArrayList<Text> myLabelText;

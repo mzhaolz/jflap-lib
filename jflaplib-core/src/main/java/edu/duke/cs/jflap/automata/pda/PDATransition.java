@@ -31,11 +31,11 @@ import edu.duke.cs.jflap.automata.State;
  */
 public class PDATransition extends Transition {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 3490505062662556709L;
+   *
+   */
+  private static final long serialVersionUID = 3490505062662556709L;
 
-/**
+  /**
    * Instantiates a new <CODE>PDATransition</CODE> object.
    *
    * @param from
