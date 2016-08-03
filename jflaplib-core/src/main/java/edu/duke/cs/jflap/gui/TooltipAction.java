@@ -26,11 +26,11 @@ import javax.swing.AbstractAction;
  */
 public abstract class TooltipAction extends AbstractAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-public TooltipAction(String name, String tooltip) {
+  public TooltipAction(String name, String tooltip) {
     super(name);
     putValue(SHORT_DESCRIPTION, tooltip);
   }

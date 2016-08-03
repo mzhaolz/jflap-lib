@@ -65,11 +65,11 @@ public class PDATransitionCreator extends TableTransitionCreator {
     final PDATransition t = (PDATransition) transition;
     return new AbstractTableModel() {
       /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+       *
+       */
+      private static final long serialVersionUID = 1L;
 
-	public Object getValueAt(int row, int column) {
+      public Object getValueAt(int row, int column) {
         return s[column];
       }
 

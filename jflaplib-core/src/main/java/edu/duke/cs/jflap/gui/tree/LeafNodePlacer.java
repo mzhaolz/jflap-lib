@@ -70,7 +70,12 @@ public class LeafNodePlacer implements NodePlacer {
    *            the mapping of nodes to points
    */
   private void setPoints(
-      TreeNode node, int depth, int thisDepth, int leaves, int[] sofar, Map<TreeNode, Float> nodeToPoint) {
+      TreeNode node,
+      int depth,
+      int thisDepth,
+      int leaves,
+      int[] sofar,
+      Map<TreeNode, Float> nodeToPoint) {
     TreeNode[] children = Trees.children(node);
     float y = (float) (thisDepth + 1) / (float) (depth + 2);
     if (children.length == 0) {

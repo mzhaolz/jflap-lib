@@ -26,7 +26,7 @@ import edu.duke.cs.jflap.automata.graph.Graph;
  *
  * @author Chris Morgan
  */
-public class VertexChain<T>{
+public class VertexChain<T> {
   /**
    * List of vertices in the chain.
    */
@@ -115,7 +115,7 @@ public class VertexChain<T>{
    *     If false, to the left.
    */
   @SuppressWarnings("unchecked")
-public void orientSubChain(
+  public void orientSubChain(
       int destIndex, int matchingIndex, int start, int end, boolean shuffleDirection) {
     T[] toMove = (T[]) new Object[end - start + 1];
     int dest, chainSize;

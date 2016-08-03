@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.*;
  */
 public class AnBkCnk extends RegularPumpingLemma {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -2843533645633275259L;
+   *
+   */
+  private static final long serialVersionUID = -2843533645633275259L;
 
-public String getTitle() {
+  public String getTitle() {
     return "a^n b^k c^(n+k) : n >= 0, k >= 0";
   }
 

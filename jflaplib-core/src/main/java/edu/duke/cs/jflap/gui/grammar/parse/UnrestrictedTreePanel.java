@@ -39,11 +39,11 @@ import javax.swing.tree.*;
 public class UnrestrictedTreePanel extends TreePanel {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-private HashMap<String, String> myVariableMap;
+  private HashMap<String, String> myVariableMap;
   /**
    * Instantiates an unrestricted tree panel.
    *
@@ -556,10 +556,12 @@ private HashMap<String, String> myVariableMap;
   protected UnrestrictedTreeNode[][][] bottom = null;
 
   /** The mapping of nodes to the center weight points of parent edges. */
-  protected Map<UnrestrictedTreeNode, Double> nodeToParentWeights = new HashMap<UnrestrictedTreeNode, Double>();
+  protected Map<UnrestrictedTreeNode, Double> nodeToParentWeights =
+      new HashMap<UnrestrictedTreeNode, Double>();
 
   /** The mapping of nodes to their parent group. */
-  protected Map<UnrestrictedTreeNode, UnrestrictedTreeNode[]> nodeToParentGroup = new HashMap<UnrestrictedTreeNode, UnrestrictedTreeNode[]>();
+  protected Map<UnrestrictedTreeNode, UnrestrictedTreeNode[]> nodeToParentGroup =
+      new HashMap<UnrestrictedTreeNode, UnrestrictedTreeNode[]>();
 
   protected Map<UnrestrictedTreeNode, Point2D> nodeToPoint;
 

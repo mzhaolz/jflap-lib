@@ -32,11 +32,11 @@ import javax.swing.table.*;
  */
 public class LLParseTablePane extends LeftTable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new parse table pane for a parse table.
    *
    * @param table
@@ -68,11 +68,11 @@ public class LLParseTablePane extends LeftTable {
    */
   private static class LambdaCellRenderer extends DefaultTableCellRenderer {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(
+    public Component getTableCellRendererComponent(
         JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
       JLabel l =
           (JLabel)

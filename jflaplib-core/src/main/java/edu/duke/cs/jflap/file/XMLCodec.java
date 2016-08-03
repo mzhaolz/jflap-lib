@@ -26,6 +26,8 @@ import org.w3c.dom.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the codec for reading and writing JFLAP structures as XML documents.
@@ -78,7 +80,7 @@ public class XMLCodec extends Codec {
    * @throws ParseException
    *             if there was a problem reading the file
    */
-  public <K, V> Serializable decode(File file, Map<K,V> parameters) {
+  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     try {
       return decode(new FileInputStream(file));
     } catch (FileNotFoundException e) {

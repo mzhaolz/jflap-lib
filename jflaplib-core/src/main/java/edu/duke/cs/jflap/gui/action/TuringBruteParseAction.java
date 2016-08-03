@@ -34,11 +34,11 @@ import java.util.HashMap;
 public class TuringBruteParseAction extends GrammarAction {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/** The grammar environment. */
+  /** The grammar environment. */
   private GrammarEnvironment environment;
 
   private HashMap<String, String> myVariableMap;

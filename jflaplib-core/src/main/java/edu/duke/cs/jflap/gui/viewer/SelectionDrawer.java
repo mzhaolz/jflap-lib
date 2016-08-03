@@ -290,7 +290,9 @@ public class SelectionDrawer extends AutomatonDrawer {
   }
 
   /** The set of selected states, and the set of selected transitions. */
-  private Set<Serializable> selected = new HashSet<Serializable>(), selectedTransitions = new HashSet<Serializable>();
+  private Set<Serializable>
+      selected = new HashSet<Serializable>(),
+      selectedTransitions = new HashSet<Serializable>();
 
   /** The color to draw selected states in. */
   protected static final Color SELECTED_COLOR = StateDrawer.STATE_COLOR.darker().darker();

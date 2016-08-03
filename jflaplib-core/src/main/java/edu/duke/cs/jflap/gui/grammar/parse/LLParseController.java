@@ -37,7 +37,6 @@ class LLParseController {
    */
   public LLParseController(LLParsePane pane) {
     this.pane = pane;
-    productions = pane.grammar.getProductions();
   }
 
   /**

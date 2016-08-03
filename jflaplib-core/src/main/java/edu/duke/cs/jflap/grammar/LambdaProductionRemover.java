@@ -119,7 +119,8 @@ public class LambdaProductionRemover {
    *         are not already in <CODE>lambdaSet</CODE> but belong there
    *         because they have lambda productions (e.g. A->lambda)
    */
-  public static boolean areMoreVariablesWithLambdaProductions(Grammar grammar, Set<String> lambdaSet) {
+  public static boolean areMoreVariablesWithLambdaProductions(
+      Grammar grammar, Set<String> lambdaSet) {
     if (getNewVariableWithLambdaProduction(grammar, lambdaSet) == null) {
       return false;
     }
@@ -201,7 +202,8 @@ public class LambdaProductionRemover {
    *         productions, or that themselves could be reducable to lambda
    *         productions).
    */
-  public static boolean isReducableToLambdaProduction(Production production, Set<String> lambdaSet) {
+  public static boolean isReducableToLambdaProduction(
+      Production production, Set<String> lambdaSet) {
     if (ProductionChecker.areTerminalsOnRHS(production)) return false;
     String[] variables = production.getVariablesOnRHS();
     for (int j = 0; j < variables.length; j++) {
@@ -225,7 +227,8 @@ public class LambdaProductionRemover {
    *         has a lambda production or a production that is reducable to
    *         lambda.
    */
-  public static boolean belongsInLambdaSet(String variable, Grammar grammar, Set<String> lambdaSet) {
+  public static boolean belongsInLambdaSet(
+      String variable, Grammar grammar, Set<String> lambdaSet) {
     if (isVariableWithLambdaProduction(variable, grammar)) return true;
     Production[] productions = GrammarChecker.getProductionsOnVariable(variable, grammar);
     for (int k = 0; k < productions.length; k++) {
@@ -271,7 +274,8 @@ public class LambdaProductionRemover {
    *         belongs there (i.e. a variable that has either a lambda
    *         production or a production that is reducable to lambda).
    */
-  public static String getNewVariableThatBelongsInLambdaSet(Grammar grammar, Set<String> lambdaSet) {
+  public static String getNewVariableThatBelongsInLambdaSet(
+      Grammar grammar, Set<String> lambdaSet) {
     String[] variables = grammar.getVariables();
     for (int k = 0; k < variables.length; k++) {
       if (!isInLambdaSet(variables[k], lambdaSet)

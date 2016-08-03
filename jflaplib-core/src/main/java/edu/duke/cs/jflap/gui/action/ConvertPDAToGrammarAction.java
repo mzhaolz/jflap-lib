@@ -47,11 +47,11 @@ import edu.duke.cs.jflap.automata.pda.PushdownAutomaton;
  */
 public class ConvertPDAToGrammarAction extends ConvertAutomatonToGrammarAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>ConvertFSAToGrammarAction</CODE>.
    *
    * @param environment

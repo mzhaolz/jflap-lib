@@ -235,7 +235,8 @@ public class UselessProductionRemover {
    * @return true if <CODE>variable</CODE> belongs in the set of useful
    *         variables, even if it is already in <CODE>set</CODE>.
    */
-  public static boolean belongsInUsefulVariableSet(String variable, Grammar grammar, Set<String> set) {
+  public static boolean belongsInUsefulVariableSet(
+      String variable, Grammar grammar, Set<String> set) {
     Production[] productions = GrammarChecker.getProductionsOnVariable(variable, grammar);
     for (int k = 0; k < productions.length; k++) {
       if (isUsefulProduction(productions[k], set)) return true;
@@ -255,7 +256,8 @@ public class UselessProductionRemover {
    *         already in the set) that belong in the set of useful variables
    *         <CODE>set</CODE>.
    */
-  public static boolean areMoreVariablesThatBelongInUsefulVariableSet(Grammar grammar, Set<String> set) {
+  public static boolean areMoreVariablesThatBelongInUsefulVariableSet(
+      Grammar grammar, Set<String> set) {
     if (getVariableThatBelongsInUsefulVariableSet(grammar, set) == null) return false;
     return true;
   }
@@ -318,7 +320,8 @@ public class UselessProductionRemover {
   /**
    * Adds <CODE>production</CODE> to <CODE>set</CODE>.
    */
-  public static void addToProductionWithUsefulVariableSet(Production production, Set<Production> set) {
+  public static void addToProductionWithUsefulVariableSet(
+      Production production, Set<Production> set) {
     set.add(production);
   }
 

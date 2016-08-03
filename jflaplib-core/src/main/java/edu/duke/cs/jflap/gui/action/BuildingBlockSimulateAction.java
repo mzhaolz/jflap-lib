@@ -48,11 +48,11 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  */
 public class BuildingBlockSimulateAction extends SimulateAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>NoInteractionSimulateAction</CODE>.
    *
    * @param automaton

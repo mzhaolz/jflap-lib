@@ -59,22 +59,22 @@ public class ItemSetChooser {
     bar.add(
         new AbstractAction("Closure") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             closure();
           }
         });
     bar.add(
         new AbstractAction("Finish") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             finish();
           }
         });

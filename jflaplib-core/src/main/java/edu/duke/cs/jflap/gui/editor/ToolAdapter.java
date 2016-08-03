@@ -33,8 +33,7 @@ public class ToolAdapter extends SuperMouseAdapter {
    * @param pane
    *            the automaton pane this tool adapter is listening to
    */
-  public ToolAdapter(AutomatonPane pane) {
-  }
+  public ToolAdapter(AutomatonPane pane) {}
 
   /**
    * Sets a new adapter to be the adapter.

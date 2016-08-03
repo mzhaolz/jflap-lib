@@ -423,9 +423,7 @@ public class LRParseDerivationController extends LLParseDerivationController {
                     JOptionPane.YES_NO_OPTION);
         Set<Production> initialGotoSet = initialGotoSet();
         Production[] initials =
-            choice == JOptionPane.YES_OPTION
-                ? null
-                : initialGotoSet.toArray(new Production[0]);
+            choice == JOptionPane.YES_OPTION ? null : initialGotoSet.toArray(new Production[0]);
         while (initials == null) {
           initials = itemChooser.getItemSet(initialGotoSet, "Initial Goto Set");
           if (initials != null) break;

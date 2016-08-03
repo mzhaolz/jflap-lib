@@ -37,11 +37,11 @@ import javax.swing.JScrollPane;
  */
 public class TraceWindow extends JFrame {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new step window with the given configuration.
    *
    * @param last
@@ -93,11 +93,11 @@ public class TraceWindow extends JFrame {
   /** The pane that displays the past configurations. */
   public static class PastPane extends JComponent {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public PastPane(Configuration last) {
+    public PastPane(Configuration last) {
       setConfiguration(last);
     }
 

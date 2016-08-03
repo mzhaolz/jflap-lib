@@ -45,11 +45,11 @@ import javax.swing.text.html.HTMLDocument;
 
 public class WebFrame extends JFrame {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * This constructs a new <TT>WebFrame</TT> that initializes its display to
    * the location shown.
    *

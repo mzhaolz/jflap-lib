@@ -31,11 +31,11 @@ import javax.swing.JToolBar;
  */
 class BuilderControlPanel extends JToolBar {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>BuilderControlPanel</CODE>.
    *
    * @param controller
@@ -58,11 +58,11 @@ class BuilderControlPanel extends JToolBar {
         new JButton(
             new TooltipAction("Hint", "Adds one transition.") {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.hint();
               }
             }));
@@ -71,11 +71,11 @@ class BuilderControlPanel extends JToolBar {
         new JButton(
             new TooltipAction("Complete", "Adds all transitions.") {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.complete();
               }
             }));
@@ -84,11 +84,11 @@ class BuilderControlPanel extends JToolBar {
         new JButton(
             new TooltipAction("Done?", "Checks if the automaton is done.") {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.done();
               }
             }));

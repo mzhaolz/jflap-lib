@@ -29,11 +29,11 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
 public class B5Wmod extends RegularPumpingLemma {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -6699257070534522059L;
+   *
+   */
+  private static final long serialVersionUID = -6699257070534522059L;
 
-public String getTitle() {
+  public String getTitle() {
     return "b^5w: w element_of {ab}* : (2na(w) + 5nb(w)) % 3 = 0";
   }
 

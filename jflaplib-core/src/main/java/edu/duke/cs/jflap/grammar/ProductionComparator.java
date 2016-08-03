@@ -26,7 +26,7 @@ import java.util.Comparator;
  * @author Thomas Finley
  */
 public class ProductionComparator implements Comparator<Production> {
-	/**
+  /**
    * Instantiates a comparator, getting the start variable from a given
    * grammar.
    *
@@ -54,7 +54,7 @@ public class ProductionComparator implements Comparator<Production> {
   /**
    * Compares two productions.
    */
-	@Override
+  @Override
   public int compare(Production p1, Production p2) {
     if (start.equals(p1.getLHS())) {
       if (p1.getLHS().equals(p2.getLHS())) return 0;

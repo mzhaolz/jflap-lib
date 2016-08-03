@@ -31,11 +31,11 @@ import edu.duke.cs.jflap.automata.Automaton;
 public class FATestAction extends TestAction {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>Turing Test Action</CODE>.
    */
   public FATestAction() {

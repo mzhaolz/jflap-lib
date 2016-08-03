@@ -41,10 +41,10 @@ import java.awt.Point;
  */
 public class EmptyStringCharacterAction extends RestrictedAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * Instantiates a new <CODE>Turing Test Action</CODE>.
    */
   public EmptyStringCharacterAction() {

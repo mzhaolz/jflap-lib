@@ -63,11 +63,11 @@ import javax.swing.event.ListSelectionListener;
  */
 public class UselessPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new useless production removing pane.
    *
    * @param environment
@@ -162,11 +162,11 @@ public class UselessPane extends JPanel {
         new GrammarTable(
             new GrammarTableModel(grammar) {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public boolean isCellEditable(int r, int c) {
+              public boolean isCellEditable(int r, int c) {
                 return false;
               }
             });
@@ -307,11 +307,11 @@ public class UselessPane extends JPanel {
   AbstractAction doStepAction =
       new AbstractAction("Do Step") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.doStep();
         }
       };
@@ -319,11 +319,11 @@ public class UselessPane extends JPanel {
   AbstractAction doAllAction =
       new AbstractAction("Do All") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.doAll();
         }
       };
@@ -331,11 +331,11 @@ public class UselessPane extends JPanel {
   AbstractAction proceedAction =
       new AbstractAction("Proceed") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           Grammar g = getGrammar();
           if (g == null) {
             JOptionPane.showMessageDialog(
@@ -352,11 +352,11 @@ public class UselessPane extends JPanel {
   AbstractAction exportAction =
       new AbstractAction("Export") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           Grammar g = getGrammar();
           if (g == null) {
             JOptionPane.showMessageDialog(
@@ -380,11 +380,11 @@ public class UselessPane extends JPanel {
   GrammarTableModel editingGrammarModel =
       new GrammarTableModel() {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public boolean isCellEditable(int r, int c) {
+        public boolean isCellEditable(int r, int c) {
           return false;
         }
       };
@@ -396,11 +396,11 @@ public class UselessPane extends JPanel {
   AbstractAction deleteAction =
       new AbstractAction("Delete") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           deleteActivated();
         }
       };

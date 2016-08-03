@@ -420,7 +420,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
 
       java.awt.Point p = new java.awt.Point();
       @SuppressWarnings("unused")
-	boolean hasLocation = true;
+      boolean hasLocation = true;
       Object obj = (e2t).get(NOTE_TEXT_NAME);
       if (obj == null) continue;
       String textString = obj.toString();
@@ -738,5 +738,4 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
 
   /** The tag name for the text of the note elements. */
   public static final String NOTE_TEXT_NAME = "text";
-
 }

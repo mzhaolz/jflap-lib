@@ -47,11 +47,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class ConvertPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Creates a new conversion pane for the conversion of an automaton to a
    * regular expression.
    *
@@ -98,11 +98,11 @@ public class ConvertPane extends JPanel {
         new JButton(
             new AbstractAction("Do It") {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.moveNextStep();
               }
             }));
@@ -110,11 +110,11 @@ public class ConvertPane extends JPanel {
         new JButton(
             new AbstractAction("Export") {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.export();
               }
             }));

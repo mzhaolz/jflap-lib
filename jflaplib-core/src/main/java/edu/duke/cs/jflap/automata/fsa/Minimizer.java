@@ -829,7 +829,7 @@ public class Minimizer {
   /**
    * map of states in minimum dfa to groups of states from non-minimized dfa.
    */
-  protected HashMap<State, State[]>  MAP;
+  protected HashMap<State, State[]> MAP;
 
   /** the trap state added to dfa in order to minimize. */
   protected State TRAP_STATE;

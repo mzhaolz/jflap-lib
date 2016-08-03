@@ -52,10 +52,10 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
  */
 public class TestAction extends RestrictedAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-private JFileChooser fileChooser;
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  private JFileChooser fileChooser;
 
   /**
    * Instantiates a new <CODE>Turing Test Action</CODE>.
@@ -270,7 +270,7 @@ private JFileChooser fileChooser;
   public static Environment openFile(File file, Codec[] codecs, boolean makeFrame) {
     ParseException p = null;
 
-    for (int i = 0; i < codecs.length;) {
+    for (int i = 0; i < codecs.length; ) {
       try {
         //                System.out.println("openFile(File, Codec[], boolean) called");
         Serializable object = codecs[i].decode(file, null);

@@ -16,6 +16,9 @@
 
 package edu.duke.cs.jflap.debug;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 public class EDebug {
   private static final Logger logger = LoggerFactory.getLogger(EDebug.class);
 

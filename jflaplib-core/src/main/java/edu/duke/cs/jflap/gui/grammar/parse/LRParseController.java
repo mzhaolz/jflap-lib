@@ -331,11 +331,11 @@ class LRParseController {
 
   private static class IntStack extends Stack<Object> {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	int push(int item) {
+    int push(int item) {
       push(new Integer(item));
       return item;
     }

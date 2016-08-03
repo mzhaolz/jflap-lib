@@ -32,11 +32,11 @@ import javax.swing.*;
  */
 public class ChomskyPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a Chomsky pane.
    *
    * @param environment
@@ -277,11 +277,11 @@ public class ChomskyPane extends JPanel {
         new GrammarTable(
             new GrammarTableModel(grammar) {
               /**
-				 * 
-				 */
-				private static final long serialVersionUID = 1L;
+               *
+               */
+              private static final long serialVersionUID = 1L;
 
-			public boolean isCellEditable(int r, int c) {
+              public boolean isCellEditable(int r, int c) {
                 return false;
               }
             });
@@ -310,11 +310,11 @@ public class ChomskyPane extends JPanel {
   GrammarTableModel editingGrammarModel =
       new GrammarTableModel() {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public boolean isCellEditable(int r, int c) {
+        public boolean isCellEditable(int r, int c) {
           return false;
         }
       };
@@ -332,11 +332,11 @@ public class ChomskyPane extends JPanel {
   AbstractAction convertAction =
       new AbstractAction("Convert Selected") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           convertSelected();
         }
       };
@@ -345,11 +345,11 @@ public class ChomskyPane extends JPanel {
   AbstractAction doAllAction =
       new AbstractAction("Do All") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           doAll();
         }
       };
@@ -358,11 +358,11 @@ public class ChomskyPane extends JPanel {
   AbstractAction highlightAction =
       new AbstractAction("What's Left?") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           highlightRemaining();
         }
       };
@@ -371,11 +371,11 @@ public class ChomskyPane extends JPanel {
   AbstractAction exportAction =
       new AbstractAction("Export") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           export();
         }
       };

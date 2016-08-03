@@ -46,9 +46,9 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 public class AddTrapStatePane extends JPanel {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * The copy of the original automaton, which will be modified throughout
@@ -97,12 +97,12 @@ public class AddTrapStatePane extends JPanel {
     bar.add(
         new JButton(
             new AbstractAction("Do All") {
-			/**
-				 * 
-				 */
-				private static final long serialVersionUID = 3085654730397188499L;
+              /**
+               *
+               */
+              private static final long serialVersionUID = 3085654730397188499L;
 
-			public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.doAll();
               }
             }));

@@ -28,10 +28,10 @@ import java.util.*;
  */
 public abstract class PumpingLemma implements Serializable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -5006082787532388783L;
-/**
+   *
+   */
+  private static final long serialVersionUID = -5006082787532388783L;
+  /**
    * Tag for when the computer goes first.
    */
   public static final String COMPUTER = "Computer";

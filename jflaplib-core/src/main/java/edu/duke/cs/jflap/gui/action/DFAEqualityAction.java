@@ -36,11 +36,11 @@ import edu.duke.cs.jflap.automata.graph.FSAEqualityChecker;
  */
 public class DFAEqualityAction extends FSAAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>DFAEqualityAction</CODE>.
    *
    * @param automaton

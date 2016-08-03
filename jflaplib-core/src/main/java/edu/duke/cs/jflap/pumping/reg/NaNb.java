@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class NaNb extends RegularPumpingLemma {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1706121984502776649L;
+   *
+   */
+  private static final long serialVersionUID = 1706121984502776649L;
 
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>w</i> "
         + ELEMENT_OF
         + " "

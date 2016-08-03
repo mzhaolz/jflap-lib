@@ -130,7 +130,8 @@ public class Operations {
     // Make every follow mapping empty for now.
     String[] variables = grammar.getVariables();
     for (int i = 0; i < variables.length; i++)
-      if (!variables[i].equals(grammar.getStartVariable())) follow.put(variables[i], new HashSet<>());
+      if (!variables[i].equals(grammar.getStartVariable()))
+        follow.put(variables[i], new HashSet<>());
     // Get the first sets.
     Map<String, Set<String>> firstSets = first(grammar);
     // Iterate repeatedly over the productions until we're
@@ -386,7 +387,8 @@ public class Operations {
    * The cached variables to productions maps, maps from grammars to maps from
    * variables to productions on that variable.
    */
-  private static WeakHashMap<Grammar, Map<String, Set<Production>>> CACHED_VPMAP = new WeakHashMap<>();
+  private static WeakHashMap<Grammar, Map<String, Set<Production>>> CACHED_VPMAP =
+      new WeakHashMap<>();
 
   /** The terminal used to indicate the position in an item. */
   public static final char ITEM_POSITION = '\u00B7';

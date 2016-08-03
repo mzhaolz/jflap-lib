@@ -189,9 +189,9 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
       while (it.hasNext()) {
         PDAConfiguration configuration = (PDAConfiguration) it.next();
         List<? extends Configuration> configsToAdd = stepConfiguration(configuration);
-				for (Configuration config : configsToAdd) {
-					configurationsToAdd.add((PDAConfiguration) config);
-				}
+        for (Configuration config : configsToAdd) {
+          configurationsToAdd.add((PDAConfiguration) config);
+        }
         it.remove();
         count++;
         if (count > 10000) {

@@ -30,11 +30,11 @@ import javax.swing.JOptionPane;
  */
 public class SetUndoAmountAction extends RestrictedAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>SetUndoAmountAction</CODE>.
    *
    * @param environment

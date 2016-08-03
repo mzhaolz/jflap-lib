@@ -30,11 +30,11 @@ import javax.swing.JOptionPane;
  */
 public class NewHelpAction extends HelpAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates an <CODE>EnvironmentHelpAction</CODE>.
    */
   public NewHelpAction() {}

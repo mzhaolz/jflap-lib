@@ -26,10 +26,10 @@ import edu.duke.cs.jflap.automata.Automaton;
  */
 public class PushdownAutomaton extends Automaton {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -4694673281116724215L;
-public boolean singleInputPDA = false;
+   *
+   */
+  private static final long serialVersionUID = -4694673281116724215L;
+  public boolean singleInputPDA = false;
 
   /**
    * Creates a pushdown automaton with no states and no transitions.

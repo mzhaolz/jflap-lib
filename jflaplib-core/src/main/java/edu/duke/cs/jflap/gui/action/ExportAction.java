@@ -22,6 +22,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 import java.io.*;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.svggen.SVGGeneratorContext;
+import org.apache.batik.swing.svg.SVGFileFilter;
 import org.w3c.dom.Document;
 
 /**
@@ -33,11 +37,11 @@ import org.w3c.dom.Document;
  */
 public class ExportAction extends RestrictedAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>ExportAction</CODE>.
    * @param environment
    */

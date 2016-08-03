@@ -51,11 +51,11 @@ public abstract class LRParseTableGenerator {
     LRParseTable pt =
         new LRParseTable(grammar, gotoGraph) {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = -5184185403146892760L;
+           *
+           */
+          private static final long serialVersionUID = -5184185403146892760L;
 
-		public boolean isCellEditable(int row, int column) {
+          public boolean isCellEditable(int row, int column) {
             return false;
           }
         };

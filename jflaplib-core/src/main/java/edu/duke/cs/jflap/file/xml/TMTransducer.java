@@ -76,7 +76,8 @@ public class TMTransducer extends AutomatonTransducer {
    *            elements to text from {@link #elementsToText}
    * @return the new transition
    */
-  protected Transition createTransition(State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
+  protected Transition createTransition(
+      State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     TuringMachine tm = (TuringMachine) from.getAutomaton();
     int tapes = tm.tapes();
     String[]

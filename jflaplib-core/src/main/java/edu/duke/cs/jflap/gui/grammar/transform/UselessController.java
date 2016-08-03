@@ -310,7 +310,9 @@ public class UselessController {
    * The set of productions that should comprise the grammar, those that
    * currently do, and those that should be removed.
    */
-  Set<Production> currentProductions = new HashSet<Production>(), uselessProductions = new HashSet<Production>();
+  Set<Production>
+      currentProductions = new HashSet<Production>(),
+      uselessProductions = new HashSet<Production>();
 
   /** The current step. */
   int step = 0;

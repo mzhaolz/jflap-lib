@@ -50,11 +50,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class ConvertToAutomatonPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Creates a new conversion pane for the conversion of a regular expression
    * to an automaton.
    *
@@ -144,11 +144,11 @@ public class ConvertToAutomatonPane extends JPanel {
   AbstractAction doStepAction =
       new AbstractAction("Do Step") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.completeStep();
         }
       };
@@ -156,11 +156,11 @@ public class ConvertToAutomatonPane extends JPanel {
   AbstractAction doAllAction =
       new AbstractAction("Do All") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.completeAll();
         }
       };
@@ -168,11 +168,11 @@ public class ConvertToAutomatonPane extends JPanel {
   AbstractAction exportAction =
       new AbstractAction("Export") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.export();
         }
       };
@@ -180,11 +180,11 @@ public class ConvertToAutomatonPane extends JPanel {
   AbstractAction exportAction2 =
       new AbstractAction("Export Now") {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+         *
+         */
+        private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
           controller.exportToTab();
         }
       };

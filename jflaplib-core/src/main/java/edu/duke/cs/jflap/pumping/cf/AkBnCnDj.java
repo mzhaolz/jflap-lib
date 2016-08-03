@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.*;
 public class AkBnCnDj extends ContextFreePumpingLemma {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -7823242644145426440L;
+   *
+   */
+  private static final long serialVersionUID = -7823242644145426440L;
 
-public String getTitle() {
+  public String getTitle() {
     return "a^k b^n c^n d^j : j != k";
   }
 

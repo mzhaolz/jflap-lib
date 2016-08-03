@@ -39,11 +39,11 @@ import edu.duke.cs.jflap.debug.EDebug;
  */
 public class GrammarTable extends HighlightTable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a <CODE>GrammarTable</CODE> with an empty grammar.
    */
   public GrammarTable() {
@@ -163,11 +163,11 @@ public class GrammarTable extends HighlightTable {
    */
   private static class LambdaCellRenderer extends DefaultTableCellRenderer {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(
+    public Component getTableCellRendererComponent(
         JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
       JLabel l =
           (JLabel)

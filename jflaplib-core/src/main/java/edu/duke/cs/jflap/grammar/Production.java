@@ -32,7 +32,7 @@ import java.util.TreeSet;
  * @author Ryan Cavalcante
  */
 public class Production implements Serializable {
-	private static final long serialVersionUID = 110L;
+  private static final long serialVersionUID = 110L;
   /**
    * Creates an instance of <CODE>Production</CODE>.
    *

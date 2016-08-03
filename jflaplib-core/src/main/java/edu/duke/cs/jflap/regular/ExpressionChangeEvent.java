@@ -25,11 +25,11 @@ import java.util.EventObject;
  */
 public class ExpressionChangeEvent extends EventObject {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 8094984580797690783L;
+   *
+   */
+  private static final long serialVersionUID = 8094984580797690783L;
 
-/**
+  /**
    * Instantiates a change event.
    *
    * @param expression

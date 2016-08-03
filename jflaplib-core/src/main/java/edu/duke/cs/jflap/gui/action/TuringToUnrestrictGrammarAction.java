@@ -32,11 +32,11 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
 public class TuringToUnrestrictGrammarAction extends ConvertAutomatonToGrammarAction {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-public TuringToUnrestrictGrammarAction(AutomatonEnvironment automatonEnvironment) {
+  public TuringToUnrestrictGrammarAction(AutomatonEnvironment automatonEnvironment) {
     super("Convert to Unrestricted Grammar", automatonEnvironment);
     // TODO Auto-generated constructor stub
   }

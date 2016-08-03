@@ -49,11 +49,11 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  */
 public class ConversionPane extends JPanel {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 2853526626829551932L;
+   *
+   */
+  private static final long serialVersionUID = 2853526626829551932L;
 
-/**
+  /**
    * Instantiates a new <CODE>ConversionPane</CODE>.
    *
    * @param nfa
@@ -118,22 +118,22 @@ public class ConversionPane extends JPanel {
     toolbar.add(
         new TooltipAction("Complete", "This will finish all expansion.") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1587659531575512768L;
+           *
+           */
+          private static final long serialVersionUID = 1587659531575512768L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.complete();
           }
         });
     toolbar.add(
         new TooltipAction("Done?", "Are we finished?") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = -3054950168721834336L;
+           *
+           */
+          private static final long serialVersionUID = -3054950168721834336L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.done();
           }
         });

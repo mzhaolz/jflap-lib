@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.pumping.LemmaMath;
 public class AB2n extends RegularPumpingLemma {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -391351138185176935L;
+   *
+   */
+  private static final long serialVersionUID = -391351138185176935L;
 
-public String getTitle() {
+  public String getTitle() {
     return "(ab)^2n : n = 1,2,...";
   }
 

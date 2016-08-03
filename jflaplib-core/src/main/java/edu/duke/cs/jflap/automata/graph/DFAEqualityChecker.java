@@ -54,7 +54,9 @@ public class DFAEqualityChecker {
         return false;
     }
 
-    Map<String, Transition> labelToTrans1 = new HashMap<String, Transition>(), labelToTrans2 = new HashMap<String, Transition>();
+    Map<String, Transition>
+        labelToTrans1 = new HashMap<String, Transition>(),
+        labelToTrans2 = new HashMap<String, Transition>();
     Transition[] t1 = state1.getAutomaton().getTransitionsFromState(state1);
     Transition[] t2 = state2.getAutomaton().getTransitionsFromState(state2);
     // If they're not even the same length...

@@ -195,8 +195,8 @@ public class SimulateAction extends AutomatonAction {
             File f = null;
             if (retval == JFileChooser.APPROVE_OPTION) {
               f = ourChooser.getSelectedFile();
-              try (Scanner sc = new Scanner(f)){
-                
+              try (Scanner sc = new Scanner(f)) {
+
                 if (tapes != 0) {
                   String[] input = new String[tapes];
                   for (int i = 0; i < tapes; i++) {

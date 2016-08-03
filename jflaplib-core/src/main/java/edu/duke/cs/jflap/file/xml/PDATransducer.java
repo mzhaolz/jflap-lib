@@ -62,7 +62,8 @@ public class PDATransducer extends AutomatonTransducer {
    *            elements to text from {@link #elementsToText}
    * @return the new transition
    */
-  protected Transition createTransition(State from, State to, Node node, Map<String, String> e2t, boolean bool) {
+  protected Transition createTransition(
+      State from, State to, Node node, Map<String, String> e2t, boolean bool) {
     String read = (String) e2t.get(TRANSITION_READ_NAME);
     String pop = (String) e2t.get(TRANSITION_POP_NAME);
     String push = (String) e2t.get(TRANSITION_PUSH_NAME);

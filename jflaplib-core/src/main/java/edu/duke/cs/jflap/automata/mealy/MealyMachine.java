@@ -27,11 +27,11 @@ import edu.duke.cs.jflap.automata.Automaton;
  */
 public class MealyMachine extends Automaton {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 8772972310960249224L;
+   *
+   */
+  private static final long serialVersionUID = 8772972310960249224L;
 
-/**
+  /**
    * Creates a Mealy machine with no states or transitions.
    *
    */

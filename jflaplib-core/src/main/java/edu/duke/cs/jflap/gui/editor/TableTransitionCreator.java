@@ -94,11 +94,11 @@ public abstract class TableTransitionCreator extends TransitionCreator {
     JTable table =
         new JTable(createModel(transition)) {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public TableCellRenderer getCellRenderer(int r, int c) {
+          public TableCellRenderer getCellRenderer(int r, int c) {
             return renders[c];
           }
 
@@ -288,11 +288,11 @@ public abstract class TableTransitionCreator extends TransitionCreator {
   /** The cell renderer. */
   private static class TipLambdaCellRenderer extends LambdaCellRenderer {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public TipLambdaCellRenderer(String replace, String tip) {
+    public TipLambdaCellRenderer(String replace, String tip) {
       super(replace);
       setToolTipText(tip);
     }

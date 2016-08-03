@@ -167,7 +167,7 @@ public class GEMLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
        * if ((i+1) % (vArray.length - isovertices.size()) == 0)
        * component.paintImmediately(component.getBounds());
        */
-    	}
+    }
 
     //Finally, shift all points onto the screen.
     shiftOntoScreen(graph, size, vertexDim, true);

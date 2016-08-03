@@ -19,6 +19,8 @@ package edu.duke.cs.jflap.grammar;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import java.io.Serializable;
 import java.util.*;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * The grammar object is the root class for the representation of all forms of
@@ -29,7 +31,7 @@ import java.util.*;
  * @author Ryan Cavalcante
  */
 public abstract class Grammar implements Serializable, Cloneable {
-	private static final long serialVersionUID = 100L;
+  private static final long serialVersionUID = 100L;
   private final Logger logger = LoggerFactory.getLogger(Grammar.class);
 
   /**
@@ -420,5 +422,4 @@ public abstract class Grammar implements Serializable, Cloneable {
 
   /** Set of Production rules. */
   protected List<Production> myProductions = new ArrayList<>();
-	
 }

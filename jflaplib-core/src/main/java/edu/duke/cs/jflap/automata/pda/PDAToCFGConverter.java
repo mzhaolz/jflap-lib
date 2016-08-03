@@ -235,7 +235,8 @@ public class PDAToCFGConverter {
    * @return a list of productions created for <CODE>transition</CODE>, a
    *         transition that pushes TWO characters on the stack.
    */
-  public List<Production> getProductionsForPushTwoTransition(Transition transition, Automaton automaton) {
+  public List<Production> getProductionsForPushTwoTransition(
+      Transition transition, Automaton automaton) {
     List<Production> list = new ArrayList<>();
     String fromState = transition.getFromState().getName();
     String toState = transition.getToState().getName();
@@ -322,7 +323,8 @@ public class PDAToCFGConverter {
    *            the automaton that transition is a part of.
    * @return a list of productions.
    */
-  public List<Production> createProductionsForTransition(Transition transition, Automaton automaton) {
+  public List<Production> createProductionsForTransition(
+      Transition transition, Automaton automaton) {
     List<Production> list = new ArrayList<>();
     if (isPushLambdaTransition(transition)) {
       list.addAll(getProductionsForPushLambdaTransition(transition, automaton));
@@ -502,7 +504,7 @@ public class PDAToCFGConverter {
     //Next, delete all superfluous rows and make note of those capital-letter variable
     //assignments that are freed up in a new map.
     HashMap<String, String> newMap = new HashMap<>();
-    HashSet<String>  freeValues = new HashSet<>();
+    HashSet<String> freeValues = new HashSet<>();
     String key;
     for (int i = 0; i < 26; i++) freeValues.add("" + (char) ('A' + i));
     for (int i = validProductions.length - 1; i >= 0; i--)

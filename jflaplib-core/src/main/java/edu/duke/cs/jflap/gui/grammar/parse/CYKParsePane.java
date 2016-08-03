@@ -48,11 +48,11 @@ import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;
 public class CYKParsePane extends BruteParsePane {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/** The parser that is going to be used **/
+  /** The parser that is going to be used **/
   private CYKParser myParser;
 
   /** The action for the stepping control. */
@@ -251,11 +251,11 @@ public class CYKParsePane extends BruteParsePane {
     myStepAction =
         new AbstractAction("Step") {
           /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+           *
+           */
+          private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             stepForward();
           }
         };

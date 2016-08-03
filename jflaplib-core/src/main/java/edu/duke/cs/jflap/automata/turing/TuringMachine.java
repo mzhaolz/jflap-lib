@@ -33,6 +33,9 @@ import java.io.File;
 import edu.duke.cs.jflap.gui.action.OpenAction;
 import javax.swing.JButton;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
 /**
  * This subclass of <CODE>Automaton</CODE> is specifically for a definition of
  * a Turing machine, possibly with multiple tapes.
@@ -43,11 +46,11 @@ import javax.swing.JButton;
  */
 public class TuringMachine extends Automaton {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = -297306935840189114L;
+   *
+   */
+  private static final long serialVersionUID = -297306935840189114L;
 
-private static final Logger logger = LoggerFactory.getLogger(TuringMachine.class);
+  private static final Logger logger = LoggerFactory.getLogger(TuringMachine.class);
   /**
    * Creates a 1-tape Turing machine with no states and no transitions.
    */

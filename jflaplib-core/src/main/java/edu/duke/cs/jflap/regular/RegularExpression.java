@@ -27,11 +27,11 @@ import java.lang.ref.Reference;
  */
 public class RegularExpression implements Serializable {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 3838500080597257761L;
+   *
+   */
+  private static final long serialVersionUID = 3838500080597257761L;
 
-/**
+  /**
    * Instantiates a blank regular expression.
    */
   public RegularExpression() {
@@ -241,7 +241,8 @@ public class RegularExpression implements Serializable {
   private String string;
 
   /** The set of objects that are regular expressions. */
-  private transient Set<ExpressionChangeListener> listeners = new HashSet<ExpressionChangeListener>();
+  private transient Set<ExpressionChangeListener> listeners =
+      new HashSet<ExpressionChangeListener>();
 
   /** The referrence object that holds the change. */
   private Reference<?> reference = null;

@@ -23,6 +23,9 @@ import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This is an abstract implementation of a transducer that implements very
  * common methods that will be used by many documents.

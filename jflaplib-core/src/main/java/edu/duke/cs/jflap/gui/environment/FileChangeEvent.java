@@ -32,11 +32,11 @@ import java.io.File;
  */
 public class FileChangeEvent extends EventObject {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>FileChangeEvent</CODE>.
    *
    * @param environment

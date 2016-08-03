@@ -66,10 +66,10 @@ public class MealyTransitionCreator extends TableTransitionCreator {
     final MealyTransition t = (MealyTransition) transition;
     return new AbstractTableModel() {
       /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-	String s[] = new String[] {t.getLabel(), t.getOutput()};
+       *
+       */
+      private static final long serialVersionUID = 1L;
+      String s[] = new String[] {t.getLabel(), t.getOutput()};
 
       public Object getValueAt(int r, int c) {
         return s[c];

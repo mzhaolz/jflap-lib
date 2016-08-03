@@ -77,7 +77,8 @@ public class LayoutAlgorithmFactory {
    */
   public static <V> LayoutAlgorithm<V> getRandomLayoutAlgorithm() {
     Random random = new Random();
-    return LayoutAlgorithmFactory.<V> getLayoutAlgorithm(Math.abs(random.nextInt() % NUM_ALGORITHMS));
+    return LayoutAlgorithmFactory.<V>getLayoutAlgorithm(
+        Math.abs(random.nextInt() % NUM_ALGORITHMS));
   }
 
   /**
@@ -148,7 +149,7 @@ public class LayoutAlgorithmFactory {
       int algorithm, Dimension pSize, Dimension vDim, double vBuffer) {
     switch (algorithm) {
       case RANDOM_CHOICE:
-        return LayoutAlgorithmFactory.<V> getRandomLayoutAlgorithm(pSize, vDim, vBuffer);
+        return LayoutAlgorithmFactory.<V>getRandomLayoutAlgorithm(pSize, vDim, vBuffer);
       case CIRCLE:
         return new CircleLayoutAlgorithm<V>(pSize, vDim, vBuffer);
       case GEM:

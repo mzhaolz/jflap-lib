@@ -31,11 +31,11 @@ import javax.swing.KeyStroke;
  */
 public class CloseWindowAction extends RestrictedAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a <CODE>CloseWindowAction</CODE>.
    *
    * @param frame

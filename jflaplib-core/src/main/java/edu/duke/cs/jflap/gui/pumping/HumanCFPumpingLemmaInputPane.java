@@ -31,10 +31,10 @@ import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
  */
 public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * The <code>SliderPanel</code> that controls <i>u</i> of the decomposition.
    */
   private SliderPanel myUPanel;

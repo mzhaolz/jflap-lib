@@ -30,11 +30,11 @@ import java.awt.event.ActionEvent;
  */
 public class MultipleBruteParseAction extends GrammarAction {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/**
+  /**
    * Instantiates a new <CODE>BruteParseAction</CODE>.
    *
    * @param environment

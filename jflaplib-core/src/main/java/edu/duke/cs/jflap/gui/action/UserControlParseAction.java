@@ -33,11 +33,11 @@ import java.awt.event.ActionEvent;
 public class UserControlParseAction extends GrammarAction {
 
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-/** The grammar environment. */
+  /** The grammar environment. */
   private GrammarEnvironment environment;
 
   /**

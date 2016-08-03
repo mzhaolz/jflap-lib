@@ -31,10 +31,10 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
   /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-/**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /**
    * Creates a <code>HumanRegPumpingInputPane</code> for a <code>RegularPumpingLemma</code>.
    *
    * @param l the <code>RegularPumpingLemma</code> we want to run
