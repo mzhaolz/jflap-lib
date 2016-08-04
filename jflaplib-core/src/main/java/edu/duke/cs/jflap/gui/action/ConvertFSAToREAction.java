@@ -32,49 +32,52 @@ import javax.swing.JOptionPane;
  * @author Thomas Finley
  */
 public class ConvertFSAToREAction extends FSAAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>ConvertFSAToREAction</CODE>.
-     *
-     * @param environment
-     *            the environment
-     */
-    public ConvertFSAToREAction(AutomatonEnvironment environment) {
-        super("Convert FA to RE", null);
-        this.environment = environment;
+  /**
+   * Instantiates a new <CODE>ConvertFSAToREAction</CODE>.
+   *
+   * @param environment
+   *            the environment
+   */
+  public ConvertFSAToREAction(AutomatonEnvironment environment) {
+    super("Convert FA to RE", null);
+    this.environment = environment;
+  }
+
+  /**
+   * This method begins the process of converting an automaton to a regular
+   * expression.
+   *
+   * @param event
+   *            the action event
+   */
+  public void actionPerformed(ActionEvent event) {
+    JFrame frame = Universe.frameForEnvironment(environment);
+    if (environment.getAutomaton().getInitialState() == null) {
+      JOptionPane.showMessageDialog(
+          frame,
+          "Conversion requires an automaton\nwith an initial state!",
+          "No Initial State",
+          JOptionPane.ERROR_MESSAGE);
+      return;
     }
-
-    /**
-     * This method begins the process of converting an automaton to a regular
-     * expression.
-     *
-     * @param event
-     *            the action event
-     */
-    public void actionPerformed(ActionEvent event) {
-        JFrame frame = Universe.frameForEnvironment(environment);
-        if (environment.getAutomaton().getInitialState() == null) {
-            JOptionPane.showMessageDialog(frame,
-                    "Conversion requires an automaton\nwith an initial state!", "No Initial State",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (environment.getAutomaton().getFinalStates().length == 0) {
-            JOptionPane.showMessageDialog(frame,
-                    "Conversion requires at least\n" + "one final state!", "No Final States",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        ConvertPane pane = new ConvertPane(environment);
-        environment.add(pane, "Convert FA to RE", new CriticalTag() {
-        });
-        environment.setActive(pane);
+    if (environment.getAutomaton().getFinalStates().length == 0) {
+      JOptionPane.showMessageDialog(
+          frame,
+          "Conversion requires at least\n" + "one final state!",
+          "No Final States",
+          JOptionPane.ERROR_MESSAGE);
+      return;
     }
+    ConvertPane pane = new ConvertPane(environment);
+    environment.add(pane, "Convert FA to RE", new CriticalTag() {});
+    environment.setActive(pane);
+  }
 
-    /** The automaton environment. */
-    private AutomatonEnvironment environment;
+  /** The automaton environment. */
+  private AutomatonEnvironment environment;
 }

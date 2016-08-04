@@ -25,31 +25,31 @@ import edu.duke.cs.jflap.automata.Automaton;
  * @author Ryan Cavalcante
  */
 public class PushdownAutomaton extends Automaton {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -4694673281116724215L;
-    public boolean singleInputPDA = false;
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4694673281116724215L;
+  public boolean singleInputPDA = false;
 
-    /**
-     * Creates a pushdown automaton with no states and no transitions.
-     */
-    public PushdownAutomaton(boolean singleinput) {
-        super();
-        singleInputPDA = singleinput;
-    }
+  /**
+   * Creates a pushdown automaton with no states and no transitions.
+   */
+  public PushdownAutomaton(boolean singleinput) {
+    super();
+    singleInputPDA = singleinput;
+  }
 
-    public PushdownAutomaton() {
-        super();
-    }
+  public PushdownAutomaton() {
+    super();
+  }
 
-    /**
-     * Returns the class of <CODE>Transition</CODE> this automaton must accept.
-     *
-     * @return the <CODE>Class</CODE> object for
-     *         <CODE>automata.pda.PDATransition</CODE>
-     */
-    protected Class<PDATransition> getTransitionClass() {
-        return edu.duke.cs.jflap.automata.pda.PDATransition.class;
-    }
+  /**
+   * Returns the class of <CODE>Transition</CODE> this automaton must accept.
+   *
+   * @return the <CODE>Class</CODE> object for
+   *         <CODE>automata.pda.PDATransition</CODE>
+   */
+  protected Class<PDATransition> getTransitionClass() {
+    return edu.duke.cs.jflap.automata.pda.PDATransition.class;
+  }
 }

@@ -29,5 +29,4 @@ package edu.duke.cs.jflap.gui.environment.tag;
  *
  * @author Thomas Finley
  */
-public interface CriticalTag extends Tag {
-}
+public interface CriticalTag extends Tag {}

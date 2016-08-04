@@ -35,102 +35,98 @@ import java.util.EventObject;
  * @author Thomas Finley
  */
 public class AutomataStateEvent extends EventObject {
-    private static final long serialVersionUID = 10L;
+  private static final long serialVersionUID = 10L;
 
-    /**
-     * Instantiates a new <CODE>AutomataStateEvent</CODE>.
-     *
-     * @param auto
-     *            the <CODE>Automaton</CODE> that generated the event
-     * @param region
-     *            the <CODE>State</CODE> that was added or removed
-     * @param add
-     *            <CODE>true</CODE> if state added
-     * @param move
-     *            <CODE>true</CODE> if the state was merely moved
-     * @param label
-     *            <CODE>true</CODE> if the state was only changed in such a
-     *            fashion as
-     */
-    public AutomataStateEvent(Automaton auto,
-            State state,
-            boolean add,
-            boolean move,
-            boolean label) {
-        super(auto);
-        myState = state;
-        myAdd = add;
-        myMove = move;
-        myLabel = label;
-    }
+  /**
+   * Instantiates a new <CODE>AutomataStateEvent</CODE>.
+   *
+   * @param auto
+   *            the <CODE>Automaton</CODE> that generated the event
+   * @param region
+   *            the <CODE>State</CODE> that was added or removed
+   * @param add
+   *            <CODE>true</CODE> if state added
+   * @param move
+   *            <CODE>true</CODE> if the state was merely moved
+   * @param label
+   *            <CODE>true</CODE> if the state was only changed in such a
+   *            fashion as
+   */
+  public AutomataStateEvent(Automaton auto, State state, boolean add, boolean move, boolean label) {
+    super(auto);
+    myState = state;
+    myAdd = add;
+    myMove = move;
+    myLabel = label;
+  }
 
-    /**
-     * Returns the <CODE>Automaton</CODE> that generated this event.
-     *
-     * @return the <CODE>Automaton</CODE> that generated this event
-     */
-    public Automaton getAutomaton() {
-        return (Automaton) getSource();
-    }
+  /**
+   * Returns the <CODE>Automaton</CODE> that generated this event.
+   *
+   * @return the <CODE>Automaton</CODE> that generated this event
+   */
+  public Automaton getAutomaton() {
+    return (Automaton) getSource();
+  }
 
-    /**
-     * Returns the <CODE>State</CODE> that was added/removed.
-     *
-     * @return the <CODE>State</CODE> that was added/removed
-     */
-    public State getState() {
-        return myState;
-    }
+  /**
+   * Returns the <CODE>State</CODE> that was added/removed.
+   *
+   * @return the <CODE>State</CODE> that was added/removed
+   */
+  public State getState() {
+    return myState;
+  }
 
-    /**
-     * Returns if this was an add.
-     *
-     * @return <CODE>true</CODE> if this event indicates the addition of a
-     *         state, <CODE>false</CODE> otherwise
-     */
-    public boolean isAdd() {
-        return myAdd;
-    }
+  /**
+   * Returns if this was an add.
+   *
+   * @return <CODE>true</CODE> if this event indicates the addition of a
+   *         state, <CODE>false</CODE> otherwise
+   */
+  public boolean isAdd() {
+    return myAdd;
+  }
 
-    /**
-     * Returns if this was a move.
-     *
-     * @return <CODE>true</CODE> if this event indicates the mere moving of a
-     *         state, <CODE>false</CODE> otherwise
-     */
-    public boolean isMove() {
-        return myMove;
-    }
+  /**
+   * Returns if this was a move.
+   *
+   * @return <CODE>true</CODE> if this event indicates the mere moving of a
+   *         state, <CODE>false</CODE> otherwise
+   */
+  public boolean isMove() {
+    return myMove;
+  }
 
-    /**
-     * Returns if this was a label change.
-     *
-     * @return <CODE>true</CODE> if this event indicates the mere relabeling of
-     *         a state, <CODE>false</CODE> otherwise
-     */
-    public boolean isLabel() {
-        return myLabel;
-    }
+  /**
+   * Returns if this was a label change.
+   *
+   * @return <CODE>true</CODE> if this event indicates the mere relabeling of
+   *         a state, <CODE>false</CODE> otherwise
+   */
+  public boolean isLabel() {
+    return myLabel;
+  }
 
-    /**
-     * Returns if this was a delete of a state.
-     *
-     * @return <CODE>true</CODE> if this event was the deletion of a state,
-     *         false otherwise
-     */
-    public boolean isDelete() {
-        return !(myMove || myAdd || myLabel);
-    }
+  /**
+   * Returns if this was a delete of a state.
+   *
+   * @return <CODE>true</CODE> if this event was the deletion of a state,
+   *         false otherwise
+   */
+  public boolean isDelete() {
+    return !(myMove || myAdd || myLabel);
+  }
 
-    /** Was this an add? */
-    private boolean myAdd;
+  /** Was this an add? */
+  private boolean myAdd;
 
-    /** Was this a move? */
-    private boolean myMove;
+  /** Was this a move? */
+  private boolean myMove;
 
-    /** Was the label for the state changed? */
-    public boolean myLabel;
+  /** Was the label for the state changed? */
+  public boolean myLabel;
 
-    /** Which state did we add/remove? */
-    private State myState;
+  /** Which state did we add/remove? */
+  private State myState;
 }

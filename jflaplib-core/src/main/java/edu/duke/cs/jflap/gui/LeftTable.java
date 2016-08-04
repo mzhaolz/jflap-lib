@@ -30,30 +30,30 @@ import javax.swing.table.TableModel;
  * @author Thomas Finley
  */
 public class LeftTable extends HighlightTable {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    public LeftTable() {
-        initView();
-    }
+  public LeftTable() {
+    initView();
+  }
 
-    public LeftTable(TableModel model) {
-        super(model);
-        initView();
-    }
+  public LeftTable(TableModel model) {
+    super(model);
+    initView();
+  }
 
-    /**
-     * Makes the leftmost column's data cells have renderers the same as the
-     * table column headers.
-     */
-    private void initView() {
-        setGridColor(Color.lightGray);
-        TableColumn column = getColumnModel().getColumn(0);
-        // column.setCellRenderer(column.getHeaderRenderer());
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-        renderer.setBackground(new Color(200, 200, 200));
-        column.setCellRenderer(renderer);
-    }
+  /**
+   * Makes the leftmost column's data cells have renderers the same as the
+   * table column headers.
+   */
+  private void initView() {
+    setGridColor(Color.lightGray);
+    TableColumn column = getColumnModel().getColumn(0);
+    // column.setCellRenderer(column.getHeaderRenderer());
+    DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+    renderer.setBackground(new Color(200, 200, 200));
+    column.setCellRenderer(renderer);
+  }
 }

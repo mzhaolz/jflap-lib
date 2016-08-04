@@ -26,11 +26,11 @@ import java.util.EventListener;
  * @see edu.duke.cs.jflap.gui.lsystem.LSystemInputPane
  */
 public interface LSystemInputListener extends EventListener {
-    /**
-     * Registers with the listener that the user has changed the L-system.
-     *
-     * @param event
-     *            the event
-     */
-    public void lSystemChanged(LSystemInputEvent event);
+  /**
+   * Registers with the listener that the user has changed the L-system.
+   *
+   * @param event
+   *            the event
+   */
+  public void lSystemChanged(LSystemInputEvent event);
 }

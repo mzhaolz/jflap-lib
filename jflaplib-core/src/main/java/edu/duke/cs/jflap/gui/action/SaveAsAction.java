@@ -33,47 +33,48 @@ import javax.swing.KeyStroke;
  * @author Thomas Finley
  */
 public class SaveAsAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>SaveAction</CODE>.
-     *
-     * @param environment
-     *            the environment that holds the serializable object
-     */
-    public SaveAsAction(Environment environment) {
-        super("Save As...", null);
-        putValue(ACCELERATOR_KEY,
-                KeyStroke.getKeyStroke(KeyEvent.VK_S, MAIN_MENU_MASK + InputEvent.SHIFT_MASK));
-        this.environment = environment;
-    }
+  /**
+   * Instantiates a new <CODE>SaveAction</CODE>.
+   *
+   * @param environment
+   *            the environment that holds the serializable object
+   */
+  public SaveAsAction(Environment environment) {
+    super("Save As...", null);
+    putValue(
+        ACCELERATOR_KEY,
+        KeyStroke.getKeyStroke(KeyEvent.VK_S, MAIN_MENU_MASK + InputEvent.SHIFT_MASK));
+    this.environment = environment;
+  }
 
-    /**
-     * If a save was attempted, call the methods that handle the saving of the
-     * serializable object to a file.
-     *
-     * @param event
-     *            the action event
-     */
-    public void actionPerformed(ActionEvent event) {
-        Universe.frameForEnvironment(environment).save(true);
-    }
+  /**
+   * If a save was attempted, call the methods that handle the saving of the
+   * serializable object to a file.
+   *
+   * @param event
+   *            the action event
+   */
+  public void actionPerformed(ActionEvent event) {
+    Universe.frameForEnvironment(environment).save(true);
+  }
 
-    /**
-     * This action is restricted to those objects that are serializable.
-     *
-     * @param object
-     *            the object to check for serializable-ness
-     * @return <CODE>true</CODE> if the object is an instance of a serializable
-     *         object, <CODE>false</CODE> otherwise
-     */
-    public static boolean isApplicable(Object object) {
-        return object instanceof Serializable;
-    }
+  /**
+   * This action is restricted to those objects that are serializable.
+   *
+   * @param object
+   *            the object to check for serializable-ness
+   * @return <CODE>true</CODE> if the object is an instance of a serializable
+   *         object, <CODE>false</CODE> otherwise
+   */
+  public static boolean isApplicable(Object object) {
+    return object instanceof Serializable;
+  }
 
-    /** The environment that this save action gets it's object from. */
-    protected Environment environment;
+  /** The environment that this save action gets it's object from. */
+  protected Environment environment;
 }

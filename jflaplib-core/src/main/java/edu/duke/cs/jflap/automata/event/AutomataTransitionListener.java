@@ -26,11 +26,11 @@ import java.util.EventListener;
  * @see edu.duke.cs.jflap.automata.Automaton#addTransitionListener
  */
 public interface AutomataTransitionListener extends EventListener {
-    /**
-     * Registers with the listener that an event has occurred.
-     *
-     * @param event
-     *            the event
-     */
-    public void automataTransitionChange(AutomataTransitionEvent event);
+  /**
+   * Registers with the listener that an event has occurred.
+   *
+   * @param event
+   *            the event
+   */
+  public void automataTransitionChange(AutomataTransitionEvent event);
 }

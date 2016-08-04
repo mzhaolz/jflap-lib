@@ -26,14 +26,14 @@ import edu.duke.cs.jflap.automata.Transition;
  * @author Ryan Cavalcante
  */
 public class TMLambdaTransitionChecker extends LambdaTransitionChecker {
-    /**
-     * Returns true if <CODE>transition</CODE> is a lambda transition
-     *
-     * @param transition
-     *            the transition
-     * @return true if <CODE>transition</CODE> is a lambda transition
-     */
-    public boolean isLambdaTransition(Transition transition) {
-        return false;
-    }
+  /**
+   * Returns true if <CODE>transition</CODE> is a lambda transition
+   *
+   * @param transition
+   *            the transition
+   * @return true if <CODE>transition</CODE> is a lambda transition
+   */
+  public boolean isLambdaTransition(Transition transition) {
+    return false;
+  }
 }

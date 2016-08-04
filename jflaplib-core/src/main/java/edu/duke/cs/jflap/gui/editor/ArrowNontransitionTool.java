@@ -28,32 +28,32 @@ import java.awt.event.MouseEvent;
  * @author Thomas Finley
  */
 public class ArrowNontransitionTool extends ArrowTool {
-    /**
-     * Instantiates a new <CODE>ArrowNontransitionTool</CODE>.
-     *
-     * @param view
-     *            the view the automaton is drawn in
-     * @param drawer
-     *            the automaton drawer
-     */
-    public ArrowNontransitionTool(AutomatonPane view, AutomatonDrawer drawer) {
-        super(view, drawer);
-    }
+  /**
+   * Instantiates a new <CODE>ArrowNontransitionTool</CODE>.
+   *
+   * @param view
+   *            the view the automaton is drawn in
+   * @param drawer
+   *            the automaton drawer
+   */
+  public ArrowNontransitionTool(AutomatonPane view, AutomatonDrawer drawer) {
+    super(view, drawer);
+  }
 
-    /**
-     * On a mouse click, this simply returns,
-     *
-     * @param event
-     *            the mouse event
+  /**
+   * On a mouse click, this simply returns,
+   *
+   * @param event
+   *            the mouse event
+   */
+  public void mouseClicked(MouseEvent event) {
+    return;
+    /*
+     * if (event.getClickCount() == 2) return; super.mouseClicked(event);
      */
-    public void mouseClicked(MouseEvent event) {
-        return;
-        /*
-         * if (event.getClickCount() == 2) return; super.mouseClicked(event);
-         */
-    }
+  }
 
-    protected boolean shouldShowStatePopup() {
-        return false;
-    }
+  protected boolean shouldShowStatePopup() {
+    return false;
+  }
 }

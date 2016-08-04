@@ -28,49 +28,49 @@ import javax.swing.JOptionPane;
 
 /**
  * Multiple CYK Parse Action class
- * 
+ *
  * @author Kyung Min (Jason) Lee
  *
  */
 public class MultipleCYKParseAction extends CYKParseAction {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>BruteParseAction</CODE>.
-     *
-     * @param environment
-     *            the grammar environment
-     */
-    public MultipleCYKParseAction(GrammarEnvironment environment) {
-        super("Multiple CYK Parse", environment);
-        this.environment = environment;
-        this.frame = Universe.frameForEnvironment(environment);
-    }
+  /**
+   * Instantiates a new <CODE>BruteParseAction</CODE>.
+   *
+   * @param environment
+   *            the grammar environment
+   */
+  public MultipleCYKParseAction(GrammarEnvironment environment) {
+    super("Multiple CYK Parse", environment);
+    this.environment = environment;
+    this.frame = Universe.frameForEnvironment(environment);
+  }
 
-    /**
-     * Performs the action.
-     */
-    public void actionPerformed(ActionEvent e) {
-        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-        myGrammar = g;
-        if (g == null)
-            return;
-        if (g.getTerminals().length == 0) {
-            JOptionPane.showMessageDialog(environment,
-                    "Error : This grammar does not accept any Strings. ", "Cannot Proceed with CYK",
-                    JOptionPane.ERROR_MESSAGE);
-            myErrorInTransform = true;
-            return;
-        }
-        hypothesizeLambda(environment, g);
-        if (!myErrorInTransform) {
-            MultipleCYKSimulateAction mult = new MultipleCYKSimulateAction(g, myGrammar,
-                    environment);
-            mult.performAction((Component) e.getSource());
-        }
+  /**
+   * Performs the action.
+   */
+  public void actionPerformed(ActionEvent e) {
+    Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+    myGrammar = g;
+    if (g == null) return;
+    if (g.getTerminals().length == 0) {
+      JOptionPane.showMessageDialog(
+          environment,
+          "Error : This grammar does not accept any Strings. ",
+          "Cannot Proceed with CYK",
+          JOptionPane.ERROR_MESSAGE);
+      myErrorInTransform = true;
+      return;
     }
+    hypothesizeLambda(environment, g);
+    if (!myErrorInTransform) {
+      MultipleCYKSimulateAction mult = new MultipleCYKSimulateAction(g, myGrammar, environment);
+      mult.performAction((Component) e.getSource());
+    }
+  }
 }

@@ -30,35 +30,33 @@ import java.awt.event.ActionEvent;
  * @author Thomas Finley
  */
 public class GrammarTestAction extends GrammarAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>GrammarOutputAction</CODE>.
-     *
-     * @param environment
-     *            the grammar environment
-     */
-    public GrammarTestAction(GrammarEnvironment environment) {
-        super("Grammar Test", null);
-        this.environment = environment;
-    }
+  /**
+   * Instantiates a new <CODE>GrammarOutputAction</CODE>.
+   *
+   * @param environment
+   *            the grammar environment
+   */
+  public GrammarTestAction(GrammarEnvironment environment) {
+    super("Grammar Test", null);
+    this.environment = environment;
+  }
 
-    /**
-     * Performs the action.
-     */
-    public void actionPerformed(ActionEvent e) {
-        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-        if (g == null)
-            return;
-        ChomskyPane cp = new ChomskyPane(environment, g);
-        environment.add(cp, "Test", new CriticalTag() {
-        });
-        environment.setActive(cp);
-    }
+  /**
+   * Performs the action.
+   */
+  public void actionPerformed(ActionEvent e) {
+    Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+    if (g == null) return;
+    ChomskyPane cp = new ChomskyPane(environment, g);
+    environment.add(cp, "Test", new CriticalTag() {});
+    environment.setActive(cp);
+  }
 
-    /** The grammar environment. */
-    private GrammarEnvironment environment;
+  /** The grammar environment. */
+  private GrammarEnvironment environment;
 }

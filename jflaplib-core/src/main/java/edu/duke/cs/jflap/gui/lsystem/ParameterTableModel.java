@@ -28,84 +28,83 @@ import java.util.TreeMap;
  * @author Thomas Finley
  */
 public class ParameterTableModel<T> extends GrowableTableModel<T> {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1656054894151911750L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1656054894151911750L;
 
-    /**
-     * Constructs an empty parameter table model.
-     */
-    public ParameterTableModel() {
-        super(2);
-    }
+  /**
+   * Constructs an empty parameter table model.
+   */
+  public ParameterTableModel() {
+    super(2);
+  }
 
-    /**
-     * Constructs a parameter table model out of the map.
-     *
-     * @param parameters
-     *            the mapping of parameter names to parameter objects
-     */
-    public ParameterTableModel(Map<String, String> parameters) {
-        this();
-        Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
-        int i = 0;
-        while (it.hasNext()) {
-            Map.Entry<String, String> entry = it.next();
-            setValueAt(entry.getKey(), i, 0);
-            setValueAt(entry.getValue(), i, 1);
-            i++;
-        }
+  /**
+   * Constructs a parameter table model out of the map.
+   *
+   * @param parameters
+   *            the mapping of parameter names to parameter objects
+   */
+  public ParameterTableModel(Map<String, String> parameters) {
+    this();
+    Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
+    int i = 0;
+    while (it.hasNext()) {
+      Map.Entry<String, String> entry = it.next();
+      setValueAt(entry.getKey(), i, 0);
+      setValueAt(entry.getValue(), i, 1);
+      i++;
     }
+  }
 
-    /**
-     * Initializes a row. In this object, a row is two empty strings.
-     *
-     * @return an array with two empty strings
-     */
-    @SuppressWarnings("unchecked")
-    public T[] initializeRow(int row) {
-        return (T[]) new Object[] { "", "" };
-    }
+  /**
+   * Initializes a row. In this object, a row is two empty strings.
+   *
+   * @return an array with two empty strings
+   */
+  @SuppressWarnings("unchecked")
+  public T[] initializeRow(int row) {
+    return (T[]) new Object[] {"", ""};
+  }
 
-    /**
-     * Returns the mapping of names of parameters.
-     *
-     * @return the mapping from parameter names to parameters (i.e., map of
-     *         contents of the left column to contents of the right column)
-     */
-    public Map<T, T> getParameters() {
-        TreeMap<T, T> map = new TreeMap<>();
-        for (int i = 0; i < getRowCount() - 1; i++) {
-            T o = getValueAt(i, 0);
-            if (o.equals(""))
-                continue;
-            map.put(o, getValueAt(i, 1));
-        }
-        return map;
+  /**
+   * Returns the mapping of names of parameters.
+   *
+   * @return the mapping from parameter names to parameters (i.e., map of
+   *         contents of the left column to contents of the right column)
+   */
+  public Map<T, T> getParameters() {
+    TreeMap<T, T> map = new TreeMap<>();
+    for (int i = 0; i < getRowCount() - 1; i++) {
+      T o = getValueAt(i, 0);
+      if (o.equals("")) continue;
+      map.put(o, getValueAt(i, 1));
     }
+    return map;
+  }
 
-    /**
-     * Values in the table are editable.
-     *
-     * @param row
-     *            the row index
-     * @param column
-     *            the column index
-     * @return <CODE>true</CODE> always
-     */
-    public boolean isCellEditable(int row, int column) {
-        return true;
-    }
+  /**
+   * Values in the table are editable.
+   *
+   * @param row
+   *            the row index
+   * @param column
+   *            the column index
+   * @return <CODE>true</CODE> always
+   */
+  public boolean isCellEditable(int row, int column) {
+    return true;
+  }
 
-    /**
-     * Returns the column name.
-     *
-     * @param column
-     *            the index of the column
-     * @return the name of a particular column
-     */
-    public String getColumnName(int column) {
-        return column == 0 ? "Name" : "Parameter";
-    }
+  /**
+   * Returns the column name.
+   *
+   * @param column
+   *            the index of the column
+   * @return the name of a particular column
+   */
+  public String getColumnName(int column) {
+    return column == 0 ? "Name" : "Parameter";
+  }
 }

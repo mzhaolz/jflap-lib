@@ -30,30 +30,28 @@ import java.util.Set;
  * @author Thomas Finley
  */
 public class StateRenamer {
-    /**
-     * Renames the states for an automaton, by changing all the ID numbers so
-     * that all the ID numbers go from 0 up without interruption in the numeric
-     * sequence. This will modify the automaton passed in.
-     *
-     * @param a
-     *            the automaton to change the IDs of the states
-     */
-    public static void rename(Automaton a) {
-        List<State> s = a.getStates();
-        int maxId = s.size() - 1;
-        Set<Integer> untaken = new HashSet<>();
-        Set<State> reassign = new HashSet<>(s);
-        for (int i = 0; i <= maxId; i++)
-            untaken.add(new Integer(i));
-        for (int i = 0; i < s.size(); i++)
-            if (untaken.remove(new Integer(s.get(i).getID())))
-                reassign.remove(s.get(i));
-        // Now untaken has the untaken IDs, and reassign has the
-        // states that need reassigning.
-        s = Lists.newArrayList(reassign);
-        Iterator<Integer> it = untaken.iterator();
-        for (int i = 0; i < s.size(); i++) {
-            s.get(i).setID(it.next().intValue());
-        }
+  /**
+   * Renames the states for an automaton, by changing all the ID numbers so
+   * that all the ID numbers go from 0 up without interruption in the numeric
+   * sequence. This will modify the automaton passed in.
+   *
+   * @param a
+   *            the automaton to change the IDs of the states
+   */
+  public static void rename(Automaton a) {
+    List<State> s = a.getStates();
+    int maxId = s.size() - 1;
+    Set<Integer> untaken = new HashSet<>();
+    Set<State> reassign = new HashSet<>(s);
+    for (int i = 0; i <= maxId; i++) untaken.add(new Integer(i));
+    for (int i = 0; i < s.size(); i++)
+      if (untaken.remove(new Integer(s.get(i).getID()))) reassign.remove(s.get(i));
+    // Now untaken has the untaken IDs, and reassign has the
+    // states that need reassigning.
+    s = Lists.newArrayList(reassign);
+    Iterator<Integer> it = untaken.iterator();
+    for (int i = 0; i < s.size(); i++) {
+      s.get(i).setID(it.next().intValue());
     }
+  }
 }

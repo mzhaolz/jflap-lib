@@ -30,31 +30,31 @@ import javax.swing.KeyStroke;
  * @author Thomas Finley
  */
 public class CloseWindowAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a <CODE>CloseWindowAction</CODE>.
-     *
-     * @param frame
-     *            the <CODE>EnvironmentFrame</CODE> to dismiss when an action is
-     *            registered
-     */
-    public CloseWindowAction(EnvironmentFrame frame) {
-        super("Close", null);
-        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_W, MAIN_MENU_MASK));
-        this.frame = frame;
-    }
+  /**
+   * Instantiates a <CODE>CloseWindowAction</CODE>.
+   *
+   * @param frame
+   *            the <CODE>EnvironmentFrame</CODE> to dismiss when an action is
+   *            registered
+   */
+  public CloseWindowAction(EnvironmentFrame frame) {
+    super("Close", null);
+    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_W, MAIN_MENU_MASK));
+    this.frame = frame;
+  }
 
-    /**
-     * Handles the closing of the window.
-     */
-    public void actionPerformed(ActionEvent event) {
-        frame.close();
-    }
+  /**
+   * Handles the closing of the window.
+   */
+  public void actionPerformed(ActionEvent event) {
+    frame.close();
+  }
 
-    /** The environment frame to call the close method on. */
-    EnvironmentFrame frame;
+  /** The environment frame to call the close method on. */
+  EnvironmentFrame frame;
 }

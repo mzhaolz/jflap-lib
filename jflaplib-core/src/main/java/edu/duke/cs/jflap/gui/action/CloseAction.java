@@ -37,62 +37,63 @@ import javax.swing.event.ChangeListener;
  * @author Thomas Finley
  */
 public class CloseAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a <CODE>CloseAction</CODE>.
-     *
-     * @param environment
-     *            the environment to handle the closing for
-     */
-    public CloseAction(Environment environment) {
-        super("Dismiss Tab", null);
-        this.environment = environment;
-        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, MAIN_MENU_MASK));
-        environment.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                checkEnabled();
-            }
+  /**
+   * Instantiates a <CODE>CloseAction</CODE>.
+   *
+   * @param environment
+   *            the environment to handle the closing for
+   */
+  public CloseAction(Environment environment) {
+    super("Dismiss Tab", null);
+    this.environment = environment;
+    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, MAIN_MENU_MASK));
+    environment.addChangeListener(
+        new ChangeListener() {
+          public void stateChanged(ChangeEvent e) {
+            checkEnabled();
+          }
         });
-        checkEnabled();
+    checkEnabled();
+  }
+
+  /**
+   * Handles the closing on the environment.
+   *
+   * @param e
+   *            the action event
+   */
+  public void actionPerformed(ActionEvent e) {
+    if (environment.getActive() instanceof EditBlockPane) {
+      EditBlockPane blockEditor = (EditBlockPane) environment.getActive();
+      blockEditor.getAutomaton();
+      blockEditor.getBlock();
     }
+    environment.remove(environment.getActive());
+    // if (editor) {
+    // EditorPane higherEditor = (EditorPane) environment.getActive();
+    // Automaton higher = higherEditor.getAutomaton();
+    // higher.replaceBlock(block, inside);
+    // }
+  }
 
-    /**
-     * Handles the closing on the environment.
-     *
-     * @param e
-     *            the action event
-     */
-    public void actionPerformed(ActionEvent e) {
-        if (environment.getActive() instanceof EditBlockPane) {
-            EditBlockPane blockEditor = (EditBlockPane) environment.getActive();
-            blockEditor.getAutomaton();
-            blockEditor.getBlock();
-        }
-        environment.remove(environment.getActive());
-        // if (editor) {
-        // EditorPane higherEditor = (EditorPane) environment.getActive();
-        // Automaton higher = higherEditor.getAutomaton();
-        // higher.replaceBlock(block, inside);
-        // }
-    }
+  /**
+   * Checks the environment to see if the currently active object has the
+   * <CODE>PermanentTag</CODE> associated with it, and if it does, disables
+   * this action; otherwise it makes it activate.
+   */
+  private void checkEnabled() {
+    Tag tag = environment.getTag(environment.getActive());
 
-    /**
-     * Checks the environment to see if the currently active object has the
-     * <CODE>PermanentTag</CODE> associated with it, and if it does, disables
-     * this action; otherwise it makes it activate.
-     */
-    private void checkEnabled() {
-        Tag tag = environment.getTag(environment.getActive());
+    if (environment.tabbed.getTabCount() == 1) {
+      setEnabled(false);
+    } else setEnabled(!(tag instanceof PermanentTag));
+  }
 
-        if (environment.tabbed.getTabCount() == 1) {
-            setEnabled(false);
-        } else setEnabled(!(tag instanceof PermanentTag));
-    }
-
-    /** The environment to handle the closing of tabs for. */
-    private Environment environment;
+  /** The environment to handle the closing of tabs for. */
+  private Environment environment;
 }

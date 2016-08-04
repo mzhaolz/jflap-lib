@@ -38,67 +38,72 @@ import javax.swing.event.DocumentListener;
  * @author Thomas Finley
  */
 public class EditorPane extends JPanel {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new editor pane for a given regular expression.
-     *
-     * @param expression
-     *            the regular expression
-     */
-    public EditorPane(RegularExpression expression) {
-        // super(new BorderLayout());
-        this.expression = expression;
-        field.setText(expression.asString());
-        field.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                updateExpression();
-            }
+  /**
+   * Instantiates a new editor pane for a given regular expression.
+   *
+   * @param expression
+   *            the regular expression
+   */
+  public EditorPane(RegularExpression expression) {
+    // super(new BorderLayout());
+    this.expression = expression;
+    field.setText(expression.asString());
+    field.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            updateExpression();
+          }
         });
-        field.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
+    field
+        .getDocument()
+        .addDocumentListener(
+            new DocumentListener() {
+              public void insertUpdate(DocumentEvent e) {
                 updateExpression();
-            }
+              }
 
-            public void removeUpdate(DocumentEvent e) {
+              public void removeUpdate(DocumentEvent e) {
                 updateExpression();
-            }
+              }
 
-            public void changedUpdate(DocumentEvent e) {
+              public void changedUpdate(DocumentEvent e) {
                 updateExpression();
-            }
-        });
-        setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 1.0;
-        c.gridwidth = GridBagConstraints.REMAINDER;
+              }
+            });
+    setLayout(new GridBagLayout());
+    GridBagConstraints c = new GridBagConstraints();
+    c.fill = GridBagConstraints.BOTH;
+    c.weightx = 1.0;
+    c.gridwidth = GridBagConstraints.REMAINDER;
 
-        add(new JLabel("Edit the regular expression below:"), c);
-        add(field, c);
-    }
+    add(new JLabel("Edit the regular expression below:"), c);
+    add(field, c);
+  }
 
-    /**
-     * This is called when the regular expression should be updated to accord
-     * with the field.
-     */
-    private void updateExpression() {
-        expression.change(ref);
-    }
+  /**
+   * This is called when the regular expression should be updated to accord
+   * with the field.
+   */
+  private void updateExpression() {
+    expression.change(ref);
+  }
 
-    /** The regular expression. */
-    private RegularExpression expression;
+  /** The regular expression. */
+  private RegularExpression expression;
 
-    /** The field where the expression is displayed and edited. */
-    private JTextField field = new JTextField("");
+  /** The field where the expression is displayed and edited. */
+  private JTextField field = new JTextField("");
 
-    /** The reference object. */
-    private Reference<?> ref = new WeakReference<Object>(null) {
+  /** The reference object. */
+  private Reference<?> ref =
+      new WeakReference<Object>(null) {
         public Object get() {
-            return field.getText();
+          return field.getText();
         }
-    };
+      };
 }
