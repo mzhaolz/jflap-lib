@@ -53,7 +53,7 @@ public class CNFConverter {
      * @throws IllegalArgumentException
      *             if the string has anything that interferes with productions
      */
-    public static String[] separateString(String string) {
+    public static List<String> separateString(String string) {
         LinkedList<String> list = new LinkedList<>();
         for (int i = string.length() - 1; i >= 0; i--) {
             int start = i;
@@ -67,7 +67,7 @@ public class CNFConverter {
                 i--;
             list.addFirst(string.substring(i, start + 1));
         }
-        return list
+        return list;
     }
 
     /**
@@ -100,26 +100,26 @@ public class CNFConverter {
      * Given an array of productions, this returns the proper replacements of
      * the "()" rules.
      *
-     * @param p
+     * @param list
      *            the array of productions
      * @return an equivalent set of productions
      * @throws UnsupportedOperationException
      *             if the number of variables needed exceeds 26
      */
-    public static Production[] convert(Production[] p) {
+    public static Production[] convert(List<Production> list) {
         // Figure out what we need, and what's available.
         TreeSet<String> vars = new TreeSet<>(); // Set of available vars.
         for (char c = 'A'; c <= 'Z'; c++)
             vars.add("" + c);
         TreeSet<String> unresolved = new TreeSet<>(); // Set of vars needing
                                                       // conversion.
-        for (int i = 0; i < p.length; i++) {
-            String[] tokens = separateString(p[i].getRHS());
+        for (int i = 0; i < list.length; i++) {
+            List<String> tokens = separateString(list[i].getRHS());
             for (int j = 0; j < tokens.length; j++)
                 if (tokens[j].length() == 1)
                     vars.remove(tokens[j]);
                 else unresolved.add(tokens[j]);
-            vars.remove(p[i].getLHS());
+            vars.remove(list[i].getLHS());
         }
         // Can it be done?
         int needed = unresolved.size() + 26 - vars.size();
@@ -134,15 +134,15 @@ public class CNFConverter {
         while (it.hasNext())
             replacements.put(it.next(), it2.next());
         // Make the substitutions.
-        Production[] pnew = new Production[p.length];
-        for (int i = 0; i < p.length; i++) {
-            String[] tokens = separateString(p[i].getRHS());
+        Production[] pnew = new Production[list.length];
+        for (int i = 0; i < list.length; i++) {
+            List<String> tokens = separateString(list[i].getRHS());
             String rhs = "";
             for (int j = 0; j < tokens.length; j++)
                 if (tokens[j].length() == 1)
                     rhs += tokens[j];
                 else rhs += replacements.get(tokens[j]);
-            String lhs = p[i].getLHS();
+            String lhs = list[i].getLHS();
             if (lhs.length() != 1)
                 lhs = replacements.get(lhs);
             pnew[i] = new Production(lhs, rhs);
@@ -178,7 +178,7 @@ public class CNFConverter {
             // must be a terminal production.
             throw new IllegalArgumentException(production + " is a terminal production!");
         }
-        String[] tokens = separateString(rhs);
+        List<String> tokens = separateString(rhs);
         // Do we need to determinalize this?
         for (int i = 0; i < tokens.length; i++)
             if (grammar.isTerminal(tokens[i]))
@@ -206,7 +206,7 @@ public class CNFConverter {
      *         terminal
      */
     public boolean isChomsky(Production production) {
-        String[] tokens = separateString(production.getRHS());
+        List<String> tokens = separateString(production.getRHS());
         switch (tokens.length) {
             case 1:
                 return grammar.isTerminal(tokens[0]);
@@ -225,7 +225,7 @@ public class CNFConverter {
      * @return the determinalized production
      */
     public Production[] determinalize(Production production) {
-        String[] tokens = separateString(production.getRHS());
+        List<String> tokens = separateString(production.getRHS());
         List<Production> list = new ArrayList<>();
         String rhs = "";
         for (int i = 0; i < tokens.length; i++) {
@@ -264,7 +264,7 @@ public class CNFConverter {
          * Instantiates a production directory.
          */
         public ProductionDirectory(Grammar grammar) {
-            Production[] p = grammar.getProductions();
+            List<Production> p = grammar.getProductions();
             // Create the map of LHSes to RHSes.
             for (int i = 0; i < p.length; i++) {
                 String lhs = p[i].getLHS(), rhs = p[i].getRHS();

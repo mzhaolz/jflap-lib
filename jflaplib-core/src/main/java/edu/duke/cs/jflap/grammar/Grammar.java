@@ -18,6 +18,8 @@ package edu.duke.cs.jflap.grammar;
 
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 
+import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,10 +72,10 @@ public abstract class Grammar implements Serializable, Cloneable {
         HashMap<String, String> map = new HashMap<>(); // old variables to new
                                                        // variables
 
-        String[] variables = getVariables();
-        for (int v = 0; v < variables.length; v++) {
-            String variable = variables[v];
-            String nvariable = new String(variables[v]);
+        List<String> variables = getVariables();
+        for (int v = 0; v < variables.size(); v++) {
+            String variable = variables.get(v);
+            String nvariable = new String(variables.get(v));
             map.put(variable, nvariable);
             g.addVariable(nvariable);
         }
@@ -81,15 +83,15 @@ public abstract class Grammar implements Serializable, Cloneable {
         /** set start variable. */
         g.setStartVariable(map.get(getStartVariable()));
 
-        String[] terminals = getTerminals();
-        for (int t = 0; t < terminals.length; t++) {
-            g.addTerminal(new String(terminals[t]));
+        List<String> terminals = getTerminals();
+        for (int t = 0; t < terminals.size(); t++) {
+            g.addTerminal(new String(terminals.get(t)));
         }
 
-        Production[] productions = getProductions();
-        for (int p = 0; p < productions.length; p++) {
-            String rhs = productions[p].getRHS();
-            String lhs = productions[p].getLHS();
+        List<Production> productions = getProductions();
+        for (int p = 0; p < productions.size(); p++) {
+            String rhs = productions.get(p).getRHS();
+            String lhs = productions.get(p).getLHS();
             g.addProduction(new Production(rhs, lhs));
         }
 
@@ -236,8 +238,8 @@ public abstract class Grammar implements Serializable, Cloneable {
      *
      * @return all productions in the grammar.
      */
-    public Production[] getProductions() {
-        return myProductions
+    public List<Production> getProductions() {
+        return myProductions;
     }
 
     /**
@@ -265,8 +267,8 @@ public abstract class Grammar implements Serializable, Cloneable {
      *
      * @return all terminals in the grammar.
      */
-    public String[] getTerminals() {
-        return myTerminals
+    public List<String> getTerminals() {
+        return Lists.newArrayList(myTerminals);
     }
 
     /**
@@ -294,8 +296,8 @@ public abstract class Grammar implements Serializable, Cloneable {
      *
      * @return all variables in the grammar.
      */
-    public String[] getVariables() {
-        return myVariables
+    public List<String> getVariables() {
+        return Lists.newArrayList(myVariables);
     }
 
     /**
@@ -350,18 +352,18 @@ public abstract class Grammar implements Serializable, Cloneable {
         buffer.append('\n');
         /** print variables. */
         buffer.append("V: ");
-        String[] variables = getVariables();
-        for (int v = 0; v < variables.length; v++) {
-            buffer.append(variables[v]);
+        List<String> variables = getVariables();
+        for (int v = 0; v < variables.size(); v++) {
+            buffer.append(variables.get(v));
             buffer.append(" ");
         }
         buffer.append('\n');
 
         /** print terminals. */
         buffer.append("T: ");
-        String[] terminals = getTerminals();
-        for (int t = 0; t < terminals.length; t++) {
-            buffer.append(terminals[t]);
+        List<String> terminals = getTerminals();
+        for (int t = 0; t < terminals.size(); t++) {
+            buffer.append(terminals.get(t));
             buffer.append(" ");
         }
         buffer.append('\n');
@@ -374,9 +376,9 @@ public abstract class Grammar implements Serializable, Cloneable {
         /** print production rules. */
         buffer.append("P: ");
         buffer.append('\n');
-        Production[] productions = getProductions();
-        for (int p = 0; p < productions.length; p++) {
-            buffer.append(productions[p].toString());
+        List<Production> productions = getProductions();
+        for (int p = 0; p < productions.size(); p++) {
+            buffer.append(productions.get(p).toString());
             buffer.append('\n');
         }
 

@@ -360,7 +360,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
   private void performLayout(Automaton automaton, Set<State> locStates) {
     // Apply the graph layout algorithm to those states that
     // appeared without the <x> and <y> tags.
-    if (locStates.size() == automaton.getStates().length) return;
+    if (locStates.size() == automaton.getStates().size()) return;
     AutomatonGraph graph = new AutomatonGraph(automaton);
     LayoutAlgorithm<State> layout = new GEMLayoutAlgorithm<>();
     for (int i = 0; i < 3; i++)
@@ -624,21 +624,21 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
 
   private Element writeFields(Document doc, Automaton auto, Element se) {
     // Add the states as subelements of the structure element.
-    State[] states = auto.getStates();
-    if (states.length > 0) se.appendChild(createComment(doc, COMMENT_STATES));
+    List<State> states = auto.getStates();
+    if (states.size() > 0) se.appendChild(createComment(doc, COMMENT_STATES));
 
     if (auto instanceof TuringMachine)
-      for (int i = 0; i < states.length; i++)
-        se.appendChild(createBlockElement(doc, (TMState) states[i], auto));
+      for (int i = 0; i < states.size(); i++)
+        se.appendChild(createBlockElement(doc, (TMState) states.get(i), auto));
     else
-      for (int i = 0; i < states.length; i++)
-        se.appendChild(createStateElement(doc, states[i], auto));
+      for (int i = 0; i < states.size(); i++)
+        se.appendChild(createStateElement(doc, states.get(i), auto));
 
     // Add the transitions as subelements of the structure element.
-    Transition[] transitions = auto.getTransitions();
-    if (transitions.length > 0) se.appendChild(createComment(doc, COMMENT_TRANSITIONS));
-    for (int i = 0; i < transitions.length; i++)
-      se.appendChild(createTransitionElement(doc, transitions[i]));
+    List<Transition> transitions = auto.getTransitions();
+    if (transitions.size() > 0) se.appendChild(createComment(doc, COMMENT_TRANSITIONS));
+    for (int i = 0; i < transitions.size(); i++)
+      se.appendChild(createTransitionElement(doc, transitions.get(i)));
 
     // Add the Automatons the blocks refer to as sub elements of the
     // structure element.
