@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -105,10 +106,10 @@ public class GrammarTransducer extends AbstractTransducer {
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();
     // Add the productions as subelements of the structure element.
-    Production[] productions = grammar.getProductions();
-    if (productions.length > 0) se.appendChild(createComment(doc, COMMENT_PRODUCTIONS));
-    for (int i = 0; i < productions.length; i++)
-      se.appendChild(createProductionElement(doc, productions[i]));
+    List<Production> productions = grammar.getProductions();
+    if (productions.size() > 0) se.appendChild(createComment(doc, COMMENT_PRODUCTIONS));
+    for (int i = 0; i < productions.size(); i++)
+      se.appendChild(createProductionElement(doc, productions.get(i)));
     // Return the completed document.
     return doc;
   }

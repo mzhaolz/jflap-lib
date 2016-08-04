@@ -28,10 +28,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * This is the transducer for encoding and decoding
@@ -80,16 +82,18 @@ public class TMTransducer extends AutomatonTransducer {
       State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     TuringMachine tm = (TuringMachine) from.getAutomaton();
     int tapes = tm.tapes();
-    String[]
-        readStrings = new String[tapes],
-        writeStrings = new String[tapes],
-        moveStrings = new String[tapes];
+    List<String>
+        readStrings = new ArrayList<>(),
+        writeStrings = new ArrayList<>(),
+        moveStrings = new ArrayList<>();
     // Set defaults in case the transition for that tape is not specified.
-    Arrays.fill(readStrings, "");
-    Arrays.fill(writeStrings, "");
-    Arrays.fill(moveStrings, "R");
+    IntStream.range(0, tapes).forEach(i -> {
+        readStrings.add("");
+        writeStrings.add("");
+        moveStrings.add("R");
+    });
     // Avoid undue code duplication.
-    Map<String, String[]> tag2array = new HashMap<>();
+    Map<String, List<String>> tag2array = new HashMap<>();
     tag2array.put(TRANSITION_READ_NAME, readStrings);
     tag2array.put(TRANSITION_WRITE_NAME, writeStrings);
     tag2array.put(TRANSITION_MOVE_NAME, moveStrings);
@@ -97,7 +101,7 @@ public class TMTransducer extends AutomatonTransducer {
     Iterator<String> it = tag2array.keySet().iterator();
     while (it.hasNext()) {
       String tag = it.next();
-      String[] array = tag2array.get(tag);
+      List<String> array = tag2array.get(tag);
       NodeList nodes = ((Element) node).getElementsByTagName(tag);
       for (int i = 0; i < nodes.getLength(); i++) {
         Element elem = (Element) nodes.item(i);
@@ -123,12 +127,12 @@ public class TMTransducer extends AutomatonTransducer {
         String contained = containedText(elem);
         if (contained == null) contained = "";
         // Set the right text.
-        array[tape - 1] = contained;
+        array.set(tape - 1, contained);
 
         if (isBlock) {
-          for (int j = 0; j < writeStrings.length; j++) {
-            writeStrings[i] = "~";
-            moveStrings[i] = "S";
+          for (int j = 0; j < writeStrings.size(); j++) {
+            writeStrings.set(i, "~");
+            moveStrings.set(i, "S");
           }
         }
       }

@@ -19,10 +19,16 @@ package edu.duke.cs.jflap.file;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
+import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
+import edu.duke.cs.jflap.automata.pda.PDATransition;
+import edu.duke.cs.jflap.automata.pda.PushdownAutomaton;
+import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnboundGrammar;
 import edu.duke.cs.jflap.regular.RegularExpression;
+
+import com.google.common.collect.Lists;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -148,10 +154,10 @@ public class JFLAP3Codec extends Codec {
    * @param reader
    *            the source of lines in the file
    */
-  private edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton readFA(BufferedReader reader)
+  private FiniteStateAutomaton readFA(BufferedReader reader)
       throws IOException {
-    edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton fa =
-        new edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton();
+    FiniteStateAutomaton fa =
+        new FiniteStateAutomaton();
     // Generic states.
     State[] states = readStateCreate(fa, reader);
     String[][][] groups = readTransitionGroups(2, 1, states.length, reader);
@@ -174,13 +180,13 @@ public class JFLAP3Codec extends Codec {
    * @param reader
    *            the source of lines in the file
    */
-  private edu.duke.cs.jflap.automata.pda.PushdownAutomaton readPDA(BufferedReader reader)
+  private PushdownAutomaton readPDA(BufferedReader reader)
       throws IOException {
     String ender = reader.readLine().trim();
     if (!(ender.equals("FINAL") || ender.equals("EMPTY") || ender.equals("FINAL+EMPTY")))
       throw new ParseException(ender + " is a bad finishing type for PDA!");
-    edu.duke.cs.jflap.automata.pda.PushdownAutomaton pda =
-        new edu.duke.cs.jflap.automata.pda.PushdownAutomaton();
+    PushdownAutomaton pda =
+        new PushdownAutomaton();
     // Generic states.
     State[] states = readStateCreate(pda, reader);
     String[][][] groups = readTransitionGroups(5, 3, states.length, reader);
@@ -196,7 +202,7 @@ public class JFLAP3Codec extends Codec {
             if (group[check[i]].equals("null")) group[check[i]] = "";
           // Create the transition.
           t =
-              new edu.duke.cs.jflap.automata.pda.PDATransition(
+              new PDATransition(
                   from, to, group[0], group[1], group[4]);
           pda.addTransition(t);
         } catch (IllegalArgumentException e) {
@@ -214,7 +220,7 @@ public class JFLAP3Codec extends Codec {
    * @param reader
    *            the source of lines in the file
    */
-  private edu.duke.cs.jflap.automata.turing.TuringMachine readTM(BufferedReader reader)
+  private TuringMachine readTM(BufferedReader reader)
       throws IOException {
     if (!reader.readLine().trim().equals("TAPE"))
       throw new ParseException("Expected TAPE line absent!");
@@ -226,8 +232,8 @@ public class JFLAP3Codec extends Codec {
     } catch (NumberFormatException e) {
       throw new ParseException("Bad format for number of tapes!");
     }
-    edu.duke.cs.jflap.automata.turing.TuringMachine tm =
-        new edu.duke.cs.jflap.automata.turing.TuringMachine(tapes);
+    TuringMachine tm =
+        new TuringMachine(tapes);
     // Generic states.
     State[] states = readStateCreate(tm, reader);
     String[][][] groups = readTransitionGroups(1 + 3 * tm.tapes(), 1, states.length, reader);
@@ -251,9 +257,9 @@ public class JFLAP3Codec extends Codec {
                 new edu.duke.cs.jflap.automata.turing.TMTransition(
                     from,
                     to,
-                    new String[] {group[0], group[4]},
-                    new String[] {group[2], group[5]},
-                    new String[] {group[3].toUpperCase(), group[6].toUpperCase()});
+                    Lists.newArrayList(group[0], group[4]),
+                    Lists.newArrayList(group[2], group[5]),
+                    Lists.newArrayList(group[3].toUpperCase(), group[6].toUpperCase()));
           tm.addTransition(t);
         } catch (IllegalArgumentException e) {
           throw new ParseException(e.getMessage());
@@ -287,7 +293,7 @@ public class JFLAP3Codec extends Codec {
       states[i] = automaton.createState(new java.awt.Point(0, 0));
     // Next possibly two lines have something to do with alphabet.
     reader.readLine();
-    if (!(automaton instanceof edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton))
+    if (!(automaton instanceof FiniteStateAutomaton))
       reader.readLine();
     // Read the ID of the initial state.
     try {
