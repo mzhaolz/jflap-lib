@@ -54,9 +54,7 @@ public class AutomatonGraph extends Graph<State> {
    * positions of the corresponding vertices in the graph.
    */
   public void moveAutomatonStates() {
-    Object[] vertices = vertices();
-    for (int i = 0; i < vertices.length; i++) {
-      State state = (State) vertices[i];
+    for (State state : vertices()) {
       Point2D point = pointForVertex(state);
       state.setPoint(new Point((int) point.getX(), (int) point.getY()));
     }

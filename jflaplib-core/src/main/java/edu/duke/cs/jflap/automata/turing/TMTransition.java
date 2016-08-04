@@ -16,8 +16,12 @@
 
 package edu.duke.cs.jflap.automata.turing;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
+
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +55,8 @@ public class TMTransition extends Transition {
      *            the direction to move the read/write tape head
      */
     public TMTransition(State from, State to, String ntoRead, String ntoWrite, String ndirection) {
-        this(from, to, new String[] { ntoRead }, new String[] { ntoWrite },
-                new String[] { ndirection });
+        this(from, to, Lists.newArrayList(ntoRead), Lists.newArrayList(ntoWrite),
+                Lists.newArrayList(ndirection));
     }
 
     /**
@@ -76,17 +80,13 @@ public class TMTransition extends Transition {
      */
     public TMTransition(State from,
             State to,
-            String[] toReadArray,
-            String[] toWriteArray,
-            String[] directionArray) {
+            List<String> toReadArray,
+            List<String> toWriteArray,
+            List<String> directionArray) {
         super(from, to);
-        if (toReadArray.length != toWriteArray.length
-                || directionArray.length != toReadArray.length)
-            throw new IllegalArgumentException("Read symbols, write symbols, and directions "
-                    + "must have equal numbers of elements!");
-        tapes = toReadArray.length;
-        if (tapes == 0)
-            throw new IllegalArgumentException("Attempted to create a transition with 0 tapes!");
+        checkArgument(toReadArray.size() != toWriteArray.size() || directionArray.size() != toReadArray.size(),
+                "Read symbols, write symbols, and directions must have equal numbers of elements!");
+        checkArgument(toReadArray.isEmpty(), "Attempted to create a transition with 0 tapes!");
         toRead = new ArrayList<>();
         toWrite = new ArrayList<>();
         direction = new ArrayList<>();
@@ -94,9 +94,9 @@ public class TMTransition extends Transition {
             toRead.add("");
             toWrite.add("");
             direction.add("");
-            setRead(toReadArray[i], i);
-            setWrite(toWriteArray[i], i);
-            setDirection(directionArray[i], i);
+            setRead(toReadArray.get(i), i);
+            setWrite(toWriteArray.get(i), i);
+            setDirection(directionArray.get(i), i);
         }
     }
 
@@ -119,9 +119,7 @@ public class TMTransition extends Transition {
      * @return a copy of this transition with the new states
      */
     public Transition copy(State from, State to) {
-        String[] s = new String[0];
-        return new TMTransition(from, to, toRead
-                direction
+        return new TMTransition(from, to, toRead, toWrite, direction);
     }
 
     /**

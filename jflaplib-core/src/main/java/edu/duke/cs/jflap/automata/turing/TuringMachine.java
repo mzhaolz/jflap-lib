@@ -31,6 +31,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -173,11 +174,11 @@ public class TuringMachine extends Automaton {
 
     for (Object o : states) {
       TMState tms = (TMState) o;
-      Transition[] ts = getTransitionsFromState(tms);
+      List<Transition> ts = getTransitionsFromState(tms);
       TMState from = map.get(tms);
-      for (int i = 0; i < ts.length; i++) {
-        TMState to = map.get(ts[i].getToState());
-        Transition toBeAdded = (Transition) ts[i].clone();
+      for (int i = 0; i < ts.size(); i++) {
+        TMState to = map.get(ts.get(i).getToState());
+        Transition toBeAdded = (Transition) ts.get(i).clone();
         toBeAdded.setFromState(from);
         toBeAdded.setToState(to);
         // a.addTransition(ts[i].copy(from, to));
@@ -308,11 +309,11 @@ public class TuringMachine extends Automaton {
     // Copy over the transitions.
     for (Object o : src.states) {
       TMState tms = (TMState) o;
-      Transition[] ts = src.getTransitionsFromState(tms);
+      List<Transition> ts = src.getTransitionsFromState(tms);
       TMState from = map.get(tms);
-      for (int i = 0; i < ts.length; i++) {
-        TMState to = map.get(ts[i].getToState());
-        Transition toBeAdded = (Transition) ts[i].clone();
+      for (int i = 0; i < ts.size(); i++) {
+        TMState to = map.get(ts.get(i).getToState());
+        Transition toBeAdded = (Transition) ts.get(i).clone();
         toBeAdded.setFromState(from);
         toBeAdded.setToState(to);
 

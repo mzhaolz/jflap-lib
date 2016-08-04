@@ -19,6 +19,8 @@ package edu.duke.cs.jflap.automata.turing;
 import edu.duke.cs.jflap.automata.Configuration;
 import edu.duke.cs.jflap.automata.State;
 
+import java.util.List;
+
 /**
  * A <CODE>TMConfiguration</CODE> object is a <CODE>Configuration</CODE> object
  * with additional fields for the input string and the tape contents. The
@@ -39,10 +41,10 @@ public class TMConfiguration extends Configuration implements Cloneable {
    *            the read/write tapes
    */
   public TMConfiguration(
-      State state, TMConfiguration parent, Tape[] tapes, AcceptanceFilter[] filters) {
+      State state, TMConfiguration parent, List<Tape> tapes, List<AcceptanceFilter> myFilters2) {
     super(state, parent);
     this.myTapes = tapes;
-    myFilters = filters;
+    myFilters = myFilters2;
   }
 
   /**
@@ -50,7 +52,7 @@ public class TMConfiguration extends Configuration implements Cloneable {
    *
    * @return the tapes
    */
-  public Tape[] getTapes() {
+  public List<Tape> getTapes() {
     return myTapes;
   }
 
@@ -64,11 +66,11 @@ public class TMConfiguration extends Configuration implements Cloneable {
    */
   public String toString() {
     StringBuffer sb = new StringBuffer(super.toString());
-    for (int i = 0; i < myTapes.length; i++) {
+    for (int i = 0; i < myTapes.size(); i++) {
       sb.append(" TAPE ");
       sb.append(i);
       sb.append(": ");
-      sb.append(myTapes[i].toString());
+      sb.append(myTapes.get(i).toString());
     }
     return sb.toString();
   }
@@ -84,8 +86,8 @@ public class TMConfiguration extends Configuration implements Cloneable {
    */
   public boolean isAccept() {
 
-    for (int i = 0; i < myFilters.length; i++) {
-      if (myFilters[i].accept(this)) return true;
+    for (int i = 0; i < myFilters.size(); i++) {
+      if (myFilters.get(i).accept(this)) return true;
     }
     return false;
   }
@@ -110,9 +112,9 @@ public class TMConfiguration extends Configuration implements Cloneable {
     if (configuration == this) return true;
     try {
       if (!super.equals(configuration)) return false;
-      Tape[] tapes = ((TMConfiguration) configuration).myTapes;
-      if (tapes.length != myTapes.length) return false;
-      for (int i = 0; i < tapes.length; i++) if (!tapes[i].equals(myTapes[i])) return false;
+      List<Tape> tapes = ((TMConfiguration) configuration).myTapes;
+      if (tapes.size() != myTapes.size()) return false;
+      for (int i = 0; i < tapes.size(); i++) if (!tapes.get(i).equals(myTapes.get(i))) return false;
       return true;
     } catch (ClassCastException e) {
       return false;
@@ -126,14 +128,14 @@ public class TMConfiguration extends Configuration implements Cloneable {
    */
   public int hashCode() {
     int code = super.hashCode();
-    for (int i = 0; i < myTapes.length; i++) code = code ^ myTapes[i].hashCode();
+    for (int i = 0; i < myTapes.size(); i++) code = code ^ myTapes.get(i).hashCode();
     return code;
   }
 
   /** The tapes. */
-  protected Tape[] myTapes;
+  protected List<Tape> myTapes;
 
-  private AcceptanceFilter[] myFilters; // constructed outside and passed in
+  private List<AcceptanceFilter> myFilters; // constructed outside and passed in
   // in the constructor. //Constructed
   // once and passed to multiple people.
 

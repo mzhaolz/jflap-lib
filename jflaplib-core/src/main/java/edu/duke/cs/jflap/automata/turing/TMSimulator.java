@@ -86,7 +86,7 @@ public class TMSimulator extends AutomatonSimulator {
         if (Universe.curProfile.getAcceptByHalting())
             tlist.add(new AcceptByHaltingFilter());
 
-        myFilters = tlist
+        myFilters = tlist;
     }
 
     /**
@@ -100,11 +100,11 @@ public class TMSimulator extends AutomatonSimulator {
      * @param input
      *            the input string
      */
-    public Configuration[] getInitialConfigurations(String input) {
+    public List<Configuration> getInitialConfigurations(String input) {
         int tapes = ((TuringMachine) myAutomaton).tapes();
-        String[] inputs = new String[tapes];
+        List<String> inputs = new ArrayList<>();
         for (int i = 0; i < tapes; i++)
-            inputs[i] = input;
+            inputs.add(input);
         return getInitialConfigurations(inputs);
     }
 
@@ -116,14 +116,14 @@ public class TMSimulator extends AutomatonSimulator {
      * @param inputs
      *            the input strings
      */
-    public Configuration[] getInitialConfigurations(String[] inputs) {
-        inputStrings = inputs.clone();
-        Tape[] tapes = new Tape[inputs.length];
-        for (int i = 0; i < tapes.length; i++)
-            tapes[i] = new Tape(inputs[i]);
-        Configuration[] configs = new Configuration[1];
+    public List<Configuration> getInitialConfigurations(List<String> inputs) {
+        inputStrings = new ArrayList<>(inputs);
+        List<Tape> tapes = new ArrayList<>();
+        for (int i = 0; i < tapes.size(); i++)
+            tapes.add(new Tape(inputs.get(i)));
+        List<Configuration> configs = new ArrayList<>();
         TMState initialState = (TMState) myAutomaton.getInitialState();
-        configs[0] = new TMConfiguration(initialState, null, tapes, myFilters);
+        configs.add(new TMConfiguration(initialState, null, tapes, myFilters));
 
         return configs;
     }
@@ -135,14 +135,14 @@ public class TMSimulator extends AutomatonSimulator {
      * particular array of tapes.
      *
      */
-    private boolean matches(Tape[] tapes, TMTransition tmt) {
-        checkArgument(tapes.length == tmt.tapes()); // make sure they address
+    private boolean matches(List<Tape> list, TMTransition tmt) {
+        checkArgument(list.size() == tmt.tapes()); // make sure they address
                                                     // the same number of tapes
 
         // for MULTITAPE turing Machine
-        if (tapes.length > 1) {
-            for (int i = 0; i < tapes.length; i++) {
-                char underHead = tapes[i].readChar();
+        if (list.size() > 1) {
+            for (int i = 0; i < list.size(); i++) {
+                char underHead = list.get(i).readChar();
                 char toMatch = tmt.getRead(i).charAt(0);
 
                 // if (toMatch == '!'){
@@ -159,10 +159,10 @@ public class TMSimulator extends AutomatonSimulator {
             return true;
         }
 
-        assert tapes.length == 1;
+        checkArgument(list.size() == 1);
 
         // fancy features only work on single-tape machines
-        char underHead = tapes[0].readChar();
+        char underHead = list.get(0).readChar();
         String strtoMatch = tmt.getRead(0);
 
         int assignIndex = strtoMatch.indexOf('}');
@@ -171,7 +171,7 @@ public class TMSimulator extends AutomatonSimulator {
         // MERLIN MERLIN MERLIN MERLIN MERLIN//
         // this should have been taken care of during the editing phase -
         // probably put in a re-check on load from save, for legacy issues
-        assert assignIndex == -1 || bangIndex == -1; // both cannot coexist
+        checkArgument(assignIndex == -1 || bangIndex == -1); // both cannot coexist
 
         if (assignIndex == -1 && bangIndex == -1) { // ordinary case
             return underHead == strtoMatch.charAt(0) || strtoMatch.charAt(0) == '~';
@@ -183,7 +183,7 @@ public class TMSimulator extends AutomatonSimulator {
                                   // through and do error checking on the
                                   // transition as well
             for (int i = 0; i < characters.length; i++) {
-                assert characters[i].length() == 1;
+                checkArgument(characters[i].length() == 1);
                 if (varToChar.containsKey(characters[i])) {
                     // warn the user that they are attempting something
                     // erroneous
@@ -277,7 +277,7 @@ public class TMSimulator extends AutomatonSimulator {
         TuringMachine tmp = null; // just a literally tmp, like /tmp
 
         int times = 0;
-        while ((tmp = currentState.getInnerTM()).getStates().length != 0) {
+        while ((tmp = currentState.getInnerTM()).getStates().size() != 0) {
             EDebug.print(times++);
             currentState = (TMState) tmp.getInitialState();
 
@@ -295,14 +295,14 @@ public class TMSimulator extends AutomatonSimulator {
         assert (tmp == currentState.getInnerTM());
         assert (tmp.getParent() == currentState);
 
-        Transition[] trans = currentState.getAutomaton().getTransitionsFromState(currentState);
+        List<Transition> trans = currentState.getAutomaton().getTransitionsFromState(currentState);
         TMTransition tmt = null;
         boolean success = false;
         outer: while (true) {
 
             // sort the ones with the ! symbol to be the later ones. If there
             // are multiple !, then the choice is arbitrary.
-            Arrays.sort(trans, new Comparator<Transition>() {
+            trans.sort(new Comparator<Transition>() {
                 public int compare(Transition a, Transition b) { // variables
                                                                  // are only
                                                                  // allowed with
@@ -320,8 +320,8 @@ public class TMSimulator extends AutomatonSimulator {
             });
 
             // go through transitions at current level
-            for (int i = 0; i < trans.length; i++) {
-                tmt = (TMTransition) trans[i];
+            for (int i = 0; i < trans.size(); i++) {
+                tmt = (TMTransition) trans.get(i);
 
                 if (matches(configuration.getTapes(), tmt)) {
                     success = true;
@@ -350,11 +350,11 @@ public class TMSimulator extends AutomatonSimulator {
 
         if (success) { // if variables are used then they will be common to all
                        // tapes...
-            if (configuration.getTapes().length > 1) {
-                for (int k = 0; k < configuration.getTapes().length; k++) {
-                    configuration.getTapes()[k].writeChar(tmt.getWrite(k).charAt(0) == '~'
-                            ? configuration.getTapes()[k].readChar() : tmt.getWrite(k).charAt(0));
-                    configuration.getTapes()[k].moveHead(tmt.getDirection(k));
+            if (configuration.getTapes().size() > 1) {
+                for (int k = 0; k < configuration.getTapes().size(); k++) {
+                    configuration.getTapes().get(k).writeChar(tmt.getWrite(k).charAt(0) == '~'
+                            ? configuration.getTapes().get(k).readChar() : tmt.getWrite(k).charAt(0));
+                    configuration.getTapes().get(k).moveHead(tmt.getDirection(k));
                     list.add(new TMConfiguration(tmt.getToState(), null, configuration.getTapes(),
                             myFilters));
                 }
@@ -367,18 +367,18 @@ public class TMSimulator extends AutomatonSimulator {
 
                 if (assignIndex != -1) {
                     String s = "" + st.charAt(assignIndex + 1);
-                    varToChar.put(s, configuration.getTapes()[0].readChar() + "");
+                    varToChar.put(s, configuration.getTapes().get(0).readChar() + "");
                 }
 
                 // perform the operations on the tape, and return a new
                 // TMConfiguration that represents the new position
-                configuration.getTapes()[0].writeChar(
-                        tmt.getWrite(0).charAt(0) == '~' ? configuration.getTapes()[0].readChar()
+                configuration.getTapes().get(0).writeChar(
+                        tmt.getWrite(0).charAt(0) == '~' ? configuration.getTapes().get(0).readChar()
                                 : (varToChar.containsKey(tmt.getWrite(0).charAt(0) + "")
                                         ? varToChar.get(tmt.getWrite(0).charAt(0) + "").charAt(0)
                                         : tmt.getWrite(0).charAt(0)));
 
-                configuration.getTapes()[0].moveHead(tmt.getDirection(0));
+                configuration.getTapes().get(0).moveHead(tmt.getDirection(0));
                 list.add(new TMConfiguration(tmt.getToState(), null, configuration.getTapes(),
                         myFilters)); // no going back
                                      // - we are in a
@@ -433,9 +433,9 @@ public class TMSimulator extends AutomatonSimulator {
         /** clear the configurations to begin new simulation. */
         // System.out.println("In Simulate Input");
         myConfigurations.clear();
-        Configuration[] initialConfigs = getInitialConfigurations(input);
-        for (int k = 0; k < initialConfigs.length; k++) {
-            TMConfiguration initialConfiguration = (TMConfiguration) initialConfigs[k];
+        List<Configuration> initialConfigs = getInitialConfigurations(input);
+        for (int k = 0; k < initialConfigs.size(); k++) {
+            TMConfiguration initialConfiguration = (TMConfiguration) initialConfigs.get(k);
             myConfigurations.add(initialConfiguration);
         }
         while (!myConfigurations.isEmpty()) {
@@ -455,13 +455,13 @@ public class TMSimulator extends AutomatonSimulator {
         return false;
     }
 
-    public String[] getInputStrings() {
+    public List<String> getInputStrings() {
         return inputStrings;
     }
 
-    private String inputStrings[];
+    private List<String> inputStrings;
 
     private Map<String, String> varToChar = new HashMap<String, String>();
 
-    private AcceptanceFilter[] myFilters;
+    private List<AcceptanceFilter> myFilters;
 }

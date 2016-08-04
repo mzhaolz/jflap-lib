@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.automata.graph;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -98,11 +99,11 @@ public abstract class LayoutAlgorithm<V> {
    *            If true, will only fill the screen with a graph if the points
    *            are outside the given size.
    */
-  public static void shiftOntoScreen(
-      Graph<?> graph, Dimension size, Dimension buffer, boolean scaleOnlyOverflow) {
+  public static <T> void shiftOntoScreen(
+      Graph<T> graph, Dimension size, Dimension buffer, boolean scaleOnlyOverflow) {
     if (size == null || size.getHeight() == 0 || size.getWidth() == 0) return;
 
-    Object[] vertices = graph.vertices();
+    List<T> vertices = graph.vertices();
     double currentX, currentY, minX, minY, maxX, maxY, heightRatio, widthRatio;
 
     // First, find the extreme values of x & y
@@ -110,9 +111,9 @@ public abstract class LayoutAlgorithm<V> {
     minY = Integer.MAX_VALUE;
     maxX = Integer.MIN_VALUE;
     maxY = Integer.MIN_VALUE;
-    for (int i = 0; i < vertices.length; i++) {
-      currentX = graph.pointForVertex(vertices[i]).getX();
-      currentY = graph.pointForVertex(vertices[i]).getY();
+    for (int i = 0; i < vertices.size(); i++) {
+      currentX = graph.pointForVertex(vertices.get(i)).getX();
+      currentY = graph.pointForVertex(vertices.get(i)).getY();
       if (currentX < minX) minX = currentX;
       if (currentX > maxX) maxX = currentX;
       if (currentY < minY) minY = currentY;
@@ -121,41 +122,41 @@ public abstract class LayoutAlgorithm<V> {
 
     // Then, set all points so that their coordinates range from
     // (0...maxX-minX, 0...maxY-minY)
-    for (int i = 0; i < vertices.length; i++)
+    for (int i = 0; i < vertices.size(); i++)
       graph.moveVertex(
-          vertices[i],
+          vertices.get(i),
           new Point2D.Double(
-              graph.pointForVertex(vertices[i]).getX() - minX,
-              graph.pointForVertex(vertices[i]).getY() - minY));
+              graph.pointForVertex(vertices.get(i)).getX() - minX,
+              graph.pointForVertex(vertices.get(i)).getY() - minY));
 
     // Calculate whether the points go off the defined screen minus buffer
     // space, and adjust
     widthRatio = (maxX - minX) / (size.getWidth() - 2 * buffer.getWidth());
     heightRatio = (maxY - minY) / (size.getHeight() - 2 * buffer.getHeight());
     if (widthRatio > 1.0 || !scaleOnlyOverflow) {
-      for (int i = 0; i < vertices.length; i++)
+      for (int i = 0; i < vertices.size(); i++)
         graph.moveVertex(
-            vertices[i],
+            vertices.get(i),
             new Point2D.Double(
-                graph.pointForVertex(vertices[i]).getX() / widthRatio,
-                graph.pointForVertex(vertices[i]).getY()));
+                graph.pointForVertex(vertices.get(i)).getX() / widthRatio,
+                graph.pointForVertex(vertices.get(i)).getY()));
     }
     if (heightRatio > 1.0 || !scaleOnlyOverflow) {
-      for (int i = 0; i < vertices.length; i++)
+      for (int i = 0; i < vertices.size(); i++)
         graph.moveVertex(
-            vertices[i],
+            vertices.get(i),
             new Point2D.Double(
-                graph.pointForVertex(vertices[i]).getX(),
-                graph.pointForVertex(vertices[i]).getY() / heightRatio));
+                graph.pointForVertex(vertices.get(i)).getX(),
+                graph.pointForVertex(vertices.get(i)).getY() / heightRatio));
     }
 
     // Finally, shift the points right and down the respective buffer values
-    for (int i = 0; i < vertices.length; i++)
+    for (int i = 0; i < vertices.size(); i++)
       graph.moveVertex(
-          vertices[i],
+          vertices.get(i),
           new Point2D.Double(
-              graph.pointForVertex(vertices[i]).getX() + buffer.getWidth(),
-              graph.pointForVertex(vertices[i]).getY() + buffer.getHeight()));
+              graph.pointForVertex(vertices.get(i)).getX() + buffer.getWidth(),
+              graph.pointForVertex(vertices.get(i)).getY() + buffer.getHeight()));
   }
 
   /**
@@ -166,11 +167,11 @@ public abstract class LayoutAlgorithm<V> {
    *
    * @return the list of vertices
    */
-  public static <V> ArrayList<V> getMovableVertices(Graph<V> graph, Set<V> notMoving) {
-    V[] vArray = graph.vertices();
+  public static <V> List<V> getMovableVertices(Graph<V> graph, Set<V> notMoving) {
+    List<V> vArray = graph.vertices();
     ArrayList<V> vertices = new ArrayList<>();
-    for (int i = 0; i < vArray.length; i++)
-      if (notMoving == null || !notMoving.contains(vArray[i])) vertices.add(vArray[i]);
+    for (int i = 0; i < vArray.size(); i++)
+      if (notMoving == null || !notMoving.contains(vArray.get(i))) vertices.add(vArray.get(i));
     return vertices;
   }
 
@@ -184,7 +185,7 @@ public abstract class LayoutAlgorithm<V> {
    * @param vertices
    *            - a list of objects whose points need to be changed
    */
-  public static void cartesianToPolar(Graph<?> graph, ArrayList<?> vertices) {
+  public static <T> void cartesianToPolar(Graph<T> graph, List<T> vertices) {
     double theta, r;
     Point2D cartesian;
     for (int i = 0; i < vertices.size(); i++) {
@@ -207,7 +208,7 @@ public abstract class LayoutAlgorithm<V> {
    * @param vertices
    *            - a list of objects whose points need to be changed
    */
-  public static void polarToCartesian(Graph<?> graph, ArrayList<?> vertices) {
+  public static <T> void polarToCartesian(Graph<T> graph, List<T> vertices) {
     Point2D polar, cartesian;
     for (int i = 0; i < vertices.size(); i++) {
       polar = graph.pointForVertex(vertices.get(i));

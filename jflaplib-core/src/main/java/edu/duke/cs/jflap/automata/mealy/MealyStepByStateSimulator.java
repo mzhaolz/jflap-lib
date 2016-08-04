@@ -23,7 +23,6 @@ import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,9 +60,10 @@ public class MealyStepByStateSimulator extends AutomatonSimulator {
    * @param input
    *            the input string to simulate
    */
-  public Configuration[] getInitialConfigurations(String input) {
-    Configuration[] configs = new Configuration[1];
-    configs[0] = new MealyConfiguration(myAutomaton.getInitialState(), null, input, input, "");
+  public List<Configuration> getInitialConfigurations(String input) {
+    Configuration config = new MealyConfiguration(myAutomaton.getInitialState(), null, input, input, "");
+    List<Configuration> configs = new ArrayList<>();
+    configs.add(config);
     return configs;
   }
 
@@ -83,9 +83,9 @@ public class MealyStepByStateSimulator extends AutomatonSimulator {
     String totalInput = config.getInput();
     State currentState = config.getCurrentState();
 
-    Transition[] transitions = myAutomaton.getTransitionsFromState(currentState);
-    for (int i = 0; i < transitions.length; i++) {
-      MealyTransition trans = (MealyTransition) transitions[i];
+    List<Transition> transitions = myAutomaton.getTransitionsFromState(currentState);
+    for (int i = 0; i < transitions.size(); i++) {
+      MealyTransition trans = (MealyTransition) transitions.get(i);
       String transLabel = trans.getLabel();
       if (unprocessedInput.startsWith(transLabel)) {
         String input = "";
@@ -129,8 +129,8 @@ public class MealyStepByStateSimulator extends AutomatonSimulator {
    */
   public boolean simulateInput(String input) {
     myConfigurations.clear();
-    Configuration[] initialConfigs = getInitialConfigurations(input);
-    myConfigurations.addAll(Arrays.asList(initialConfigs));
+    List<Configuration> initialConfigs = getInitialConfigurations(input);
+    myConfigurations.addAll(initialConfigs);
 
     while (!myConfigurations.isEmpty()) {
       if (isAccepted()) return true;

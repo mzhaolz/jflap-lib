@@ -74,14 +74,14 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    * @param input
    *            the input string.
    */
-  public Configuration[] getInitialConfigurations(String input) {
+  public List<Configuration> getInitialConfigurations(String input) {
     /** The stack should contain the bottom of stack marker. */
-    Configuration[] configs = new Configuration[1];
+    List<Configuration> configs = new ArrayList<>();
     CharacterStack stack = new CharacterStack();
     stack.push("Z");
-    configs[0] =
+    configs.add(
         new PDAConfiguration(
-            myAutomaton.getInitialState(), null, input, input, stack, myAcceptance);
+            myAutomaton.getInitialState(), null, input, input, stack, myAcceptance));
     return configs;
   }
 
@@ -99,9 +99,9 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
     String unprocessedInput = configuration.getUnprocessedInput();
     String totalInput = configuration.getInput();
     State currentState = configuration.getCurrentState();
-    Transition[] transitions = myAutomaton.getTransitionsFromState(currentState);
-    for (int k = 0; k < transitions.length; k++) {
-      PDATransition transition = (PDATransition) transitions[k];
+    List<Transition> transitions = myAutomaton.getTransitionsFromState(currentState);
+    for (int k = 0; k < transitions.size(); k++) {
+      PDATransition transition = (PDATransition) transitions.get(k);
       /** get all information from transition. */
       String inputToRead = transition.getInputToRead();
       String stringToPop = transition.getStringToPop();
@@ -176,9 +176,9 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
   public boolean simulateInput(String input) {
     /** clear the configurations to begin new simulation. */
     myConfigurations.clear();
-    Configuration[] initialConfigs = getInitialConfigurations(input);
-    for (int k = 0; k < initialConfigs.length; k++) {
-      PDAConfiguration initialConfiguration = (PDAConfiguration) initialConfigs[k];
+    List<Configuration> initialConfigs = getInitialConfigurations(input);
+    for (int k = 0; k < initialConfigs.size(); k++) {
+      PDAConfiguration initialConfiguration = (PDAConfiguration) initialConfigs.get(k);
       myConfigurations.add(initialConfiguration);
     }
     int count = 0;

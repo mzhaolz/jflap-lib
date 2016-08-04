@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -65,8 +66,8 @@ public class GEMLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
 
   public void layout(Graph<V> graph, Set<V> isovertices) {
     if (isovertices == null) isovertices = Collections.emptySet();
-    V[] vArray = graph.vertices();
-    int Rmax = 120 * (vArray.length - isovertices.size());
+    List<V> vArray = graph.vertices();
+    int Rmax = 120 * (vArray.size() - isovertices.size());
     double Tglobal = Tmin + 1.0;
 
     // Determine an optimal edge length. With isovertices, we
@@ -95,17 +96,17 @@ public class GEMLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
 
     // Initialize the record for each vertex.
     records = new HashMap<Object, Record>();
-    for (int i = 0; i < vArray.length; i++) {
+    for (int i = 0; i < vArray.size(); i++) {
       Record r = new Record();
-      r.point = graph.pointForVertex(vArray[i]);
+      r.point = graph.pointForVertex(vArray.get(i));
       // The barycenter will be updated.
       c[0] += r.point.getX();
       c[1] += r.point.getY();
-      records.put(vArray[i], r);
+      records.put(vArray.get(i), r);
     }
 
     // Iterate until done.
-    ArrayList<V> vertices = new ArrayList<>();
+    List<V> vertices = new ArrayList<>();
     for (int i = 0; i < Rmax && Tglobal > Tmin; i++) {
       if (vertices.isEmpty()) {
         vertices = getMovableVertices(graph, isovertices);
@@ -132,9 +133,9 @@ public class GEMLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
       p[0] += RANDOM.nextDouble() * 10.0 - 5.0;
       p[1] += RANDOM.nextDouble() * 10.0 - 5.0;
       // Forces exerted by other nodes.
-      for (int j = 0; j < vArray.length; j++) {
-        if (vArray[j] == vertex) continue;
-        Point2D otherPoint = graph.pointForVertex(vArray[j]);
+      for (int j = 0; j < vArray.size(); j++) {
+        if (vArray.get(i) == vertex) continue;
+        Point2D otherPoint = graph.pointForVertex(vArray.get(i));
         double[] delta =
             new double[] {point.getX() - otherPoint.getX(), point.getY() - otherPoint.getY()};
         double D2 = delta[0] * delta[0] + delta[1] * delta[1];
@@ -142,7 +143,7 @@ public class GEMLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
         if (delta[0] != 0.0 || delta[1] != 0.0) {
           for (int k = 0; k < 2; k++) p[k] += delta[k] * O2 / D2;
         }
-        if (!graph.hasEdge(vertex, vArray[j])) continue;
+        if (!graph.hasEdge(vertex, vArray.get(j))) continue;
         for (int k = 0; k < 2; k++) p[k] -= delta[k] * D2 / (O2 * Theta);
       }
 

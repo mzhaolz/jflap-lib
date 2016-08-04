@@ -215,8 +215,8 @@ public class FSAToRegularExpressionConverter {
     if (r1.equals(EMPTY) || r2.equals(EMPTY)) return EMPTY;
     else if (r1.equals(LAMBDA)) return r2;
     else if (r2.equals(LAMBDA)) return r1;
-    if (Discretizer.or(r1).length > 1) r1 = addParen(r1);
-    if (Discretizer.or(r2).length > 1) r2 = addParen(r2);
+    if (Discretizer.or(r1).size() > 1) r1 = addParen(r1);
+    if (Discretizer.or(r2).size() > 1) r2 = addParen(r2);
     return r1 + r2;
   }
 
@@ -229,7 +229,7 @@ public class FSAToRegularExpressionConverter {
    */
   public static String star(String r1) {
     if (r1.equals(EMPTY) || r1.equals(LAMBDA)) return LAMBDA;
-    if (Discretizer.or(r1).length > 1 || Discretizer.cat(r1).length > 1) {
+    if (Discretizer.or(r1).size() > 1 || Discretizer.cat(r1).size() > 1) {
       r1 = addParen(r1);
     } else {
       if (r1.endsWith(KLEENE_STAR)) return r1;
