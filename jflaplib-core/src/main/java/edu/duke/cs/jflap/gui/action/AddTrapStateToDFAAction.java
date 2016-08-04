@@ -32,88 +32,85 @@ import javax.swing.JOptionPane;
 
 /**
  * Add a trap state to existing DFA or NFA
- * 
+ *
  * @author Kyung Min (Jason) Lee
  *
  */
 public class AddTrapStateToDFAAction extends FSAAction {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /** The automaton. */
-    private Automaton automaton;
+  /** The automaton. */
+  private Automaton automaton;
 
-    /** The environment. */
-    private AutomatonEnvironment environment;
+  /** The environment. */
+  private AutomatonEnvironment environment;
 
-    /**
-     * Instantiates a new <CODE>MinimizeTreeAction</CODE>.
-     *
-     * @param automaton
-     *            the automaton that the tree will be shown for
-     * @param environment
-     *            the environment object that we shall add our simulator pane to
-     */
-    public AddTrapStateToDFAAction(AutomatonEnvironment environment) {
-        super("Add Trap State to DFA", null);
-        this.environment = environment;
-        this.automaton = environment.getAutomaton();
+  /**
+   * Instantiates a new <CODE>MinimizeTreeAction</CODE>.
+   *
+   * @param automaton
+   *            the automaton that the tree will be shown for
+   * @param environment
+   *            the environment object that we shall add our simulator pane to
+   */
+  public AddTrapStateToDFAAction(AutomatonEnvironment environment) {
+    super("Add Trap State to DFA", null);
+    this.environment = environment;
+    this.automaton = environment.getAutomaton();
+  }
+
+  /**
+   * Puts the DFA form in another window.
+   *
+   * @param e
+   *            the action event
+   */
+  public void actionPerformed(ActionEvent e) {
+    if (automaton.getInitialState() == null) {
+      JOptionPane.showMessageDialog(
+          Universe.frameForEnvironment(environment),
+          "The automaton should have " + "an initial state.");
+      return;
     }
-
-    /**
-     * Puts the DFA form in another window.
-     *
-     * @param e
-     *            the action event
-     */
-    public void actionPerformed(ActionEvent e) {
-        if (automaton.getInitialState() == null) {
-            JOptionPane.showMessageDialog(Universe.frameForEnvironment(environment),
-                    "The automaton should have " + "an initial state.");
-            return;
-        }
-        AutomatonChecker ac = new AutomatonChecker();
-        if (ac.isNFA(automaton)) {
-            JOptionPane.showMessageDialog(Universe.frameForEnvironment(environment),
-                    "This isn't a DFA!");
-            return;
-        }
-        boolean isComplete = checkIfDFAisComplete();
-        if (isComplete) {
-            JOptionPane.showMessageDialog(Universe.frameForEnvironment(environment),
-                    "DFA is complete. No need for the Trap State");
-
-            return;
-        }
-        AddTrapStatePane trapPane = new AddTrapStatePane(environment);
-        environment.add(trapPane, "Adding Trap State", new CriticalTag() {
-        });
-        environment.setActive(trapPane);
+    AutomatonChecker ac = new AutomatonChecker();
+    if (ac.isNFA(automaton)) {
+      JOptionPane.showMessageDialog(Universe.frameForEnvironment(environment), "This isn't a DFA!");
+      return;
     }
+    boolean isComplete = checkIfDFAisComplete();
+    if (isComplete) {
+      JOptionPane.showMessageDialog(
+          Universe.frameForEnvironment(environment), "DFA is complete. No need for the Trap State");
 
-    /**
-     * Check if DFA already has trap state and complete
-     * 
-     * @return True if DFA already has a trap state and complete
-     */
-    private boolean checkIfDFAisComplete() {
-        Transition[] t = automaton.getTransitions();
-        State[] s = automaton.getStates();
-        TreeSet<String> reads = new TreeSet<String>();
-        for (int i = 0; i < t.length; i++) {
-            reads.add(t[i].getDescription());
-        }
-        int count = 0;
-        for (int i = 0; i < s.length; i++) {
-            Transition[] tt = automaton.getTransitionsFromState(s[i]);
-            if (tt.length < reads.size())
-                count++;
-        }
-        if (count == 0)
-            return true;
-        return false;
+      return;
     }
+    AddTrapStatePane trapPane = new AddTrapStatePane(environment);
+    environment.add(trapPane, "Adding Trap State", new CriticalTag() {});
+    environment.setActive(trapPane);
+  }
+
+  /**
+   * Check if DFA already has trap state and complete
+   *
+   * @return True if DFA already has a trap state and complete
+   */
+  private boolean checkIfDFAisComplete() {
+    Transition[] t = automaton.getTransitions();
+    State[] s = automaton.getStates();
+    TreeSet<String> reads = new TreeSet<String>();
+    for (int i = 0; i < t.length; i++) {
+      reads.add(t[i].getDescription());
+    }
+    int count = 0;
+    for (int i = 0; i < s.length; i++) {
+      Transition[] tt = automaton.getTransitionsFromState(s[i]);
+      if (tt.length < reads.size()) count++;
+    }
+    if (count == 0) return true;
+    return false;
+  }
 }

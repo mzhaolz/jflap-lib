@@ -24,15 +24,15 @@ import edu.duke.cs.jflap.grammar.Grammar;
  * @author Thomas Finley
  */
 public class UnrestrictedBruteParser extends BruteParser {
-    /**
-     * Creates a new unrestricted brute parser.
-     *
-     * @param grammar
-     *            the unrestricted grammar to parse
-     * @param target
-     *            the target string
-     */
-    public UnrestrictedBruteParser(Grammar grammar, String target) {
-        super(grammar, target);
-    }
+  /**
+   * Creates a new unrestricted brute parser.
+   *
+   * @param grammar
+   *            the unrestricted grammar to parse
+   * @param target
+   *            the target string
+   */
+  public UnrestrictedBruteParser(Grammar grammar, String target) {
+    super(grammar, target);
+  }
 }

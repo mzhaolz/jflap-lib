@@ -28,8 +28,8 @@ package edu.duke.cs.jflap.automata;
  */
 public class IncompatibleTransitionException extends RuntimeException {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 197916993239519305L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 197916993239519305L;
 }

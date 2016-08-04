@@ -28,59 +28,64 @@ import edu.duke.cs.jflap.pumping.LemmaMath;
  */
 public class WW1WrGrtrThanEq extends ContextFreePumpingLemma {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = -4941517762785350617L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = -4941517762785350617L;
 
-    public String getTitle() {
-        return "w w1 w^R : |w1| >= 5, w & w1 element_of {ab}*";
-    }
+  public String getTitle() {
+    return "w w1 w^R : |w1| >= 5, w & w1 element_of {ab}*";
+  }
 
-    public String getHTMLTitle() {
-        return "<i>ww<sub>1</sub>w<sup>R</sup></i> : |<i>w<sub>1</sub></i>| " + GREATER_OR_EQ
-                + " 5, <i>w</i> & <i>w<sub>1</sub></i> " + ELEMENT_OF + " " + AB_STAR;
-    }
+  public String getHTMLTitle() {
+    return "<i>ww<sub>1</sub>w<sup>R</sup></i> : |<i>w<sub>1</sub></i>| "
+        + GREATER_OR_EQ
+        + " 5, <i>w</i> & <i>w<sub>1</sub></i> "
+        + ELEMENT_OF
+        + " "
+        + AB_STAR;
+  }
 
-    public void setDescription() {
-        partitionIsValid = true;
-        explanation = "Because this is a context-free language, a valid decomposition exists.  For any <i>m</i> value "
-                + GREATER_OR_EQ
-                + " 6, it is possible to assign to both 'w' and 'w<sup>R</sup>' the empty string.  Thus, "
-                + "|'w<sub>1</sub>'| " + GREATER_OR_EQ
-                + " 6.  If |<i>v</i>| = 0 and <i>y</i> is one character from "
-                + "'w<sub>1</sub>', |'w<sub>1</sub>'| " + GREATER_OR_EQ
-                + " 5 for all values of <i>i</i>.";
-    }
+  public void setDescription() {
+    partitionIsValid = true;
+    explanation =
+        "Because this is a context-free language, a valid decomposition exists.  For any <i>m</i> value "
+            + GREATER_OR_EQ
+            + " 6, it is possible to assign to both 'w' and 'w<sup>R</sup>' the empty string.  Thus, "
+            + "|'w<sub>1</sub>'| "
+            + GREATER_OR_EQ
+            + " 6.  If |<i>v</i>| = 0 and <i>y</i> is one character from "
+            + "'w<sub>1</sub>', |'w<sub>1</sub>'| "
+            + GREATER_OR_EQ
+            + " 5 for all values of <i>i</i>.";
+  }
 
-    protected void addCases() {
-        // TODO Auto-generated method stub
-    }
+  protected void addCases() {
+    // TODO Auto-generated method stub
+  }
 
-    public void chooseI() {
-        i = LemmaMath.flipCoin();
-    }
+  public void chooseI() {
+    i = LemmaMath.flipCoin();
+  }
 
-    protected void chooseW() {
-        w = pumpString("a", m) + "babab" + pumpString("a", m);
-    }
+  protected void chooseW() {
+    w = pumpString("a", m) + "babab" + pumpString("a", m);
+  }
 
-    protected void setRange() {
-        myRange = new int[] { 1, 7 };
-    }
+  protected void setRange() {
+    myRange = new int[] {1, 7};
+  }
 
-    public void chooseDecomposition() {
-        // always chooses the middle character, which is part of w1
-        setDecomposition(new int[] { w.length() / 2, 1, 0, 0 });
-    }
+  public void chooseDecomposition() {
+    // always chooses the middle character, which is part of w1
+    setDecomposition(new int[] {w.length() / 2, 1, 0, 0});
+  }
 
-    public boolean isInLang(String s) {
-        char[] list = new char[] { 'a', 'b' };
-        if (LemmaMath.otherCharactersFound(s, list))
-            return false;
+  public boolean isInLang(String s) {
+    char[] list = new char[] {'a', 'b'};
+    if (LemmaMath.otherCharactersFound(s, list)) return false;
 
-        if (s.length() >= 5)
-            return true;
-        return false;
-    }
+    if (s.length() >= 5) return true;
+    return false;
+  }
 }

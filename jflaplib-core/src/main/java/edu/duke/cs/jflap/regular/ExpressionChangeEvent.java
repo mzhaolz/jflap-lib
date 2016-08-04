@@ -24,46 +24,46 @@ import java.util.EventObject;
  * @author Thomas Finley
  */
 public class ExpressionChangeEvent extends EventObject {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 8094984580797690783L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 8094984580797690783L;
 
-    /**
-     * Instantiates a change event.
-     *
-     * @param expression
-     *            the expression object that was changed
-     * @param old
-     *            the string representing the old regular expression
-     */
-    public ExpressionChangeEvent(RegularExpression expression, String old) {
-        super(expression);
-        this.expression = expression;
-        this.old = old;
-    }
+  /**
+   * Instantiates a change event.
+   *
+   * @param expression
+   *            the expression object that was changed
+   * @param old
+   *            the string representing the old regular expression
+   */
+  public ExpressionChangeEvent(RegularExpression expression, String old) {
+    super(expression);
+    this.expression = expression;
+    this.old = old;
+  }
 
-    /**
-     * Returns the regular expression that was changed.
-     *
-     * @return the regular expression that was changed
-     */
-    public RegularExpression getExpression() {
-        return expression;
-    }
+  /**
+   * Returns the regular expression that was changed.
+   *
+   * @return the regular expression that was changed
+   */
+  public RegularExpression getExpression() {
+    return expression;
+  }
 
-    /**
-     * Returns the old string representation of the expression.
-     *
-     * @return the old string representation of the expression
-     */
-    public String getOld() {
-        return old;
-    }
+  /**
+   * Returns the old string representation of the expression.
+   *
+   * @return the old string representation of the expression
+   */
+  public String getOld() {
+    return old;
+  }
 
-    /** The changed RE. */
-    private RegularExpression expression;
+  /** The changed RE. */
+  private RegularExpression expression;
 
-    /** The old string representation of the RE. */
-    private String old;
+  /** The old string representation of the RE. */
+  private String old;
 }

@@ -31,37 +31,37 @@ import javax.swing.JMenu;
  * @author Jonathan Su
  */
 public class SaveGraphPNGAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-    /** The environment that this save action gets it's object from. */
-    protected Environment environment;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
+  /** The environment that this save action gets it's object from. */
+  protected Environment environment;
 
-    protected JMenu myMenu;
+  protected JMenu myMenu;
 
-    /**
-     * Instantiates a new <CODE>SaveGraphPNGAction</CODE>.
-     *
-     * @param environment
-     *            the environment that holds the action
-     */
-    public SaveGraphPNGAction(Environment environment, JMenu menu) {
-        super("Save Graph as PNG", null);
-        this.environment = environment;
-        this.myMenu = menu;
-    }
+  /**
+   * Instantiates a new <CODE>SaveGraphPNGAction</CODE>.
+   *
+   * @param environment
+   *            the environment that holds the action
+   */
+  public SaveGraphPNGAction(Environment environment, JMenu menu) {
+    super("Save Graph as PNG", null);
+    this.environment = environment;
+    this.myMenu = menu;
+  }
 
-    /**
-     * Displays JFileChooser for location to save the graph canvas as png image.
-     *
-     * @param arg0
-     *            the action event
-     */
-    public void actionPerformed(ActionEvent arg0) {
+  /**
+   * Displays JFileChooser for location to save the graph canvas as png image.
+   *
+   * @param arg0
+   *            the action event
+   */
+  public void actionPerformed(ActionEvent arg0) {
 
-        Component apane = environment.tabbed.getSelectedComponent();
-        JComponent c = (JComponent) environment.getActive();
-        SaveGraphUtility.saveGraph(apane, c, "PNG files", "png");
-    }
+    Component apane = environment.tabbed.getSelectedComponent();
+    JComponent c = (JComponent) environment.getActive();
+    SaveGraphUtility.saveGraph(apane, c, "PNG files", "png");
+  }
 }

@@ -30,5 +30,4 @@ package edu.duke.cs.jflap.gui.environment.tag;
  *
  * @author Thomas Finley
  */
-public interface Tag {
-}
+public interface Tag {}

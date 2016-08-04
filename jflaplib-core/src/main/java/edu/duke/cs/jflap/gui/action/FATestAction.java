@@ -29,21 +29,21 @@ import java.awt.event.KeyEvent;
  */
 public class FATestAction extends TestAction {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>Turing Test Action</CODE>.
-     */
-    public FATestAction() {
-        // super("Test Turing Machines", null);
-        super("Test Finite Automata", KeyEvent.VK_A);
-    }
+  /**
+   * Instantiates a new <CODE>Turing Test Action</CODE>.
+   */
+  public FATestAction() {
+    // super("Test Turing Machines", null);
+    super("Test Finite Automata", KeyEvent.VK_A);
+  }
 
-    protected void displayMultipleRunPane(Environment env) {
-        MultipleSimulateAction act = new MultipleSimulateAction((Automaton) myObjects.get(0), env);
-        act.performAction(env);
-    }
+  protected void displayMultipleRunPane(Environment env) {
+    MultipleSimulateAction act = new MultipleSimulateAction((Automaton) myObjects.get(0), env);
+    act.performAction(env);
+  }
 }

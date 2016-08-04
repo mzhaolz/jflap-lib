@@ -26,40 +26,39 @@ import java.util.List;
  * @author Ryan Cavalcante, Henry Qin
  */
 public class ClosureTaker {
-    /**
-     * There is no reason for this class to ever be constructed.
-     */
-    private ClosureTaker() {
-    }
+  /**
+   * There is no reason for this class to ever be constructed.
+   */
+  private ClosureTaker() {}
 
-    /**
-     * Returns the closure of <CODE>state</CODE>, that is, all states reachable
-     * from <CODE>state</CODE> without changing any internal state (e.g. stack,
-     * tape, input) via lambda transitions.
-     *
-     * @param state
-     *            the state whose closure is being taken.
-     * @param automaton
-     *            the automaton
-     * @return the set of states that represent the closure of state.
-     */
-    public static List<State> getClosure(State state, Automaton automaton) {
-        List<State> list = new ArrayList<>();
-        list.add(state);
-        for (int i = 0; i < list.size(); i++) {
-            state = list.get(i);
-            List<Transition> transitions = automaton.getTransitionsFromState(state);
-            for (Transition trans : transitions) {
-                LambdaTransitionChecker checker = LambdaCheckerFactory.getLambdaChecker(automaton);
-                /** if lambda transition */
-                if (checker.isLambdaTransition(trans)) {
-                    State toState = trans.getToState();
-                    if (!list.contains(toState)) {
-                        list.add(toState);
-                    }
-                }
-            }
+  /**
+   * Returns the closure of <CODE>state</CODE>, that is, all states reachable
+   * from <CODE>state</CODE> without changing any internal state (e.g. stack,
+   * tape, input) via lambda transitions.
+   *
+   * @param state
+   *            the state whose closure is being taken.
+   * @param automaton
+   *            the automaton
+   * @return the set of states that represent the closure of state.
+   */
+  public static List<State> getClosure(State state, Automaton automaton) {
+    List<State> list = new ArrayList<>();
+    list.add(state);
+    for (int i = 0; i < list.size(); i++) {
+      state = list.get(i);
+      List<Transition> transitions = automaton.getTransitionsFromState(state);
+      for (Transition trans : transitions) {
+        LambdaTransitionChecker checker = LambdaCheckerFactory.getLambdaChecker(automaton);
+        /** if lambda transition */
+        if (checker.isLambdaTransition(trans)) {
+          State toState = trans.getToState();
+          if (!list.contains(toState)) {
+            list.add(toState);
+          }
         }
-        return list;
+      }
     }
+    return list;
+  }
 }

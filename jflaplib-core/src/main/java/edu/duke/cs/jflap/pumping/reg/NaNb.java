@@ -27,55 +27,62 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  * @author Jinghui Lim & Chris Morgan
  */
 public class NaNb extends RegularPumpingLemma {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1706121984502776649L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1706121984502776649L;
 
-    public String getHTMLTitle() {
-        return "<i>w</i> " + ELEMENT_OF + " " + AB_STAR + " : <i>n<sub>a</sub></i> (<i>w</i>) "
-                + LESS_THAN + " <i>n<sub>b</sub></i> (<i>w</i>)";
-    }
+  public String getHTMLTitle() {
+    return "<i>w</i> "
+        + ELEMENT_OF
+        + " "
+        + AB_STAR
+        + " : <i>n<sub>a</sub></i> (<i>w</i>) "
+        + LESS_THAN
+        + " <i>n<sub>b</sub></i> (<i>w</i>)";
+  }
 
-    public String getTitle() {
-        return "w element_of {ab}* : na(w) < nb(w)";
-    }
+  public String getTitle() {
+    return "w element_of {ab}* : na(w) < nb(w)";
+  }
 
-    public void setDescription() {
-        partitionIsValid = false;
-        explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
-                + "b<sup><i>m</i>+1</sup>\".  The <i>y</i> value thus would be a multiple of \"a\".  "
-                + "For any <i>i</i> " + GREATER_THAN + " 1, n<sub>a</sub> " + GREATER_OR_EQ
-                + " n<sub>b</sub>, "
-                + "giving a string which is not in the language.  Thus, the language is not regular.";
-    }
+  public void setDescription() {
+    partitionIsValid = false;
+    explanation =
+        "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
+            + "b<sup><i>m</i>+1</sup>\".  The <i>y</i> value thus would be a multiple of \"a\".  "
+            + "For any <i>i</i> "
+            + GREATER_THAN
+            + " 1, n<sub>a</sub> "
+            + GREATER_OR_EQ
+            + " n<sub>b</sub>, "
+            + "giving a string which is not in the language.  Thus, the language is not regular.";
+  }
 
-    protected void chooseW() {
-        w = pumpString("a", getM()) + pumpString("b", getM() + 1);
-    }
+  protected void chooseW() {
+    w = pumpString("a", getM()) + pumpString("b", getM() + 1);
+  }
 
-    public void chooseDecomposition() {
-        setDecomposition(new int[] { Math.min(m - 1, w.indexOf('b')), 1 });
-    }
+  public void chooseDecomposition() {
+    setDecomposition(new int[] {Math.min(m - 1, w.indexOf('b')), 1});
+  }
 
-    public void chooseI() {
-        i = 2;
-    }
+  public void chooseI() {
+    i = 2;
+  }
 
-    protected void setRange() {
-        myRange = new int[] { 2, 17 };
-    }
+  protected void setRange() {
+    myRange = new int[] {2, 17};
+  }
 
-    public boolean isInLang(String s) {
-        int a, b;
-        char[] list = new char[] { 'a', 'b' };
-        if (LemmaMath.otherCharactersFound(s, list))
-            return false;
+  public boolean isInLang(String s) {
+    int a, b;
+    char[] list = new char[] {'a', 'b'};
+    if (LemmaMath.otherCharactersFound(s, list)) return false;
 
-        a = LemmaMath.countInstances(s, 'a');
-        b = LemmaMath.countInstances(s, 'b');
-        if (a < b)
-            return true;
-        return false;
-    }
+    a = LemmaMath.countInstances(s, 'a');
+    b = LemmaMath.countInstances(s, 'b');
+    if (a < b) return true;
+    return false;
+  }
 }

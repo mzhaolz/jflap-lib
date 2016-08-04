@@ -32,74 +32,68 @@ import java.util.Comparator;
  * @author Thomas Finley
  */
 public class ColorComparator implements Comparator<Color> {
-    /**
-     * Imposes the ordering on colors, first by alpha, then by saturation, then
-     * by brightness, then by hue.
-     *
-     * @param o1
-     *            the first color
-     * @param o2
-     *            the second color
-     * @return a negative quantity if <TT>o1</TT> is ordered before <TT>o2</TT>,
-     *         0 if they're equal, and positive otherwise.
-     */
-    public int compare(Color first, Color second) {
-        if (first.getAlpha() != second.getAlpha())
-            return (second.getAlpha() - first.getAlpha());
-        // Extract the HSB, and impose the ordering.
-        float[] firstHSB = Color.RGBtoHSB(first.getRed(), first.getGreen(), first.getBlue(), null);
-        float[] secondHSB = Color.RGBtoHSB(second.getRed(), second.getGreen(), second.getBlue(),
-                null);
-        int[] comp = new int[3];
-        // First saturation...
-        comp[0] = -compareFloat(firstHSB[1], secondHSB[1]);
-        // Then brightness...
-        comp[1] = -compareFloat(firstHSB[2], secondHSB[2]);
-        // Then hue...
-        comp[2] = compareFloat(firstHSB[0], secondHSB[0]);
+  /**
+   * Imposes the ordering on colors, first by alpha, then by saturation, then
+   * by brightness, then by hue.
+   *
+   * @param o1
+   *            the first color
+   * @param o2
+   *            the second color
+   * @return a negative quantity if <TT>o1</TT> is ordered before <TT>o2</TT>,
+   *         0 if they're equal, and positive otherwise.
+   */
+  public int compare(Color first, Color second) {
+    if (first.getAlpha() != second.getAlpha()) return (second.getAlpha() - first.getAlpha());
+    // Extract the HSB, and impose the ordering.
+    float[] firstHSB = Color.RGBtoHSB(first.getRed(), first.getGreen(), first.getBlue(), null);
+    float[] secondHSB = Color.RGBtoHSB(second.getRed(), second.getGreen(), second.getBlue(), null);
+    int[] comp = new int[3];
+    // First saturation...
+    comp[0] = -compareFloat(firstHSB[1], secondHSB[1]);
+    // Then brightness...
+    comp[1] = -compareFloat(firstHSB[2], secondHSB[2]);
+    // Then hue...
+    comp[2] = compareFloat(firstHSB[0], secondHSB[0]);
 
-        // Run through the comparisons, return if not zero.
-        for (int i = 0; i < 3; i++)
-            if (comp[i] != 0)
-                return comp[i];
-        return 0;
-    }
+    // Run through the comparisons, return if not zero.
+    for (int i = 0; i < 3; i++) if (comp[i] != 0) return comp[i];
+    return 0;
+  }
 
-    /**
-     * Small utility for making comparing floats easier.
-     *
-     * @param float1
-     *            the first float
-     * @param float2
-     *            the second float
-     * @return -1 if float1 is smaller, 0 if they're equal, 1 if float1 is
-     *         larger
-     */
-    private int compareFloat(float float1, float float2) {
-        if (float1 > float2)
-            return 1;
-        if (float2 > float1)
-            return -1;
-        return 0;
-    }
+  /**
+   * Small utility for making comparing floats easier.
+   *
+   * @param float1
+   *            the first float
+   * @param float2
+   *            the second float
+   * @return -1 if float1 is smaller, 0 if they're equal, 1 if float1 is
+   *         larger
+   */
+  private int compareFloat(float float1, float float2) {
+    if (float1 > float2) return 1;
+    if (float2 > float1) return -1;
+    return 0;
+  }
 
-    /**
-     * Compares this comparator against another for equality.
-     *
-     * @return <TT>true</TT>> if the passed in object is equal to this
-     *         comparator.
-     */
-    public boolean equals(Object object) {
-        return true;
-    }
+  /**
+   * Compares this comparator against another for equality.
+   *
+   * @return <TT>true</TT>> if the passed in object is equal to this
+   *         comparator.
+   */
+  public boolean equals(Object object) {
+    return true;
+  }
 
-    /**
-     * Some very simple test code for the color comparator.
-     */
-    public static void main(String args[]) {
-        Color first = Color.black;
-        Color second = Color.red;
-        Comparator<Color> comp = new ColorComparator();
-        System.out.println(comp.compare(first, second));
-    }
+  /**
+   * Some very simple test code for the color comparator.
+   */
+  public static void main(String args[]) {
+    Color first = Color.black;
+    Color second = Color.red;
+    Comparator<Color> comp = new ColorComparator();
+    System.out.println(comp.compare(first, second));
+  }
 }

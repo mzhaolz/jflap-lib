@@ -40,71 +40,75 @@ import javax.swing.JToolBar;
 
 /**
  * Pane used for adding trap state
- * 
+ *
  * @author Kyung Min (Jason) Lee
  *
  */
 public class AddTrapStatePane extends JPanel {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * The copy of the original automaton, which will be modified throughout
-     * this process.
-     */
-    private FiniteStateAutomaton myAutomaton;
+  /**
+   * The copy of the original automaton, which will be modified throughout
+   * this process.
+   */
+  private FiniteStateAutomaton myAutomaton;
 
-    /**
-     * Constructor for creating Trap State Pane
-     * 
-     * @param environment
-     */
-    public AddTrapStatePane(AutomatonEnvironment environment) {
-        myAutomaton = (FiniteStateAutomaton) environment.getAutomaton().clone();
-        JFrame frame = Universe.frameForEnvironment(environment);
+  /**
+   * Constructor for creating Trap State Pane
+   *
+   * @param environment
+   */
+  public AddTrapStatePane(AutomatonEnvironment environment) {
+    myAutomaton = (FiniteStateAutomaton) environment.getAutomaton().clone();
+    JFrame frame = Universe.frameForEnvironment(environment);
 
-        setLayout(new BorderLayout());
+    setLayout(new BorderLayout());
 
-        JPanel labels = new JPanel(new BorderLayout());
-        JLabel mainLabel = new JLabel();
-        JLabel detailLabel = new JLabel();
-        labels.add(mainLabel, BorderLayout.NORTH);
-        labels.add(detailLabel, BorderLayout.SOUTH);
+    JPanel labels = new JPanel(new BorderLayout());
+    JLabel mainLabel = new JLabel();
+    JLabel detailLabel = new JLabel();
+    labels.add(mainLabel, BorderLayout.NORTH);
+    labels.add(detailLabel, BorderLayout.SOUTH);
 
-        add(labels, BorderLayout.NORTH);
-        SelectionDrawer automatonDrawer = new SelectionDrawer(myAutomaton);
+    add(labels, BorderLayout.NORTH);
+    SelectionDrawer automatonDrawer = new SelectionDrawer(myAutomaton);
 
-        final AddTrapStateController controller = new AddTrapStateController(myAutomaton,
-                automatonDrawer, mainLabel, detailLabel, frame);
+    final AddTrapStateController controller =
+        new AddTrapStateController(myAutomaton, automatonDrawer, mainLabel, detailLabel, frame);
 
-        edu.duke.cs.jflap.gui.editor.EditorPane ep = new edu.duke.cs.jflap.gui.editor.EditorPane(
-                automatonDrawer, new ToolBox() {
-                    public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
-                        LinkedList<Tool> tools = new LinkedList<Tool>();
-                        tools.add(new ArrowNontransitionTool(view, drawer));
-                        tools.add(new TrapStateTool(view, drawer, controller));
-                        tools.add(new TrapTransitionTool(view, drawer, controller));
-                        return tools;
-                    }
-                });
+    edu.duke.cs.jflap.gui.editor.EditorPane ep =
+        new edu.duke.cs.jflap.gui.editor.EditorPane(
+            automatonDrawer,
+            new ToolBox() {
+              public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+                LinkedList<Tool> tools = new LinkedList<Tool>();
+                tools.add(new ArrowNontransitionTool(view, drawer));
+                tools.add(new TrapStateTool(view, drawer, controller));
+                tools.add(new TrapTransitionTool(view, drawer, controller));
+                return tools;
+              }
+            });
 
-        JToolBar bar = ep.getToolBar();
+    JToolBar bar = ep.getToolBar();
 
-        bar.addSeparator();
-        bar.add(new JButton(new AbstractAction("Do All") {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 3085654730397188499L;
+    bar.addSeparator();
+    bar.add(
+        new JButton(
+            new AbstractAction("Do All") {
+              /**
+               *
+               */
+              private static final long serialVersionUID = 3085654730397188499L;
 
-            public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.doAll();
-            }
-        }));
+              }
+            }));
 
-        add(ep, BorderLayout.CENTER);
-    }
+    add(ep, BorderLayout.CENTER);
+  }
 }

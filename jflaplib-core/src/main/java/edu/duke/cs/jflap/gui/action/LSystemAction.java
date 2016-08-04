@@ -33,50 +33,50 @@ import javax.swing.Icon;
  * @author Thomas Finley
  */
 public abstract class LSystemAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+  /**
+   *
+   */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>LSystemAction</CODE>.
-     *
-     * @param env
-     *            the environment
-     * @param string
-     *            a string description
-     * @param icon
-     *            the optional icon, or <CODE>null</CODE> if there is to be no
-     *            icon associated with this action
-     */
-    public LSystemAction(LSystemEnvironment env, String string, Icon icon) {
-        super(string, icon);
-        environment = env;
-    }
+  /**
+   * Instantiates a new <CODE>LSystemAction</CODE>.
+   *
+   * @param env
+   *            the environment
+   * @param string
+   *            a string description
+   * @param icon
+   *            the optional icon, or <CODE>null</CODE> if there is to be no
+   *            icon associated with this action
+   */
+  public LSystemAction(LSystemEnvironment env, String string, Icon icon) {
+    super(string, icon);
+    environment = env;
+  }
 
-    /**
-     * Given an object, determine if this grammar action is able to be applied
-     * to that object based on its class. By default, this method returns
-     * <CODE>true</CODE> if this object is an instance of <CODE>LSystem</CODE>.
-     *
-     * @param object
-     *            the object to test for "applicability"
-     * @return <CODE>true</CODE> if this action should be available to an object
-     *         of this type, <CODE>false</CODE> otherwise.
-     */
-    public static boolean isApplicable(Object object) {
-        return object instanceof LSystem;
-    }
+  /**
+   * Given an object, determine if this grammar action is able to be applied
+   * to that object based on its class. By default, this method returns
+   * <CODE>true</CODE> if this object is an instance of <CODE>LSystem</CODE>.
+   *
+   * @param object
+   *            the object to test for "applicability"
+   * @return <CODE>true</CODE> if this action should be available to an object
+   *         of this type, <CODE>false</CODE> otherwise.
+   */
+  public static boolean isApplicable(Object object) {
+    return object instanceof LSystem;
+  }
 
-    /**
-     * Returns the environment.
-     *
-     * @return the L-system environment
-     */
-    protected LSystemEnvironment getEnvironment() {
-        return environment;
-    }
+  /**
+   * Returns the environment.
+   *
+   * @return the L-system environment
+   */
+  protected LSystemEnvironment getEnvironment() {
+    return environment;
+  }
 
-    /** The L-system environment. */
-    private LSystemEnvironment environment;
+  /** The L-system environment. */
+  private LSystemEnvironment environment;
 }

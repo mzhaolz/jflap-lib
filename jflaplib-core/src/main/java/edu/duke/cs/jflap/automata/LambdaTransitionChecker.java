@@ -23,24 +23,23 @@ package edu.duke.cs.jflap.automata;
  * @author Ryan Cavalcante
  */
 public abstract class LambdaTransitionChecker {
-    /**
-     * Creates a <CODE>LambdaTransitionChecker</CODE>.
-     */
-    public LambdaTransitionChecker() {
-    }
+  /**
+   * Creates a <CODE>LambdaTransitionChecker</CODE>.
+   */
+  public LambdaTransitionChecker() {}
 
-    /**
-     * Returns true if <CODE>transition</CODE> is a lambda transition.
-     *
-     * @param transition
-     *            the transition.
-     * @return true if <CODE>transition</CODE> is a lambda transition.
-     */
-    public abstract boolean isLambdaTransition(Transition transition);
+  /**
+   * Returns true if <CODE>transition</CODE> is a lambda transition.
+   *
+   * @param transition
+   *            the transition.
+   * @return true if <CODE>transition</CODE> is a lambda transition.
+   */
+  public abstract boolean isLambdaTransition(Transition transition);
 
-    /** The lambda string. */
-    protected String LAMBDA = "";
+  /** The lambda string. */
+  protected String LAMBDA = "";
 
-    /** The stay string. */
-    protected String STAY = "S";
+  /** The stay string. */
+  protected String STAY = "S";
 }
