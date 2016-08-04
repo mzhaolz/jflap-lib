@@ -23,6 +23,7 @@ import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PDAStepWithClosureSimulator extends PDAStepByStateSimulator {
 
@@ -38,15 +39,15 @@ public class PDAStepWithClosureSimulator extends PDAStepByStateSimulator {
    * @param input
    *            the input string.
    */
-  public Configuration[] getInitialConfigurations(String input) {
+  public List<Configuration> getInitialConfigurations(String input) {
     /** The stack should contain the bottom of stack marker. */
     State init = myAutomaton.getInitialState();
-    State[] closure = ClosureTaker.getClosure(init, myAutomaton);
-    Configuration[] configs = new Configuration[closure.length];
-    for (int k = 0; k < closure.length; k++) {
+    List<State> closure = ClosureTaker.getClosure(init, myAutomaton);
+    List<Configuration> configs = new ArrayList<>();
+    for (int k = 0; k < closure.size(); k++) {
       CharacterStack stack = new CharacterStack();
       stack.push("Z");
-      configs[k] = new PDAConfiguration(closure[k], null, input, input, stack, myAcceptance);
+      configs.add(new PDAConfiguration(closure.get(k), null, input, input, stack, myAcceptance));
     }
     return configs;
   }
@@ -65,9 +66,9 @@ public class PDAStepWithClosureSimulator extends PDAStepByStateSimulator {
     String unprocessedInput = configuration.getUnprocessedInput();
     String totalInput = configuration.getInput();
     State currentState = configuration.getCurrentState();
-    Transition[] transitions = myAutomaton.getTransitionsFromState(currentState);
-    for (int k = 0; k < transitions.length; k++) {
-      PDATransition transition = (PDATransition) transitions[k];
+    List<Transition> transitions = myAutomaton.getTransitionsFromState(currentState);
+    for (int k = 0; k < transitions.size(); k++) {
+      PDATransition transition = (PDATransition) transitions.get(k);
       /** get all information from transition. */
       String inputToRead = transition.getInputToRead();
       String stringToPop = transition.getStringToPop();
@@ -82,12 +83,12 @@ public class PDAStepWithClosureSimulator extends PDAStepByStateSimulator {
         }
         State toState = transition.getToState();
         stack.push(transition.getStringToPush());
-        State[] closure = ClosureTaker.getClosure(toState, myAutomaton);
-        for (int i = 0; i < closure.length; i++) {
+        List<State> closure = ClosureTaker.getClosure(toState, myAutomaton);
+        for (int i = 0; i < closure.size(); i++) {
           CharacterStack cstack = new CharacterStack(stack);
           PDAConfiguration configurationToAdd =
               new PDAConfiguration(
-                  closure[i], configuration, totalInput, input, cstack, myAcceptance);
+                  closure.get(i), configuration, totalInput, input, cstack, myAcceptance);
           list.add(configurationToAdd);
         }
       }

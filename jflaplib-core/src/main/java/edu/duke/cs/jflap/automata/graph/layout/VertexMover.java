@@ -21,7 +21,7 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -86,7 +86,7 @@ public class VertexMover<V> extends LayoutAlgorithm<V> {
   }
 
   public void layout(Graph<V> graph, Set<V> notMoving) {
-    ArrayList<?> vertices = getMovableVertices(graph, notMoving);
+    List<V> vertices = getMovableVertices(graph, notMoving);
 
     // Check whether to fill the screen first, because other commands will
     // call the other

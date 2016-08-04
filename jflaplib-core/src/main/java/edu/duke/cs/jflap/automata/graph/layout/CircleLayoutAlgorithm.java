@@ -22,6 +22,7 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -62,7 +63,7 @@ public class CircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   }
 
   public void layout(Graph<V> graph, Set<V> notMoving) {
-    ArrayList<V> vertices = getMovableVertices(graph, notMoving);
+    List<V> vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 
     boxes = new ArrayList<Box>();

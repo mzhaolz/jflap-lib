@@ -16,11 +16,14 @@
 
 package edu.duke.cs.jflap.automata.graph;
 
+import com.google.common.collect.Lists;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -77,7 +80,7 @@ public class Graph<T> {
     }
 
     /** Adds a vertex. */
-    public void addVertex(Object vertex, Point2D point) {
+    public void addVertex(T vertex, Point2D point) {
         verticesToPoints.put(vertex, (Point2D) point.clone());
     }
 
@@ -92,7 +95,7 @@ public class Graph<T> {
     }
 
     /** Moves a vertex to a new point. */
-    public void moveVertex(Object vertex, Point2D point) {
+    public void moveVertex(T vertex, Point2D point) {
         addVertex(vertex, point);
     }
 
@@ -102,40 +105,39 @@ public class Graph<T> {
     }
 
     /** Returns the list of vertex objects. */
-    @SuppressWarnings("unchecked")
-    public T[] vertices() {
-        return (T[]) verticesToPoints.keySet()
+    public List<T> vertices() {
+        return Lists.newArrayList(verticesToPoints.keySet());
     }
 
     /**
      * Returns the list of vertex points. The order they appear is not
      * necessarily the same as the vertices.
      */
-    public Point2D[] points() {
-        return verticesToPoints.values()
+    public List<Point2D> points() {
+        return Lists.newArrayList(verticesToPoints.values());
     }
 
     /** Reforms the points so they are enclosed within a certain frame. */
     public void moveWithinFrame(Rectangle2D bounds) {
-        Object[] vertices = vertices();
-        if (vertices.length == 0)
+        List<T> vertices = vertices();
+        if (vertices.size() == 0)
             return;
-        Point2D p = pointForVertex(vertices[0]);
+        Point2D p = pointForVertex(vertices.get(0));
         double minx = p.getX(), miny = p.getY(), maxx = minx, maxy = miny;
-        for (int i = 1; i < vertices.length; i++) {
-            p = pointForVertex(vertices[i]);
+        for (int i = 1; i < vertices.size(); i++) {
+            p = pointForVertex(vertices.get(i));
             minx = Math.min(minx, p.getX());
             miny = Math.min(miny, p.getY());
             maxx = Math.max(maxx, p.getX());
             maxy = Math.max(maxy, p.getY());
         }
         // Now, scale them!
-        for (int i = 0; i < vertices.length; i++) {
-            p = pointForVertex(vertices[i]);
+        for (int i = 0; i < vertices.size(); i++) {
+            p = pointForVertex(vertices.get(i));
             p = new Point2D.Double(
                     (p.getX() - minx) * bounds.getWidth() / (maxx - minx) + bounds.getX(),
                     (p.getY() - miny) * bounds.getHeight() / (maxy - miny) + bounds.getY());
-            moveVertex(vertices[i], p);
+            moveVertex(vertices.get(i), p);
         }
     }
 
@@ -147,7 +149,7 @@ public class Graph<T> {
         return sb.toString();
     }
 
-    protected Map<Object, Point2D> verticesToPoints = new HashMap<Object, Point2D>();
+    protected Map<T, Point2D> verticesToPoints = new HashMap<T, Point2D>();
 
     protected Map<T, HashSet<T>> verticesToNeighbors = new HashMap<>();
 }

@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFrame;
@@ -47,12 +48,12 @@ public class TwoCircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   /**
    * The vertices associated with the graph
    */
-  ArrayList<V> vertices;
+  List<V> vertices;
   /**
    * Two lists that represent the division of the vertices into an inner and
    * an outer circle
    */
-  ArrayList<V> innerCircle, outerCircle;
+  List<V> innerCircle, outerCircle;
   /**
    * <code>VertexChains</code> that represent values in the outer circle. Each
    * <code>VertexChain</code> corresponds to a vertex in the

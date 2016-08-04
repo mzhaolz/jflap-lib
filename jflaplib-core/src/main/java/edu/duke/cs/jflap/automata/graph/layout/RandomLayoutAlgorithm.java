@@ -24,6 +24,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -38,11 +39,11 @@ public class RandomLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   /**
    * A list of all movable vertices.
    */
-  private ArrayList<V> vertices;
+  private List<V> vertices;
   /**
    * A list of all randomly generated points.
    */
-  private ArrayList<Point2D> points;
+  private List<Point2D> points;
   /**
    * The <code>VertexChain</code> used to minimize edge collision.
    */

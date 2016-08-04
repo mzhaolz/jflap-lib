@@ -22,6 +22,7 @@ import edu.duke.cs.jflap.automata.State;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * The disjoint sets detector can be used to determine the disjoint sets of
@@ -76,8 +77,8 @@ public class DisjointSetsDetector {
     private boolean areDirectlyConnected(State s1, State s2, Automaton automaton) {
         if (s1 == s2)
             return false;
-        if (automaton.getTransitionsFromStateToState(s1, s2).length == 0
-                && automaton.getTransitionsFromStateToState(s2, s1).length == 0)
+        if (automaton.getTransitionsFromStateToState(s1, s2).size() == 0
+                && automaton.getTransitionsFromStateToState(s2, s1).size() == 0)
             return false;
         return true;
     }
@@ -95,10 +96,10 @@ public class DisjointSetsDetector {
      */
     private ArrayList<State> getStatesConnectedToState(State state, Automaton automaton) {
         ArrayList<State> list = new ArrayList<State>();
-        State[] states = automaton.getStates();
-        for (int k = 0; k < states.length; k++) {
-            if (areDirectlyConnected(state, states[k], automaton)) {
-                list.add(states[k]);
+        List<State> states = automaton.getStates();
+        for (State stati : states) {
+            if (areDirectlyConnected(state, stati, automaton)) {
+                list.add(stati);
             }
         }
         return list;
@@ -193,10 +194,10 @@ public class DisjointSetsDetector {
      *         for in the determination of disjoint sets.
      */
     public State getUnaccountedForState(Automaton automaton) {
-        State[] states = automaton.getStates();
-        for (int k = 0; k < states.length; k++) {
-            if (!isAccountedFor(states[k]))
-                return states[k];
+        List<State> states = automaton.getStates();
+        for (State state : states) {
+            if (!isAccountedFor(state))
+                return state;
         }
         return null;
     }
@@ -210,8 +211,7 @@ public class DisjointSetsDetector {
      * @return an array of all the disjoint sets of states in
      *         <CODE>automaton</CODE>.
      */
-    @SuppressWarnings("unchecked")
-    public HashSet<State>[] getDisjointSets(Automaton automaton) {
+    public List<HashSet<State>> getDisjointSets(Automaton automaton) {
         ArrayList<HashSet<State>> list = new ArrayList<HashSet<State>>();
         STATES_IN_A_SET = new ArrayList<State>();
 
@@ -221,7 +221,7 @@ public class DisjointSetsDetector {
             accountForStates(set);
             list.add(set);
         }
-        return list
+        return list;
     }
 
     /** the states accounted for in the determination of disjoint sets. */

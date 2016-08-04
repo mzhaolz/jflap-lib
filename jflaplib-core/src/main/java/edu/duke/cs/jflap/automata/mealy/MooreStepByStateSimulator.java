@@ -19,6 +19,9 @@ package edu.duke.cs.jflap.automata.mealy;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The Mealy machine step by state simulator simulates the behavior of a Mealy
  * machine. It takes a <code>MooreMachine</code> object and runs an input string
@@ -55,15 +58,15 @@ public class MooreStepByStateSimulator extends MealyStepByStateSimulator {
    * @param input
    *            the input string to simulate
    */
-  public Configuration[] getInitialConfigurations(String input) {
-    Configuration[] configs = new Configuration[1];
-    configs[0] =
+  public List<Configuration> getInitialConfigurations(String input) {
+    List<Configuration> configs = new ArrayList<>();
+    configs.add(
         new MealyConfiguration(
             myAutomaton.getInitialState(),
             null,
             input,
             input,
-            ((MooreMachine) myAutomaton).getOutput(myAutomaton.getInitialState()));
+            ((MooreMachine) myAutomaton).getOutput(myAutomaton.getInitialState())));
     return configs;
   }
 }

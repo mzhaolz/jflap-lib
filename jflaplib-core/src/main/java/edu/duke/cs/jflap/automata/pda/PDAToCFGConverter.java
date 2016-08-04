@@ -74,16 +74,16 @@ public class PDAToCFGConverter {
    *         entered if and only if the stack is empty.
    */
   public boolean hasSingleFinalState(Automaton automaton) {
-    State[] finalStates = automaton.getFinalStates();
-    if (finalStates.length != 1) {
+    List<State> finalStates = automaton.getFinalStates();
+    if (finalStates.size() != 1) {
       // System.err.println("There is not exactly one final state!");
       return false;
     }
 
-    State finalState = finalStates[0];
-    Transition[] transitions = automaton.getTransitionsToState(finalState);
-    for (int k = 0; k < transitions.length; k++) {
-      PDATransition trans = (PDATransition) transitions[k];
+    State finalState = finalStates.get(0);
+    List<Transition> transitions = automaton.getTransitionsToState(finalState);
+    for (int k = 0; k < transitions.size(); k++) {
+      PDATransition trans = (PDATransition) transitions.get(k);
       String toPop = trans.getStringToPop();
       if (!(toPop.substring(toPop.length() - 1)).equals(BOTTOM_OF_STACK)) {
         // System.err.println("Bad transition to final state! "+trans);
@@ -106,9 +106,9 @@ public class PDAToCFGConverter {
    *         and push either zero or two characters on to the stack.
    */
   public boolean hasTransitionsInCorrectForm(Automaton automaton) {
-    Transition[] transitions = automaton.getTransitions();
-    for (int k = 0; k < transitions.length; k++) {
-      if (!isPushLambdaTransition(transitions[k]) && !isPushTwoTransition(transitions[k])) {
+    List<Transition> transitions = automaton.getTransitions();
+    for (int k = 0; k < transitions.size(); k++) {
+      if (!isPushLambdaTransition(transitions.get(k)) && !isPushTwoTransition(transitions.get(k))) {
         return false;
       }
     }
@@ -208,12 +208,12 @@ public class PDAToCFGConverter {
    */
   public boolean isStartSymbol(String variable, Automaton automaton) {
     State startState = automaton.getInitialState();
-    State[] finalStates = automaton.getFinalStates();
-    if (finalStates.length > 1) {
+    List<State> finalStates = automaton.getFinalStates();
+    if (finalStates.size() > 1) {
       // System.err.println("MORE THAN ONE FINAL STATE");
       return false;
     }
-    State finalState = finalStates[0];
+    State finalState = finalStates.get(0);
     String startSymbol =
         LEFT_PAREN.concat(
             startState
@@ -246,12 +246,12 @@ public class PDAToCFGConverter {
     String toPushOne = toPush.substring(0, 1);
     String toPushTwo = toPush.substring(1);
 
-    State[] states = automaton.getStates();
-    for (int k = 0; k < states.length; k++) {
-      String state = states[k].getName();
+    List<State> states = automaton.getStates();
+    for (int k = 0; k < states.size(); k++) {
+      String state = states.get(k).getName();
       String lhs = LEFT_PAREN.concat(fromState.concat(toPop.concat(state.concat(RIGHT_PAREN))));
-      for (int j = 0; j < states.length; j++) {
-        String lstate = states[j].getName();
+      for (int j = 0; j < states.size(); j++) {
+        String lstate = states.get(j).getName();
         String variable1 =
             LEFT_PAREN.concat(toState.concat(toPushOne.concat(lstate.concat(RIGHT_PAREN))));
         String variable2 =
@@ -389,9 +389,9 @@ public class PDAToCFGConverter {
     List<Production> list = new ArrayList<>();
     ContextFreeGrammar grammar = new ContextFreeGrammar();
 
-    Transition[] transitions = automaton.getTransitions();
-    for (int k = 0; k < transitions.length; k++) {
-      list.addAll(createProductionsForTransition(transitions[k], automaton));
+    List<Transition> transitions = automaton.getTransitions();
+    for (int k = 0; k < transitions.size(); k++) {
+      list.addAll(createProductionsForTransition(transitions.get(k), automaton));
     }
 
     Iterator<Production> it = list.iterator();
@@ -508,7 +508,7 @@ public class PDAToCFGConverter {
         LEFT_PAREN
             + automaton.getInitialState().getName()
             + BOTTOM_OF_STACK
-            + automaton.getFinalStates()[0].getName()
+            + automaton.getFinalStates().get(0).getName()
             + RIGHT_PAREN;
     purgeProductionsHelper(initVar, productions, valid, validProductions);
 

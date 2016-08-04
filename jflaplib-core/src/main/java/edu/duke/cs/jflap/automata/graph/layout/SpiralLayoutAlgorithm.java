@@ -21,9 +21,9 @@ import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -63,7 +63,7 @@ public class SpiralLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
 
   public void layout(Graph<V> g, Set<V> notMoving) {
     graph = g;
-    ArrayList<V> vertices = getMovableVertices(graph, notMoving);
+    List<V> vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 
     /*
