@@ -16,7 +16,10 @@
 
 package edu.duke.cs.jflap.file.xml;
 
-import org.w3c.dom.*;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * This prettier converts DOMs to a prettier form. When creating a new raw DOM,
@@ -28,52 +31,56 @@ import org.w3c.dom.*;
  * @author Thomas Finley
  */
 public class DOMPrettier {
-  /**
-   * Recursive private helper method that inserts indenting text nodes.
-   *
-   * @param dom
-   *            the DOM document
-   * @param indent
-   *            the indent string sofar
-   * @param node
-   *            the node that we are recursing on
-   * @return if the last node encountered was a text node
-   */
-  private static boolean makePretty(Document dom, String indent, Node node) {
-    if (node.getNodeType() == Node.TEXT_NODE) return true;
-    try {
-      node.getParentNode().insertBefore(dom.createTextNode(indent), node);
-    } catch (DOMException e) {
-      // This occurs when the parent is the document, in which
-      // case we don't want to insert the indentation anyway, so
-      // this is perfectly fine.
+    /**
+     * Recursive private helper method that inserts indenting text nodes.
+     *
+     * @param dom
+     *            the DOM document
+     * @param indent
+     *            the indent string sofar
+     * @param node
+     *            the node that we are recursing on
+     * @return if the last node encountered was a text node
+     */
+    private static boolean makePretty(Document dom, String indent, Node node) {
+        if (node.getNodeType() == Node.TEXT_NODE)
+            return true;
+        try {
+            node.getParentNode().insertBefore(dom.createTextNode(indent), node);
+        } catch (DOMException e) {
+            // This occurs when the parent is the document, in which
+            // case we don't want to insert the indentation anyway, so
+            // this is perfectly fine.
+        }
+        NodeList list = node.getChildNodes();
+        // Not good to insert nodes while accessing the list. :)
+        Node[] nodes = new Node[list.getLength()];
+        for (int i = 0; i < list.getLength(); i++)
+            nodes[i] = list.item(i);
+
+        boolean lastChild = true; // If no children, don't want text inside.
+        for (int i = 0; i < nodes.length; i++)
+            lastChild = makePretty(dom, indent + INDENT, nodes[i]);
+        if (!lastChild)
+            node.appendChild(dom.createTextNode(indent));
+        return false;
     }
-    NodeList list = node.getChildNodes();
-    // Not good to insert nodes while accessing the list. :)
-    Node[] nodes = new Node[list.getLength()];
-    for (int i = 0; i < list.getLength(); i++) nodes[i] = list.item(i);
 
-    boolean lastChild = true; // If no children, don't want text inside.
-    for (int i = 0; i < nodes.length; i++) lastChild = makePretty(dom, indent + INDENT, nodes[i]);
-    if (!lastChild) node.appendChild(dom.createTextNode(indent));
-    return false;
-  }
+    /**
+     * Pretty-fies a DOM by inserting whitespace text nodes at appropriate
+     * places. This modifies the DOM itself.
+     *
+     * @param dom
+     *            the DOM document to make pretty
+     */
+    public static void makePretty(Document dom) {
+        String newline = System.getProperty("line.separator");
+        makePretty(dom, newline, dom.getDocumentElement());
+    }
 
-  /**
-   * Pretty-fies a DOM by inserting whitespace text nodes at appropriate
-   * places. This modifies the DOM itself.
-   *
-   * @param dom
-   *            the DOM document to make pretty
-   */
-  public static void makePretty(Document dom) {
-    String newline = System.getProperty("line.separator");
-    makePretty(dom, newline, dom.getDocumentElement());
-  }
-
-  /**
-   * The changing indentation string. Whenever a new level of indent is
-   * reached, this is prepended.
-   */
-  public static final String INDENT = "\t";
+    /**
+     * The changing indentation string. Whenever a new level of indent is
+     * reached, this is prepended.
+     */
+    public static final String INDENT = "\t";
 }

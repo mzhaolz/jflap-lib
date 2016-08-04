@@ -19,34 +19,33 @@ package edu.duke.cs.jflap.automata.mealy;
 import edu.duke.cs.jflap.automata.Automaton;
 
 /**
- * This subclass of <code>Automaton</code> is specifically for
- * a definition of a Mealy machine.
+ * This subclass of <code>Automaton</code> is specifically for a definition of a
+ * Mealy machine.
  *
  * @author Jinghui Lim
  *
  */
 public class MealyMachine extends Automaton {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 8772972310960249224L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8772972310960249224L;
 
-  /**
-   * Creates a Mealy machine with no states or transitions.
-   *
-   */
-  public MealyMachine() {
-    super();
-  }
+    /**
+     * Creates a Mealy machine with no states or transitions.
+     *
+     */
+    public MealyMachine() {
+        super();
+    }
 
-  /**
-   * Returns the class of <code>Transition</code> this automaton
-   * must accept.
-   *
-   * @return the <code>Class</code> object for the <code>
-   * MealyTransition</code>
-   */
-  protected Class<? extends MealyTransition> getTransitionClass() {
-    return MealyTransition.class;
-  }
+    /**
+     * Returns the class of <code>Transition</code> this automaton must accept.
+     *
+     * @return the <code>Class</code> object for the <code>
+     * MealyTransition</code>
+     */
+    protected Class<? extends MealyTransition> getTransitionClass() {
+        return MealyTransition.class;
+    }
 }

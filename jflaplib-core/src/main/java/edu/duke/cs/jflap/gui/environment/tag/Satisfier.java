@@ -28,18 +28,18 @@ package edu.duke.cs.jflap.gui.environment.tag;
  * @author Thomas Finley
  */
 public interface Satisfier {
-  /**
-   * Checks to see if an object and its tag satisfy some properties
-   *
-   * @param object
-   *            the object, in case it is useful
-   * @param tag
-   *            an object associated with <CODE>object</CODE>, which
-   *            presumably implements some varieties of <CODE>tag</CODE> to
-   *            identify the object
-   * @return <CODE>true</CODE> if this object with this tag satisfies
-   *         whatever this satisfier wishes to satisfy, or <CODE>false</CODE>
-   *         if it does not
-   */
-  public boolean satisfies(Object object, Tag tag);
+    /**
+     * Checks to see if an object and its tag satisfy some properties
+     *
+     * @param object
+     *            the object, in case it is useful
+     * @param tag
+     *            an object associated with <CODE>object</CODE>, which
+     *            presumably implements some varieties of <CODE>tag</CODE> to
+     *            identify the object
+     * @return <CODE>true</CODE> if this object with this tag satisfies whatever
+     *         this satisfier wishes to satisfy, or <CODE>false</CODE> if it
+     *         does not
+     */
+    public boolean satisfies(Object object, Tag tag);
 }

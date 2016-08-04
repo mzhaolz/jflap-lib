@@ -16,62 +16,89 @@
 
 package edu.duke.cs.jflap.automata.turing;
 
-import edu.duke.cs.jflap.automata.State;
-import java.awt.Point;
+import static com.google.common.base.Preconditions.checkArgument;
+
 import edu.duke.cs.jflap.automata.Automaton;
+import edu.duke.cs.jflap.automata.State;
+
+import java.awt.Point;
 
 /**
- * This class represents the TuringMachine-specific aspects of states, such as the ability to hold inner machines.
+ * This class represents the TuringMachine-specific aspects of states, such as
+ * the ability to hold inner machines.
  *
  *
  * @author Henry Qin
  */
 public class TMState extends State {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 2825886205807641375L;
-  private TuringMachine myInnerTuringMachine;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2825886205807641375L;
+    private TuringMachine myInnerTuringMachine;
 
-  public TMState(int id, Point point, Automaton tm) { //do we really need a pointer to the parent?
-    super(id, point, tm);
+    public TMState(int id, Point point, Automaton tm) { // do we really need a
+                                                        // pointer to the
+                                                        // parent?
+        super(id, point, tm);
+        checkArgument(tm instanceof TuringMachine);
+        myInnerTuringMachine = new TuringMachine();
+        myInnerTuringMachine.setParent(this);
+    }
 
-    assert (tm instanceof TuringMachine);
+    public TMState(TMState copyMe) { // do we really need a pointer to the
+                                     // parent?
+        this(copyMe.getID(), (Point) copyMe.getPoint().clone(), copyMe.getAutomaton());
 
-    myInnerTuringMachine = new TuringMachine();
-    myInnerTuringMachine.setParent(this);
-  }
+        myInnerTuringMachine = (TuringMachine) copyMe.getInnerTM().clone(); // this
+                                                                            // should
+                                                                            // result
+                                                                            // in
+                                                                            // recursion
+                                                                            // until
+                                                                            // we
+                                                                            // reach
+                                                                            // a
+                                                                            // TMState
+                                                                            // whose
+                                                                            // inner
+                                                                            // TM
+                                                                            // does
+                                                                            // not
+                                                                            // contain
+                                                                            // states.
+    }
 
-  public TMState(TMState copyMe) { //do we really need a pointer to the parent?
-    this(copyMe.getID(), (Point) copyMe.getPoint().clone(), copyMe.getAutomaton());
+    public void setInnerTM(TuringMachine tm) {
+        myInnerTuringMachine = tm;
+        myInnerTuringMachine.setParent(this);
+        checkArgument(myInnerTuringMachine.getParent() == this);
+    }
 
-    myInnerTuringMachine =
-        (TuringMachine)
-            copyMe
-                .getInnerTM()
-                .clone(); //this should result in recursion until we reach a TMState whose inner TM does not contain states.
-  }
+    public TuringMachine getInnerTM() {
+        return myInnerTuringMachine;
+    }
 
-  public void setInnerTM(TuringMachine tm) {
-    myInnerTuringMachine = tm;
-    myInnerTuringMachine.setParent(this);
-    assert (myInnerTuringMachine.getParent() == this);
-  }
+    public String getInternalName() { // just for trying to preserve old way of
+                                      // saving.
+        // ASSUME that ID's are Independent
+        return myInternalName == null ? myInternalName = "Machine" + getID() : myInternalName; // create
+                                                                                               // an
+                                                                                               // internal
+                                                                                               // name
+                                                                                               // if
+                                                                                               // one
+                                                                                               // has
+                                                                                               // not
+                                                                                               // been
+                                                                                               // assigned
+                                                                                               // explicitly
+    }
 
-  public TuringMachine getInnerTM() {
-    return myInnerTuringMachine;
-  }
+    public void setInternalName(String s) { // just for trying to preserve old
+                                            // way of saving.
+        myInternalName = s;
+    }
 
-  public String getInternalName() { //just for trying to preserve old way of saving.
-    //ASSUME that ID's are Independent
-    return myInternalName == null
-        ? myInternalName = "Machine" + getID()
-        : myInternalName; //create an internal name if one has not been assigned explicitly
-  }
-
-  public void setInternalName(String s) { //just for trying to preserve old way of saving.
-    myInternalName = s;
-  }
-
-  private String myInternalName = null;
+    private String myInternalName = null;
 }

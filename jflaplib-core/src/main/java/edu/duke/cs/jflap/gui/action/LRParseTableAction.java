@@ -18,8 +18,9 @@ package edu.duke.cs.jflap.gui.action;
 
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.environment.tag.*;
-import edu.duke.cs.jflap.gui.grammar.parse.*;
+import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.grammar.parse.LRParseTableDerivationPane;
+
 import java.awt.event.ActionEvent;
 
 /**
@@ -28,34 +29,37 @@ import java.awt.event.ActionEvent;
  * @author Thomas Finley
  */
 public class LRParseTableAction extends GrammarAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiates a new <CODE>GrammarOutputAction</CODE>.
-   *
-   * @param environment
-   *            the grammar environment
-   */
-  public LRParseTableAction(GrammarEnvironment environment) {
-    super("Build SLR(1) Parse Table", null);
-    this.environment = environment;
-  }
+    /**
+     * Instantiates a new <CODE>GrammarOutputAction</CODE>.
+     *
+     * @param environment
+     *            the grammar environment
+     */
+    public LRParseTableAction(GrammarEnvironment environment) {
+        super("Build SLR(1) Parse Table", null);
+        this.environment = environment;
+    }
 
-  /**
-   * Performs the action.
-   */
-  public void actionPerformed(ActionEvent e) {
-    Grammar g = environment.getGrammar();
-    if (g == null) return;
-    LRParseTableDerivationPane ptdp = new LRParseTableDerivationPane(environment);
-    if (ptdp.getAugmentedGrammar() == null) return;
-    environment.add(ptdp, "Build SLR(1) Parse", new CriticalTag() {});
-    environment.setActive(ptdp);
-  }
+    /**
+     * Performs the action.
+     */
+    public void actionPerformed(ActionEvent e) {
+        Grammar g = environment.getGrammar();
+        if (g == null)
+            return;
+        LRParseTableDerivationPane ptdp = new LRParseTableDerivationPane(environment);
+        if (ptdp.getAugmentedGrammar() == null)
+            return;
+        environment.add(ptdp, "Build SLR(1) Parse", new CriticalTag() {
+        });
+        environment.setActive(ptdp);
+    }
 
-  /** The grammar environment. */
-  private GrammarEnvironment environment;
+    /** The grammar environment. */
+    private GrammarEnvironment environment;
 }

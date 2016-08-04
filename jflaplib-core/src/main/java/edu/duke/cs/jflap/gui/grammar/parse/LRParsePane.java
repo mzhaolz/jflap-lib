@@ -16,10 +16,11 @@
 
 package edu.duke.cs.jflap.gui.grammar.parse;
 
-import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.grammar.parse.*;
-import javax.swing.*;
+import edu.duke.cs.jflap.grammar.parse.LRParseTable;
+import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
+
+import javax.swing.JTable;
 
 /**
  * This is a parse pane for LR grammars.
@@ -27,71 +28,70 @@ import javax.swing.*;
  * @author Thomas Finley
  */
 public class LRParsePane extends ParsePane {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiaes a new LR parse pane.
-   *
-   * @param environment
-   *            the grammar environment
-   * @param grammar
-   *            the augmented grammar
-   * @param table
-   *            the LR parse table
-   */
-  public LRParsePane(GrammarEnvironment environment, Grammar grammar, LRParseTable table) {
-    super(environment, grammar);
-    this.table =
-        new LRParseTable(table) {
-          /**
-           *
-           */
-          private static final long serialVersionUID = 1L;
+    /**
+     * Instantiaes a new LR parse pane.
+     *
+     * @param environment
+     *            the grammar environment
+     * @param grammar
+     *            the augmented grammar
+     * @param table
+     *            the LR parse table
+     */
+    public LRParsePane(GrammarEnvironment environment, Grammar grammar, LRParseTable table) {
+        super(environment, grammar);
+        this.table = new LRParseTable(table) {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-          public boolean isCellEditable(int r, int c) {
-            return false;
-          }
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
-    initView();
-  }
+        initView();
+    }
 
-  /**
-   * Inits a parse table.
-   *
-   * @return a table to hold the parse table
-   */
-  protected JTable initParseTable() {
-    tablePanel = new LRParseTablePane(table);
-    return tablePanel;
-  }
+    /**
+     * Inits a parse table.
+     *
+     * @return a table to hold the parse table
+     */
+    protected JTable initParseTable() {
+        tablePanel = new LRParseTablePane(table);
+        return tablePanel;
+    }
 
-  /**
-   * This method is called when there is new input to parse.
-   *
-   * @param string
-   *            a new input string
-   */
-  protected void input(String string) {
-    controller.initialize(string);
-  }
+    /**
+     * This method is called when there is new input to parse.
+     *
+     * @param string
+     *            a new input string
+     */
+    protected void input(String string) {
+        controller.initialize(string);
+    }
 
-  /**
-   * This method is called when the step button is pressed.
-   */
-  protected boolean step() {
-    controller.step();
-    return true;
-  }
+    /**
+     * This method is called when the step button is pressed.
+     */
+    protected boolean step() {
+        controller.step();
+        return true;
+    }
 
-  /** The parse table. */
-  final LRParseTable table;
+    /** The parse table. */
+    final LRParseTable table;
 
-  /** The parse table panel. */
-  LRParseTablePane tablePanel;
+    /** The parse table panel. */
+    LRParseTablePane tablePanel;
 
-  /** The controller object. */
-  protected LRParseController controller = new LRParseController(this);
+    /** The controller object. */
+    protected LRParseController controller = new LRParseController(this);
 }

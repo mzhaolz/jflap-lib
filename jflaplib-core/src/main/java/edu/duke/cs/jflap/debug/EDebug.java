@@ -16,35 +16,35 @@
 
 package edu.duke.cs.jflap.debug;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EDebug {
-  private static final Logger logger = LoggerFactory.getLogger(EDebug.class);
+    private static final Logger logger = LoggerFactory.getLogger(EDebug.class);
 
-  public static boolean setFind = false;
+    public static boolean setFind = false;
 
-  private static String getFileName() {
-    return Thread.currentThread().getStackTrace()[3].getClassName();
-  }
-
-  private static String getClassName() {
-    return Thread.currentThread().getStackTrace()[3].getClassName();
-  }
-
-  private static String getMethodName() {
-    return Thread.currentThread().getStackTrace()[3].getMethodName();
-  }
-
-  private static int getLineNumber() {
-    return Thread.currentThread().getStackTrace()[3].getLineNumber();
-  }
-
-  public static void print(Object s) {
-    if (setFind) {
-      logger.debug(
-          getFileName() + ":" + getClassName() + ":" + getMethodName() + ":" + getLineNumber());
+    private static String getFileName() {
+        return Thread.currentThread().getStackTrace()[3].getClassName();
     }
-    logger.debug(s.toString());
-  }
+
+    private static String getClassName() {
+        return Thread.currentThread().getStackTrace()[3].getClassName();
+    }
+
+    private static String getMethodName() {
+        return Thread.currentThread().getStackTrace()[3].getMethodName();
+    }
+
+    private static int getLineNumber() {
+        return Thread.currentThread().getStackTrace()[3].getLineNumber();
+    }
+
+    public static void print(Object s) {
+        if (setFind) {
+            logger.debug(getFileName() + ":" + getClassName() + ":" + getMethodName() + ":"
+                    + getLineNumber());
+        }
+        logger.debug(s.toString());
+    }
 }

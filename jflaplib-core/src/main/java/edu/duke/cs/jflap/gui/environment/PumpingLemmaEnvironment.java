@@ -25,12 +25,12 @@ import edu.duke.cs.jflap.gui.pumping.PumpingLemmaChooser;
  *
  */
 public class PumpingLemmaEnvironment extends Environment {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  public PumpingLemmaEnvironment(PumpingLemmaChooser lemma) {
-    super(lemma);
-  }
+    public PumpingLemmaEnvironment(PumpingLemmaChooser lemma) {
+        super(lemma);
+    }
 }

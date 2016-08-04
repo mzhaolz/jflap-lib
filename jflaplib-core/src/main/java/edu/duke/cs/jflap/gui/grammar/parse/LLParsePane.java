@@ -16,11 +16,13 @@
 
 package edu.duke.cs.jflap.gui.grammar.parse;
 
-import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.grammar.parse.*;
-import javax.swing.*;
-import edu.duke.cs.jflap.gui.tree.*;
+import edu.duke.cs.jflap.grammar.parse.LLParseTable;
+import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
+import edu.duke.cs.jflap.gui.tree.SelectNodeDrawer;
+
+import javax.swing.JComponent;
+import javax.swing.JTable;
 
 /**
  * This is a parse pane for LL grammars.
@@ -28,85 +30,84 @@ import edu.duke.cs.jflap.gui.tree.*;
  * @author Thomas Finley
  */
 public class LLParsePane extends ParsePane {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiaes a new LL parse pane.
-   *
-   * @param environment
-   *            the grammar environment
-   * @param grammar
-   *            the augmented grammar
-   * @param table
-   *            the LL parse table
-   */
-  public LLParsePane(GrammarEnvironment environment, Grammar grammar, LLParseTable table) {
-    super(environment, grammar);
-    this.table =
-        new LLParseTable(table) {
-          /**
-           *
-           */
-          private static final long serialVersionUID = 1L;
+    /**
+     * Instantiaes a new LL parse pane.
+     *
+     * @param environment
+     *            the grammar environment
+     * @param grammar
+     *            the augmented grammar
+     * @param table
+     *            the LL parse table
+     */
+    public LLParsePane(GrammarEnvironment environment, Grammar grammar, LLParseTable table) {
+        super(environment, grammar);
+        this.table = new LLParseTable(table) {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-          public boolean isCellEditable(int r, int c) {
-            return false;
-          }
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
         };
-    initView();
-  }
+        initView();
+    }
 
-  /**
-   * Inits a parse table.
-   *
-   * @return a table to hold the parse table
-   */
-  protected JTable initParseTable() {
-    tablePanel = new LLParseTablePane(table);
-    return tablePanel;
-  }
+    /**
+     * Inits a parse table.
+     *
+     * @return a table to hold the parse table
+     */
+    protected JTable initParseTable() {
+        tablePanel = new LLParseTablePane(table);
+        return tablePanel;
+    }
 
-  /**
-   * This method is called when there is new input to parse.
-   *
-   * @param string
-   *            a new input string
-   */
-  protected void input(String string) {
-    controller.initialize(string);
-  }
+    /**
+     * This method is called when there is new input to parse.
+     *
+     * @param string
+     *            a new input string
+     */
+    protected void input(String string) {
+        controller.initialize(string);
+    }
 
-  /**
-   * This method is called when the step button is pressed.
-   */
-  protected boolean step() {
-    controller.step();
-    return true;
-  }
+    /**
+     * This method is called when the step button is pressed.
+     */
+    protected boolean step() {
+        controller.step();
+        return true;
+    }
 
-  /**
-   * Inits a new tree panel. This overriding adds a selection node drawer so
-   * certain nodes can be highlighted.
-   *
-   * @return a new display for the parse tree
-   */
-  protected JComponent initTreePanel() {
-    treeDrawer.setNodeDrawer(nodeDrawer);
-    return super.initTreePanel();
-  }
+    /**
+     * Inits a new tree panel. This overriding adds a selection node drawer so
+     * certain nodes can be highlighted.
+     *
+     * @return a new display for the parse tree
+     */
+    protected JComponent initTreePanel() {
+        treeDrawer.setNodeDrawer(nodeDrawer);
+        return super.initTreePanel();
+    }
 
-  /** The parse table. */
-  final LLParseTable table;
+    /** The parse table. */
+    final LLParseTable table;
 
-  /** The parse table panel. */
-  LLParseTablePane tablePanel;
+    /** The parse table panel. */
+    LLParseTablePane tablePanel;
 
-  /** The controller object. */
-  protected LLParseController controller = new LLParseController(this);
+    /** The controller object. */
+    protected LLParseController controller = new LLParseController(this);
 
-  /** The selection node drawer. */
-  SelectNodeDrawer nodeDrawer = new SelectNodeDrawer();
+    /** The selection node drawer. */
+    SelectNodeDrawer nodeDrawer = new SelectNodeDrawer();
 }

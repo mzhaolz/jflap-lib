@@ -28,24 +28,25 @@ import edu.duke.cs.jflap.automata.turing.TMConfiguration;
  * @author Thomas Finley
  */
 public class ConfigurationIconFactory {
-  /**
-   * Returns an instance of an appropriate subclass of the configuration icon
-   * for this sort of configuration.
-   *
-   * @param configuration
-   *            the configuration to return the icon for
-   * @return some instance of a subclass of <CODE>ConfigurationIcon</CODE>,
-   *         or <CODE>null</CODE> if this factory is not set up to handle
-   *         this sort of configuration
-   */
-  public static ConfigurationIcon iconForConfiguration(Configuration configuration) {
-    if (configuration instanceof FSAConfiguration) return new FSAConfigurationIcon(configuration);
-    else if (configuration instanceof PDAConfiguration)
-      return new PDAConfigurationIcon(configuration);
-    else if (configuration instanceof TMConfiguration)
-      return new TMConfigurationIcon(configuration);
-    else if (configuration instanceof edu.duke.cs.jflap.automata.mealy.MealyConfiguration)
-      return new MealyConfigurationIcon(configuration);
-    return null;
-  }
+    /**
+     * Returns an instance of an appropriate subclass of the configuration icon
+     * for this sort of configuration.
+     *
+     * @param configuration
+     *            the configuration to return the icon for
+     * @return some instance of a subclass of <CODE>ConfigurationIcon</CODE>, or
+     *         <CODE>null</CODE> if this factory is not set up to handle this
+     *         sort of configuration
+     */
+    public static ConfigurationIcon iconForConfiguration(Configuration configuration) {
+        if (configuration instanceof FSAConfiguration)
+            return new FSAConfigurationIcon(configuration);
+        else if (configuration instanceof PDAConfiguration)
+            return new PDAConfigurationIcon(configuration);
+        else if (configuration instanceof TMConfiguration)
+            return new TMConfigurationIcon(configuration);
+        else if (configuration instanceof edu.duke.cs.jflap.automata.mealy.MealyConfiguration)
+            return new MealyConfigurationIcon(configuration);
+        return null;
+    }
 }

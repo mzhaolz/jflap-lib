@@ -3,6 +3,7 @@ java_library(
 	srcs = glob(["**/*.java"], exclude = ["**/LRParser.java"]),
 	visibility = [ "//visibility:public" ],
 	deps = [
+			"@com_google_guava//jar",
 			"@org_apache_xmlgraphics_batik_anim//jar",
 			"@org_apache_xmlgraphics_batik_dom//jar",
 			"@org_apache_xmlgraphics_batik_svg_dom//jar",

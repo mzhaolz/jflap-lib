@@ -25,11 +25,11 @@ import java.util.EventListener;
  * @author Thomas Finley
  */
 public interface ExpressionChangeListener extends EventListener {
-  /**
-   * This method is called when a regular expression changes.
-   *
-   * @param event
-   *            the event object that was changed
-   */
-  public void expressionChanged(ExpressionChangeEvent event);
+    /**
+     * This method is called when a regular expression changes.
+     *
+     * @param event
+     *            the event object that was changed
+     */
+    public void expressionChanged(ExpressionChangeEvent event);
 }

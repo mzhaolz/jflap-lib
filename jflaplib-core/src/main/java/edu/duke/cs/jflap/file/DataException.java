@@ -19,33 +19,34 @@ package edu.duke.cs.jflap.file;
 /**
  * This error indicates elements in a file are arranged in such a fashion as to
  * prevent the correct initialization of a structure. This should be thrown by
- * {@link edu.duke.cs.jflap.file.Decoder} implementing objects to indicate a problem processing
- * the data in the file that indicates that the data is formatted correctly, but
- * that trying to make a JFLAP structure out of it is impossible. For example,
- * the data could be formatted correctly, but be inconsistent.
+ * {@link edu.duke.cs.jflap.file.Decoder} implementing objects to indicate a
+ * problem processing the data in the file that indicates that the data is
+ * formatted correctly, but that trying to make a JFLAP structure out of it is
+ * impossible. For example, the data could be formatted correctly, but be
+ * inconsistent.
  *
  * @author Thomas Finley
  */
 public class DataException extends RuntimeException {
-  /**
-   *
-   */
-  private static final long serialVersionUID = -1918740200556208694L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -1918740200556208694L;
 
-  /**
-   * Creates a generic data exception.
-   */
-  public DataException() {
-    super();
-  }
+    /**
+     * Creates a generic data exception.
+     */
+    public DataException() {
+        super();
+    }
 
-  /**
-   * Creates a data exception with the given message.
-   *
-   * @param message
-   *            the exception message
-   */
-  public DataException(String message) {
-    super(message);
-  }
+    /**
+     * Creates a data exception with the given message.
+     *
+     * @param message
+     *            the exception message
+     */
+    public DataException(String message) {
+        super(message);
+    }
 }

@@ -19,27 +19,29 @@ package edu.duke.cs.jflap.file;
 /**
  * This error indicates elements in a file are arranged in such a fashion as to
  * prevent the interpreter from working correctly. This should be thrown by
- * {@link edu.duke.cs.jflap.file.Decoder} implementing objects to indicate a problem processing
- * the file that could indicate that it is not the target type of file at all.
+ * {@link edu.duke.cs.jflap.file.Decoder} implementing objects to indicate a
+ * problem processing the file that could indicate that it is not the target
+ * type of file at all.
  *
  * @author Thomas Finley
  */
 public class ParseException extends RuntimeException {
-  private static final long serialVersionUID = 17L;
-  /**
-   * Creates a generic parse exception.
-   */
-  public ParseException() {
-    super();
-  }
+    private static final long serialVersionUID = 17L;
 
-  /**
-   * Creates a parse exception with the given message.
-   *
-   * @param message
-   *            the exception message
-   */
-  public ParseException(String message) {
-    super(message);
-  }
+    /**
+     * Creates a generic parse exception.
+     */
+    public ParseException() {
+        super();
+    }
+
+    /**
+     * Creates a parse exception with the given message.
+     *
+     * @param message
+     *            the exception message
+     */
+    public ParseException(String message) {
+        super(message);
+    }
 }
