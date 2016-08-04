@@ -16,9 +16,9 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 
 /**
  * This is a view that holds a tool bar and the canvas where the automaton is
@@ -27,36 +27,37 @@ import edu.duke.cs.jflap.automata.State;
  * @author Thomas Finley
  */
 public class EditBlockPane extends EditorPane {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-  /**
-   * Instantiates a new editor pane for the given automaton.
-   *
-   * @param automaton
-   *            the automaton to create the editor pane for
-   */
-  public EditBlockPane(Automaton automaton) {
-    super(new SelectionDrawer(automaton));
-  }
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  public void setBlock(State state) {
-    myBlock = state;
-  }
+    /**
+     * Instantiates a new editor pane for the given automaton.
+     *
+     * @param automaton
+     *            the automaton to create the editor pane for
+     */
+    public EditBlockPane(Automaton automaton) {
+        super(new SelectionDrawer(automaton));
+    }
 
-  public State getBlock() {
-    return myBlock;
-  }
+    public void setBlock(State state) {
+        myBlock = state;
+    }
 
-  public void setOldBlock(State state) {
-    myOldBlock = state;
-  }
+    public State getBlock() {
+        return myBlock;
+    }
 
-  public State getOldBlock() {
-    return myOldBlock;
-  }
+    public void setOldBlock(State state) {
+        myOldBlock = state;
+    }
 
-  protected State myBlock = null;
-  protected State myOldBlock = null;
+    public State getOldBlock() {
+        return myOldBlock;
+    }
+
+    protected State myBlock = null;
+    protected State myOldBlock = null;
 }

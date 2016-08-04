@@ -25,33 +25,34 @@ package edu.duke.cs.jflap.grammar;
  * @author Thomas Finley
  */
 public class UnboundGrammar extends Grammar {
-  private static final long serialVersionUID = 1600L;
-  /**
-   * Creates a new grammar.
-   */
-  public UnboundGrammar() {
-    setStartVariable("S");
-  }
+    private static final long serialVersionUID = 1600L;
 
-  /**
-   * Every production is all right except those with lambda in the left hand
-   * side of the production.
-   *
-   * @param production
-   *            the production to check
-   * @throws IllegalArgumentException
-   *             if the production is lambda on the left hand side
-   */
-  public void checkProduction(Production production) {
-    /*
-     * if (production.getLHS().length() == 0) { throw new
-     * IllegalArgumentException ("The left hand side cannot be empty."); }
+    /**
+     * Creates a new grammar.
      */
-  }
+    public UnboundGrammar() {
+        setStartVariable("S");
+    }
 
-  @Override
-  public boolean isConverted() {
-    // TODO Auto-generated method stub
-    return false;
-  }
+    /**
+     * Every production is all right except those with lambda in the left hand
+     * side of the production.
+     *
+     * @param production
+     *            the production to check
+     * @throws IllegalArgumentException
+     *             if the production is lambda on the left hand side
+     */
+    public void checkProduction(Production production) {
+        /*
+         * if (production.getLHS().length() == 0) { throw new
+         * IllegalArgumentException ("The left hand side cannot be empty."); }
+         */
+    }
+
+    @Override
+    public boolean isConverted() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

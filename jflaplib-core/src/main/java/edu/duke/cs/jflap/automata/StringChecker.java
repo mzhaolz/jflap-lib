@@ -23,24 +23,26 @@ package edu.duke.cs.jflap.automata;
  * @author Thomas Finley
  */
 public class StringChecker {
-  /**
-   * We can't have people creating instances of us, now can we?
-   */
-  private StringChecker() {}
+    /**
+     * We can't have people creating instances of us, now can we?
+     */
+    private StringChecker() {
+    }
 
-  /**
-   * Determines if all characters in a string are alphanumeric, i.e., are
-   * either digits or numbers.
-   *
-   * @param string
-   *            the string to check
-   * @return <CODE>true</CODE> if all characters in the string are
-   *         alphanumeric, <CODE>false</CODE> if at least one character in
-   *         the string is non-alphanumeric
-   */
-  public static boolean isAlphanumeric(String string) {
-    for (int i = 0; i < string.length(); i++)
-      if (!Character.isLetterOrDigit(string.charAt(i))) return false;
-    return true;
-  }
+    /**
+     * Determines if all characters in a string are alphanumeric, i.e., are
+     * either digits or numbers.
+     *
+     * @param string
+     *            the string to check
+     * @return <CODE>true</CODE> if all characters in the string are
+     *         alphanumeric, <CODE>false</CODE> if at least one character in the
+     *         string is non-alphanumeric
+     */
+    public static boolean isAlphanumeric(String string) {
+        for (int i = 0; i < string.length(); i++)
+            if (!Character.isLetterOrDigit(string.charAt(i)))
+                return false;
+        return true;
+    }
 }

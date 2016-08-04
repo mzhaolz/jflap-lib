@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.automata;
 
+import java.util.List;
+
 /**
  * The alphabet retriever object can be used to find the alphabet for a given
  * automaton.
@@ -23,17 +25,18 @@ package edu.duke.cs.jflap.automata;
  * @author Ryan Cavalcante
  */
 public abstract class AlphabetRetriever {
-  /**
-   * Instantiates an <CODE>AlphabetRetriever</CODE> object.
-   */
-  public AlphabetRetriever() {}
+    /**
+     * Instantiates an <CODE>AlphabetRetriever</CODE> object.
+     */
+    public AlphabetRetriever() {
+    }
 
-  /**
-   * Returns the alphabet for <CODE>automaton</CODE> in an array of strings.
-   *
-   * @param automaton
-   *            the automaton.
-   * @return the alphabet.
-   */
-  public abstract String[] getAlphabet(Automaton automaton);
+    /**
+     * Returns the alphabet for <CODE>automaton</CODE> in an array of strings.
+     *
+     * @param automaton
+     *            the automaton.
+     * @return the alphabet.
+     */
+    public abstract List<String> getAlphabet(Automaton automaton);
 }

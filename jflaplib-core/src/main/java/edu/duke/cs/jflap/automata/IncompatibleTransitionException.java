@@ -17,8 +17,8 @@
 package edu.duke.cs.jflap.automata;
 
 /**
- * This class is an exception that is thrown in the event an incompatible <CODE>Transition</CODE>
- * object is assigned to an automaton.
+ * This class is an exception that is thrown in the event an incompatible
+ * <CODE>Transition</CODE> object is assigned to an automaton.
  *
  * @see edu.duke.cs.jflap.automata.Automaton
  * @see edu.duke.cs.jflap.automata.Transition
@@ -28,8 +28,8 @@ package edu.duke.cs.jflap.automata;
  */
 public class IncompatibleTransitionException extends RuntimeException {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = 197916993239519305L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 197916993239519305L;
 }

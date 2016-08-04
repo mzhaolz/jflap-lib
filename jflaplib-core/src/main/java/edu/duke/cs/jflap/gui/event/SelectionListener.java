@@ -26,11 +26,11 @@ import java.util.EventListener;
  * @author Thomas Finley
  */
 public interface SelectionListener extends EventListener {
-  /**
-   * This method is called when a selection in an object is changed.
-   *
-   * @param event
-   *            the selection event
-   */
-  public void selectionChanged(SelectionEvent event);
+    /**
+     * This method is called when a selection in an object is changed.
+     *
+     * @param event
+     *            the selection event
+     */
+    public void selectionChanged(SelectionEvent event);
 }

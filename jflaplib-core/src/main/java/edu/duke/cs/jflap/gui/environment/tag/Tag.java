@@ -23,11 +23,12 @@ package edu.duke.cs.jflap.gui.environment.tag;
  * much like the bitfield vectors of yore for identifying them with particular
  * characteristics, but without the inconvinience of having particular bits tied
  * to certain values that absolutely everybody and his mother had to be made
- * aware of. A tag object may simply be something that implements <CODE>Tag</CODE>
- * only to indicate that it has no tag.
+ * aware of. A tag object may simply be something that implements
+ * <CODE>Tag</CODE> only to indicate that it has no tag.
  *
  * @see edu.duke.cs.jflap.gui.environment.Environment#add
  *
  * @author Thomas Finley
  */
-public interface Tag {}
+public interface Tag {
+}

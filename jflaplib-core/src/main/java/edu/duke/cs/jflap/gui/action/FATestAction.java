@@ -16,35 +16,34 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.gui.environment.Environment;
 
 import java.awt.event.KeyEvent;
 
-import edu.duke.cs.jflap.automata.Automaton;
-
 /**
- * The <CODE>TestTuringAction</CODE> is an action to load a structure from a file,
- * and create a new environment with that object.
+ * The <CODE>TestTuringAction</CODE> is an action to load a structure from a
+ * file, and create a new environment with that object.
  *
  * @author Stephen Reading
  */
 public class FATestAction extends TestAction {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiates a new <CODE>Turing Test Action</CODE>.
-   */
-  public FATestAction() {
-    //super("Test Turing Machines", null);
-    super("Test Finite Automata", KeyEvent.VK_A);
-  }
+    /**
+     * Instantiates a new <CODE>Turing Test Action</CODE>.
+     */
+    public FATestAction() {
+        // super("Test Turing Machines", null);
+        super("Test Finite Automata", KeyEvent.VK_A);
+    }
 
-  protected void displayMultipleRunPane(Environment env) {
-    MultipleSimulateAction act = new MultipleSimulateAction((Automaton) myObjects.get(0), env);
-    act.performAction(env);
-  }
+    protected void displayMultipleRunPane(Environment env) {
+        MultipleSimulateAction act = new MultipleSimulateAction((Automaton) myObjects.get(0), env);
+        act.performAction(env);
+    }
 }
