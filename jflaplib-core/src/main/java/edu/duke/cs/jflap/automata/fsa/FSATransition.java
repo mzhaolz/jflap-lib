@@ -58,7 +58,8 @@ public class FSATransition extends Transition {
    *            the new to state
    * @return a copy of this transition with the new states
    */
-  public Transition copy(State from, State to) {
+  @Override
+public Transition copy(State from, State to) {
     return new FSATransition(from, to, myLabel);
   }
 
@@ -87,7 +88,8 @@ public class FSATransition extends Transition {
    *
    * @return the description, in this case, simply the label
    */
-  public String getDescription() {
+  @Override
+public String getDescription() {
     String desc = getLabel();
     if (desc.length() == 0) return Universe.curProfile.getEmptyString(); // I am a badass.
     return getLabel();
@@ -101,7 +103,8 @@ public class FSATransition extends Transition {
    * @see edu.duke.cs.jflap.automata.Transition#toString
    * @return a string representation of this object
    */
-  public String toString() {
+  @Override
+public String toString() {
     return super.toString() + ": \"" + getLabel() + "\"";
   }
 
@@ -113,7 +116,8 @@ public class FSATransition extends Transition {
    * @return <CODE>true</CODE> if the two are equal, <CODE>false</CODE>
    *         otherwise
    */
-  public boolean equals(Object object) {
+  @Override
+public boolean equals(Object object) {
     try {
       FSATransition t = (FSATransition) object;
       return super.equals(t) && myLabel.equals(t.myLabel);
@@ -127,7 +131,8 @@ public class FSATransition extends Transition {
    *
    * @return the hash code for this transition
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return super.hashCode() ^ myLabel.hashCode();
   }
 

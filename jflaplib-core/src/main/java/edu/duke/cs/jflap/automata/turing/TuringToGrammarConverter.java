@@ -23,6 +23,7 @@ import edu.duke.cs.jflap.grammar.Production;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Converter for turing to unrestricted grammar NEEDS to make abstraction (super
@@ -53,7 +54,7 @@ public class TuringToGrammarConverter {
     myAllWritableString = new HashSet<String>();
   }
 
-  public Production[] createProductionsForInit(State state, Transition[] tm) {
+  public List<Production> createProductionsForInit(State state, Transition[] tm) {
     // TODO Auto-generated method stub
     int id = state.getID();
     ArrayList<Production> init = new ArrayList<Production>();
@@ -84,11 +85,7 @@ public class TuringToGrammarConverter {
     }
     init.add(new Production(SQUARE, null));
 
-    Production[] answer = new Production[init.size()];
-    for (int i = 0; i < answer.length; i++) {
-      answer[i] = init.get(i);
-    }
-    return answer;
+    return init;
   }
 
   /**
@@ -99,7 +96,7 @@ public class TuringToGrammarConverter {
    * @param states
    * @return
    */
-  public Production[] createProductionsForTransition(Transition transition, State[] states) {
+  public List<Production> createProductionsForTransition(Transition transition, State[] states) {
     // TODO Auto-generated method stub
     ArrayList<Production> list = new ArrayList<Production>();
     TMTransition trans = (TMTransition) transition;
@@ -175,10 +172,6 @@ public class TuringToGrammarConverter {
       }
     }
 
-    Production[] answer = new Production[list.size()];
-    for (int i = 0; i < answer.length; i++) {
-      answer[i] = list.get(i);
-    }
-    return answer;
+    return list;
   }
 }

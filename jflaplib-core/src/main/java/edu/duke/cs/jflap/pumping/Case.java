@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.pumping;
 
+import java.util.List;
+
 /**
  * A <code>Case</code> is an object that lets the user or program know if
  * certain cases had been done, depending on the conditions of the case,
@@ -37,7 +39,7 @@ public abstract class Case {
    * Previously entered user input. It is <code>null</code> if the user has
    * not entered any input.
    */
-  protected int[] userInput;
+  protected List<Integer> userInput;
 
   /**
    * Constructs a new case with no user input.
@@ -67,7 +69,7 @@ public abstract class Case {
    * Given a <i>w</i> value, returns in an int[] the dividers separating u, v,
    * x, y, & z Used by the computer when it goes first.
    *
-   * public int[] chooseDecompositionOfCase(String s) { int size = s.length();
+   * public List<int> chooseDecompositionOfCase(String s) { int size = s.length();
    * for (int w=0; w<s.length(); w++) for (int x=w; x<s.length(); x++) for
    * (int y=x; y<s.length(); y++) for (int z=y; z<s.length(); z++) if
    * (isCase(s.substring(w, x), s.substring(y, z))) return new int[] {size - w
@@ -88,7 +90,8 @@ public abstract class Case {
    *
    * @return a string representing this case
    */
-  public String toString() {
+  @Override
+public String toString() {
     return description();
   }
 
@@ -102,7 +105,8 @@ public abstract class Case {
    * @return <code>true</code> if the two cases are equivalent,
    *         <code>false</code> otherwise
    */
-  public boolean equals(Object o) {
+  @Override
+public boolean equals(Object o) {
     try {
       return toString().equals(((Case) o).toString());
     } catch (ClassCastException e) {
@@ -118,7 +122,7 @@ public abstract class Case {
    *
    * @return a preset decomposition of this case
    */
-  public abstract int[] getPreset();
+  public abstract List<Integer> getPreset();
 
   /**
    * Returns a decomposition that suits this case, a previously set user
@@ -128,7 +132,7 @@ public abstract class Case {
    *
    * @return a previously set user decomposition or a preset decomposition
    */
-  public int[] getInput() {
+  public List<Integer> getInput() {
     if (userInput == null) return getPreset();
     else return userInput;
   }
@@ -140,7 +144,7 @@ public abstract class Case {
    * @param n
    *            the user's decomposition of <i>w</i>
    */
-  public void setUserInput(int[] n) {
+  public void setUserInput(List<Integer> n) {
     userInput = n;
   }
 

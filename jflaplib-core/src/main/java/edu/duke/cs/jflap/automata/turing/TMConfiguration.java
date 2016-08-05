@@ -64,7 +64,8 @@ public class TMConfiguration extends Configuration implements Cloneable {
    * @see edu.duke.cs.jflap.automata.Configuration#toString
    * @return a string representation of this object.
    */
-  public String toString() {
+  @Override
+public String toString() {
     StringBuffer sb = new StringBuffer(super.toString());
     for (int i = 0; i < myTapes.size(); i++) {
       sb.append(" TAPE ");
@@ -84,7 +85,8 @@ public class TMConfiguration extends Configuration implements Cloneable {
    * @return <CODE>true</CODE> if this configuration is accepting,
    *         <CODE>false</CODE> otherwise
    */
-  public boolean isAccept() {
+  @Override
+public boolean isAccept() {
 
     for (int i = 0; i < myFilters.size(); i++) {
       if (myFilters.get(i).accept(this)) return true;
@@ -108,7 +110,8 @@ public class TMConfiguration extends Configuration implements Cloneable {
    * @return <CODE>true</CODE> if the configurations are equal,
    *         <CODE>false</CODE> if they are not
    */
-  public boolean equals(Object configuration) {
+  @Override
+public boolean equals(Object configuration) {
     if (configuration == this) return true;
     try {
       if (!super.equals(configuration)) return false;
@@ -126,7 +129,8 @@ public class TMConfiguration extends Configuration implements Cloneable {
    *
    * @return a hash code for this configuration
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     int code = super.hashCode();
     for (int i = 0; i < myTapes.size(); i++) code = code ^ myTapes.get(i).hashCode();
     return code;
@@ -160,7 +164,8 @@ public class TMConfiguration extends Configuration implements Cloneable {
     isHalted = b;
   }
 
-  public Object clone() {
+  @Override
+public Object clone() {
     TMConfiguration newConfig =
         new TMConfiguration(
             this.getCurrentState(), (TMConfiguration) this.getParent(), myTapes, myFilters);

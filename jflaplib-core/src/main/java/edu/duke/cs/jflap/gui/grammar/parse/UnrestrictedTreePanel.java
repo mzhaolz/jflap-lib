@@ -89,7 +89,7 @@ public class UnrestrictedTreePanel extends TreePanel {
         return total.toString();
     }
 
-    private UnrestrictedTreeNode[] levelNodes(int level) {
+    private List<UnrestrictedTreeNode> levelNodes(int level) {
         List<UnrestrictedTreeNode> list = new ArrayList<UnrestrictedTreeNode>();
         if (top[level] != null) {
             for (int i = 0; i < top[level].length; i++)

@@ -199,7 +199,8 @@ public class Text {
    *
    * @return the string of this <code>Text</code> object
    */
-  public String toString() {
+  @Override
+public String toString() {
     return myText;
   }
 }

@@ -26,8 +26,6 @@ import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
 import edu.duke.cs.jflap.gui.environment.Universe;
-import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
-
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Rectangle2D;
@@ -65,7 +63,8 @@ public class CombineAutomaton extends AutomatonAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     JComboBox<EnvironmentFrame> combo = new JComboBox<EnvironmentFrame>();
     // Figure out what existing environments in the program have
     // the type of automaton that we need.

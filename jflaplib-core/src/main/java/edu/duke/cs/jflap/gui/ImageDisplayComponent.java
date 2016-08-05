@@ -173,7 +173,8 @@ public class ImageDisplayComponent extends JComponent implements Scrollable {
    * @param g
    *            the graphics object to paint upon
    */
-  public void paintComponent(Graphics g) {
+  @Override
+public void paintComponent(Graphics g) {
     if (myImage == null) return;
 
     Rectangle r = getVisibleRect(), r2 = new Rectangle(getPreferredSize());
@@ -193,15 +194,18 @@ public class ImageDisplayComponent extends JComponent implements Scrollable {
         this);
   }
 
-  public Dimension getPreferredScrollableViewportSize() {
+  @Override
+public Dimension getPreferredScrollableViewportSize() {
     return getPreferredSize();
   }
 
-  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+  @Override
+public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
     return orientation == SwingConstants.VERTICAL ? visibleRect.height : visibleRect.width;
   }
 
-  public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+  @Override
+public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
     return 5;
   }
 
@@ -209,7 +213,8 @@ public class ImageDisplayComponent extends JComponent implements Scrollable {
    * We want this view sized so that it is either larger than or just as wide
    * as the containing scroll pane.
    */
-  public boolean getScrollableTracksViewportWidth() {
+  @Override
+public boolean getScrollableTracksViewportWidth() {
     return getPreferredSize().width < getParent().getSize().width;
   }
 
@@ -217,7 +222,8 @@ public class ImageDisplayComponent extends JComponent implements Scrollable {
    * We want this view sized so that it is either larger than or just as tall
    * as the containing scroll pane.
    */
-  public boolean getScrollableTracksViewportHeight() {
+  @Override
+public boolean getScrollableTracksViewportHeight() {
     return getPreferredSize().height < getParent().getSize().height;
   }
 

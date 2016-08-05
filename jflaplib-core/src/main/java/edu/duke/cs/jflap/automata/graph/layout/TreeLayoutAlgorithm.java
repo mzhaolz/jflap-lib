@@ -76,7 +76,8 @@ public class TreeLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
     hierarchical = hier;
   }
 
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public void layout(Graph<V> g, Set<V> notMoving) {
     graph = g;
     List<V> vertices = getMovableVertices(graph, notMoving);
@@ -100,6 +101,7 @@ public class TreeLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
       Collections.sort(
           (List<State>) vertices,
           new Comparator<State>() {
+            @Override
             public int compare(State o1, State o2) {
               if (adg.toDegree(o1, true) == adg.toDegree(o2, true)) return 0;
               else if (adg.toDegree(o1, true) > adg.toDegree(o2, true)) return 1;
@@ -110,6 +112,7 @@ public class TreeLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
       Collections.sort(
           vertices,
           new Comparator<V>() {
+            @Override
             public int compare(V o1, V o2) {
               if (graph.degree(o1) == graph.degree(o2)) return 0;
               else if (graph.degree(o1) > graph.degree(o2)) return -1;

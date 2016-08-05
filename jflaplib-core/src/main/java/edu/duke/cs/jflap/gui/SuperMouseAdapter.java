@@ -71,7 +71,8 @@ public abstract class SuperMouseAdapter implements MouseListener, MouseMotionLis
    * @param event
    *            the MouseEvent to process
    */
-  public void mouseClicked(MouseEvent event) {}
+  @Override
+public void mouseClicked(MouseEvent event) {}
 
   /**
    * Invoked when the mouse enters a component.
@@ -79,7 +80,8 @@ public abstract class SuperMouseAdapter implements MouseListener, MouseMotionLis
    * @param event
    *            the MouseEvent to process
    */
-  public void mouseEntered(MouseEvent event) {}
+  @Override
+public void mouseEntered(MouseEvent event) {}
 
   /**
    * Invoked when the mouse exits a component.
@@ -87,7 +89,8 @@ public abstract class SuperMouseAdapter implements MouseListener, MouseMotionLis
    * @param event
    *            the MouseEvent to process
    */
-  public void mouseExited(MouseEvent event) {}
+  @Override
+public void mouseExited(MouseEvent event) {}
 
   /**
    * Invoked when a mouse button is held down on a component.
@@ -95,7 +98,8 @@ public abstract class SuperMouseAdapter implements MouseListener, MouseMotionLis
    * @param event
    *            the MouseEvent to process
    */
-  public void mousePressed(MouseEvent event) {}
+  @Override
+public void mousePressed(MouseEvent event) {}
 
   /**
    * Invoked when a mouse button is released on a component.
@@ -103,7 +107,8 @@ public abstract class SuperMouseAdapter implements MouseListener, MouseMotionLis
    * @param event
    *            the MouseEvent to process
    */
-  public void mouseReleased(MouseEvent event) {}
+  @Override
+public void mouseReleased(MouseEvent event) {}
 
   /**
    * Invoked when a mouse is dragged over this component with a button down.
@@ -111,7 +116,8 @@ public abstract class SuperMouseAdapter implements MouseListener, MouseMotionLis
    * @param event
    *            the MouseEvent to process
    */
-  public void mouseDragged(MouseEvent event) {}
+  @Override
+public void mouseDragged(MouseEvent event) {}
 
   /**
    * Invoked when a mouse is moved over this component with no buttons down.
@@ -119,5 +125,6 @@ public abstract class SuperMouseAdapter implements MouseListener, MouseMotionLis
    * @param event
    *            the MouseEvent to process
    */
-  public void mouseMoved(MouseEvent event) {}
+  @Override
+public void mouseMoved(MouseEvent event) {}
 }

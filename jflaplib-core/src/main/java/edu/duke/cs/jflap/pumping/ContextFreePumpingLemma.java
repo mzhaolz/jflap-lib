@@ -99,7 +99,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
     return z;
   }
 
-  public String getDecompositionAsString() {
+  @Override
+public String getDecompositionAsString() {
     String[] s = new String[5];
     int counter = 0;
     for (int i = 0; i <= 3; i++) {
@@ -128,7 +129,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    * Clears the information the user and program have set for <i>m</i>,
    * <i>w</i>, <i>i</i>, <i>u</i>, <i>v</i>, <i>x</i>, <i>y</i>, and <i>z</i>.
    */
-  public void reset() {
+  @Override
+public void reset() {
     m = -1;
     i = -1;
     w = "";
@@ -151,7 +153,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    * @return <code>true</code> if this deocmposition is legal,
    *         <code>false</code> otherwise
    */
-  public boolean setDecomposition(int[] decomposition) {
+  @Override
+public boolean setDecomposition(int[] decomposition) {
     myDecomposition = decomposition;
     int uLength = decomposition[0];
     int vLength = decomposition[1];
@@ -184,7 +187,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    * @return <code>true</code> if this decomposition is legal and has not been
    *         tried before, <code>false</code> otherwise
    */
-  public boolean setDecomposition(int[] decomposition, int num) {
+  @Override
+public boolean setDecomposition(int[] decomposition, int num) {
     i = num;
     return setDecomposition(decomposition);
   }
@@ -195,7 +199,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    *
    * @return the pumped string, <i>uv<sup>i</sup>xy<sup>i</sup>z</i>
    */
-  public String createPumpedString() {
+  @Override
+public String createPumpedString() {
     return u + pumpString(v, getI()) + x + pumpString(y, getI()) + z;
   }
 
@@ -213,7 +218,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    *         greater than or equal to the total number of cases, which can be
    *         found by calling {@link PumpingLemma#numCasesTotal()}.
    */
-  public int addCase(int[] decomposition, int num) {
+  @Override
+public int addCase(int[] decomposition, int num) {
     /*
      * addCase(int[]) should only be called after
      * chooseDecomposition(int[]), so it should be a legal decomposition and
@@ -243,7 +249,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
     return -1;
   }
 
-  public boolean replaceCase(int[] decomposition, int num, int index) {
+  @Override
+public boolean replaceCase(int[] decomposition, int num, int index) {
     Case c = myDoneCases.get(index);
     if (c.isCase(v, y)) {
       c.setI(num);
@@ -327,7 +334,8 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
   /**
    * Chooses a random context-free decomposition, ignoring cases.
    */
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     // Currently just chooses a decomposition without cases. The code for
     // choosing it
     // with cases is currently commented out, but can be added if desired.

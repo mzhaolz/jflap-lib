@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the transducer for encoding and decoding
@@ -81,7 +82,8 @@ public class CFPumpingLemmaTransducer extends PumpingLemmaTransducer {
    */
   public static String CASE_Y_NAME = "caseYLength";
 
-  public Serializable fromDOM(Document document) {
+  @Override
+public Serializable fromDOM(Document document) {
     ContextFreePumpingLemma pl =
         (ContextFreePumpingLemma)
             PumpingLemmaFactory.createPumpingLemma(
@@ -146,7 +148,8 @@ public class CFPumpingLemmaTransducer extends PumpingLemmaTransducer {
     }
   }
 
-  public Document toDOM(Serializable structure) {
+  @Override
+public Document toDOM(Serializable structure) {
     ContextFreePumpingLemma pl = (ContextFreePumpingLemma) structure;
     Document doc = newEmptyDocument();
     Element elem = doc.getDocumentElement();
@@ -178,16 +181,17 @@ public class CFPumpingLemmaTransducer extends PumpingLemmaTransducer {
   protected Element createCaseElement(Document doc, Case c) {
     Element elem = createElement(doc, CASE_NAME, null, null);
 
-    int[] decomposition = c.getInput();
-    elem.appendChild(createElement(doc, CASE_U_NAME, null, "" + decomposition[0]));
-    elem.appendChild(createElement(doc, CASE_V_NAME, null, "" + decomposition[1]));
-    elem.appendChild(createElement(doc, CASE_X_NAME, null, "" + decomposition[2]));
-    elem.appendChild(createElement(doc, CASE_Y_NAME, null, "" + decomposition[3]));
+    List<Integer> decomposition = c.getInput();
+    elem.appendChild(createElement(doc, CASE_U_NAME, null, "" + decomposition.get(0)));
+    elem.appendChild(createElement(doc, CASE_V_NAME, null, "" + decomposition.get(1)));
+    elem.appendChild(createElement(doc, CASE_X_NAME, null, "" + decomposition.get(2)));
+    elem.appendChild(createElement(doc, CASE_Y_NAME, null, "" + decomposition.get(3)));
     elem.appendChild(createElement(doc, CASE_I_NAME, null, "" + c.getI()));
     return elem;
   }
 
-  public String getType() {
+  @Override
+public String getType() {
     return TYPE;
   }
 }

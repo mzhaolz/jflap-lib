@@ -39,7 +39,7 @@ import java.util.HashSet;
 public class CYKParser {
 
   /** Production array that will contain all the productions of grammar */
-  private Production[] myProductions;
+  private List<Production> myProductions;
 
   /** Start variable of the grammar */
   private static String START_VARIABLE;
@@ -279,7 +279,8 @@ public class CYKParser {
 }
 
 final class OrderCorrectly implements Comparator<Object> {
-  public int compare(Object o1, Object o2) {
+  @Override
+public int compare(Object o1, Object o2) {
     String str1 = (String) o1;
     String str2 = (String) o2;
     int index1 = str1.indexOf("/");

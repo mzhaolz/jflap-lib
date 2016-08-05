@@ -111,7 +111,8 @@ public class MealyConfiguration extends Configuration {
    *
    * @return string representation of this configuration.
    */
-  public String toString() {
+  @Override
+public String toString() {
     return super.toString() + ": " + getUnprocessedInput() + "--" + getOutput();
   }
 
@@ -122,7 +123,8 @@ public class MealyConfiguration extends Configuration {
    * @return <code>true</code> if all input has been processed,
    *         <code>false</code> otherwise.
    */
-  public boolean isAccept() {
+  @Override
+public boolean isAccept() {
     return getUnprocessedInput().length() == 0;
   }
 
@@ -138,7 +140,8 @@ public class MealyConfiguration extends Configuration {
    * @return <code>true</code> if the two configurations are equal,
    *         <code>false</code> otherwise
    */
-  public boolean equals(Object configuration) {
+  @Override
+public boolean equals(Object configuration) {
     if (configuration == this) return true;
     try {
       MealyConfiguration config = (MealyConfiguration) configuration;
@@ -155,7 +158,8 @@ public class MealyConfiguration extends Configuration {
    *
    * @return hashcode for this object
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return super.hashCode() ^ myUnprocessedInput.hashCode() ^ myOutput.hashCode();
   }
 }

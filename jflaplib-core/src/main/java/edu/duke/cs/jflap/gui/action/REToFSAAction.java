@@ -18,8 +18,6 @@ package edu.duke.cs.jflap.gui.action;
 
 import edu.duke.cs.jflap.gui.environment.RegularEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.regular.ConvertToAutomatonPane;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
@@ -53,7 +51,8 @@ public class REToFSAAction extends RegularAction {
    * @param event
    *            the event to process
    */
-  public void actionPerformed(ActionEvent event) {
+  @Override
+public void actionPerformed(ActionEvent event) {
     // JFrame frame = Universe.frameForEnvironment(environment);
     try {
       getExpression().asCheckedString();

@@ -45,7 +45,8 @@ public class MealyMachine extends Automaton {
    * @return the <code>Class</code> object for the <code>
    * MealyTransition</code>
    */
-  protected Class<? extends MealyTransition> getTransitionClass() {
+  @Override
+protected Class<? extends MealyTransition> getTransitionClass() {
     return MealyTransition.class;
   }
 }

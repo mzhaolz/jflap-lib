@@ -118,7 +118,8 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
    *
    * @return a panel that takes the decomposition from the user
    */
-  protected JPanel initDecompPanel() {
+  @Override
+protected JPanel initDecompPanel() {
     JPanel n = new JPanel(new BorderLayout());
 
     JPanel o = new JPanel();
@@ -166,7 +167,8 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
     myDecompButton.setEnabled(false);
     myDecompButton.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent ev) {
+          @Override
+        public void actionPerformed(ActionEvent ev) {
             stages[4].setVisible(true);
             stages[5].setVisible(true);
             resetMessages();
@@ -212,10 +214,12 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
     myXYZPanel.add(myXYZDisplay, BorderLayout.CENTER);
   }
 
-  protected String addTopGameFeatures(JButton b) {
+  @Override
+protected String addTopGameFeatures(JButton b) {
     b.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             myMDisplay.setText("");
             updateTopPane(false);
             reset();
@@ -224,12 +228,14 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
     return OBJECTIVE;
   }
 
-  protected String addMGameFeatures() {
+  @Override
+protected String addMGameFeatures() {
     myMDisplay = new JTextField(10);
     ((JTextField) myMDisplay)
         .addActionListener(
             new ActionListener() {
-              public void actionPerformed(ActionEvent ev) {
+              @Override
+            public void actionPerformed(ActionEvent ev) {
                 try {
                   reset();
                   int m = Integer.parseInt(ev.getActionCommand());
@@ -260,7 +266,8 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
     return new String(PROMPT_M);
   }
 
-  protected String addWGameFeatures() {
+  @Override
+protected String addWGameFeatures() {
     myWDisplay = new JTextArea(1, 20);
     myWDisplay.setEditable(false);
     return new String(DESCRIBE_W);
@@ -275,13 +282,15 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
    */
   protected abstract void addDecompPanelGameFeatures(JPanel p);
 
-  protected String addIGameFeatures() {
+  @Override
+protected String addIGameFeatures() {
     myIDisplay = new JTextArea(1, 5);
     myIDisplay.setEditable(false);
     return new String(DESCRIBE_I);
   }
 
-  public void displayEnd() {
+  @Override
+public void displayEnd() {
     String s = myLemma.createPumpedString();
     myPumpedStringDisplay.setText(s);
     if (myLemma.isInLang(s))

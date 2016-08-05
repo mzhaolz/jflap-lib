@@ -100,7 +100,7 @@ public class TMTransitionCreator extends TableTransitionCreator {
    *            the transition to build the arrays for
    * @return the arrays for the editing table model
    */
-  private String[][] arraysForTransition(TMTransition transition) {
+  private List<String>[] arraysForTransition(TMTransition transition) {
     String[][] s = new String[machine.tapes()][3];
     for (int i = machine.tapes() - 1; i >= 0; i--) {
       s[i][0] = transition.getRead(i);
@@ -250,7 +250,7 @@ public class TMTransitionCreator extends TableTransitionCreator {
   private TuringMachine machine;
 
   /** The directions. */
-  private static String[] DIRS = new String[] {"R", "S", "L"}; // made this
+  private List<static List<String> DIRS = new String> {"R", "S", "L"}; // made this
   // non-static
   // to allow
   // for
@@ -261,7 +261,7 @@ public class TMTransitionCreator extends TableTransitionCreator {
   private static JComboBox<String> BOX = new JComboBox<String>(DIRS);
 
   /** The array of keystrokes for the direction field. */
-  private static KeyStroke[] STROKES;
+  private static List<KeyStroke> STROKES;
 
   /** The action for the strokes for the direction field. */
   private static final Action CHANGE_ACTION =

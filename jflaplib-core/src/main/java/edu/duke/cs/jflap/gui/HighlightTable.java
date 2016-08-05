@@ -135,7 +135,8 @@ public class HighlightTable extends JTable {
   /**
    * Returns the possibly modified cell renderer for this column.
    */
-  public TableCellRenderer getCellRenderer(int row, int column) {
+  @Override
+public TableCellRenderer getCellRenderer(int row, int column) {
     int column2 = convertColumnIndexToModel(column);
     if (highlightRenderers != null) {
       TableCellRenderer ren = highlightRenderers.get(new Integer(singleIndex(row, column2)));
@@ -165,6 +166,7 @@ public class HighlightTable extends JTable {
   /** The built in renderer. */
   private static TableHighlighterRendererGenerator THRG =
       new TableHighlighterRendererGenerator() {
+        @Override
         public TableCellRenderer getRenderer(int row, int column) {
           if (renderer == null) {
             renderer = new DefaultTableCellRenderer();

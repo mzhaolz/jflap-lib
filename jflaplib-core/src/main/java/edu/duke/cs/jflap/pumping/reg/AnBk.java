@@ -32,15 +32,18 @@ public class AnBk extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = 1481440241152133955L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "a^n b^k : n is odd or k is even";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>a<sup>n</sup>b<sup>k</sup></i> : <i>n</i> is odd" + " or <i>k</i> is even.";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a regular language, a valid decomposition exists.  If <i>m</i> "
@@ -49,20 +52,24 @@ public class AnBk extends RegularPumpingLemma {
             + "can be the <i>y</i> value.";
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {3, 10};
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     if (m % 2 == 0) w = pumpString("a", m - 2) + "bb";
     else w = "a" + pumpString("b", m);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     int firstB = w.indexOf('b');
 
     // One of these should be valid
@@ -70,7 +77,8 @@ public class AnBk extends RegularPumpingLemma {
     else setDecomposition(new int[] {firstB, 2});
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int a, b;
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.isMixture(s, list)) return false;

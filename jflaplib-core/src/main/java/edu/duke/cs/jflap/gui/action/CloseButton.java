@@ -19,8 +19,6 @@ package edu.duke.cs.jflap.gui.action;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
-import edu.duke.cs.jflap.gui.editor.EditBlockPane;
-import edu.duke.cs.jflap.gui.editor.EditorPane;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.tag.PermanentTag;
 import edu.duke.cs.jflap.gui.environment.tag.Tag;
@@ -66,14 +64,16 @@ public class CloseButton extends javax.swing.JButton {
     env = environment;
     env.addChangeListener(
         new ChangeListener() {
-          public void stateChanged(ChangeEvent e) {
+          @Override
+        public void stateChanged(ChangeEvent e) {
             checkEnabled();
           }
         });
     addActionListener(
         new ActionListener() {
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             boolean editor = false;
             if (env.getActive() instanceof EditBlockPane) {
               editor = true;

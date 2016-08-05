@@ -31,15 +31,18 @@ public class AnBn extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = -4276138054767348836L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "a^n b^n : n >= 0";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>a<sup>n</sup>b<sup>n</sup></i> : <i>n</i> " + GREATER_OR_EQ + " 0";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -52,19 +55,23 @@ public class AnBn extends RegularPumpingLemma {
             + "which is not in the language.  Thus, the language is not regular.";
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", m) + pumpString("b", m);
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {4, 18};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int a, b;
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.isMixture(s, list)) return false;

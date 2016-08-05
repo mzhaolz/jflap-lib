@@ -45,7 +45,8 @@ public class LeafNodePlacer implements NodePlacer {
    * @return a map from the nodes of the tree to points where those nodes
    *         should be drawn
    */
-  public Map<TreeNode, Float> placeNodes(TreeModel tree, NodeDrawer drawer) {
+  @Override
+public Map<TreeNode, Float> placeNodes(TreeModel tree, NodeDrawer drawer) {
     HashMap<TreeNode, Float> nodeToPoint = new HashMap<TreeNode, Float>();
     Trees.width(tree);
     TreeNode[] leaves = Trees.leaves(tree);

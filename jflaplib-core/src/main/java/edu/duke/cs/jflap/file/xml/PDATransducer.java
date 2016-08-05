@@ -43,7 +43,8 @@ public class PDATransducer extends AutomatonTransducer {
    *            the DOM document that is being read
    * @return an empty PDA
    */
-  protected Automaton createEmptyAutomaton(Document document) {
+  @Override
+protected Automaton createEmptyAutomaton(Document document) {
     return new PushdownAutomaton();
   }
 
@@ -62,7 +63,8 @@ public class PDATransducer extends AutomatonTransducer {
    *            elements to text from {@link #elementsToText}
    * @return the new transition
    */
-  protected Transition createTransition(
+  @Override
+protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean bool) {
     String read = e2t.get(TRANSITION_READ_NAME);
     String pop = e2t.get(TRANSITION_POP_NAME);
@@ -88,7 +90,8 @@ public class PDATransducer extends AutomatonTransducer {
    * @return the newly created element that encodes the transition
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
-  protected Element createTransitionElement(Document document, Transition transition) {
+  @Override
+protected Element createTransitionElement(Document document, Transition transition) {
     Element te = super.createTransitionElement(document, transition);
     PDATransition t = (PDATransition) transition;
     // Add the characterizing strings for this transition.
@@ -103,7 +106,8 @@ public class PDATransducer extends AutomatonTransducer {
    *
    * @return the string "pda"
    */
-  public String getType() {
+  @Override
+public String getType() {
     return "pda";
   }
 

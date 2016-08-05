@@ -87,7 +87,7 @@ public class ParseNode extends DefaultMutableTreeNode {
    * @return the productions that were substituted in to achieve the
    *         derivation
    */
-  public Production[] getProductions() {
+  public List<Production> getProductions() {
     return productions;
   }
 
@@ -98,7 +98,7 @@ public class ParseNode extends DefaultMutableTreeNode {
    * @return the positions for the substitutions of the productions in the
    *         parent derivation that led to this current derivation
    */
-  public int[] getSubstitutions() {
+  public List<int> getSubstitutions() {
     return subs;
   }
 
@@ -107,7 +107,8 @@ public class ParseNode extends DefaultMutableTreeNode {
    *
    * @return a string representation of those object
    */
-  public String toString() {
+  @Override
+public String toString() {
     StringBuffer sb = new StringBuffer(derivation);
     sb.append(", ");
     sb.append(Arrays.asList(productions) + ", ");
@@ -124,8 +125,8 @@ public class ParseNode extends DefaultMutableTreeNode {
   private String derivation;
 
   /** The grammar rules used to achieve this derivation. */
-  private Production[] productions;
+  private List<Production> productions;
 
   /** The positions at which substitutions were attempted. */
-  private int[] subs;
+  private List<int> subs;
 }

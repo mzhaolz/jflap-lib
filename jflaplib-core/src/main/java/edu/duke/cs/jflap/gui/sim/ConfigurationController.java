@@ -24,8 +24,6 @@ import edu.duke.cs.jflap.automata.turing.TMConfiguration;
 import edu.duke.cs.jflap.automata.turing.TMSimulator;
 import edu.duke.cs.jflap.automata.turing.TMState;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -456,7 +454,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
    * @param event
    *            the selection event
    */
-  public void configurationSelectionChange(ConfigurationSelectionEvent event) {
+  @Override
+public void configurationSelectionChange(ConfigurationSelectionEvent event) {
     // changeSelection();
   }
 
@@ -484,7 +483,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
    * This is the set of original configurations when the configuration pane
    * started.
    */
-  private Configuration[] originalConfigurations = new Configuration[0];
+  private List<Configuration> originalConfigurations = new Configuration[0];
 
   /** The error message displayed when there is no config selected. */
   private static final String NO_CONFIGURATION_ERROR = "Select at least one configuration!";

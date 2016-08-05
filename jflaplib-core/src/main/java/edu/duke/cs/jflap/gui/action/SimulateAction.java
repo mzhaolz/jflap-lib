@@ -28,7 +28,6 @@ import edu.duke.cs.jflap.automata.mealy.MealyMachine;
 import edu.duke.cs.jflap.automata.turing.TMSimulator;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.gui.editor.EditBlockPane;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
@@ -197,7 +196,8 @@ public class SimulateAction extends AutomatonAction {
     jb.addActionListener(
         new ActionListener() {
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
             JFileChooser ourChooser =
                 new JFileChooser(System.getProperties().getProperty("user.dir"));
@@ -282,7 +282,8 @@ public class SimulateAction extends AutomatonAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (environment.getActive() instanceof EditBlockPane) {
       EditBlockPane newPane = (EditBlockPane) environment.getActive();
       automaton = newPane.getAutomaton();

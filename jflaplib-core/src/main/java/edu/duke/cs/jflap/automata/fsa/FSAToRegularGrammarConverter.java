@@ -77,11 +77,13 @@ public class FSAToRegularGrammarConverter {
     states.remove(initialState);
     states.sort(
         new Comparator<State>() {
-          public int compare(State o1, State o2) {
+          @Override
+        public int compare(State o1, State o2) {
             return o1.getID() - o2.getID();
           }
 
-          public boolean equals(Object o) {
+          @Override
+        public boolean equals(Object o) {
             return false;
           }
         });

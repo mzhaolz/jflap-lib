@@ -53,7 +53,8 @@ public class EmptyStringCharacterAction extends RestrictedAction {
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_P, MAIN_MENU_MASK));
   }
 
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Profile current = Universe.curProfile;
 
     // JFrame.setDefaultLookAndFeelDecorated(true);
@@ -64,14 +65,16 @@ public class EmptyStringCharacterAction extends RestrictedAction {
     lambda.setActionCommand("Lambda");
     lambda.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
+          @Override
+        public void actionPerformed(ActionEvent event) {
             Universe.curProfile.setEmptyString(Universe.curProfile.lambda);
           }
         });
     JRadioButton epsilon = new JRadioButton("Epsilon");
     epsilon.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
+          @Override
+        public void actionPerformed(ActionEvent event) {
             Universe.curProfile.setEmptyString(Universe.curProfile.epsilon);
           }
         });
@@ -93,7 +96,8 @@ public class EmptyStringCharacterAction extends RestrictedAction {
     JButton accept = new JButton("Accept");
     accept.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
+          @Override
+        public void actionPerformed(ActionEvent event) {
             frame.setVisible(false);
             Universe.curProfile.savePreferences();
           }

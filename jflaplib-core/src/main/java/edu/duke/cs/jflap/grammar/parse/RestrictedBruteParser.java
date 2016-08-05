@@ -39,7 +39,8 @@ public class RestrictedBruteParser extends BruteParser {
     super(grammar, target);
   }
 
-  public boolean isPossibleDerivation(String derivation) {
+  @Override
+public boolean isPossibleDerivation(String derivation) {
     if (Unrestricted.minimumLength(derivation, smaller) > target.length()) return false;
     boolean startBookend = false, endBookend = false;
     ArrayList<String> discrete = new ArrayList<String>();

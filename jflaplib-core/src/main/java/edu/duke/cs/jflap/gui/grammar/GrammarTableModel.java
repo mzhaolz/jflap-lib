@@ -21,6 +21,7 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.gui.GrowableTableModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 
@@ -57,9 +58,9 @@ public class GrammarTableModel extends GrowableTableModel<Object> {
      */
     public GrammarTableModel(Grammar grammar) {
         this();
-        Production[] ps = grammar.getProductions();
-        for (int i = 0; i < ps.length; i++)
-            addProduction(ps[i]);
+        List<Production> ps = grammar.getProductions();
+        for (int i = 0; i < ps.size(); i++)
+            addProduction(ps.get(i));
     }
 
     /**
@@ -127,14 +128,14 @@ public class GrammarTableModel extends GrowableTableModel<Object> {
      *
      * @return an array of the productions
      */
-    public Production[] getProductions() {
+    public List<Production> getProductions() {
         ArrayList<Production> list = new ArrayList<Production>();
         for (int i = 0; i < getRowCount() - 1; i++) {
             Production production = getProduction(i);
             if (production != null)
                 list.add(production);
         }
-        return list
+        return list;
     }
 
     /**

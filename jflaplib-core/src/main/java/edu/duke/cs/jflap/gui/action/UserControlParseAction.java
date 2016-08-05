@@ -20,8 +20,6 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.parse.UserControlParsePane;
-
 import java.awt.event.ActionEvent;
 
 /**
@@ -58,7 +56,8 @@ public class UserControlParseAction extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     if (g == null) return;
     UserControlParsePane userPane = new UserControlParsePane(environment, g);

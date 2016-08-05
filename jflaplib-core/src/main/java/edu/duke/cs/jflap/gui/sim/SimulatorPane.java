@@ -20,17 +20,14 @@ import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.AutomatonSimulator;
 import edu.duke.cs.jflap.automata.Configuration;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
-import edu.duke.cs.jflap.gui.editor.ArrowDisplayOnlyTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -101,7 +98,7 @@ public class SimulatorPane extends JPanel {
     // Initialize the scroll pane for the configuration view.
     JScrollPane scroller =
         new JScrollPane(
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
     // Set up the configurations pane.
     ConfigurationPane configurations = new ConfigurationPane(automaton);
@@ -114,7 +111,8 @@ public class SimulatorPane extends JPanel {
         new ConfigurationController(configurations, simulator, drawer, display);
     env.addChangeListener(
         new ChangeListener() {
-          public void stateChanged(ChangeEvent e) {
+          @Override
+        public void stateChanged(ChangeEvent e) {
             if (env.contains(SimulatorPane.this)) return;
             env.removeChangeListener(this);
             controller.cleanup();

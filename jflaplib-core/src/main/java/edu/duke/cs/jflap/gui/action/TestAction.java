@@ -73,11 +73,13 @@ public class TestAction extends RestrictedAction {
   }
 
   class inputFilter extends javax.swing.filechooser.FileFilter {
+    @Override
     public boolean accept(File file) {
       String filename = file.getName();
       return filename.endsWith(".txt");
     }
 
+    @Override
     public String getDescription() {
       return "*.txt";
     }
@@ -231,7 +233,8 @@ public class TestAction extends RestrictedAction {
     displayMultipleRunPane(myEnvFrame.getEnvironment(), myObjects.get(0));
   }
 
-  public void actionPerformed(ActionEvent event) {
+  @Override
+public void actionPerformed(ActionEvent event) {
     Component source = null;
     try {
       source = (Component) event.getSource();

@@ -70,7 +70,8 @@ public class BuildingBlockSimulateAction extends SimulateAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (automaton.getInitialState() == null) {
       JOptionPane.showMessageDialog(
           (Component) e.getSource(),
@@ -110,7 +111,8 @@ public class BuildingBlockSimulateAction extends SimulateAction {
    *            object in most cases, but may differ for multiple tape turing
    *            machines
    */
-  public void handleInteraction(
+  @Override
+public void handleInteraction(
       Automaton automaton,
       AutomatonSimulator simulator,
       Configuration[] configurations,

@@ -40,7 +40,8 @@ public class GrammarTransducer extends AbstractTransducer {
    *
    * @return the string "grammar"
    */
-  public String getType() {
+  @Override
+public String getType() {
     return "edu/duke/cs/jflap/grammar";
   }
 
@@ -83,7 +84,8 @@ public class GrammarTransducer extends AbstractTransducer {
    *            the DOM document to convert
    * @return the {@link edu.duke.cs.jflap.grammar.Grammar} instance
    */
-  public java.io.Serializable fromDOM(Document document) {
+  @Override
+public java.io.Serializable fromDOM(Document document) {
     Grammar g = new UnboundGrammar();
     NodeList list = document.getDocumentElement().getElementsByTagName(PRODUCTION_NAME);
     for (int i = 0; i < list.getLength(); i++) {
@@ -101,7 +103,8 @@ public class GrammarTransducer extends AbstractTransducer {
    *            the JFLAP grammar to encode
    * @return a DOM document instance
    */
-  public Document toDOM(java.io.Serializable structure) {
+  @Override
+public Document toDOM(java.io.Serializable structure) {
     Grammar grammar = (Grammar) structure;
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();

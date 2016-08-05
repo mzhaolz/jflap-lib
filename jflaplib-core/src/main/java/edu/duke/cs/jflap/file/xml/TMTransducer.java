@@ -49,7 +49,8 @@ public class TMTransducer extends AutomatonTransducer {
    *            the DOM document that is being read
    * @return an empty Turing machine
    */
-  protected Automaton createEmptyAutomaton(Document document) {
+  @Override
+protected Automaton createEmptyAutomaton(Document document) {
     Map<String, String> e2t = elementsToText(document.getDocumentElement());
     String s = e2t.get(TURING_TAPES_NAME);
     if (s == null) s = "1";
@@ -78,7 +79,8 @@ public class TMTransducer extends AutomatonTransducer {
    *            elements to text from {@link #elementsToText}
    * @return the new transition
    */
-  protected Transition createTransition(
+  @Override
+protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     TuringMachine tm = (TuringMachine) from.getAutomaton();
     int tapes = tm.tapes();
@@ -159,7 +161,8 @@ public class TMTransducer extends AutomatonTransducer {
    * @return the newly created element that encodes the transition
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
-  protected Element createTransitionElement(Document document, Transition transition) {
+  @Override
+protected Element createTransitionElement(Document document, Transition transition) {
     Element te = super.createTransitionElement(document, transition);
     TMTransition t = (TMTransition) transition;
     TuringMachine tm = (TuringMachine) t.getFromState().getAutomaton();
@@ -186,7 +189,8 @@ public class TMTransducer extends AutomatonTransducer {
    *
    * @return the string "pda"
    */
-  public String getType() {
+  @Override
+public String getType() {
     return "turing";
   }
 
@@ -200,7 +204,8 @@ public class TMTransducer extends AutomatonTransducer {
    * @param structure
    *            the structure, which should be a turing machine
    */
-  public Document toDOM(java.io.Serializable structure) {
+  @Override
+public Document toDOM(java.io.Serializable structure) {
     Document dom = super.toDOM(structure);
     TuringMachine tm = (TuringMachine) structure;
     if (tm.tapes() > 1) {

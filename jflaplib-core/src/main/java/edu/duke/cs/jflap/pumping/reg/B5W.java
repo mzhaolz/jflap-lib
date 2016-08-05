@@ -33,11 +33,13 @@ public class B5W extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = 5646526422163373705L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "b^5w: w element_of {ab}* : 2na(w) = 3nb(w)";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>b<sup>5</sup>w</i> : <i>w</i> "
         + ELEMENT_OF
         + " "
@@ -46,7 +48,8 @@ public class B5W extends RegularPumpingLemma {
         + " 3<i>n<sub>b</sub></i> (<i>w</i>)";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value "
@@ -63,16 +66,19 @@ public class B5W extends RegularPumpingLemma {
             + "not in the language.  Thus, the language is not regular.";
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     int count = m - 5;
     w = "bbbbb" + pumpString("b", 2 * count) + pumpString("a", 3 * count);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     int a, count;
     count = 5;
     a = 0;
@@ -84,11 +90,13 @@ public class B5W extends RegularPumpingLemma {
     setDecomposition(new int[] {Math.min(count - 5, m - 5), 5});
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {6, 10};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
     if (!s.startsWith("bbbbb")) return false;

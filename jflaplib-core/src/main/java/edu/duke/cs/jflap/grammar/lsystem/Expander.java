@@ -237,7 +237,7 @@ public class Expander {
          * @return the resulting replacement lists for the center token if there
          *         was a match, or an empty array otherwise
          */
-        public List<String>[] matches(List<String> list, int centerList) {
+        public List<List<String>> matches(List<String> list, int centerList) {
             centerList -= center;
             try {
                 List<String> sub = list.subList(centerList, centerList + tokens.size());
@@ -253,6 +253,7 @@ public class Expander {
          *
          * @return a string description of this context
          */
+        @Override
         public String toString() {
             StringBuffer sb = new StringBuffer(super.toString());
             sb.append(" : tokens(");
@@ -287,7 +288,7 @@ public class Expander {
     private static final Random RANDOM = new Random();
 
     /** The contexts. */
-    private Context[] contexts = null;
+    private List<Context> contexts = null;
 
     /** An empty list. */
     @SuppressWarnings("unchecked")

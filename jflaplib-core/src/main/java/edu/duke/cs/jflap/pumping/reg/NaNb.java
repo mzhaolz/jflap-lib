@@ -32,7 +32,8 @@ public class NaNb extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = 1706121984502776649L;
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>w</i> "
         + ELEMENT_OF
         + " "
@@ -42,11 +43,13 @@ public class NaNb extends RegularPumpingLemma {
         + " <i>n<sub>b</sub></i> (<i>w</i>)";
   }
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w element_of {ab}* : na(w) < nb(w)";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -59,23 +62,28 @@ public class NaNb extends RegularPumpingLemma {
             + "giving a string which is not in the language.  Thus, the language is not regular.";
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", getM()) + pumpString("b", getM() + 1);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     setDecomposition(new int[] {Math.min(m - 1, w.indexOf('b')), 1});
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = 2;
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {2, 17};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int a, b;
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;

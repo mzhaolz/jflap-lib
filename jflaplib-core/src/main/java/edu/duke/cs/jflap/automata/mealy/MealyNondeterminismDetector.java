@@ -45,7 +45,8 @@ public class MealyNondeterminismDetector extends NondeterminismDetector {
    *            a transition
    * @return true if the transitions are nondeterministic.
    */
-  public boolean areNondeterministic(Transition t1, Transition t2) {
+  @Override
+public boolean areNondeterministic(Transition t1, Transition t2) {
     MealyTransition transition1 = (MealyTransition) t1;
     MealyTransition transition2 = (MealyTransition) t2;
     if (transition1.getLabel().equals(transition2.getLabel())) return true;

@@ -40,7 +40,8 @@ public class FiniteStateAutomaton extends Automaton {
    * @return the <CODE>Class</CODE> object for
    *         <CODE>automata.fsa.FSATransition</CODE>
    */
-  protected Class<? extends FSATransition> getTransitionClass() {
+  @Override
+protected Class<? extends FSATransition> getTransitionClass() {
     return edu.duke.cs.jflap.automata.fsa.FSATransition.class;
   }
 }

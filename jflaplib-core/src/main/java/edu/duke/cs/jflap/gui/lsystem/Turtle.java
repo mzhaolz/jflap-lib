@@ -124,7 +124,8 @@ class Turtle implements Cloneable, Serializable {
    *
    * @return a copy of the current turtle
    */
-  public Object clone() {
+  @Override
+public Object clone() {
     return new Turtle(this);
   }
 
@@ -490,7 +491,8 @@ class Turtle implements Cloneable, Serializable {
    *
    * @return a string representation of this turtle
    */
-  public final String toString() {
+  @Override
+public final String toString() {
     StringBuffer sb = new StringBuffer();
     sb.append("{ " + super.toString());
     sb.append(", distance=" + distance);
@@ -703,6 +705,7 @@ class Turtle implements Cloneable, Serializable {
          */
         private static final long serialVersionUID = 1L;
 
+        @Override
         public void setLocation(double x, double y) {
           // This should ensure our bounds are always kept up
           // to date. Excellent...

@@ -27,8 +27,6 @@ import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Profile;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-import edu.duke.cs.jflap.gui.grammar.parse.CYKParsePane;
 import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;
 
 import java.awt.BorderLayout;
@@ -78,7 +76,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
     myCNFGrammar = cnf;
   }
 
-  public void performAction(Component source) {
+  @Override
+public void performAction(Component source) {
 
     table = initializeTable(getObject());
     if (((InputTableModel) table.getModel()).isMultiple) {
@@ -94,7 +93,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
         new AbstractAction("Load Inputs") {
           private static final long serialVersionUID = 43L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
             try {
               // Make sure any recent changes are registered.
@@ -128,7 +128,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
         new AbstractAction("Run Inputs") {
           private static final long serialVersionUID = 45L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             try {
               // Make sure any recent changes are registered.
               table.getCellEditor().stopCellEditing();
@@ -158,6 +159,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
           new AbstractAction("Clear") {
             private static final long serialVersionUID = 47L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
               try {
                 // Make sure any recent changes are registered.
@@ -183,6 +185,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
           new AbstractAction("Enter " + empty /* "Enter Lambda" */) {
             private static final long serialVersionUID = 49L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
               int row = table.getSelectedRow();
               if (row == -1) return;
@@ -197,6 +200,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
           new AbstractAction("Edit File") {
             private static final long serialVersionUID = 51L;
 
+            @Override
             public void actionPerformed(ActionEvent arg0) {
               int k = getMachineIndexBySelectedRow(table);
               if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -215,6 +219,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
           new AbstractAction("Add input string") {
             private static final long serialVersionUID = 53L;
 
+            @Override
             public void actionPerformed(ActionEvent arg0) {
               boolean turing = false;
               if (getEnvironment().myObjects.get(0) instanceof TuringMachine) {
@@ -276,6 +281,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
           new AbstractAction("Add file") {
             private static final long serialVersionUID = 55L;
 
+            @Override
             public void actionPerformed(ActionEvent arg0) {
               TestAction test = new TestAction();
               test.chooseFile(getEnvironment().getActive(), false);
@@ -288,6 +294,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
           new AbstractAction("Remove file") {
             private static final long serialVersionUID = 57L;
 
+            @Override
             public void actionPerformed(ActionEvent arg0) {
               int k = getMachineIndexBySelectedRow(table);
               if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -312,6 +319,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
           new AbstractAction("Save Results") {
             private static final long serialVersionUID = 59L;
 
+            @Override
             public void actionPerformed(ActionEvent arg0) {
               final JFrame frame = new JFrame("Save Location");
 
@@ -321,11 +329,13 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
               defaultLocation.setActionCommand("Save Results with Original File");
               defaultLocation.addActionListener(
                   new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent event) {}
                   });
               final JRadioButton specifyLocation = new JRadioButton("Specify New Location");
               specifyLocation.addActionListener(
                   new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent event) {}
                   });
               specifyLocation.setMnemonic(KeyEvent.VK_C);
@@ -343,6 +353,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
               JButton accept = new JButton("Accept");
               accept.addActionListener(
                   new ActionListener() {
+                    @Override
                     public void actionPerformed(ActionEvent event) {
                       frame.setVisible(false);
                       String filepath = "";
@@ -491,7 +502,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
     return getMachineIndexByName(machineFileName);
   }
 
-  public int getMachineIndexByName(String machineFileName) {
+  @Override
+public int getMachineIndexByName(String machineFileName) {
     List<Object> machines = getEnvironment().myObjects;
     if (machines == null) return -1;
     for (int k = 0; k < machines.size(); k++) {
@@ -512,7 +524,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     performAction((Component) e.getSource());
   }
 
@@ -520,7 +533,8 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
    * @param machineFileName
    *
    */
-  protected void updateView(String machineFileName, String input, JTableExtender table) {
+  @Override
+protected void updateView(String machineFileName, String input, JTableExtender table) {
     List<Object> machines = this.getEnvironment().myObjects;
     Object current = null;
     if (machines != null) current = machines.get(0);

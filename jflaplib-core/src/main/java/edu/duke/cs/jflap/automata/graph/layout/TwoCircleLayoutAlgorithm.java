@@ -91,7 +91,8 @@ public class TwoCircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph<V> g, Set<V> notMoving) {
+  @Override
+public void layout(Graph<V> g, Set<V> notMoving) {
     // First, initialize classwide variables.
     graph = g;
     innerCircle = new ArrayList<>();

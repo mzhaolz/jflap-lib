@@ -35,11 +35,13 @@ public class W1VVrW2 extends ContextFreePumpingLemma {
    */
   private static final long serialVersionUID = 255488807130945086L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w1 v v^R w2 : na(w1) = na(w2), |v|>=3, w1 & w2 element_of {ab}*";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>w<sub>1</sub>vv<sup>R</sup>w<sub>2</sub></i>, : "
         + "<i>n<sub>a</sub></i>(<i>w<sub>1</sub></i>) = "
         + "<i>n<sub>a</sub></i>(<i>w<sub>2</sub></i>),  "
@@ -52,7 +54,8 @@ public class W1VVrW2 extends ContextFreePumpingLemma {
         + AB_STAR;
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a context-free language, a valid decomposition exists.  If |'v'| "
@@ -69,20 +72,24 @@ public class W1VVrW2 extends ContextFreePumpingLemma {
             + "pump the first \"b\" value in w<sub>1</sub> or w<sub>2</sub>.";
   }
 
-  protected void addCases() {
+  @Override
+protected void addCases() {
     // TODO Auto-generated method stub
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = 3;
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     int power = m / 2;
     w = pumpString("ab", power) + "abbbba" + pumpString("ab", power);
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {2, 15};
   }
 
@@ -96,7 +103,7 @@ public class W1VVrW2 extends ContextFreePumpingLemma {
    *         the given string in the first array item, and the last index in
    *         the second array item.
    */
-  private int[] getVVr(String s) {
+  private List<int> getVVr(String s) {
     if (s.length() < 6) return null;
 
     boolean match;
@@ -115,7 +122,8 @@ public class W1VVrW2 extends ContextFreePumpingLemma {
     return null;
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     int[] v = getVVr(w);
     String w1, w2;
     w1 = w.substring(0, v[0]);
@@ -129,7 +137,8 @@ public class W1VVrW2 extends ContextFreePumpingLemma {
     else setDecomposition(new int[] {w2.indexOf('b') + v[1] + 1, 1, 0, 0});
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
 

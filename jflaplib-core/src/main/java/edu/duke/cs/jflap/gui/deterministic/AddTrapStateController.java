@@ -21,11 +21,10 @@ import edu.duke.cs.jflap.automata.Transition;
 import edu.duke.cs.jflap.automata.fsa.FSATransition;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.JFrame;
@@ -136,8 +135,8 @@ public class AddTrapStateController {
         currentStep = CREATE_SINGLE_TRAPSTATE;
         mainStep.setText("Make Single Trap State");
         detailStep.setText("Create a new state to make a single trap state.");
-        if (automaton.getFinalStates().length != 1
-            || automaton.getFinalStates()[0] == automaton.getInitialState()) {
+        if (automaton.getFinalStates().size() != 1
+            || automaton.getFinalStates().get(0) == automaton.getInitialState()) {
           return;
         }
         return;
@@ -171,15 +170,15 @@ public class AddTrapStateController {
     myNeededTransitionMap = new HashMap<Integer, ArrayList<String>>();
     myReadSets = new TreeSet<String>();
     myStateMap = new HashMap<Integer, State>();
-    State[] s = automaton.getStates();
-    for (int i = 0; i < s.length; i++) {
-      myTransitionsMap.put(s[i].getID(), new ArrayList<String>());
-      myStateMap.put(s[i].getID(), s[i]);
+    List<State> s = automaton.getStates();
+    for (int i = 0; i < s.size(); i++) {
+      myTransitionsMap.put(s.get(i).getID(), new ArrayList<String>());
+      myStateMap.put(s.get(i).getID(), s.get(i));
     }
 
-    Transition[] t = automaton.getTransitions();
-    for (int i = 0; i < t.length; i++) {
-      myReadSets.add(t[i].getDescription());
+    List<Transition> t = automaton.getTransitions();
+    for (int i = 0; i < t.size(); i++) {
+      myReadSets.add(t.get(i).getDescription());
       int id = t[i].getFromState().getID();
       ArrayList<String> temp = myTransitionsMap.get(id);
       temp.add(t[i].getDescription());

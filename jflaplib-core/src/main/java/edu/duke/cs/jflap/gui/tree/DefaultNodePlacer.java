@@ -46,7 +46,8 @@ public class DefaultNodePlacer implements NodePlacer {
    * @return a map from the nodes of the tree to points where those nodes
    *         should be drawn
    */
-  public Map<TreeNode, Float> placeNodes(TreeModel tree, NodeDrawer drawer) {
+  @Override
+public Map<TreeNode, Float> placeNodes(TreeModel tree, NodeDrawer drawer) {
     HashMap<TreeNode, Float> nodeToPoint = new HashMap<TreeNode, Float>();
     int[] width = Trees.width(tree), sofar = new int[width.length];
     Arrays.fill(sofar, 0);

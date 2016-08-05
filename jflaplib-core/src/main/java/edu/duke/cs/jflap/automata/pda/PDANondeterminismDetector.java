@@ -56,7 +56,8 @@ public class PDANondeterminismDetector extends NondeterminismDetector {
    *            a transition
    * @return true if the transitions introduce nondeterminism.
    */
-  public boolean areNondeterministic(Transition t1, Transition t2) {
+  @Override
+public boolean areNondeterministic(Transition t1, Transition t2) {
     PDATransition transition1 = (PDATransition) t1;
     PDATransition transition2 = (PDATransition) t2;
     String input1 = transition1.getInputToRead();

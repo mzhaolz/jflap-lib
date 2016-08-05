@@ -67,6 +67,7 @@ public class OpenAction extends RestrictedAction {
      * @param event
      *            the action event
      */
+    @Override
     public void actionPerformed(ActionEvent event) {
         Component source = null;
         lastFileOpened = false;
@@ -125,7 +126,7 @@ public class OpenAction extends RestrictedAction {
         return OpenAction.getLastObjectOpened();
     }
 
-    public static Codec[] makeFilters() {
+    public static List<Codec> makeFilters() {
         // Set up the file filters.
         Universe.CHOOSER.resetChoosableFileFilters();
         List<?> decoders = Universe.CODEC_REGISTRY.getDecoders();

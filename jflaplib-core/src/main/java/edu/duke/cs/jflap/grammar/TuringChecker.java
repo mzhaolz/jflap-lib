@@ -27,8 +27,8 @@ import java.io.Serializable;
  */
 public final class TuringChecker {
 
-  private static final String[] LHS_DEFAULT = {"S", "S", "S"};
-  private static final String[] RHS_DEFAULT = {"V(==)S", "SV(==)", "T"};
+  private static final List<String> LHS_DEFAULT = {"S", "S", "S"};
+  private static final List<String> RHS_DEFAULT = {"V(==)S", "SV(==)", "T"};
 
   /**
    * Checks whether loaded grammar is Turing Converted Grammar or not.

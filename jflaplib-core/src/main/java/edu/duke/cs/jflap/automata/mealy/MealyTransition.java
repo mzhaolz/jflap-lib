@@ -72,7 +72,8 @@ public class MealyTransition extends Transition {
    *            the new to state
    * @return a copy of this transition with new states
    */
-  public Transition copy(State from, State to) {
+  @Override
+public Transition copy(State from, State to) {
     return new MealyTransition(from, to, myLabel, myOutput);
   }
 
@@ -129,7 +130,8 @@ public class MealyTransition extends Transition {
    *
    * @return the description for this transition
    */
-  public String getDescription() {
+  @Override
+public String getDescription() {
     String label = getLabel();
     String output = getOutput();
     if (label == null || label.length() == 0) label = Universe.curProfile.getEmptyString();
@@ -146,7 +148,8 @@ public class MealyTransition extends Transition {
    * @see edu.duke.cs.jflap.automata.Transition#toString()
    * @return a string representation of this object
    */
-  public String toString() {
+  @Override
+public String toString() {
     return super.toString() + ": \"" + getLabel() + "/" + getOutput() + "\"";
   }
 
@@ -161,7 +164,8 @@ public class MealyTransition extends Transition {
    * @return <code>true</code> if the two are equal, <code>false</code>
    *         otherwise
    */
-  public boolean equals(Object object) {
+  @Override
+public boolean equals(Object object) {
     try {
       MealyTransition t = (MealyTransition) object;
       return super.equals(t)
@@ -177,7 +181,8 @@ public class MealyTransition extends Transition {
    *
    * @return the hash code for this transition
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return super.hashCode() ^ getLabel().hashCode() ^ getOutput().hashCode();
   }
 }

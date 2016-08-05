@@ -20,8 +20,6 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.transform.ChomskyPane;
-
 import java.awt.event.ActionEvent;
 
 /**
@@ -49,7 +47,8 @@ public class GrammarTestAction extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     if (g == null) return;
     ChomskyPane cp = new ChomskyPane(environment, g);

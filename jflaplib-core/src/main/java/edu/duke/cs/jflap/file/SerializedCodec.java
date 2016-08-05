@@ -63,7 +63,8 @@ public class SerializedCodec extends Codec {
    * @throws ParseException
    *             if there was a problem reading the file
    */
-  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
+  @Override
+public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     Serializable object = null;
     try {
       ObjectInputStream stream =
@@ -94,7 +95,8 @@ public class SerializedCodec extends Codec {
    * @throws EncodeException
    *             if there was a problem writing the file
    */
-  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
+  @Override
+public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     try {
       ObjectOutputStream stream =
           new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
@@ -120,7 +122,8 @@ public class SerializedCodec extends Codec {
    * @return if the structure, perhaps with minor changes, could possibly be
    *         written to a file
    */
-  public boolean canEncode(Serializable structure) {
+  @Override
+public boolean canEncode(Serializable structure) {
     return false; // Serialization is deprecated as a saving method.
   }
 
@@ -129,7 +132,8 @@ public class SerializedCodec extends Codec {
    *
    * @return the description of this codec
    */
-  public String getDescription() {
+  @Override
+public String getDescription() {
     return "JFLAP 4 Beta File";
   }
 
@@ -138,7 +142,8 @@ public class SerializedCodec extends Codec {
    *
    * @return the {@link XMLCodec}
    */
-  public Encoder correspondingEncoder() {
+  @Override
+public Encoder correspondingEncoder() {
     // return this;
     return xmlcodec;
   }

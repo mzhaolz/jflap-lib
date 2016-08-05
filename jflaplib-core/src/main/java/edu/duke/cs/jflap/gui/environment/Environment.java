@@ -176,6 +176,7 @@ public abstract class Environment extends JPanel {
         // So that when the user changes the view by clicking in the
         // tabbed pane, this knows about it.
         tabbed.addChangeListener(new ChangeListener() {
+            @Override
             public void stateChanged(ChangeEvent event) {
                 distributeChangeEvent();
             }
@@ -349,6 +350,7 @@ public abstract class Environment extends JPanel {
      * @param component
      *            the component to remove
      */
+    @Override
     public void remove(Component component) {
         tabbed.remove(component);
         Tag tag = componentTags.remove(component);
@@ -381,7 +383,8 @@ public abstract class Environment extends JPanel {
      *
      * @return an array containing all components.
      */
-    public Component[] getComponents() {
+    @Override
+    public List<Component> getComponents() {
         Component[] comps = new Component[tabbed.getTabCount()];
         for (int i = 0; i < comps.length; i++)
             comps[i] = tabbed.getComponentAt(i);
@@ -396,7 +399,7 @@ public abstract class Environment extends JPanel {
      * @return an array containing all those components who, along with their
      *         tags, satisfied the satisfier
      */
-    public Component[] getComponents(Satisfier satisfier) {
+    public List<Component> getComponents(Satisfier satisfier) {
         List<Component> list = new ArrayList<>();
         for (int i = 0; i < tabbed.getTabCount(); i++) {
             Component c = tabbed.getComponentAt(i);

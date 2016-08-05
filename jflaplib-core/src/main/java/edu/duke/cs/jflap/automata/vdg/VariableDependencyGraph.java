@@ -44,7 +44,8 @@ public class VariableDependencyGraph extends Automaton {
    * @return the <CODE>Class</CODE> object for
    *         <CODE>automata.vdg.VDGTransition</CODE>
    */
-  protected Class<VDGTransition> getTransitionClass() {
+  @Override
+protected Class<VDGTransition> getTransitionClass() {
     return edu.duke.cs.jflap.automata.vdg.VDGTransition.class;
   }
 }

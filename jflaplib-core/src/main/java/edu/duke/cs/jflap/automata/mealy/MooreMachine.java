@@ -63,7 +63,8 @@ public class MooreMachine extends MealyMachine {
    * @return the <code>Class</code> object for the <code>
    * MooreTransition</code>
    */
-  protected Class<MooreTransition> getTransitionClass() {
+  @Override
+protected Class<MooreTransition> getTransitionClass() {
     return MooreTransition.class;
   }
 

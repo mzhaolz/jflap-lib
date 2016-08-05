@@ -95,6 +95,7 @@ public class AboutBox extends JWindow {
    * dismissed.
    */
   private class BoxDismisser extends MouseAdapter {
+    @Override
     public void mouseClicked(MouseEvent e) {
       dismissBox();
     }

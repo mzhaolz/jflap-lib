@@ -33,11 +33,13 @@ public class AnBlAk extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = 7114226724693300070L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "a^n b^l a^k : n > 5, l > 3, k <= l";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>a<sup>n</sup>b<sup>l</sup>a<sup>k</sup></i> : <i>n</i> "
         + GREATER_THAN
         + " 5, <i>l</i> "
@@ -47,7 +49,8 @@ public class AnBlAk extends RegularPumpingLemma {
         + " <i>l</i>";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value "
@@ -60,26 +63,31 @@ public class AnBlAk extends RegularPumpingLemma {
             + "string that is not in the language.  Thus, the language is not regular.";
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     if (getM() <= 3) w = pumpString("a", 6) + pumpString("b", 4) + pumpString("a", 4);
     else w = pumpString("a", 6) + pumpString("b", getM()) + pumpString("a", getM());
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     int b = w.indexOf('b');
     if (b > 6) setDecomposition(new int[] {0, 1});
     else setDecomposition(new int[] {Math.min(b, m - 1), 1});
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = 0;
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {2, 15};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int a, b, a2;
     char[] list = new char[] {'a', 'b', 'a'};
     if (LemmaMath.isMixture(s, list)) return false;

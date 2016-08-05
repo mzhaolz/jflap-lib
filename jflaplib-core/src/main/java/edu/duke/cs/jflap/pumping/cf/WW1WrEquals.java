@@ -33,11 +33,13 @@ public class WW1WrEquals extends ContextFreePumpingLemma {
    */
   private static final long serialVersionUID = 9179931471363918962L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w w1 w^R : |w| = |w1|, w & w1 element_of {ab}*";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>ww<sub>1</sub>w<sup>R</sup></i> : |<i>w</i>| = |<i>w<sub>1</sub></i>| "
         + ", <i>w</i> & <i>w<sub>1</sub></i> "
         + ELEMENT_OF
@@ -45,7 +47,8 @@ public class WW1WrEquals extends ContextFreePumpingLemma {
         + AB_STAR;
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -57,28 +60,34 @@ public class WW1WrEquals extends ContextFreePumpingLemma {
             + "|'w<sup>1</sup>'|.    Thus, this language is not context-free.";
   }
 
-  protected void addCases() {
+  @Override
+protected void addCases() {
     // TODO Auto-generated method stub
 
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     setDecomposition(new int[] {0, 1, 0, 0});
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", m) + pumpString("b", m) + pumpString("a", m);
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {3, 10};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list) || s.length() == 0) return false;
 

@@ -23,8 +23,6 @@ import edu.duke.cs.jflap.automata.event.AutomataTransitionListener;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.automata.fsa.Minimizer;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.Component;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -94,7 +92,8 @@ class BuilderController {
   private void initTransitionListener() {
     minDfa.addTransitionListener(
         new AutomataTransitionListener() {
-          public void automataTransitionChange(AutomataTransitionEvent e) {
+          @Override
+        public void automataTransitionChange(AutomataTransitionEvent e) {
             if (!e.isAdd()) return;
             Transition transition = e.getTransition();
             if (!remainingTransitions.contains(transition)) {

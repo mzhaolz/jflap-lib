@@ -105,7 +105,8 @@ public class SliderPanel extends JPanel {
     mySlider.setMinorTickSpacing(1);
     mySlider.addChangeListener(
         new ChangeListener() {
-          public void stateChanged(ChangeEvent e) {
+          @Override
+        public void stateChanged(ChangeEvent e) {
             refresh();
             myPane.refresh();
           }

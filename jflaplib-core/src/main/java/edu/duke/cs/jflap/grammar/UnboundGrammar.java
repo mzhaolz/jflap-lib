@@ -43,7 +43,8 @@ public class UnboundGrammar extends Grammar {
    * @throws IllegalArgumentException
    *             if the production is lambda on the left hand side
    */
-  public void checkProduction(Production production) {
+  @Override
+public void checkProduction(Production production) {
     /*
      * if (production.getLHS().length() == 0) { throw new
      * IllegalArgumentException ("The left hand side cannot be empty."); }

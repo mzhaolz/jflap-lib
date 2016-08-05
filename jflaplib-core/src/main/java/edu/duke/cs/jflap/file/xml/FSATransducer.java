@@ -42,7 +42,8 @@ public class FSATransducer extends AutomatonTransducer {
    *            the DOM document that is being read
    * @return an empty FSA
    */
-  protected Automaton createEmptyAutomaton(Document document) {
+  @Override
+protected Automaton createEmptyAutomaton(Document document) {
     return new FiniteStateAutomaton();
   }
 
@@ -60,7 +61,8 @@ public class FSATransducer extends AutomatonTransducer {
    *            elements to text from {@link #elementsToText}
    * @return the new transition
    */
-  protected Transition createTransition(
+  @Override
+protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean bool) {
     String s = e2t.get(TRANSITION_READ_NAME);
     if (s == null) s = ""; // Allow lambda transition.
@@ -78,7 +80,8 @@ public class FSATransducer extends AutomatonTransducer {
    * @return the newly created element that encodes the transition
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
-  protected Element createTransitionElement(Document document, Transition transition) {
+  @Override
+protected Element createTransitionElement(Document document, Transition transition) {
     Element te = super.createTransitionElement(document, transition);
     FSATransition t = (FSATransition) transition;
     // Add what the label is.
@@ -91,7 +94,8 @@ public class FSATransducer extends AutomatonTransducer {
    *
    * @return the string "fa"
    */
-  public String getType() {
+  @Override
+public String getType() {
     return "fa";
   }
 

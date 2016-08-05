@@ -211,7 +211,7 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      *
      * @return an array of selected configurations
      */
-    public Configuration[] getSelected() {
+    public List<Configuration> getSelected() {
         return selected
     }
 
@@ -220,7 +220,7 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      *
      * @return an array of all configurations
      */
-    public Configuration[] getConfigurations() {
+    public List<Configuration> getConfigurations() {
         return configurationToButtonMap.keySet()
     }
 
@@ -230,7 +230,7 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      *
      * @return an array of "valid" configurations
      */
-    public Configuration[] getValidConfigurations() {
+    public List<Configuration> getValidConfigurations() {
         // A state is valid for return if it is normal.
         ArrayList<Configuration> list = new ArrayList<Configuration>();
         Iterator<ConfigurationButton> it = configurationToButtonMap.values().iterator();
@@ -284,6 +284,7 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      * @param e
      *            the action event generated
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         ConfigurationButton button = null;
         try {

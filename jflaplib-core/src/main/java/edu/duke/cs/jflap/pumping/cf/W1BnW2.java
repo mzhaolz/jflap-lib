@@ -36,11 +36,13 @@ public class W1BnW2 extends ContextFreePumpingLemma {
    */
   private static final long serialVersionUID = -1655390282899834206L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w1 + b^n + w2 : na(w1) < na(w2) & na(w1) < n, w1 & w2 element_of {ab}*";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>w<sub>1</sub>b<sup>n</sup>w<sub>2</sub></i> : <i>n<sub>a</sub></i>"
         + "(<i>w<sub>1</sub></i>) "
         + LESS_THAN
@@ -54,7 +56,8 @@ public class W1BnW2 extends ContextFreePumpingLemma {
         + AB_STAR;
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -66,16 +69,19 @@ public class W1BnW2 extends ContextFreePumpingLemma {
             + "context-free.";
   }
 
-  protected void addCases() {
+  @Override
+protected void addCases() {
     // TODO Auto-generated method stub
 
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", m) + pumpString("b", m + 1) + pumpString("a", m + 1);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     String s;
     for (int k = w.length() - 1; k >= 0; k--) {
       s = w.substring(0, k) + w.substring(k + 1);
@@ -87,16 +93,19 @@ public class W1BnW2 extends ContextFreePumpingLemma {
     super.chooseDecomposition();
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     if (getU().length() < m) i = 2;
     else i = 0;
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {2, 10};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
 

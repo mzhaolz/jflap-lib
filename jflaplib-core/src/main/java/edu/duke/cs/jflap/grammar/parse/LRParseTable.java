@@ -20,6 +20,8 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +59,8 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      *            the goto graph for the grammar
      */
     public LRParseTable(Grammar grammar, FiniteStateAutomaton fsa) {
-        List<String> term = new ArrayList<>(Arrays.asList(grammar.getTerminals()));
-        List<String> vars = new ArrayList<>(Arrays.asList(grammar.getVariables()));
+        List<String> term = new ArrayList<>(grammar.getTerminals());
+        List<String> vars = new ArrayList<>(grammar.getVariables());
         this.grammar = grammar;
         Collections.sort(term);
         Collections.sort(vars);
@@ -98,6 +100,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      *
      * @return a copy of this object
      */
+    @Override
     public Object clone() {
         return new LRParseTable(this);
     }
@@ -193,6 +196,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      *
      * @return the number of rows
      */
+    @Override
     public int getRowCount() {
         return entries.length;
     }
@@ -203,6 +207,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      *
      * @return the number of columns
      */
+    @Override
     public int getColumnCount() {
         return entries[0].length;
     }
@@ -261,7 +266,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      * @param input
      *            the input in the table
      */
-    private String[] parseValues(String input, int column) {
+    private List<String> parseValues(String input, int column) {
         StringTokenizer st = new StringTokenizer(input);
         SortedSet<String> values = new TreeSet<>();
         while (st.hasMoreTokens()) {
@@ -271,7 +276,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
                 continue;
             values.add(token);
         }
-        return values
+        return Lists.newArrayList(values);
     }
 
     /**
@@ -281,6 +286,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      *            the column index
      * @return the name of the column
      */
+    @Override
     public String getColumnName(int column) {
         if (column == 0)
             return " ";
@@ -299,6 +305,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      * @param column
      *            the column index
      */
+    @Override
     public void setValueAt(Object value, int row, int column) {
         if (column == 0) {
             return;
@@ -332,6 +339,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
     /**
      * Returns the value at a particular index.
      */
+    @Override
     public Object getValueAt(int row, int column) {
         return entries[row][column];
     }
@@ -365,6 +373,7 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
      *            the column index
      * @return if the column is not 0
      */
+    @Override
     public boolean isCellEditable(int row, int column) {
         return column != 0;
     }
@@ -424,13 +433,13 @@ public class LRParseTable extends AbstractTableModel implements Serializable, Cl
     }
 
     /** The terminals of the grammar. */
-    private String[] variables;
+    private List<String> variables;
 
     /** The nonterminals of the grammar, including $ at the end. */
-    private String[] terminals;
+    private List<String> terminals;
 
     /** The entries of the table. */
-    private String[][] entries;
+    private List<String>[] entries;
 
     /** The grammar for the parse table. */
     private Grammar grammar;

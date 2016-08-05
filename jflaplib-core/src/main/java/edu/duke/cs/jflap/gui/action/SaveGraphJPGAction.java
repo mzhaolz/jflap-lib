@@ -60,7 +60,8 @@ public class SaveGraphJPGAction extends RestrictedAction {
    * @param arg0
    *            the action event
    */
-  public void actionPerformed(ActionEvent arg0) {
+  @Override
+public void actionPerformed(ActionEvent arg0) {
     Component apane = environment.tabbed.getSelectedComponent();
     JComponent c = (JComponent) environment.getActive();
     SaveGraphUtility.saveGraph(apane, c, "JPEG files", "jpg,jpeg");

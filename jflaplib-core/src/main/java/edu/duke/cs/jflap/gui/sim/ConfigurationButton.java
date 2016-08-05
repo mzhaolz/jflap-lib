@@ -108,7 +108,8 @@ public class ConfigurationButton extends JToggleButton {
    * @param g
    *            the graphics object to paint this component to
    */
-  public void paintComponent(Graphics g) {
+  @Override
+public void paintComponent(Graphics g) {
     super.paintComponent(g);
     g.setColor(STATE_COLOR[state]);
     g.fillRect(0, 0, getWidth(), getHeight());
@@ -132,13 +133,13 @@ public class ConfigurationButton extends JToggleButton {
   public static final int NORMAL = 0, ACCEPT = 1, REJECT = 2, FREEZE = 3, FOCUSED = 4;
 
   /** The texts that correspond to the states of an object. */
-  private static final String[] TEXT = {"Normal", "Accept", "Reject", "Freeze", "Focused"};
+  private static final List<String> TEXT = {"Normal", "Accept", "Reject", "Freeze", "Focused"};
 
   /**
    * State colors. For example, STATE_COLOR[ACCEPT] is the state color for a
    * configuration in the accept state.
    */
-  public static final Color[] STATE_COLOR = {
+  public static List<final Color> STATE_COLOR = {
     new Color(0, 0, 0, 0),
     new Color(0, 150, 0, 80),
     new Color(255, 0, 0, 80),
@@ -147,7 +148,7 @@ public class ConfigurationButton extends JToggleButton {
   };
 
   /*
-   * public static final Color[] STATE_COLOR = {Color.black, new
+   * public static List<final Color> STATE_COLOR = {Color.black, new
    * Color(0,150,0), Color.red, new Color(100,100,255)};
    */
   /** The padding for the icon drawing. */

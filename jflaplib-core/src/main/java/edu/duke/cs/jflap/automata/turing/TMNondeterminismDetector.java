@@ -43,7 +43,8 @@ public class TMNondeterminismDetector extends NondeterminismDetector {
    *            a transition
    * @return true if the transitions introduce nondeterminism
    */
-  public boolean areNondeterministic(Transition t1, Transition t2) {
+  @Override
+public boolean areNondeterministic(Transition t1, Transition t2) {
     TMTransition transition1 = (TMTransition) t1;
     TMTransition transition2 = (TMTransition) t2;
     for (int i = 0; i < transition1.tapes(); i++) {

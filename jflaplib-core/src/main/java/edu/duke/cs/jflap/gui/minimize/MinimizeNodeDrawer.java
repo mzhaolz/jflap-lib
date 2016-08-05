@@ -47,7 +47,8 @@ public class MinimizeNodeDrawer extends DefaultNodeDrawer {
    * @param node
    *            the node to draw
    */
-  public void draw(Graphics2D g, TreeNode node) {
+  @Override
+public void draw(Graphics2D g, TreeNode node) {
     g.fill(NODE_SHAPE);
     Color c = g.getColor();
     g.setColor(Color.black);

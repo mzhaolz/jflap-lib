@@ -143,7 +143,7 @@ public class ItemSetChooser {
      * @return an array containing the items the user selected, or
      *         <CODE>null</CODE> if the user cancelled the action
      */
-    public Production[] getItemSet(Set<?> items, String message) {
+    public List<Production> getItemSet(Set<?> items, String message) {
         restricted = items;
         choiceTable.setModel(new ImmutableGrammarTableModel());
         alreadyChosen = new HashSet<Production>();

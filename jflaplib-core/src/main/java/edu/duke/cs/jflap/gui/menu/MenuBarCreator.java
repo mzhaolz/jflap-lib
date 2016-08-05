@@ -37,10 +37,13 @@ import edu.duke.cs.jflap.gui.action.ConvertFSAToREAction;
 import edu.duke.cs.jflap.gui.action.ConvertPDAToGrammarAction;
 import edu.duke.cs.jflap.gui.action.ConvertRegularGrammarToFSA;
 import edu.duke.cs.jflap.gui.action.DFAEqualityAction;
+import edu.duke.cs.jflap.gui.action.FSAAction;
+import edu.duke.cs.jflap.gui.action.GrammarAction;
 import edu.duke.cs.jflap.gui.action.GrammarTransformAction;
 import edu.duke.cs.jflap.gui.action.GrammarTypeTestAction;
 import edu.duke.cs.jflap.gui.action.LLParseTableAction;
 import edu.duke.cs.jflap.gui.action.LRParseTableAction;
+import edu.duke.cs.jflap.gui.action.LSystemAction;
 import edu.duke.cs.jflap.gui.action.LSystemDisplay;
 import edu.duke.cs.jflap.gui.action.LambdaHighlightAction;
 import edu.duke.cs.jflap.gui.action.LayoutAlgorithmAction;
@@ -59,6 +62,7 @@ import edu.duke.cs.jflap.gui.action.OpenURLAction;
 import edu.duke.cs.jflap.gui.action.PrintAction;
 import edu.duke.cs.jflap.gui.action.QuitAction;
 import edu.duke.cs.jflap.gui.action.REToFSAAction;
+import edu.duke.cs.jflap.gui.action.RegularAction;
 import edu.duke.cs.jflap.gui.action.RestrictedAction;
 import edu.duke.cs.jflap.gui.action.SaveAction;
 import edu.duke.cs.jflap.gui.action.SaveAsAction;
@@ -279,9 +283,9 @@ public class MenuBarCreator {
       addItem(menu, new BuildingBlockSimulateAction((Automaton) object, environment));
     if (SimulateNoClosureAction.isApplicable(object))
       addItem(menu, new SimulateNoClosureAction((Automaton) object, environment));
-    if (NoInteractionSimulateAction.isApplicable(object))
+    if (SimulateAction.isApplicable(object))
       addItem(menu, new NoInteractionSimulateAction((Automaton) object, environment));
-    if (MultipleSimulateAction.isApplicable(object))
+    if (SimulateAction.isApplicable(object))
       addItem(menu, new MultipleSimulateAction((Automaton) object, environment));
     if (MultipleOutputSimulateAction.isApplicable(object))
       addItem(menu, new MultipleOutputSimulateAction((Automaton) object, environment));
@@ -295,21 +299,21 @@ public class MenuBarCreator {
     if (isTuring) return getInputMenu(frame, 0);
 
     // Grammar-y actions.
-    if (LLParseTableAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new LLParseTableAction(
               (edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (LRParseTableAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new LRParseTableAction(
               (edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (BruteParseAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new BruteParseAction((edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (MultipleBruteParseAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new MultipleBruteParseAction(
@@ -319,11 +323,11 @@ public class MenuBarCreator {
           menu,
           new UserControlParseAction(
               (edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (CYKParseAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new CYKParseAction((edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (MultipleCYKParseAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new MultipleCYKParseAction(
@@ -334,7 +338,7 @@ public class MenuBarCreator {
 
     // LSystem-y actions.
 
-    if (LSystemDisplay.isApplicable(object))
+    if (LSystemAction.isApplicable(object))
       addItem(
           menu,
           new LSystemDisplay((edu.duke.cs.jflap.gui.environment.LSystemEnvironment) environment));
@@ -358,7 +362,7 @@ public class MenuBarCreator {
           menu,
           new UserControlParseAction(
               (edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (TuringBruteParseAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new TuringBruteParseAction(
@@ -467,7 +471,7 @@ public class MenuBarCreator {
     JMenu menu = new JMenu("Test");
     Serializable object = environment.getObject();
 
-    if (DFAEqualityAction.isApplicable(object))
+    if (FSAAction.isApplicable(object))
       addItem(
           menu,
           new DFAEqualityAction(
@@ -486,7 +490,7 @@ public class MenuBarCreator {
      * if (UnnecessaryAction.isApplicable(object)) addItem(menu, new
      * UnnecessaryAction ((automata.Automaton) object, environment));
      */
-    if (LambdaHighlightAction.isApplicable(object))
+    if (AutomatonAction.isApplicable(object))
       addItem(
           menu,
           new LambdaHighlightAction((edu.duke.cs.jflap.automata.Automaton) object, environment));
@@ -497,7 +501,7 @@ public class MenuBarCreator {
      * environment));
      */
 
-    if (GrammarTypeTestAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new GrammarTypeTestAction(
@@ -520,12 +524,12 @@ public class MenuBarCreator {
     boolean isTuring = TuringChecker.check(object);
     if (isTuring) return getConvertMenu(frame, 0);
 
-    if (NFAToDFAAction.isApplicable(object))
+    if (FSAAction.isApplicable(object))
       addItem(
           menu,
           new NFAToDFAAction(
               (edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton) object, environment));
-    if (MinimizeTreeAction.isApplicable(object))
+    if (FSAAction.isApplicable(object))
       addItem(
           menu,
           new MinimizeTreeAction(
@@ -542,37 +546,37 @@ public class MenuBarCreator {
           new ConvertPDAToGrammarAction(
               (edu.duke.cs.jflap.gui.environment.AutomatonEnvironment) environment));
 
-    if (ConvertFSAToREAction.isApplicable(object))
+    if (FSAAction.isApplicable(object))
       addItem(
           menu,
           new ConvertFSAToREAction(
               (edu.duke.cs.jflap.gui.environment.AutomatonEnvironment) environment));
 
-    if (ConvertCFGLL.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new ConvertCFGLL((edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (ConvertCFGLR.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new ConvertCFGLR((edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (ConvertRegularGrammarToFSA.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new ConvertRegularGrammarToFSA(
               (edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
-    if (GrammarTransformAction.isApplicable(object))
+    if (GrammarAction.isApplicable(object))
       addItem(
           menu,
           new GrammarTransformAction(
               (edu.duke.cs.jflap.gui.environment.GrammarEnvironment) environment));
 
-    if (REToFSAAction.isApplicable(object))
+    if (RegularAction.isApplicable(object))
       addItem(
           menu,
           new REToFSAAction((edu.duke.cs.jflap.gui.environment.RegularEnvironment) environment));
 
-    if (CombineAutomaton.isApplicable(object))
+    if (AutomatonAction.isApplicable(object))
       addItem(
           menu,
           new CombineAutomaton(
@@ -584,7 +588,7 @@ public class MenuBarCreator {
           new TuringToUnrestrictGrammarAction(
               (edu.duke.cs.jflap.gui.environment.AutomatonEnvironment) environment));
 
-    if (AddTrapStateToDFAAction.isApplicable(object))
+    if (FSAAction.isApplicable(object))
       addItem(
           menu,
           new AddTrapStateToDFAAction(
@@ -633,7 +637,8 @@ public class MenuBarCreator {
            */
           private static final long serialVersionUID = 1L;
 
-          public void actionPerformed(ActionEvent event) {
+          @Override
+        public void actionPerformed(ActionEvent event) {
             JOptionPane.showMessageDialog(
                 null,
                 "For help, feel free to access the JFLAP tutorial at\n"

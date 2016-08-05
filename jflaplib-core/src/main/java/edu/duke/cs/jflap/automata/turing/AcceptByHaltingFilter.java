@@ -29,11 +29,13 @@ public class AcceptByHaltingFilter implements AcceptanceFilter { // note that
   // ignore final
   // states in
   // nonTopLevel.
-  public boolean accept(TMConfiguration tmc) {
+  @Override
+public boolean accept(TMConfiguration tmc) {
     return tmc.isHalted();
   }
 
-  public String getName() {
+  @Override
+public String getName() {
     return "Accept by Halting";
   }
 }

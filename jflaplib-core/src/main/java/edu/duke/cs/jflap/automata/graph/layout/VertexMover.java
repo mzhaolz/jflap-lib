@@ -85,7 +85,8 @@ public class VertexMover<V> extends LayoutAlgorithm<V> {
     command = c;
   }
 
-  public void layout(Graph<V> graph, Set<V> notMoving) {
+  @Override
+public void layout(Graph<V> graph, Set<V> notMoving) {
     List<V> vertices = getMovableVertices(graph, notMoving);
 
     // Check whether to fill the screen first, because other commands will

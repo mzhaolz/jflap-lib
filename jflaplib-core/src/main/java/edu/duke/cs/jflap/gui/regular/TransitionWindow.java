@@ -98,7 +98,7 @@ public class TransitionWindow extends JFrame {
    *
    * @return the array of transitions displayed by this window
    */
-  public Transition[] getTransitions() {
+  public List<Transition> getTransitions() {
     return transitions;
   }
 
@@ -118,7 +118,7 @@ public class TransitionWindow extends JFrame {
   private FSAToREController controller;
 
   /** The array of transitions displayed. */
-  private Transition[] transitions = new Transition[0];
+  private List<Transition> transitions = new Transition[0];
 
   /** The table object that displays the transitions. */
   private JTable table = new JTable(new TransitionTableModel());

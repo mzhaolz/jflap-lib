@@ -57,7 +57,8 @@ public class GrammarTypeTestAction extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     // EDebug.print(g == null);
     if (g == null) return;

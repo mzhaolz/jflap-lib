@@ -99,7 +99,7 @@ public class UnitProductionRemover {
      *            the grammar.
      * @return all unit productions in <CODE>grammar</CODE>.
      */
-    public static Production[] getUnitProductions(Grammar grammar) {
+    public static List<Production> getUnitProductions(Grammar grammar) {
         List<Production> list = new ArrayList<>();
 
         Production[] productions = grammar.getProductions();
@@ -118,7 +118,7 @@ public class UnitProductionRemover {
      *            the grammar
      * @return all non-unit productions in <CODE>grammar</CODE>.
      */
-    public static Production[] getNonUnitProductions(Grammar grammar) {
+    public static List<Production> getNonUnitProductions(Grammar grammar) {
         List<Production> list = new ArrayList<>();
 
         Production[] productions = grammar.getProductions();
@@ -260,7 +260,7 @@ public class UnitProductionRemover {
      *         all variables whose states can be reached from the state that
      *         represents <CODE>variable</CODE> in <CODE>graph</CODE>.
      */
-    public static String[] getDependencies(String variable, Grammar grammar,
+    public static List<String> getDependencies(String variable, Grammar grammar,
             VariableDependencyGraph graph) {
         List<String> list = new ArrayList<>();
         String[] variables = grammar.getVariables();
@@ -288,7 +288,7 @@ public class UnitProductionRemover {
      *         their left hand side, and the right hand side of a production in
      *         <CODE>oldProductions</CODE> as their right hand sides.
      */
-    public static Production[] getNewProductions(String variable, Production[] oldProductions) {
+    public static List<Production> getNewProductions(String variable, Production[] oldProductions) {
         List<Production> list = new ArrayList<>();
         for (int k = 0; k < oldProductions.length; k++) {
             list.add(new Production(variable, oldProductions[k].getRHS()));

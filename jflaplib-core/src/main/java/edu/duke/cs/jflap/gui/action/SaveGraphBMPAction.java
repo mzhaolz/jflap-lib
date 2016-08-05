@@ -62,7 +62,8 @@ public class SaveGraphBMPAction extends RestrictedAction {
    * @param arg0
    *            the action event
    */
-  public void actionPerformed(ActionEvent arg0) {
+  @Override
+public void actionPerformed(ActionEvent arg0) {
     Component apane = environment.tabbed.getSelectedComponent();
 
     JComponent c = (JComponent) environment.getActive();
@@ -72,11 +73,13 @@ public class SaveGraphBMPAction extends RestrictedAction {
 }
 
 class BMPFileFilter extends FileFilter {
-  public boolean accept(File f) {
+  @Override
+public boolean accept(File f) {
     return f.getName().endsWith(".bmp");
   }
 
-  public String getDescription() {
+  @Override
+public String getDescription() {
     return ".bmp";
   }
 }

@@ -142,7 +142,7 @@ public class LSystem implements Serializable {
      * @return an array of lists, where each list is a list of the strings; the
      *         array will be empty if there are no replacements
      */
-    public List<String>[] getReplacements(String symbol) {
+    public List<List<String>> getReplacements(String symbol) {
         List<String>[] toReturn = symbolToReplacements.get(symbol);
         return toReturn == null ? EMPTY_LIST : toReturn;
     }
@@ -178,7 +178,7 @@ public class LSystem implements Serializable {
     }
 
     /** The grammar holding the replacement rules. */
-    private Map<String, List<String>[]> symbolToReplacements;
+    private List<Map<String, List<String>>> symbolToReplacements;
 
     /** The mapping of keys to values. */
     private Map<String, String> values;
@@ -191,5 +191,5 @@ public class LSystem implements Serializable {
 
     /** An empty list array. */
     @SuppressWarnings("unchecked")
-    private static final List<String>[] EMPTY_LIST = new List[0];
+    private static final List<List<String>> EMPTY_LIST = new List[0];
 }

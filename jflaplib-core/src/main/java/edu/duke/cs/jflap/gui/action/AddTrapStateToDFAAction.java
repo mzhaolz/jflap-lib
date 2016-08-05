@@ -26,6 +26,7 @@ import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
@@ -69,7 +70,8 @@ public class AddTrapStateToDFAAction extends FSAAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (automaton.getInitialState() == null) {
       JOptionPane.showMessageDialog(
           Universe.frameForEnvironment(environment),
@@ -99,16 +101,16 @@ public class AddTrapStateToDFAAction extends FSAAction {
    * @return True if DFA already has a trap state and complete
    */
   private boolean checkIfDFAisComplete() {
-    Transition[] t = automaton.getTransitions();
-    State[] s = automaton.getStates();
+    List<Transition> t = automaton.getTransitions();
+    List<State> s = automaton.getStates();
     TreeSet<String> reads = new TreeSet<String>();
     for (int i = 0; i < t.length; i++) {
       reads.add(t[i].getDescription());
     }
     int count = 0;
     for (int i = 0; i < s.length; i++) {
-      Transition[] tt = automaton.getTransitionsFromState(s[i]);
-      if (tt.length < reads.size()) count++;
+      List<Transition> tt = automaton.getTransitionsFromState(s[i]);
+      if (tt.size() < reads.size()) count++;
     }
     if (count == 0) return true;
     return false;

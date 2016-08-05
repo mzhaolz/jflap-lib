@@ -17,8 +17,6 @@
 package edu.duke.cs.jflap.gui.environment;
 
 import edu.duke.cs.jflap.file.xml.DOMPrettier;
-import edu.duke.cs.jflap.gui.editor.TMTransitionCreator;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -118,7 +116,8 @@ public class Profile {
     transTuringFinalCheckBox.setSelected(transTuringFinal);
     transTuringFinalCheckBox.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             setTransitionsFromTuringFinalStateAllowed(transTuringFinalCheckBox.isSelected());
             savePreferences();
           }
@@ -130,7 +129,8 @@ public class Profile {
     turingAcceptByFinalStateCheckBox.setSelected(turingAcceptByFinalState);
     turingAcceptByFinalStateCheckBox.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             setAcceptByFinalState(turingAcceptByFinalStateCheckBox.isSelected());
             savePreferences();
           }
@@ -142,7 +142,8 @@ public class Profile {
     turingAcceptByHaltingCheckBox.setSelected(turingAcceptByHalting);
     turingAcceptByHaltingCheckBox.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             setAcceptByHalting(turingAcceptByHaltingCheckBox.isSelected());
             savePreferences();
           }
@@ -154,7 +155,8 @@ public class Profile {
     turingAllowStayCheckBox.setSelected(turingAllowStay);
     turingAllowStayCheckBox.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             setAllowStay(turingAllowStayCheckBox.isSelected());
             savePreferences();
           }

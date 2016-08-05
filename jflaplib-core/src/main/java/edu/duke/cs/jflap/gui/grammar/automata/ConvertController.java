@@ -159,7 +159,7 @@ public abstract class ConvertController {
      *         there are productions for this object and they have already been
      *         revealed
      */
-    public Production[] revealObjectProductions(Object object) {
+    public List<Production> revealObjectProductions(Object object) {
         Production[] p = objectToProduction.get(object);
         if (p == null || p.length == 0) {
             // There are no productions!
@@ -226,7 +226,7 @@ public abstract class ConvertController {
      *
      * @return an array of the objects which as yet have not been transformed
      */
-    public Object[] highlightUntransformed() {
+    public List<Object> highlightUntransformed() {
         HashSet<Serializable> unselectedSet = new HashSet<Serializable>(
                 objectToProduction.keySet());
         unselectedSet.removeAll(alreadyDone);

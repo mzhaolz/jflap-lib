@@ -81,7 +81,8 @@ public class LayoutAlgorithmAction extends AutomatonAction {
     algorithm = algm;
   }
 
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     double vertexBuffer;
     if (automaton instanceof TuringMachine) vertexBuffer = 80 * ((TuringMachine) automaton).tapes();
     else if (automaton instanceof PushdownAutomaton) vertexBuffer = 80;

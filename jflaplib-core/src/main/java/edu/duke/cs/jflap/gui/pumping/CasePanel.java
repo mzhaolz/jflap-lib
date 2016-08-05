@@ -75,7 +75,7 @@ public class CasePanel extends JPanel {
    * The last decomposition chosen. This is used when {@link #addCase()} is
    * called.
    */
-  private int[] tempDecomposition;
+  private List<int> tempDecomposition;
   /**
    * The last <i>i</i> used.
    */
@@ -156,30 +156,36 @@ public class CasePanel extends JPanel {
                *
                */
               private static final long serialVersionUID = 1L;
-              public final String[] COLUMN_NAMES = new String[] {"#", "Description"};
+              @Override
+            public List<final String> COLUMN_NAMES = new String[] {"#", "Description"};
 
               public Object getValueAt(int r, int c) {
                 if (c == 0) return Integer.toString(r + 1);
                 else return myCases.get(r);
               }
 
-              public String getColumnName(int c) {
+              @Override
+            public String getColumnName(int c) {
                 return COLUMN_NAMES[c];
               }
 
-              public int getRowCount() {
+              @Override
+            public int getRowCount() {
                 return myCases.size();
               }
 
-              public int getColumnCount() {
+              @Override
+            public int getColumnCount() {
                 return COLUMN_NAMES.length;
               }
 
-              public boolean isCellEditable(int r, int c) {
+              @Override
+            public boolean isCellEditable(int r, int c) {
                 return false;
               }
 
-              public void setValueAt(Object value, int r, int c) {}
+              @Override
+            public void setValueAt(Object value, int r, int c) {}
             });
 
     /*
@@ -219,7 +225,8 @@ public class CasePanel extends JPanel {
     myAddCase = new JButton("Add");
     myAddCase.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             addCase();
           }
         });
@@ -230,7 +237,8 @@ public class CasePanel extends JPanel {
     myReplace = new JButton("Replace");
     myReplace.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             replaceCase(myTable.getSelectedRow());
           }
         });
@@ -241,7 +249,8 @@ public class CasePanel extends JPanel {
     myShowAll = new JButton("List");
     myShowAll.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             listAll();
           }
         });
@@ -252,7 +261,8 @@ public class CasePanel extends JPanel {
     myShowCase = new JButton("Show");
     myShowCase.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             showCase(myTable.getSelectedRow());
           }
         });
@@ -263,7 +273,8 @@ public class CasePanel extends JPanel {
     myClearCase = new JButton("Delete");
     myClearCase.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             clearCase(myTable.getSelectedRow());
           }
         });
@@ -274,7 +285,8 @@ public class CasePanel extends JPanel {
     myClearAll = new JButton("Clear");
     myClearAll.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             clearAll();
           }
         });
@@ -284,7 +296,8 @@ public class CasePanel extends JPanel {
     myDone = new JButton("Done?");
     myDone.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             int numLeft = myLemma.numCasesTotal() - myCases.size();
             if (numLeft == 1) myMessage.setText("1 case left.");
             else if (numLeft > 1) myMessage.setText(numLeft + " cases left.");
@@ -302,7 +315,8 @@ public class CasePanel extends JPanel {
         .getSelectionModel()
         .addListSelectionListener(
             new ListSelectionListener() {
-              public void valueChanged(ListSelectionEvent e) {
+              @Override
+            public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting()) return;
 
                 ListSelectionModel lsm = (ListSelectionModel) e.getSource();

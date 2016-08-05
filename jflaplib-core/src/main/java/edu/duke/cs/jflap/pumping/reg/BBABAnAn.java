@@ -32,15 +32,18 @@ public class BBABAnAn extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = 4681597859261204781L;
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>bba(ba)<sup>n</sup>a<sup>n-1</sup></i>";
   }
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "bba(ba)^n a^(n-1)";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"bba(ba)<sup><i>m</i></sup>"
@@ -49,23 +52,28 @@ public class BBABAnAn extends RegularPumpingLemma {
             + "Thus, the language is not regular.";
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     setDecomposition(new int[] {1, 2});
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = "bba" + pumpString("ba", m) + pumpString("a", m - 1);
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {5, 10};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     if (!s.startsWith("bba")) return false;
 
     String temp = s.substring(3);

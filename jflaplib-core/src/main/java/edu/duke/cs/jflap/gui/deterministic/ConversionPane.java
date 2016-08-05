@@ -19,16 +19,7 @@ package edu.duke.cs.jflap.gui.deterministic;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.TooltipAction;
-import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
-import edu.duke.cs.jflap.gui.editor.EditorPane;
-import edu.duke.cs.jflap.gui.editor.Tool;
-import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.environment.Environment;
-import edu.duke.cs.jflap.gui.viewer.AutomatonDraggerPane;
-import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
@@ -74,7 +65,8 @@ public class ConversionPane extends JPanel {
     // When the component is first shown, perform layout.
     addComponentListener(
         new ComponentAdapter() {
-          public void componentShown(ComponentEvent event) {
+          @Override
+        public void componentShown(ComponentEvent event) {
             // We may now lay out the states...
             controller.performFirstLayout();
             editor.getAutomatonPane().repaint();
@@ -121,7 +113,8 @@ public class ConversionPane extends JPanel {
            */
           private static final long serialVersionUID = 1587659531575512768L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             controller.complete();
           }
         });
@@ -132,7 +125,8 @@ public class ConversionPane extends JPanel {
            */
           private static final long serialVersionUID = -3054950168721834336L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             controller.done();
           }
         });

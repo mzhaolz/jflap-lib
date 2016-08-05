@@ -18,6 +18,8 @@ package edu.duke.cs.jflap.grammar;
 
 import edu.duke.cs.jflap.gui.environment.Universe;
 
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,11 +98,11 @@ public class Production implements Serializable {
      *
      * @return all symbols in a production
      */
-    public String[] getSymbols() {
+    public List<String> getSymbols() {
         SortedSet<String> symbols = new TreeSet<>();
         symbols.addAll(Arrays.asList(getVariables()));
         symbols.addAll(Arrays.asList(getTerminals()));
-        return symbols
+        return Lists.newArrayList(symbols);
     }
 
     /**
@@ -108,7 +110,7 @@ public class Production implements Serializable {
      *
      * @return all variables in the production.
      */
-    public String[] getVariables() {
+    public List<String> getVariables() {
 
         List<String> list = new ArrayList<>();
         String[] rhsVariables = getVariablesOnRHS();
@@ -133,7 +135,7 @@ public class Production implements Serializable {
      *
      * @return all variables on the left hand side of the production.
      */
-    public String[] getVariablesOnLHS() {
+    public List<String> getVariablesOnLHS() {
         List<String> list = new ArrayList<>();
         if (myLHS == null)
             return new String[0];
@@ -150,7 +152,7 @@ public class Production implements Serializable {
      *
      * @return all variables on the right hand side of the production.
      */
-    public String[] getVariablesOnRHS() {
+    public List<String> getVariablesOnRHS() {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < myRHS.length(); i++) {
             char c = myRHS.charAt(i);
@@ -165,7 +167,7 @@ public class Production implements Serializable {
      *
      * @return all terminals in the production.
      */
-    public String[] getTerminals() {
+    public List<String> getTerminals() {
         List<String> list = new ArrayList<>();
         String[] rhsTerminals = getTerminalsOnRHS();
         for (int k = 0; k < rhsTerminals.length; k++) {
@@ -189,7 +191,7 @@ public class Production implements Serializable {
      *
      * @return all terminals on the right hand side of the production.
      */
-    public String[] getTerminalsOnRHS() {
+    public List<String> getTerminalsOnRHS() {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < myRHS.length(); i++) {
             char c = myRHS.charAt(i);
@@ -208,6 +210,7 @@ public class Production implements Serializable {
      * @return true if <CODE>production</CODE> is equivalent to this production
      *         (i.e. they have identical left and right hand sides).
      */
+    @Override
     public boolean equals(Object production) {
         if (production instanceof Production) {
             Production p = (Production) production;
@@ -221,6 +224,7 @@ public class Production implements Serializable {
      *
      * @return the hashcode for this production
      */
+    @Override
     public int hashCode() {
         return myRHS.hashCode() ^ myLHS.hashCode();
     }
@@ -230,7 +234,7 @@ public class Production implements Serializable {
      *
      * @return all terminals on the left hand side of the production.
      */
-    public String[] getTerminalsOnLHS() {
+    public List<String> getTerminalsOnLHS() {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < myLHS.length(); i++) {
             char c = myLHS.charAt(i);
@@ -245,6 +249,7 @@ public class Production implements Serializable {
      *
      * @return a string representation of the production object.
      */
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(getLHS());
@@ -261,7 +266,7 @@ public class Production implements Serializable {
      * For example, for the production <CODE>A -> BCD</CODE> this would return
      * the array of strings <CODE>{"B","C","D"}</CODE>.
      */
-    public String[] getSymbolsOnRHS() {
+    public List<String> getSymbolsOnRHS() {
         List<String> list = new ArrayList<>();
         for (int i = 0; i < myRHS.length(); i++) {
             list.add(myRHS.substring(i, i + 1));

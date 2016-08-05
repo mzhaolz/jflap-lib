@@ -80,7 +80,8 @@ public class Automaton implements Serializable, Cloneable {
    * @return a clone of this automaton, or <CODE>null</CODE> if the clone
    *         failed
    */
-  public Object clone() {
+  @Override
+public Object clone() {
     Automaton a;
     // Try to create a new object.
     try {
@@ -622,7 +623,8 @@ public class Automaton implements Serializable, Cloneable {
   /**
    * Returns a string representation of this <CODE>Automaton</CODE>.
    */
-  public String toString() {
+  @Override
+public String toString() {
     StringBuffer buffer = new StringBuffer();
     buffer.append(super.toString());
     buffer.append('\n');
@@ -832,7 +834,8 @@ public class Automaton implements Serializable, Cloneable {
     return fileName.substring(0, last + 1);
   }
 
-  public int hashCode() {
+  @Override
+public int hashCode() {
     // EDebug.print("The Hash is that is hashed, is truly hashed");
     int ret = 0;
     for (Object o : states) ret += ((State) o).specialHash();

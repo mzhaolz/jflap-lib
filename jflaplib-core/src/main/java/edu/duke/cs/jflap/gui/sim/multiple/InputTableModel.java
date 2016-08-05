@@ -80,7 +80,8 @@ public class InputTableModel extends GrowableTableModel<Object> {
   /**
    * Initializes the contents of a new array to be all blank strings.
    */
-  protected Object[] initializeRow(int row) {
+  @Override
+protected Object[] initializeRow(int row) {
     Object[] nr = super.initializeRow(row);
     Arrays.fill(nr, "");
     return nr;
@@ -100,7 +101,8 @@ public class InputTableModel extends GrowableTableModel<Object> {
    *            the number of the column to get the name for
    * @return the name of the column
    */
-  public String getColumnName(int column) {
+  @Override
+public String getColumnName(int column) {
     int count = getColumnCount();
     if (column == count - 1) return "Result";
     int offset = 0;
@@ -153,7 +155,8 @@ public class InputTableModel extends GrowableTableModel<Object> {
    *         other than the last column; in that instance this returns
    *         <CODE>false</CODE>
    */
-  public boolean isCellEditable(int row, int column) {
+  @Override
+public boolean isCellEditable(int row, int column) {
     if (isMultiple) return (column < getInputCount() && column > 0);
     return column < getInputCount();
   }
@@ -308,7 +311,8 @@ public class InputTableModel extends GrowableTableModel<Object> {
    * This initializes the table so that it is completely blank except for
    * having one row. The number of columns remains unchanged.
    */
-  public void clear() {
+  @Override
+public void clear() {
     if (rowToAssociatedConfiguration != null) rowToAssociatedConfiguration.clear();
     super.clear();
   }
@@ -331,6 +335,7 @@ public class InputTableModel extends GrowableTableModel<Object> {
   /** The static table model listener for caching inputs. */
   protected final static TableModelListener LISTENER =
       new TableModelListener() {
+        @Override
         public void tableChanged(TableModelEvent event) {
           InputTableModel model = (InputTableModel) event.getSource();
           if (event.getColumn() != TableModelEvent.ALL_COLUMNS

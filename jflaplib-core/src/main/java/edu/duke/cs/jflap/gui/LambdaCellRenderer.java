@@ -66,7 +66,8 @@ public class LambdaCellRenderer extends DefaultTableCellRenderer {
     return toSubstitute;
   }
 
-  public Component getTableCellRendererComponent(
+  @Override
+public Component getTableCellRendererComponent(
       JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
     JLabel l =
         (JLabel)

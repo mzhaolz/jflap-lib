@@ -31,10 +31,12 @@ public class OpenURLAction extends RestrictedAction {
     super("Open URL", null);
   }
 
-  public boolean isEnabled() {
+  @Override
+public boolean isEnabled() {
     if (Universe.CHOOSER == null) return true;
     return false;
   }
 
-  public void actionPerformed(ActionEvent e) {}
+  @Override
+public void actionPerformed(ActionEvent e) {}
 }

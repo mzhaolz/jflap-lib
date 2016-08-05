@@ -35,11 +35,13 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
    */
   private static final long serialVersionUID = 56169474941404352L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w1cw2cw3cw4 : w1 = w2 or w3 = w4, wi element_of {ab}*, |wi| >= 5";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>w<sub>1</sub>cw<sub>2</sub>cw<sub>3</sub>cw<sub>4</sub></i>, : "
         + "<i>w<sub>1</sub></i> = <i>w<sub>2</sub></i> or "
         + "<i>w<sub>3</sub></i> = <i>w<sub>4</sub></i>, "
@@ -50,7 +52,8 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
         + ", |<i>w<sub>i</sub></i>| > 0";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -65,12 +68,14 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
             + " 'w<sub>2</sub>'.  Thus, this language is not context-free.";
   }
 
-  protected void addCases() {
+  @Override
+protected void addCases() {
     // TODO Auto-generated method stub
 
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w =
         pumpString("a", m)
             + pumpString("b", m)
@@ -80,7 +85,8 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
             + "cacb";
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     String[] wArray = getWs(w);
     int[] decomp = checkIfPossibility(wArray[0], wArray[1], 0);
     if (decomp != null) {
@@ -95,7 +101,8 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
     super.chooseDecomposition();
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = 0;
   }
 
@@ -107,7 +114,7 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
    *            the string to check.
    * @return the w[k] values.
    */
-  private String[] getWs(String s) {
+  private List<String> getWs(String s) {
     String[] w = new String[4];
     String temp = s;
     int c;
@@ -135,7 +142,7 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
    *            position of the first string.
    * @return null if no decomposition is adequate, the decomposition if it is.
    */
-  private int[] checkIfPossibility(String s0, String s1, int shift) {
+  private List<int> checkIfPossibility(String s0, String s1, int shift) {
     int x;
     String first, last;
     if (s0.length() == 1 && s1.length() == 1) return null;
@@ -160,11 +167,13 @@ public class W1CW2CW3CW4 extends ContextFreePumpingLemma {
     return null;
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {2, 7};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     String[] w = getWs(s);
     if (w == null) return false;
 

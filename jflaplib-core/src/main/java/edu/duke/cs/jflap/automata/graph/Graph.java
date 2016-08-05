@@ -142,6 +142,7 @@ public class Graph<T> {
     }
 
     /** Returns a string description of the graph. */
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(super.toString() + "\n");

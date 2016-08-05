@@ -24,18 +24,10 @@ import edu.duke.cs.jflap.automata.fsa.Minimizer;
 import edu.duke.cs.jflap.automata.graph.AutomatonGraph;
 import edu.duke.cs.jflap.automata.graph.layout.GEMLayoutAlgorithm;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
-import edu.duke.cs.jflap.gui.editor.EditorPane;
-import edu.duke.cs.jflap.gui.editor.Tool;
-import edu.duke.cs.jflap.gui.editor.ToolBox;
-import edu.duke.cs.jflap.gui.editor.TransitionTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.tree.SelectTreeDrawer;
 import edu.duke.cs.jflap.gui.tree.TreePanel;
 import edu.duke.cs.jflap.gui.tree.Trees;
-import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -132,12 +124,14 @@ public class MinimizePane extends JPanel {
     final TreePanel tpane = new TreePanel(treeDrawer);
     edu.duke.cs.jflap.gui.SuperMouseAdapter a =
         new edu.duke.cs.jflap.gui.SuperMouseAdapter() {
-          public void mouseClicked(MouseEvent event) {
+          @Override
+        public void mouseClicked(MouseEvent event) {
             TreeNode n = tpane.nodeAtPoint(event.getPoint());
             controller.nodeClicked((MinimizeTreeNode) n, event);
           }
 
-          public void mousePressed(MouseEvent event) {
+          @Override
+        public void mousePressed(MouseEvent event) {
             TreeNode n = tpane.nodeAtPoint(event.getPoint());
             controller.nodeDown((MinimizeTreeNode) n, event);
           }

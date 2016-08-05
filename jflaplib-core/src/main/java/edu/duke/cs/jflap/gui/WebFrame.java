@@ -237,6 +237,7 @@ public class WebFrame extends JFrame {
    * the new contents.
    */
   public class Hyperactive implements HyperlinkListener {
+    @Override
     public void hyperlinkUpdate(HyperlinkEvent e) {
       if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
         JEditorPane pane = (JEditorPane) e.getSource();
@@ -259,6 +260,7 @@ public class WebFrame extends JFrame {
    * An action to browse back.
    */
   private class BackAction implements ActionListener {
+    @Override
     public void actionPerformed(ActionEvent e) {
       goBack();
     }
@@ -268,6 +270,7 @@ public class WebFrame extends JFrame {
    * An action to browse forward.
    */
   private class ForwardAction implements ActionListener {
+    @Override
     public void actionPerformed(ActionEvent e) {
       goForward();
     }
@@ -277,6 +280,7 @@ public class WebFrame extends JFrame {
    * An action to browse back to the start.
    */
   private class HomeAction implements ActionListener {
+    @Override
     public void actionPerformed(ActionEvent e) {
       goHome();
     }
