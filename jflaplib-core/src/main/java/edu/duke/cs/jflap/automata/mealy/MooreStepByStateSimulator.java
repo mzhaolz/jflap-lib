@@ -59,7 +59,7 @@ public class MooreStepByStateSimulator extends MealyStepByStateSimulator {
    *            the input string to simulate
    */
   @Override
-public List<Configuration> getInitialConfigurations(String input) {
+  public List<Configuration> getInitialConfigurations(String input) {
     List<Configuration> configs = new ArrayList<>();
     configs.add(
         new MealyConfiguration(

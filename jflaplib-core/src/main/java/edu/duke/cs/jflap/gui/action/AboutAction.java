@@ -43,7 +43,7 @@ public class AboutAction extends RestrictedAction {
    * Shows the about box.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     BOX.displayBox();
   }
 

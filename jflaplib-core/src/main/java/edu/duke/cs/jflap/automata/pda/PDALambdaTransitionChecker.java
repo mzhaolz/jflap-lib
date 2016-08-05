@@ -43,7 +43,7 @@ public class PDALambdaTransitionChecker extends LambdaTransitionChecker {
    *         three of its fields are the lambda string).
    */
   @Override
-public boolean isLambdaTransition(Transition transition) {
+  public boolean isLambdaTransition(Transition transition) {
     PDATransition trans = (PDATransition) transition;
     String input = trans.getInputToRead();
     String toPop = trans.getStringToPop();

@@ -77,7 +77,7 @@ public class TreeLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   }
 
   @Override
-@SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
   public void layout(Graph<V> g, Set<V> notMoving) {
     graph = g;
     List<V> vertices = getMovableVertices(graph, notMoving);

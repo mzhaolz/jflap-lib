@@ -59,7 +59,7 @@ public class FSATransition extends Transition {
    * @return a copy of this transition with the new states
    */
   @Override
-public Transition copy(State from, State to) {
+  public Transition copy(State from, State to) {
     return new FSATransition(from, to, myLabel);
   }
 
@@ -89,7 +89,7 @@ public Transition copy(State from, State to) {
    * @return the description, in this case, simply the label
    */
   @Override
-public String getDescription() {
+  public String getDescription() {
     String desc = getLabel();
     if (desc.length() == 0) return Universe.curProfile.getEmptyString(); // I am a badass.
     return getLabel();
@@ -104,7 +104,7 @@ public String getDescription() {
    * @return a string representation of this object
    */
   @Override
-public String toString() {
+  public String toString() {
     return super.toString() + ": \"" + getLabel() + "\"";
   }
 
@@ -117,7 +117,7 @@ public String toString() {
    *         otherwise
    */
   @Override
-public boolean equals(Object object) {
+  public boolean equals(Object object) {
     try {
       FSATransition t = (FSATransition) object;
       return super.equals(t) && myLabel.equals(t.myLabel);
@@ -132,7 +132,7 @@ public boolean equals(Object object) {
    * @return the hash code for this transition
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     return super.hashCode() ^ myLabel.hashCode();
   }
 

@@ -37,7 +37,7 @@ public class RETransducer extends AbstractTransducer {
    * @return the string "re"
    */
   @Override
-public String getType() {
+  public String getType() {
     return "re";
   }
 
@@ -50,7 +50,7 @@ public String getType() {
    * @return the {@link edu.duke.cs.jflap.regular.RegularExpression} instance
    */
   @Override
-public java.io.Serializable fromDOM(Document document) {
+  public java.io.Serializable fromDOM(Document document) {
     Map<?, ?> e2t = elementsToText(document.getDocumentElement());
     String expression = (String) e2t.get(EXPRESSION_NAME);
     if (expression == null)
@@ -70,7 +70,7 @@ public java.io.Serializable fromDOM(Document document) {
    * @return a DOM document instance
    */
   @Override
-public Document toDOM(java.io.Serializable structure) {
+  public Document toDOM(java.io.Serializable structure) {
     RegularExpression re = (RegularExpression) structure;
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();

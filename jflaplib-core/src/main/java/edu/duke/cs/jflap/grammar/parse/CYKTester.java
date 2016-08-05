@@ -20,6 +20,10 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 /**
  * CYK Parser tester.
  *
@@ -29,17 +33,17 @@ import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 public class CYKTester {
 
   public static void main(String[] args) {
-    Production[] productions = new Production[10];
-    productions[0] = new Production("S", "AD");
-    productions[1] = new Production("D", "SC");
-    productions[2] = new Production("A", "a");
-    productions[3] = new Production("C", "b");
-    productions[4] = new Production("S", "CB");
-    productions[5] = new Production("B", "CE");
-    productions[6] = new Production("E", "CB");
-    productions[7] = new Production("S", "SS");
-    productions[8] = new Production("S", "b");
-    productions[9] = new Production("B", "CC");
+    List<Production> productions = Lists.newArrayList(
+    new Production("S", "AD"),
+    new Production("D", "SC"),
+    new Production("A", "a"),
+    new Production("C", "b"),
+    new Production("S", "CB"),
+    new Production("B", "CE"),
+    new Production("E", "CB"),
+    new Production("S", "SS"),
+    new Production("S", "b"),
+    new Production("B", "CC"));
 
     Grammar g = new UnrestrictedGrammar();
     g.addProductions(productions);

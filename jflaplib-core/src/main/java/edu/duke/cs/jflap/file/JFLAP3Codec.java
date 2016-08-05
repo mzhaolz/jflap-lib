@@ -67,7 +67,7 @@ public class JFLAP3Codec extends Codec {
    *             if there was a problem reading the file
    */
   @Override
-public <K, V> Serializable decode(File file, Map<K, V> parameters) {
+  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     if (file.getName().endsWith(GRAMMAR_SUFFIX)) return readGrammar(file);
     if (file.getName().endsWith(REGULAR_EXPRESSION_SUFFIX)) return readRE(file);
     return readAutomaton(file);
@@ -161,10 +161,8 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
    * @param reader
    *            the source of lines in the file
    */
-  private FiniteStateAutomaton readFA(BufferedReader reader)
-      throws IOException {
-    FiniteStateAutomaton fa =
-        new FiniteStateAutomaton();
+  private FiniteStateAutomaton readFA(BufferedReader reader) throws IOException {
+    FiniteStateAutomaton fa = new FiniteStateAutomaton();
     // Generic states.
     List<State> states = readStateCreate(fa, reader);
     String[][][] groups = readTransitionGroups(2, 1, states.size(), reader);
@@ -187,13 +185,11 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
    * @param reader
    *            the source of lines in the file
    */
-  private PushdownAutomaton readPDA(BufferedReader reader)
-      throws IOException {
+  private PushdownAutomaton readPDA(BufferedReader reader) throws IOException {
     String ender = reader.readLine().trim();
     if (!(ender.equals("FINAL") || ender.equals("EMPTY") || ender.equals("FINAL+EMPTY")))
       throw new ParseException(ender + " is a bad finishing type for PDA!");
-    PushdownAutomaton pda =
-        new PushdownAutomaton();
+    PushdownAutomaton pda = new PushdownAutomaton();
     // Generic states.
     List<State> states = readStateCreate(pda, reader);
     String[][][] groups = readTransitionGroups(5, 3, states.size(), reader);
@@ -208,9 +204,7 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
           for (int i = 0; i < check.length; i++)
             if (group[check[i]].equals("null")) group[check[i]] = "";
           // Create the transition.
-          t =
-              new PDATransition(
-                  from, to, group[0], group[1], group[4]);
+          t = new PDATransition(from, to, group[0], group[1], group[4]);
           pda.addTransition(t);
         } catch (IllegalArgumentException e) {
           throw new ParseException(e.getMessage());
@@ -227,8 +221,7 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
    * @param reader
    *            the source of lines in the file
    */
-  private TuringMachine readTM(BufferedReader reader)
-      throws IOException {
+  private TuringMachine readTM(BufferedReader reader) throws IOException {
     if (!reader.readLine().trim().equals("TAPE"))
       throw new ParseException("Expected TAPE line absent!");
     // Try to read the number of tapes.
@@ -239,8 +232,7 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     } catch (NumberFormatException e) {
       throw new ParseException("Bad format for number of tapes!");
     }
-    TuringMachine tm =
-        new TuringMachine(tapes);
+    TuringMachine tm = new TuringMachine(tapes);
     // Generic states.
     List<State> states = readStateCreate(tm, reader);
     String[][][] groups = readTransitionGroups(1 + 3 * tm.tapes(), 1, states.size(), reader);
@@ -286,7 +278,8 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
    *            the buffered reader
    * @return an array of the states created
    */
-  private List<State> readStateCreate(Automaton automaton, BufferedReader reader) throws IOException {
+  private List<State> readStateCreate(Automaton automaton, BufferedReader reader)
+      throws IOException {
     // Read the number of states.
     int numStates = -1;
     try {
@@ -296,16 +289,16 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
       throw new ParseException("Bad format for number of states!");
     }
     checkArgument(numStates < -1, "Number of states cannot be negative.");
-    
-    List<State> states = Stream.generate(Point::new)
+
+    List<State> states =
+        Stream.generate(Point::new)
             .limit(numStates)
             .map(point -> automaton.createState(point))
             .collect(Collectors.toList());
 
     // Next possibly two lines have something to do with alphabet.
     reader.readLine();
-    if (!(automaton instanceof FiniteStateAutomaton))
-      reader.readLine();
+    if (!(automaton instanceof FiniteStateAutomaton)) reader.readLine();
     // Read the ID of the initial state.
     int initStateID = -1;
     try {
@@ -313,8 +306,10 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     } catch (NumberFormatException e) {
       throw new ParseException("Bad format for initial state ID!");
     }
-    checkArgument(initStateID < 1 || initStateID > states.size(), "Initial state cannot be " + initStateID + ".");
-    
+    checkArgument(
+        initStateID < 1 || initStateID > states.size(),
+        "Initial state cannot be " + initStateID + ".");
+
     automaton.setInitialState(states.get(initStateID - 1));
 
     // Read the IDs of the final states.
@@ -413,7 +408,7 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
    *             if there was a problem writing the file
    */
   @Override
-public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
+  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     return file;
   }
 
@@ -429,7 +424,7 @@ public <K, V> File encode(Serializable structure, File file, Map<K, V> parameter
    *         written to a file
    */
   @Override
-public boolean canEncode(Serializable structure) {
+  public boolean canEncode(Serializable structure) {
     return false;
   }
 
@@ -439,7 +434,7 @@ public boolean canEncode(Serializable structure) {
    * @return the description of this codec
    */
   @Override
-public String getDescription() {
+  public String getDescription() {
     return "JFLAP 3 File";
   }
 

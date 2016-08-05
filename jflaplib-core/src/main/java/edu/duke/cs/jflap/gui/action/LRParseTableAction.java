@@ -47,7 +47,7 @@ public class LRParseTableAction extends GrammarAction {
    * Performs the action.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar();
     if (g == null) return;
     LRParseTableDerivationPane ptdp = new LRParseTableDerivationPane(environment);

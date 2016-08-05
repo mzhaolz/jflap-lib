@@ -40,7 +40,7 @@ public class PDAStepWithClosureSimulator extends PDAStepByStateSimulator {
    *            the input string.
    */
   @Override
-public List<Configuration> getInitialConfigurations(String input) {
+  public List<Configuration> getInitialConfigurations(String input) {
     /** The stack should contain the bottom of stack marker. */
     State init = myAutomaton.getInitialState();
     List<State> closure = ClosureTaker.getClosure(init, myAutomaton);
@@ -61,7 +61,7 @@ public List<Configuration> getInitialConfigurations(String input) {
    *            the configuration to simulate the one step on
    */
   @Override
-public ArrayList<PDAConfiguration> stepConfiguration(Configuration config) {
+  public ArrayList<PDAConfiguration> stepConfiguration(Configuration config) {
     ArrayList<PDAConfiguration> list = new ArrayList<PDAConfiguration>();
     PDAConfiguration configuration = (PDAConfiguration) config;
     /** get all information from configuration. */

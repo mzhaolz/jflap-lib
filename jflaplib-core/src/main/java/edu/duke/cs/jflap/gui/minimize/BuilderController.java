@@ -93,7 +93,7 @@ class BuilderController {
     minDfa.addTransitionListener(
         new AutomataTransitionListener() {
           @Override
-        public void automataTransitionChange(AutomataTransitionEvent e) {
+          public void automataTransitionChange(AutomataTransitionEvent e) {
             if (!e.isAdd()) return;
             Transition transition = e.getTransition();
             if (!remainingTransitions.contains(transition)) {

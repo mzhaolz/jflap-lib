@@ -37,12 +37,12 @@ public class W1BnW2 extends ContextFreePumpingLemma {
   private static final long serialVersionUID = -1655390282899834206L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "w1 + b^n + w2 : na(w1) < na(w2) & na(w1) < n, w1 & w2 element_of {ab}*";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>w<sub>1</sub>b<sup>n</sup>w<sub>2</sub></i> : <i>n<sub>a</sub></i>"
         + "(<i>w<sub>1</sub></i>) "
         + LESS_THAN
@@ -57,7 +57,7 @@ public String getHTMLTitle() {
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -70,18 +70,18 @@ public void setDescription() {
   }
 
   @Override
-protected void addCases() {
+  protected void addCases() {
     // TODO Auto-generated method stub
 
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = pumpString("a", m) + pumpString("b", m + 1) + pumpString("a", m + 1);
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     String s;
     for (int k = w.length() - 1; k >= 0; k--) {
       s = w.substring(0, k) + w.substring(k + 1);
@@ -94,18 +94,18 @@ public void chooseDecomposition() {
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     if (getU().length() < m) i = 2;
     else i = 0;
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {2, 10};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
 

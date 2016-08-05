@@ -54,7 +54,7 @@ public class LambdaHighlightAction extends AutomatonAction {
    * Highlights states with lambda transitions.
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     Transition[] t = automaton.getTransitions();
     Set<Transition> lambdas = new HashSet<Transition>();
     LambdaTransitionChecker checker = LambdaCheckerFactory.getLambdaChecker(automaton);

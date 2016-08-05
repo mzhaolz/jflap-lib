@@ -90,7 +90,7 @@ public class TreePanel extends JComponent {
    *            the graphics object to draw on
    */
   @Override
-public void paintComponent(Graphics gr) {
+  public void paintComponent(Graphics gr) {
     Graphics2D g = (Graphics2D) gr;
     super.paintComponent(g);
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

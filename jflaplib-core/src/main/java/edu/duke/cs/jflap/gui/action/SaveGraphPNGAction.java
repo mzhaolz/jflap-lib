@@ -59,7 +59,7 @@ public class SaveGraphPNGAction extends RestrictedAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent arg0) {
+  public void actionPerformed(ActionEvent arg0) {
 
     Component apane = environment.tabbed.getSelectedComponent();
     JComponent c = (JComponent) environment.getActive();

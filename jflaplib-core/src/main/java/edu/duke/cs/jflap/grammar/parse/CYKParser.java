@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * CYK Parser It parses grammar that is in CNF form and returns whether the
@@ -86,10 +87,10 @@ public class CYKParser {
       HashSet<String> temp = new HashSet<String>();
       int count = 0;
 
-      for (int j = 0; j < myProductions.length; j++) {
-        if (myProductions[j].getRHS().equals(a)) {
+      for (int j = 0; j < myProductions.size(); j++) {
+        if (myProductions.get(j).getRHS().equals(a)) {
           count++;
-          temp.add(myProductions[j].getLHS());
+          temp.add(myProductions.get(j).getLHS());
         }
       }
       String key = i + "," + i;
@@ -157,20 +158,20 @@ public class CYKParser {
   private void checkProductions(int x, int y) {
     HashSet<String> tempSet = new HashSet<String>();
 
-    for (int i = 0; i < myProductions.length; i++) {
+    for (int i = 0; i < myProductions.size(); i++) {
       for (int k = x; k < y; k++) {
         String key1 = x + "," + k;
         String key2 = (k + 1) + "," + y;
         for (String A : myMap.get(key1)) {
           for (String B : myMap.get(key2)) {
             String target = A + B;
-            if (myProductions[i].getRHS().equals(target)) {
+            if (myProductions.get(i).getRHS().equals(target)) {
               HashSet<String> temp2Set = new HashSet<String>();
-              tempSet.add(myProductions[i].getLHS());
+              tempSet.add(myProductions.get(i).getLHS());
               temp2Set.add("0" + A + "/" + key1);
               temp2Set.add("1" + B + "/" + key2);
 
-              String tempKey = x + "," + y + myProductions[i].getLHS();
+              String tempKey = x + "," + y + myProductions.get(i).getLHS();
               if (myMap.get(tempKey) != null) temp2Set.addAll(myMap.get(tempKey));
 
               myMap.put(tempKey, temp2Set);
@@ -229,8 +230,8 @@ public class CYKParser {
     ArrayList<String> optionsA = new ArrayList<String>();
     ArrayList<String> optionsB = new ArrayList<String>();
 
-    String[] A = new String[2];
-    String[] B = new String[2];
+    List<String> A = Collections.nCopies(2, null);
+    List<String> B = Collections.nCopies(2, null);
     for (String var : myMap.get(location + variable)) {
       if (var.startsWith("0")) optionsA.add(var);
       else optionsB.add(var);
@@ -253,13 +254,13 @@ public class CYKParser {
         String locB = optionsB.get(i).substring(index + 1);
 
         Production p = new Production(variable, a + b);
-        for (int k = 0; k < myProductions.length; k++) {
-          if (myProductions[k].getLHS().equals(p.getLHS())
-              && myProductions[k].getRHS().equals(p.getRHS())) {
-            A[0] = a;
-            A[1] = locA;
-            B[0] = b;
-            B[1] = locB;
+        for (int k = 0; k < myProductions.size(); k++) {
+          if (myProductions.get(k).getLHS().equals(p.getLHS())
+              && myProductions.get(k).getRHS().equals(p.getRHS())) {
+            A.set(0,a);
+            A.set(1, locA);
+            B.set(0,b);
+            B.set(1,locB);
             isDone = true;
             break;
           }
@@ -269,18 +270,18 @@ public class CYKParser {
       if (isDone) break;
     }
 
-    // //System.out.println("Selected = "+A[0]+" at "+A[1]);
-    // //System.out.println("Selected = "+B[0]+" at "+B[1]);
+    // //System.out.println("Selected = "+A.get(0)+" at "+A.get(1));
+    // //System.out.println("Selected = "+B.get(0)+" at "+B.get(1));
 
-    myAnswerProductions.add(new Production(variable, A[0] + B[0]));
-    getMoreProductions(A[0], A[1]);
-    getMoreProductions(B[0], B[1]);
+    myAnswerProductions.add(new Production(variable, A.get(0) + B.get(0)));
+    getMoreProductions(A.get(0), A.get(1));
+    getMoreProductions(B.get(0), B.get(1));
   }
 }
 
 final class OrderCorrectly implements Comparator<Object> {
   @Override
-public int compare(Object o1, Object o2) {
+  public int compare(Object o1, Object o2) {
     String str1 = (String) o1;
     String str2 = (String) o2;
     int index1 = str1.indexOf("/");

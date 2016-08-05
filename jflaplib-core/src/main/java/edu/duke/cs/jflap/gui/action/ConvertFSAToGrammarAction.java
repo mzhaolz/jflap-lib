@@ -58,7 +58,7 @@ public class ConvertFSAToGrammarAction extends ConvertAutomatonToGrammarAction {
    * Checks the FSA to make sure it's ready to be converted.
    */
   @Override
-protected boolean checkAutomaton() {
+  protected boolean checkAutomaton() {
     // If we have more than 26 states, we can't have a single
     // letter for all states.
     if (getAutomaton().getStates().length > 26) {

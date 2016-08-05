@@ -54,7 +54,7 @@ public class CloseAction extends RestrictedAction {
     environment.addChangeListener(
         new ChangeListener() {
           @Override
-        public void stateChanged(ChangeEvent e) {
+          public void stateChanged(ChangeEvent e) {
             checkEnabled();
           }
         });
@@ -68,7 +68,7 @@ public class CloseAction extends RestrictedAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     if (environment.getActive() instanceof EditBlockPane) {
       EditBlockPane blockEditor = (EditBlockPane) environment.getActive();
       blockEditor.getAutomaton();

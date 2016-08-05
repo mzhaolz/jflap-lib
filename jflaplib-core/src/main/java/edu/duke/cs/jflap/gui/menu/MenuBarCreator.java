@@ -638,7 +638,7 @@ public class MenuBarCreator {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             JOptionPane.showMessageDialog(
                 null,
                 "For help, feel free to access the JFLAP tutorial at\n"

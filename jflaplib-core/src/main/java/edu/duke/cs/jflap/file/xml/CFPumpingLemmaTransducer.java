@@ -83,7 +83,7 @@ public class CFPumpingLemmaTransducer extends PumpingLemmaTransducer {
   public static String CASE_Y_NAME = "caseYLength";
 
   @Override
-public Serializable fromDOM(Document document) {
+  public Serializable fromDOM(Document document) {
     ContextFreePumpingLemma pl =
         (ContextFreePumpingLemma)
             PumpingLemmaFactory.createPumpingLemma(
@@ -149,7 +149,7 @@ public Serializable fromDOM(Document document) {
   }
 
   @Override
-public Document toDOM(Serializable structure) {
+  public Document toDOM(Serializable structure) {
     ContextFreePumpingLemma pl = (ContextFreePumpingLemma) structure;
     Document doc = newEmptyDocument();
     Element elem = doc.getDocumentElement();
@@ -191,7 +191,7 @@ public Document toDOM(Serializable structure) {
   }
 
   @Override
-public String getType() {
+  public String getType() {
     return TYPE;
   }
 }

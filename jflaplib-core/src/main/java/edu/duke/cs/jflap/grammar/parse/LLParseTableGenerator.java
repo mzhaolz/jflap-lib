@@ -20,6 +20,7 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,10 +46,10 @@ public class LLParseTableGenerator {
   public static LLParseTable generate(Grammar grammar) {
     LLParseTable table = new LLParseTable(grammar);
     Map<String, Set<String>> first = Operations.first(grammar), follow = Operations.follow(grammar);
-    Production[] productions = grammar.getProductions();
-    for (int i = 0; i < productions.length; i++) {
-      String alpha = productions[i].getRHS();
-      String A = productions[i].getLHS();
+    List<Production> productions = grammar.getProductions();
+    for (int i = 0; i < productions.size(); i++) {
+      String alpha = productions.get(i).getRHS();
+      String A = productions.get(i).getLHS();
       Set<?> firsts = Operations.first(first, alpha);
       Iterator<?> it = firsts.iterator();
       while (it.hasNext()) {

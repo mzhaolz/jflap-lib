@@ -136,7 +136,7 @@ public class HighlightTable extends JTable {
    * Returns the possibly modified cell renderer for this column.
    */
   @Override
-public TableCellRenderer getCellRenderer(int row, int column) {
+  public TableCellRenderer getCellRenderer(int row, int column) {
     int column2 = convertColumnIndexToModel(column);
     if (highlightRenderers != null) {
       TableCellRenderer ren = highlightRenderers.get(new Integer(singleIndex(row, column2)));

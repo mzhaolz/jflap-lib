@@ -99,9 +99,9 @@ public abstract class GrammarToAutomatonConverter {
     List<Transition> list = new ArrayList<>();
     Automaton automaton = new Automaton();
     createStatesForConversion(grammar, automaton);
-    Production[] productions = grammar.getProductions();
-    for (int k = 0; k < productions.length; k++) {
-      list.add(getTransitionForProduction(productions[k]));
+    List<Production> productions = grammar.getProductions();
+    for (int k = 0; k < productions.size(); k++) {
+      list.add(getTransitionForProduction(productions.get(k)));
     }
 
     Iterator<Transition> it = list.iterator();

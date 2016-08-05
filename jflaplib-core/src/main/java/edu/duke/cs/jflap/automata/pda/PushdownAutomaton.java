@@ -50,7 +50,7 @@ public class PushdownAutomaton extends Automaton {
    *         <CODE>automata.pda.PDATransition</CODE>
    */
   @Override
-protected Class<PDATransition> getTransitionClass() {
+  protected Class<PDATransition> getTransitionClass() {
     return edu.duke.cs.jflap.automata.pda.PDATransition.class;
   }
 }

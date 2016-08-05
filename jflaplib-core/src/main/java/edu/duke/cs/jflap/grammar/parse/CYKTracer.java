@@ -23,9 +23,14 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnitProductionRemover;
 import edu.duke.cs.jflap.grammar.UselessProductionRemover;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
+import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
+import edu.duke.cs.jflap.gui.grammar.transform.LambdaController;
+import edu.duke.cs.jflap.gui.grammar.transform.LambdaPane;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -75,7 +80,7 @@ public class CYKTracer {
       }
 
       // //System.out.println("DIRECT = "+directLambdaProductions);
-      Production[] p = lp.getGrammar().getProductions();
+      List<Production> p = lp.getGrammar().getProductions();
 
       for (String key : directLambdaProductions.keySet()) {
         for (int i = 0; i < p.length; i++) {

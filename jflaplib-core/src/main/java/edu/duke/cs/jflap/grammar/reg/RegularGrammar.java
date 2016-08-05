@@ -73,7 +73,7 @@ public class RegularGrammar extends Grammar {
    *             if the production is in some way illegal for the grammar
    */
   @Override
-public void checkProduction(Production production) {
+  public void checkProduction(Production production) {
     if (!ProductionChecker.isRestrictedOnLHS(production))
       throw new IllegalArgumentException("The production is unrestricted on the left hand side.");
     if (!ProductionChecker.isLeftLinear(production) && !ProductionChecker.isRightLinear(production))
@@ -101,7 +101,7 @@ public void checkProduction(Production production) {
    *             linearities don't match up)
    */
   @Override
-public void addProduction(Production production) {
+  public void addProduction(Production production) {
     super.addProduction(production);
     // If it's both, we shouldn't change at all.
     if (ProductionChecker.isRightLinear(production) && ProductionChecker.isLeftLinear(production))

@@ -34,12 +34,12 @@ public class WW1WrGrtrThanEq extends ContextFreePumpingLemma {
   private static final long serialVersionUID = -4941517762785350617L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "w w1 w^R : |w1| >= 5, w & w1 element_of {ab}*";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>ww<sub>1</sub>w<sup>R</sup></i> : |<i>w<sub>1</sub></i>| "
         + GREATER_OR_EQ
         + " 5, <i>w</i> & <i>w<sub>1</sub></i> "
@@ -49,7 +49,7 @@ public String getHTMLTitle() {
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a context-free language, a valid decomposition exists.  For any <i>m</i> value "
@@ -64,33 +64,33 @@ public void setDescription() {
   }
 
   @Override
-protected void addCases() {
+  protected void addCases() {
     // TODO Auto-generated method stub
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = pumpString("a", m) + "babab" + pumpString("a", m);
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {1, 7};
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     // always chooses the middle character, which is part of w1
     setDecomposition(new int[] {w.length() / 2, 1, 0, 0});
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
 

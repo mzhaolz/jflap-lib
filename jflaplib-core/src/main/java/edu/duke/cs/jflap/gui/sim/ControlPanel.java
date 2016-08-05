@@ -69,7 +69,7 @@ public class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.step(blockStep);
           }
         });
@@ -82,7 +82,7 @@ public class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.reset();
           }
         });
@@ -125,7 +125,7 @@ public class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.freeze();
           }
         });
@@ -138,7 +138,7 @@ public class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.thaw();
           }
         });
@@ -151,7 +151,7 @@ public class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.trace();
           }
         });
@@ -164,7 +164,7 @@ public class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.remove();
           }
         });

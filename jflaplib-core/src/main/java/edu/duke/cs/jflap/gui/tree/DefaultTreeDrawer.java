@@ -74,7 +74,7 @@ public class DefaultTreeDrawer implements TreeDrawer, TreeModelListener {
    *            0,0.
    */
   @Override
-public void draw(Graphics2D g, Dimension2D size) {
+  public void draw(Graphics2D g, Dimension2D size) {
     if (!valid) revalidate();
     g = (Graphics2D) g.create();
     // Draw the nodes.
@@ -146,7 +146,7 @@ public void draw(Graphics2D g, Dimension2D size) {
    * @return the tree model this drawer draws
    */
   @Override
-public TreeModel getModel() {
+  public TreeModel getModel() {
     return tree;
   }
 
@@ -216,7 +216,7 @@ public TreeModel getModel() {
    * This marks the structure as uninitialized.
    */
   @Override
-public void invalidate() {
+  public void invalidate() {
     valid = false;
   }
 
@@ -225,7 +225,7 @@ public void invalidate() {
    * is some change in the tree.
    */
   @Override
-public void revalidate() {
+  public void revalidate() {
     valid = true;
     nodeToPoint = nodePlacer.placeNodes(tree, nodeDrawer);
   }
@@ -239,7 +239,7 @@ public void revalidate() {
    *            the size that the tree, if drawn, would be drawn in
    */
   @Override
-public TreeNode nodeAtPoint(Point2D point, Dimension2D size) {
+  public TreeNode nodeAtPoint(Point2D point, Dimension2D size) {
     Iterator<Map.Entry<TreeNode, Point2D.Float>> it = nodeToPoint.entrySet().iterator();
     while (it.hasNext()) {
       Map.Entry<TreeNode, Point2D.Float> entry = it.next();
@@ -254,7 +254,7 @@ public TreeNode nodeAtPoint(Point2D point, Dimension2D size) {
    * Invoked after nodes have changed.
    */
   @Override
-public void treeNodesChanged(TreeModelEvent e) {
+  public void treeNodesChanged(TreeModelEvent e) {
     invalidate();
   }
 
@@ -262,7 +262,7 @@ public void treeNodesChanged(TreeModelEvent e) {
    * Invoked after nodes have been inserted.
    */
   @Override
-public void treeNodesInserted(TreeModelEvent e) {
+  public void treeNodesInserted(TreeModelEvent e) {
     invalidate();
   }
 
@@ -270,7 +270,7 @@ public void treeNodesInserted(TreeModelEvent e) {
    * Invoked after nodes have been removed.
    */
   @Override
-public void treeNodesRemoved(TreeModelEvent e) {
+  public void treeNodesRemoved(TreeModelEvent e) {
     invalidate();
   }
 
@@ -278,7 +278,7 @@ public void treeNodesRemoved(TreeModelEvent e) {
    * Invoked after the structure of a tree has changed.
    */
   @Override
-public void treeStructureChanged(TreeModelEvent e) {
+  public void treeStructureChanged(TreeModelEvent e) {
     invalidate();
   }
 
@@ -291,7 +291,7 @@ public void treeStructureChanged(TreeModelEvent e) {
    * @see edu.duke.cs.jflap.gui.tree.DefaultNodePlacer
    */
   @Override
-public void setNodePlacer(NodePlacer placer) {
+  public void setNodePlacer(NodePlacer placer) {
     this.nodePlacer = placer;
     invalidate();
   }
@@ -302,7 +302,7 @@ public void setNodePlacer(NodePlacer placer) {
    * @return the node placer for this drawer
    */
   @Override
-public NodePlacer getNodePlacer() {
+  public NodePlacer getNodePlacer() {
     return nodePlacer;
   }
 
@@ -315,7 +315,7 @@ public NodePlacer getNodePlacer() {
    * @see edu.duke.cs.jflap.gui.tree.DefaultNodeDrawer
    */
   @Override
-public void setNodeDrawer(NodeDrawer drawer) {
+  public void setNodeDrawer(NodeDrawer drawer) {
     this.nodeDrawer = drawer;
   }
 
@@ -325,7 +325,7 @@ public void setNodeDrawer(NodeDrawer drawer) {
    * @return the node drawer for this drawer
    */
   @Override
-public NodeDrawer getNodeDrawer() {
+  public NodeDrawer getNodeDrawer() {
     return nodeDrawer;
   }
 

@@ -43,7 +43,7 @@ public class DefaultNodeDrawer implements NodeDrawer {
    *            the node to draw
    */
   @Override
-public void draw(Graphics2D g, TreeNode node) {
+  public void draw(Graphics2D g, TreeNode node) {
     g.fill(NODE_SHAPE);
     Color c = g.getColor();
     g.setColor(Color.black);
@@ -98,7 +98,7 @@ public void draw(Graphics2D g, TreeNode node) {
    * @return the space any node takes up
    */
   @Override
-public Rectangle2D nodeSize() {
+  public Rectangle2D nodeSize() {
     return NODE_SIZE;
   }
 
@@ -111,7 +111,7 @@ public Rectangle2D nodeSize() {
    * @return the space any node takes up
    */
   @Override
-public Rectangle2D nodeSize(TreeNode node) {
+  public Rectangle2D nodeSize(TreeNode node) {
     return nodeSize();
   }
 
@@ -130,7 +130,7 @@ public Rectangle2D nodeSize(TreeNode node) {
    * @see #draw
    */
   @Override
-public boolean onNode(TreeNode node, double x, double y) {
+  public boolean onNode(TreeNode node, double x, double y) {
     return Math.sqrt(x * x + y * y) <= NODE_RADIUS;
   }
 

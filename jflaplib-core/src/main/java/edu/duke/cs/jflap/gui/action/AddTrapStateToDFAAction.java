@@ -71,7 +71,7 @@ public class AddTrapStateToDFAAction extends FSAAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     if (automaton.getInitialState() == null) {
       JOptionPane.showMessageDialog(
           Universe.frameForEnvironment(environment),

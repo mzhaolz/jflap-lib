@@ -20,6 +20,8 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -65,27 +67,27 @@ public class Operations {
             return CACHED_FIRST.get(grammar);
         Map<String, Set<String>> first = new HashMap<>();
         // Put the terminals in the map.
-        String[] terminals = grammar.getTerminals();
-        for (int i = 0; i < terminals.length; i++) {
+        List<String> terminals = grammar.getTerminals();
+        for (int i = 0; i < terminals.size(); i++) {
             Set<String> termSet = new HashSet<>();
-            termSet.add(terminals[i]);
-            first.put(terminals[i], termSet);
+            termSet.add(terminals.get(i));
+            first.put(terminals.get(i), termSet);
         }
         // Put the variables in the map as empty sets.
-        String[] variables = grammar.getVariables();
-        for (int i = 0; i < variables.length; i++) {
-            first.put(variables[i], new HashSet<>());
+        List<String> variables = grammar.getVariables();
+        for (int i = 0; i < variables.size(); i++) {
+            first.put(variables.get(i), new HashSet<>());
         }
 
         // Repeatedly go over the productions until there is no more
         // change.
         boolean hasChanged = true;
-        Production[] productions = grammar.getProductions();
+        List<Production> productions = grammar.getProductions();
         while (hasChanged) {
             hasChanged = false;
-            for (int i = 0; i < productions.length; i++) {
-                String variable = productions[i].getLHS();
-                String rhs = productions[i].getRHS();
+            for (int i = 0; i < productions.size(); i++) {
+                String variable = productions.get(i).getLHS();
+                String rhs = productions.get(i).getRHS();
                 Set<String> firstRhs = first(first, rhs);
                 if (setForKey(first, variable).addAll(firstRhs))
                     hasChanged = true;
@@ -145,21 +147,21 @@ public class Operations {
         initialSet.add("$");
         follow.put(grammar.getStartVariable(), initialSet);
         // Make every follow mapping empty for now.
-        String[] variables = grammar.getVariables();
-        for (int i = 0; i < variables.length; i++)
-            if (!variables[i].equals(grammar.getStartVariable()))
-                follow.put(variables[i], new HashSet<>());
+        List<String> variables = grammar.getVariables();
+        for (int i = 0; i < variables.size(); i++)
+            if (!variables.get(i).equals(grammar.getStartVariable()))
+                follow.put(variables.get(i), new HashSet<>());
         // Get the first sets.
         Map<String, Set<String>> firstSets = first(grammar);
         // Iterate repeatedly over the productions until we're
         // completely done.
-        Production[] productions = grammar.getProductions();
+        List<Production> productions = grammar.getProductions();
         boolean hasChanged = true;
         while (hasChanged) {
             hasChanged = false;
-            for (int i = 0; i < productions.length; i++) {
-                String variable = productions[i].getLHS();
-                String rhs = productions[i].getRHS();
+            for (int i = 0; i < productions.size(); i++) {
+                String variable = productions.get(i).getLHS();
+                String rhs = productions.get(i).getRHS();
                 for (int j = 0; j < rhs.length(); j++) {
                     String rhsVariable = rhs.substring(j, j + 1);
                     if (!grammar.isVariable(rhsVariable))
@@ -200,29 +202,29 @@ public class Operations {
         }
         Map<String, List<Production>> varToProd = new HashMap<>();
 
-        Production[] productions = grammar.getProductions();
-        for (int i = 0; i < productions.length; i++) {
-            String variable = productions[i].getLHS();
+        List<Production> productions = grammar.getProductions();
+        for (int i = 0; i < productions.size(); i++) {
+            String variable = productions.get(i).getLHS();
             if (!varToProd.containsKey(variable))
                 varToProd.put(variable, new ArrayList<>());
-            varToProd.get(variable).add(productions[i]);
+            varToProd.get(variable).add(productions.get(i));
         }
-        String[] variables = grammar.getVariables();
-        for (int i = 0; i < variables.length; i++) {
-            Set<String> followVar = follow.get(variables[i]);
-            List<Production> varList = varToProd.get(variables[i]);
+        List<String> variables = grammar.getVariables();
+        for (int i = 0; i < variables.size(); i++) {
+            Set<String> followVar = follow.get(variables.get(i));
+            List<Production> varList = varToProd.get(variables.get(i));
             if (varList == null) {
                 JOptionPane.showMessageDialog(null,
                         "JFLAP failed to find a variable.  You may have used a variable on the right hand side without providing a derivation for it.",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            productions = varList
-            for (int j = 0; j < productions.length; j++) {
-                String alpha = productions[j].getRHS();
+            productions = varList;
+            for (int j = 0; j < productions.size(); j++) {
+                String alpha = productions.get(j).getRHS();
                 Set<String> alphaFirst = first(first, alpha);
-                for (int k = j + 1; k < productions.length; k++) {
-                    String beta = productions[k].getRHS();
+                for (int k = j + 1; k < productions.size(); k++) {
+                    String beta = productions.get(k).getRHS();
                     Set<String> betaFirst = first(first, beta);
                     // Condition 1 & 2
                     if (betaFirst.removeAll(alphaFirst))
@@ -251,7 +253,7 @@ public class Operations {
         String start = grammar.getStartVariable();
         Grammar g = new ContextFreeGrammar();
         g.setStartVariable(start);
-        Production[] prods = grammar.getProductions();
+        List<Production> prods = grammar.getProductions();
         Production startProduction = new Production(start, start);
         try {
             g.addProduction(startProduction);
@@ -259,8 +261,8 @@ public class Operations {
             return null;
         }
         startProduction.setLHS(start + "'");
-        for (int i = 0; i < prods.length; i++)
-            g.addProduction(prods[i]);
+        for (int i = 0; i < prods.size(); i++)
+            g.addProduction(prods.get(i));
         return g;
     }
 
@@ -352,11 +354,11 @@ public class Operations {
             return Collections.unmodifiableMap(CACHED_VPMAP.get(grammar));
         Map<String, Set<Production>> vp = new HashMap<>();
         CACHED_VPMAP.put(grammar, vp);
-        Production[] p = grammar.getProductions();
-        for (int i = 0; i < p.length; i++) {
-            if (!vp.containsKey(p[i].getLHS()))
-                vp.put(p[i].getLHS(), new HashSet<Production>());
-            vp.get(p[i].getLHS()).add(p[i]);
+        List<Production> p = grammar.getProductions();
+        for (int i = 0; i < p.size(); i++) {
+            if (!vp.containsKey(p.get(i).getLHS()))
+                vp.put(p.get(i).getLHS(), new HashSet<Production>());
+            vp.get(p.get(i).getLHS()).add(p.get(i));
         }
         return getVariableProductionMap(grammar);
     }
@@ -373,10 +375,10 @@ public class Operations {
     public static List<Production> getItems(Production production) {
         StringBuffer sb = new StringBuffer(production.getRHS());
         String rhs = production.getRHS();
-        Production[] items = new Production[rhs.length() + 1];
+        List<Production> items = new ArrayList<>();
         for (int i = 0; i <= rhs.length(); i++) {
             sb.insert(i, ITEM_POSITION);
-            items[i] = new Production(production.getLHS(), sb.toString());
+            items.add(new Production(production.getLHS(), sb.toString()));
             sb.deleteCharAt(i);
         }
         return items;
@@ -401,7 +403,7 @@ public class Operations {
                 continue;
             symbols.add(item.getRHS().substring(position, position + 1));
         }
-        return symbols
+        return Lists.newArrayList(symbols);
     }
 
     /** The cached first sets, maps from grammars to first sets. */

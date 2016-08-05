@@ -200,7 +200,7 @@ public class Text {
    * @return the string of this <code>Text</code> object
    */
   @Override
-public String toString() {
+  public String toString() {
     return myText;
   }
 }

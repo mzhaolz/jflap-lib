@@ -55,7 +55,7 @@ public class TuringBruteParseAction extends GrammarAction {
   }
 
   @Override
-public void actionPerformed(ActionEvent arg0) {
+  public void actionPerformed(ActionEvent arg0) {
     // TODO Auto-generated method stub
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     Production[] p = g.getProductions();

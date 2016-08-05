@@ -161,9 +161,9 @@ public abstract class BruteParser {
       possibilities.add(E);
       return possibilities;
     }
-    for (int i = -1; i < productions.length; i++) {
+    for (int i = -1; i < productions.size(); i++) {
       Production prod =
-          i == -1 ? new Production(c.substring(0, 1), c.substring(0, 1)) : productions[i];
+          i == -1 ? new Production(c.substring(0, 1), c.substring(0, 1)) : productions.get(i);
       // Find the start of the production.
       int start = c.indexOf(prod.getLHS());
       int lengthSubs = prod.getLHS().length();
@@ -176,13 +176,13 @@ public abstract class BruteParser {
       while (it.hasNext()) {
         ParseNode node = it.next();
         String d = node.getDerivation();
-        Production[] p = node.getProductions();
+        List<Production> p = node.getProductions();
         String a = prepend + d;
-        int[] s = node.getSubstitutions();
+        List<Integer> s = node.getSubstitutions();
         if (i == -1) {
-          int[] newS = new int[s.length];
-          for (int j = 0; j < p.length; j++) {
-            newS[j] = s[j] + lengthReplace;
+          List<Integer> newS = new ArrayList<>();
+          for (int j = 0; j < p.size(); j++) {
+            newS.add(s.get(j) + lengthReplace);
           }
           // Make the node with the substitution.
           if (alreadyEncountered.add(a)) {
@@ -191,13 +191,13 @@ public abstract class BruteParser {
             beingConsideredNodes++;
           }
         } else {
-          Production[] newP = new Production[p.length + 1];
-          int[] newS = new int[s.length + 1];
-          newS[0] = start;
-          newP[0] = prod;
-          for (int j = 0; j < p.length; j++) {
-            newP[j + 1] = p[j];
-            newS[j + 1] = s[j] + lengthReplace;
+          List<Production> newP = Collections.nCopies(p.size() + 1, null);
+          List<Integer> newS = Collections.nCopies(s.size() + 1, null);
+          newS.set(0, start);
+          newP.set(0, prod);
+          for (int j = 0; j < p.size(); j++) {
+            newP.set(j + 1, p.get(j));
+            newS.set(j + 1, s.get(j) + lengthReplace);
           }
           // Make the node with the substitution.
           if (alreadyEncountered.add(a)) {
@@ -213,9 +213,9 @@ public abstract class BruteParser {
   }
 
   // Stuff for the possibilities.
-  private static final List<Production> P = new Production[0];
+  private static final List<Production> P = new ArrayList<>();
 
-  private static final List<int> S = new int[0];
+  private static final List<Integer> S = new ArrayList<>();
 
   private static final ParseNode E = new ParseNode("", P, S);
 
@@ -357,7 +357,7 @@ public abstract class BruteParser {
   protected Grammar grammar;
 
   /** The array of productions. */
-  protected Production[] productions;
+  protected List<Production> productions;
 
   /** This is the target string. */
   protected String target;

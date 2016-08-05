@@ -81,7 +81,7 @@ public class Automaton implements Serializable, Cloneable {
    *         failed
    */
   @Override
-public Object clone() {
+  public Object clone() {
     Automaton a;
     // Try to create a new object.
     try {
@@ -624,7 +624,7 @@ public Object clone() {
    * Returns a string representation of this <CODE>Automaton</CODE>.
    */
   @Override
-public String toString() {
+  public String toString() {
     StringBuffer buffer = new StringBuffer();
     buffer.append(super.toString());
     buffer.append('\n');
@@ -835,7 +835,7 @@ public String toString() {
   }
 
   @Override
-public int hashCode() {
+  public int hashCode() {
     // EDebug.print("The Hash is that is hashed, is truly hashed");
     int ret = 0;
     for (Object o : states) ret += ((State) o).specialHash();

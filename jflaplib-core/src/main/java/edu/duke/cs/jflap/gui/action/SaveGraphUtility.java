@@ -121,7 +121,7 @@ class FileNameExtensionFilter extends FileFilter {
   }
 
   @Override
-public boolean accept(File f) {
+  public boolean accept(File f) {
     if (f.isDirectory()) return true;
     for (int i = 0; i < myAcceptedFormats.length; i++)
       if (f.getName().endsWith("." + myAcceptedFormats[i])) return true;
@@ -129,19 +129,19 @@ public boolean accept(File f) {
   }
 
   @Override
-public String getDescription() {
+  public String getDescription() {
     return myDescription;
   }
 }
 
 class AcceptAllFileFilter extends FileFilter {
   @Override
-public boolean accept(File f) {
+  public boolean accept(File f) {
     return true;
   }
 
   @Override
-public String getDescription() {
+  public String getDescription() {
     return "All files";
   }
 }

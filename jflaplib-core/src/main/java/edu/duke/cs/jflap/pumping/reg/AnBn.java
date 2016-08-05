@@ -32,17 +32,17 @@ public class AnBn extends RegularPumpingLemma {
   private static final long serialVersionUID = -4276138054767348836L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "a^n b^n : n >= 0";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>a<sup>n</sup>b<sup>n</sup></i> : <i>n</i> " + GREATER_OR_EQ + " 0";
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -56,22 +56,22 @@ public void setDescription() {
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = pumpString("a", m) + pumpString("b", m);
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {4, 18};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     int a, b;
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.isMixture(s, list)) return false;

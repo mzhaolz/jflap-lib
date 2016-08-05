@@ -32,17 +32,17 @@ public class Palindrome extends RegularPumpingLemma {
   private static final long serialVersionUID = 6526761464406572765L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "w w^R : w element_of {ab}*";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>ww<sup>R</sup></i> : <i>w</i> " + ELEMENT_OF + " " + AB_STAR;
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>bb"
@@ -52,27 +52,27 @@ public void setDescription() {
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = pumpString("a", m) + "bb" + pumpString("a", m);
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     setDecomposition(new int[] {Math.min(w.length() / 2 - 1, m - 2), 2});
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {2, 10};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     int size = s.length();
     if (size == 0) return true;
     if (size % 2 == 1) return false;

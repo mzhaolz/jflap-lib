@@ -36,7 +36,7 @@ public class ConvertedUnrestrictedGrammar extends Grammar {
    *             if the production is lambda on the left hand side
    */
   @Override
-public void checkProduction(Production production) {
+  public void checkProduction(Production production) {
     if (production.getLHS().length() == 0) {
       throw new IllegalArgumentException("The left hand side cannot be empty.");
     }
@@ -52,7 +52,7 @@ public void checkProduction(Production production) {
    *             hand side
    */
   @Override
-public void addProduction(Production production) {
+  public void addProduction(Production production) {
     if (myProductions.size() == 0 && !ProductionChecker.isRestrictedOnLHS(production))
       throw new IllegalArgumentException("The first production must be restricted.");
     super.addProduction(production);

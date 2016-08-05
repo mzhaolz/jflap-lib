@@ -18,6 +18,7 @@ package edu.duke.cs.jflap.pumping;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A <code>PumpingLemma</code> contains the information needed to guide the user
@@ -109,11 +110,11 @@ public abstract class PumpingLemma implements Serializable {
   /**
    * A suggested range for <i>m</i>.
    */
-  protected int[] myRange;
+  protected List<Integer> myRange;
   /**
    * The current decomposition of this lemma.
    */
-  protected int[] myDecomposition;
+  protected List<Integer> myDecomposition;
 
   /**
    * Constructs a new <code>PumpingLemma</code>.
@@ -176,7 +177,7 @@ public abstract class PumpingLemma implements Serializable {
    *
    * @return the current decomposition
    */
-  public List<int> getDecomposition() {
+  public List<Integer> getDecomposition() {
     return myDecomposition;
   }
 
@@ -244,7 +245,7 @@ public abstract class PumpingLemma implements Serializable {
    *
    * @return the recommended range for<i>m</i>
    */
-  public List<int> getRange() {
+  public List<Integer> getRange() {
     return myRange;
   }
 
@@ -354,7 +355,7 @@ public abstract class PumpingLemma implements Serializable {
    * goes first
    */
   public void chooseM() {
-    m = LemmaMath.fetchRandInt(myRange[0], myRange[1]);
+    m = LemmaMath.fetchRandInt(myRange.get(0), myRange.get(1));
   }
 
   /**

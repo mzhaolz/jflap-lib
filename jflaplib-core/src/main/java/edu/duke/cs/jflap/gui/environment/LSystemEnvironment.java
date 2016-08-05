@@ -58,7 +58,7 @@ public class LSystemEnvironment extends Environment {
     input.addLSystemInputListener(
         new LSystemInputListener() {
           @Override
-        public void lSystemChanged(LSystemInputEvent event) {
+          public void lSystemChanged(LSystemInputEvent event) {
             setDirty();
           }
         });
@@ -73,7 +73,7 @@ public class LSystemEnvironment extends Environment {
    * @return the <CODE>LSystem</CODE> for this environment
    */
   @Override
-public Serializable getObject() {
+  public Serializable getObject() {
     return getLSystem();
   }
 

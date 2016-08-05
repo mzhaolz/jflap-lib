@@ -239,7 +239,7 @@ public class Canvas extends JPanel {
    * @see #stop()
    */
   @Override
-public void paintComponent(Graphics pen) {
+  public void paintComponent(Graphics pen) {
     for (int i = 0; i < myLabelText.size(); i++) {
       Text l = (myLabelText.get(i));
       l.paint(pen);

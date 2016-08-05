@@ -52,9 +52,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     @SuppressWarnings("unchecked")
     public LLParseTable(Grammar grammar) {
         variables = grammar.getVariables();
-        Arrays.sort(variables);
+        variables.sort((x,y) -> x.compareTo(y));
+        terminals.sort((x,y) -> x.compareTo(y));
         terminals = grammar.getTerminals();
-        Arrays.sort(terminals);
 
         entries = new SortedSet[variables.length][terminals.length + 1];
         for (int i = 0; i < entries.length; i++)

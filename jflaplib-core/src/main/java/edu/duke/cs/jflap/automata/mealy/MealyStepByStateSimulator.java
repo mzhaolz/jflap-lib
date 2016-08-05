@@ -61,8 +61,9 @@ public class MealyStepByStateSimulator extends AutomatonSimulator {
    *            the input string to simulate
    */
   @Override
-public List<Configuration> getInitialConfigurations(String input) {
-    Configuration config = new MealyConfiguration(myAutomaton.getInitialState(), null, input, input, "");
+  public List<Configuration> getInitialConfigurations(String input) {
+    Configuration config =
+        new MealyConfiguration(myAutomaton.getInitialState(), null, input, input, "");
     List<Configuration> configs = new ArrayList<>();
     configs.add(config);
     return configs;
@@ -77,7 +78,7 @@ public List<Configuration> getInitialConfigurations(String input) {
    *            the configuration simulate one step on
    */
   @Override
-public List<MealyConfiguration> stepConfiguration(Configuration configuration) {
+  public List<MealyConfiguration> stepConfiguration(Configuration configuration) {
     List<MealyConfiguration> list = new ArrayList<>();
     MealyConfiguration config = (MealyConfiguration) configuration;
 
@@ -112,7 +113,7 @@ public List<MealyConfiguration> stepConfiguration(Configuration configuration) {
    * </code> otherwise
    */
   @Override
-public boolean isAccepted() {
+  public boolean isAccepted() {
     Iterator<Configuration> it = myConfigurations.iterator();
     while (it.hasNext()) {
       MealyConfiguration config = (MealyConfiguration) it.next();
@@ -131,7 +132,7 @@ public boolean isAccepted() {
    * @see #isAccepted()
    */
   @Override
-public boolean simulateInput(String input) {
+  public boolean simulateInput(String input) {
     myConfigurations.clear();
     List<Configuration> initialConfigs = getInitialConfigurations(input);
     myConfigurations.addAll(initialConfigs);

@@ -54,7 +54,7 @@ public class ConvertFSAToREAction extends FSAAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     JFrame frame = Universe.frameForEnvironment(environment);
     if (environment.getAutomaton().getInitialState() == null) {
       JOptionPane.showMessageDialog(

@@ -114,7 +114,7 @@ public abstract class GrowableTableModel<T> extends AbstractTableModel implement
    * @return the number of columns in this table
    */
   @Override
-public final int getColumnCount() {
+  public final int getColumnCount() {
     return columns;
   }
 
@@ -124,7 +124,7 @@ public final int getColumnCount() {
    * @return the number of rows currently in this table
    */
   @Override
-public final int getRowCount() {
+  public final int getRowCount() {
     return data.size();
   }
 
@@ -170,12 +170,12 @@ public final int getRowCount() {
    * @return the object at that location
    */
   @Override
-public T getValueAt(int row, int column) {
+  public T getValueAt(int row, int column) {
     return data.get(row)[column];
   }
 
   @Override
-@SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
   public void setValueAt(Object newData, int row, int column) {
     data.get(row)[column] = (T) newData;
     if (row + 1 == getRowCount()) {

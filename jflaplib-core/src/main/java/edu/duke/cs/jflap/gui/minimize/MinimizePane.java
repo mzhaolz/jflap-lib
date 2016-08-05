@@ -125,13 +125,13 @@ public class MinimizePane extends JPanel {
     edu.duke.cs.jflap.gui.SuperMouseAdapter a =
         new edu.duke.cs.jflap.gui.SuperMouseAdapter() {
           @Override
-        public void mouseClicked(MouseEvent event) {
+          public void mouseClicked(MouseEvent event) {
             TreeNode n = tpane.nodeAtPoint(event.getPoint());
             controller.nodeClicked((MinimizeTreeNode) n, event);
           }
 
           @Override
-        public void mousePressed(MouseEvent event) {
+          public void mousePressed(MouseEvent event) {
             TreeNode n = tpane.nodeAtPoint(event.getPoint());
             controller.nodeDown((MinimizeTreeNode) n, event);
           }

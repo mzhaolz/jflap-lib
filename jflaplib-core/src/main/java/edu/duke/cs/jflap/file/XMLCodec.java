@@ -98,7 +98,7 @@ public class XMLCodec extends Codec {
    *             if there was a problem reading the file
    */
   @Override
-public <K, V> Serializable decode(File file, Map<K, V> parameters) {
+  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     try {
       return decode(new FileInputStream(file));
     } catch (FileNotFoundException e) {
@@ -122,7 +122,7 @@ public <K, V> Serializable decode(File file, Map<K, V> parameters) {
    *             if there was a problem writing the file
    */
   @Override
-public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
+  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     Transducer transducer = null;
     try {
       transducer = TransducerFactory.getTransducer(structure);
@@ -168,7 +168,7 @@ public <K, V> File encode(Serializable structure, File file, Map<K, V> parameter
    *         written to a file
    */
   @Override
-public boolean canEncode(Serializable structure) {
+  public boolean canEncode(Serializable structure) {
     return true;
   }
 
@@ -178,7 +178,7 @@ public boolean canEncode(Serializable structure) {
    * @return the description of this codec
    */
   @Override
-public String getDescription() {
+  public String getDescription() {
     return "JFLAP 4 File";
   }
 
@@ -193,7 +193,7 @@ public String getDescription() {
    * @return the new suggestion for a name
    */
   @Override
-public String proposeFilename(String filename, Serializable structure) {
+  public String proposeFilename(String filename, Serializable structure) {
     if (!filename.endsWith(SUFFIX)) return filename + SUFFIX;
     return filename;
   }

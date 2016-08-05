@@ -33,7 +33,7 @@ public class MealyConfigurationIcon extends ConfigurationIcon {
   }
 
   @Override
-public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
+  public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
     super.paintConfiguration(c, g, width, height);
     MealyConfiguration config = (MealyConfiguration) getConfiguration();
     // Draw the torn tape with the rest of the input.

@@ -46,7 +46,7 @@ public class PDAConfigurationIcon extends ConfigurationIcon {
    * @return the height of this icon
    */
   @Override
-public int getIconHeight() {
+  public int getIconHeight() {
     // Why not...
     return super.getIconHeight() + 25;
   }
@@ -65,7 +65,7 @@ public int getIconHeight() {
    *            the height to draw the configuration in
    */
   @Override
-public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
+  public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
     super.paintConfiguration(c, g, width, height);
     PDAConfiguration config = (PDAConfiguration) getConfiguration();
     // Draw the torn tape with the rest of the input.

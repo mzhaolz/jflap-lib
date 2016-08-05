@@ -41,7 +41,7 @@ public class RestrictedUserParser extends UserParser {
   }
 
   @Override
-public boolean isPossibleDerivation(String derivation) {
+  public boolean isPossibleDerivation(String derivation) {
     if (Unrestricted.minimumLength(derivation, mySmallerSet) > myTarget.length()) return false;
     boolean startBookend = false, endBookend = false;
     ArrayList<String> discrete = new ArrayList<String>();

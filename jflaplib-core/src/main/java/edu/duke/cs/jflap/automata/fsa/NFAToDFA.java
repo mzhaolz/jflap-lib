@@ -197,14 +197,14 @@ public class NFAToDFA {
     nfaStates.sort(
         new Comparator<State>() {
           @Override
-        public int compare(State s, State t) {
+          public int compare(State s, State t) {
             return s.hashCode() - t.hashCode();
           }
         });
     states2.sort(
         new Comparator<State>() {
           @Override
-        public int compare(State s, State t) {
+          public int compare(State s, State t) {
             return s.hashCode() - t.hashCode();
           }
         });

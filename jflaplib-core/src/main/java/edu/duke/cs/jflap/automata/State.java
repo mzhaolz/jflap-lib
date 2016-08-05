@@ -117,7 +117,7 @@ public class State implements Serializable {
    * representation will be </CODE>"q_5 at (50,80)"</CODE>
    */
   @Override
-public String toString() {
+  public String toString() {
     return "q_"
         + Integer.toString(getID())
         + " at ("

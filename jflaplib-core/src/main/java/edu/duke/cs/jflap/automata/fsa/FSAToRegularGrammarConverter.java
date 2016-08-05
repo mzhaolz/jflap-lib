@@ -78,12 +78,12 @@ public class FSAToRegularGrammarConverter {
     states.sort(
         new Comparator<State>() {
           @Override
-        public int compare(State o1, State o2) {
+          public int compare(State o1, State o2) {
             return o1.getID() - o2.getID();
           }
 
           @Override
-        public boolean equals(Object o) {
+          public boolean equals(Object o) {
             return false;
           }
         });

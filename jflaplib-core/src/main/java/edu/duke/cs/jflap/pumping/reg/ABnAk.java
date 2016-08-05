@@ -34,12 +34,12 @@ public class ABnAk extends RegularPumpingLemma {
   private static final long serialVersionUID = 2542738704518014246L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "(ab)^n a^k : n > k, k >= 0";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "(<i>ab</i>)<i><sup>n</sup>a<sup>k</sup></i> : <i>n</i> "
         + GREATER_THAN
         + " <i>k</i>, <i>k</i> "
@@ -48,12 +48,12 @@ public String getHTMLTitle() {
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {2, 11};
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"(ab)<sup><i>m</i>+1</sup>"
@@ -63,22 +63,22 @@ public void setDescription() {
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = pumpString("ab", m + 1) + pumpString("a", m);
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     setDecomposition(new int[] {0, 2});
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = 0;
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     int a, b;
     char[] list = new char[] {'a'};
     String temp = s;

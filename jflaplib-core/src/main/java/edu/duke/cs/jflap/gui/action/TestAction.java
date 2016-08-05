@@ -234,7 +234,7 @@ public class TestAction extends RestrictedAction {
   }
 
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     Component source = null;
     try {
       source = (Component) event.getSource();

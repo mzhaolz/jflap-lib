@@ -63,7 +63,7 @@ public class MultipleOutputSimulateAction extends MultipleSimulateAction {
    * @return in this base class, returns "Multiple Inputs"
    */
   @Override
-public String getComponentTitle() {
+  public String getComponentTitle() {
     return "Multiple Runs";
   }
 
@@ -76,7 +76,7 @@ public String getComponentTitle() {
    * @see edu.duke.cs.jflap.gui.sim.multiple.InputTableModel
    */
   @Override
-protected JTableExtender initializeTable(Object obj) {
+  protected JTableExtender initializeTable(Object obj) {
     boolean multiple = false;
     if (this.getEnvironment().myObjects != null) multiple = true;
     TableModel model = InputTableModel.getModel((Automaton) getObject(), multiple);

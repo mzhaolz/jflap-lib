@@ -123,7 +123,7 @@ public class CharacterStack implements Serializable {
    * @return a string representation of this object
    */
   @Override
-public String toString() {
+  public String toString() {
     return buffer.toString();
   }
 
@@ -137,7 +137,7 @@ public String toString() {
    *         otherwise
    */
   @Override
-public boolean equals(Object stack) {
+  public boolean equals(Object stack) {
     try {
       return ((CharacterStack) stack).buffer.toString().equals(buffer.toString());
     } catch (ClassCastException e) {
@@ -151,7 +151,7 @@ public boolean equals(Object stack) {
    * @return a hash value for this character stack
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     if (cachedHash != 0xdeadbeef) return cachedHash;
     return cachedHash = buffer.toString().hashCode();
   }

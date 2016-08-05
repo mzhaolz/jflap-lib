@@ -58,7 +58,7 @@ public class FSAStepByStateSimulator extends AutomatonSimulator {
    *            the input string.
    */
   @Override
-public List<Configuration> getInitialConfigurations(String input) {
+  public List<Configuration> getInitialConfigurations(String input) {
     List<Configuration> configs = new ArrayList<>();
     configs.add(new FSAConfiguration(myAutomaton.getInitialState(), null, input, input));
     return configs;
@@ -72,7 +72,7 @@ public List<Configuration> getInitialConfigurations(String input) {
    *            the configuration to simulate the one step on.
    */
   @Override
-public List<Configuration> stepConfiguration(Configuration config) {
+  public List<Configuration> stepConfiguration(Configuration config) {
     List<Configuration> list = new ArrayList<>();
     FSAConfiguration configuration = (FSAConfiguration) config;
     /** get all information from configuration. */
@@ -127,7 +127,7 @@ public List<Configuration> stepConfiguration(Configuration config) {
    *         the machine in a final state.
    */
   @Override
-public boolean isAccepted() {
+  public boolean isAccepted() {
     Iterator<Configuration> it = myConfigurations.iterator();
     while (it.hasNext()) {
       FSAConfiguration configuration = (FSAConfiguration) it.next();
@@ -148,7 +148,7 @@ public boolean isAccepted() {
    * @return true if the automaton accepts the input
    */
   @Override
-public boolean simulateInput(String input) {
+  public boolean simulateInput(String input) {
     /** clear the configurations to begin new simulation. */
     myConfigurations.clear();
     List<Configuration> initialConfigs = getInitialConfigurations(input);

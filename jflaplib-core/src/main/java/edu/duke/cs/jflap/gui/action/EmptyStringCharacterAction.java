@@ -54,7 +54,7 @@ public class EmptyStringCharacterAction extends RestrictedAction {
   }
 
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     Profile current = Universe.curProfile;
 
     // JFrame.setDefaultLookAndFeelDecorated(true);
@@ -66,7 +66,7 @@ public void actionPerformed(ActionEvent e) {
     lambda.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             Universe.curProfile.setEmptyString(Universe.curProfile.lambda);
           }
         });
@@ -74,7 +74,7 @@ public void actionPerformed(ActionEvent e) {
     epsilon.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             Universe.curProfile.setEmptyString(Universe.curProfile.epsilon);
           }
         });
@@ -97,7 +97,7 @@ public void actionPerformed(ActionEvent e) {
     accept.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             frame.setVisible(false);
             Universe.curProfile.savePreferences();
           }

@@ -81,7 +81,7 @@ public class InputTableModel extends GrowableTableModel<Object> {
    * Initializes the contents of a new array to be all blank strings.
    */
   @Override
-protected Object[] initializeRow(int row) {
+  protected Object[] initializeRow(int row) {
     Object[] nr = super.initializeRow(row);
     Arrays.fill(nr, "");
     return nr;
@@ -102,7 +102,7 @@ protected Object[] initializeRow(int row) {
    * @return the name of the column
    */
   @Override
-public String getColumnName(int column) {
+  public String getColumnName(int column) {
     int count = getColumnCount();
     if (column == count - 1) return "Result";
     int offset = 0;
@@ -156,7 +156,7 @@ public String getColumnName(int column) {
    *         <CODE>false</CODE>
    */
   @Override
-public boolean isCellEditable(int row, int column) {
+  public boolean isCellEditable(int row, int column) {
     if (isMultiple) return (column < getInputCount() && column > 0);
     return column < getInputCount();
   }
@@ -312,7 +312,7 @@ public boolean isCellEditable(int row, int column) {
    * having one row. The number of columns remains unchanged.
    */
   @Override
-public void clear() {
+  public void clear() {
     if (rowToAssociatedConfiguration != null) rowToAssociatedConfiguration.clear();
     super.clear();
   }

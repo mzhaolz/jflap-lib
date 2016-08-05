@@ -63,7 +63,7 @@ class BuilderControlPanel extends JToolBar {
               private static final long serialVersionUID = 1L;
 
               @Override
-            public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.hint();
               }
             }));
@@ -77,7 +77,7 @@ class BuilderControlPanel extends JToolBar {
               private static final long serialVersionUID = 1L;
 
               @Override
-            public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.complete();
               }
             }));
@@ -91,7 +91,7 @@ class BuilderControlPanel extends JToolBar {
               private static final long serialVersionUID = 1L;
 
               @Override
-            public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.done();
               }
             }));

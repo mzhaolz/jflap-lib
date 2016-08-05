@@ -49,7 +49,7 @@ public class MooreTransducer extends MealyTransducer {
    * @return an empty Moore machine
    */
   @Override
-protected Automaton createEmptyAutomaton(Document document) {
+  protected Automaton createEmptyAutomaton(Document document) {
     return new MooreMachine();
   }
 
@@ -70,7 +70,7 @@ protected Automaton createEmptyAutomaton(Document document) {
    * @return the new transition
    */
   @Override
-protected Transition createTransition(
+  protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     /*
      * The boolean isBlock seems to be ignored in FSATransducer.java, so I'm
@@ -89,7 +89,7 @@ protected Transition createTransition(
    * @return the string "moore"
    */
   @Override
-public String getType() {
+  public String getType() {
     return "moore";
   }
 
@@ -105,7 +105,7 @@ public String getType() {
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
   @Override
-protected Element createStateElement(Document document, State state, Automaton container) {
+  protected Element createStateElement(Document document, State state, Automaton container) {
     // System.out.println("moore create state element called");
     Element se = super.createStateElement(document, state, state.getAutomaton());
     se.appendChild(

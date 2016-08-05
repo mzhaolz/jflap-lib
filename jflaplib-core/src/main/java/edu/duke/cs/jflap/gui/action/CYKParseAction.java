@@ -88,7 +88,7 @@ public class CYKParseAction extends GrammarAction {
    * Performs the action.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     myGrammar = g;
     if (g == null) return;

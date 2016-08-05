@@ -61,7 +61,7 @@ public class GrammarEnvironment extends Environment {
         .addTableModelListener(
             new TableModelListener() {
               @Override
-            public void tableChanged(TableModelEvent event) {
+              public void tableChanged(TableModelEvent event) {
                 setDirty();
               }
             });
@@ -76,7 +76,7 @@ public class GrammarEnvironment extends Environment {
    * @return the <CODE>Grammar</CODE> for this environment
    */
   @Override
-public Serializable getObject() {
+  public Serializable getObject() {
     return getGrammar(UnboundGrammar.class);
   }
 

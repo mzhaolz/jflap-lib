@@ -19,8 +19,12 @@ package edu.duke.cs.jflap.grammar.parse;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 
+import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,8 +40,8 @@ import java.util.Set;
  */
 public abstract class UserParser {
   /** Stuff for the possibilities. **/
-  private static final List<Production> P = new Production[0];
-  private static final List<int> S = new int[0];
+  private static final List<Production> P = new ArrayList<>();
+  private static final List<Integer> S = new ArrayList<>();
 
   /** Starting ParseNode **/
   private static final ParseNode E = new ParseNode("", P, S);
@@ -46,7 +50,7 @@ public abstract class UserParser {
   protected Grammar myGrammar;
 
   /** The array of productions. */
-  protected Production[] myProductions;
+  protected List<Production> myProductions;
 
   /** This is the target string. */
   protected String myTarget;
@@ -143,7 +147,7 @@ public abstract class UserParser {
      * "  production = "+myProductions[i]); }
      */
 
-    myCurrentProduction = myProductions[index];
+    myCurrentProduction = myProductions.get(index);
     int length = myCurrentProduction.getLHS().length();
     int count = 0;
     for (int i = 0; i < myAnswer.getDerivation().length(); i++) {
@@ -183,10 +187,9 @@ public abstract class UserParser {
         c.substring(0, start)
             + myCurrentProduction.getRHS()
             + c.substring(start + myCurrentProduction.getLHS().length());
-    Production[] singleProductionArray = new Production[1];
-    singleProductionArray[0] = myCurrentProduction;
-    int[] singleSubstitutionArray = new int[1];
-    singleSubstitutionArray[0] = start;
+    List<Production> singleProductionArray = new ArrayList<>();
+    singleProductionArray.set(0, myCurrentProduction);
+    List<Integer> singleSubstitutionArray = Lists.newArrayList(start);
     return new ParseNode(prepend, singleProductionArray, singleSubstitutionArray);
   }
 
@@ -280,7 +283,7 @@ public abstract class UserParser {
    */
   public String getLHSForProduction(int selectedRow) {
     // TODO Auto-generated method stub
-    return myProductions[selectedRow].getLHS();
+    return myProductions.get(selectedRow).getLHS();
   }
 
   /**
@@ -291,7 +294,7 @@ public abstract class UserParser {
    * @param tempIndices
    *            Indices of where the substitution will occur
    */
-  public void subsitute(int[] tempIndices) {
+  public void subsitute(List<Integer> tempIndices) {
     ParseNode node = myQueue.removeFirst();
     ParseNode pNode = getNextSubstitution(myAnswer.getDerivation(), tempIndices);
 
@@ -320,23 +323,23 @@ public abstract class UserParser {
    *            Indices of where the substitution will occur
    * @return The next parseNode derived from this production
    */
-  private ParseNode getNextSubstitution(String c, int[] tempIndices) {
+  private ParseNode getNextSubstitution(String c, List<Integer> tempIndices) {
     // Find the start of the production.
-    int[] multipleSubstitutionArray = tempIndices;
+    List<Integer> multipleSubstitutionArray = tempIndices;
 
     int start = 0;
     String prepend = "";
-    Production[] multipleProductionArray = new Production[multipleSubstitutionArray.length];
-    multipleProductionArray[0] = myCurrentProduction;
-    for (int i = 0; i < multipleSubstitutionArray.length; i++) {
-      if (i == 0) start = multipleSubstitutionArray[i];
-      else start = multipleSubstitutionArray[i] + i * (myCurrentProduction.getRHS().length() - 1);
+    List<Production> multipleProductionArray = new ArrayList<>();
+    multipleProductionArray.set(0, myCurrentProduction);
+    for (int i = 0; i < multipleSubstitutionArray.size(); i++) {
+      if (i == 0) start = multipleSubstitutionArray.get(i);
+      else start = multipleSubstitutionArray.get(i)+ i * (myCurrentProduction.getRHS().length() - 1);
       prepend =
           c.substring(0, start)
               + myCurrentProduction.getRHS()
               + c.substring(start + myCurrentProduction.getLHS().length());
       c = prepend;
-      multipleProductionArray[i] = myCurrentProduction;
+      multipleProductionArray.set(i, myCurrentProduction);
     }
 
     return new ParseNode(prepend, multipleProductionArray, multipleSubstitutionArray);
@@ -353,8 +356,8 @@ public abstract class UserParser {
    *         variables left.
    */
   public boolean isStringTerminal(String finalString) {
-    for (int i = 0; i < myProductions.length; i++) {
-      if (finalString.contains(myProductions[i].getLHS())) return false;
+    for (int i = 0; i < myProductions.size(); i++) {
+      if (finalString.contains(myProductions.get(i).getLHS())) return false;
     }
     return true;
   }

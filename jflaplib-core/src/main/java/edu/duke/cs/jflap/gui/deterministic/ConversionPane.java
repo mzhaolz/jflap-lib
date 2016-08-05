@@ -66,7 +66,7 @@ public class ConversionPane extends JPanel {
     addComponentListener(
         new ComponentAdapter() {
           @Override
-        public void componentShown(ComponentEvent event) {
+          public void componentShown(ComponentEvent event) {
             // We may now lay out the states...
             controller.performFirstLayout();
             editor.getAutomatonPane().repaint();
@@ -114,7 +114,7 @@ public class ConversionPane extends JPanel {
           private static final long serialVersionUID = 1587659531575512768L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.complete();
           }
         });
@@ -126,7 +126,7 @@ public class ConversionPane extends JPanel {
           private static final long serialVersionUID = -3054950168721834336L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.done();
           }
         });

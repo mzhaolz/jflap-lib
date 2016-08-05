@@ -57,7 +57,7 @@ public class SaveAction extends SaveAsAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     Universe.frameForEnvironment(environment).save(false);
   }
 

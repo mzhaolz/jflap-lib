@@ -32,11 +32,11 @@ public class OpenURLAction extends RestrictedAction {
   }
 
   @Override
-public boolean isEnabled() {
+  public boolean isEnabled() {
     if (Universe.CHOOSER == null) return true;
     return false;
   }
 
   @Override
-public void actionPerformed(ActionEvent e) {}
+  public void actionPerformed(ActionEvent e) {}
 }

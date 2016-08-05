@@ -63,7 +63,7 @@ public class PrintAction extends RestrictedAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     JComponent c = (JComponent) environment.getActive();
     PrintUtilities.printComponent(c);
   }
