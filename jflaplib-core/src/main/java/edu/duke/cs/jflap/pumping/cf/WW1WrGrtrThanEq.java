@@ -33,11 +33,13 @@ public class WW1WrGrtrThanEq extends ContextFreePumpingLemma {
    */
   private static final long serialVersionUID = -4941517762785350617L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w w1 w^R : |w1| >= 5, w & w1 element_of {ab}*";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>ww<sub>1</sub>w<sup>R</sup></i> : |<i>w<sub>1</sub></i>| "
         + GREATER_OR_EQ
         + " 5, <i>w</i> & <i>w<sub>1</sub></i> "
@@ -46,7 +48,8 @@ public class WW1WrGrtrThanEq extends ContextFreePumpingLemma {
         + AB_STAR;
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a context-free language, a valid decomposition exists.  For any <i>m</i> value "
@@ -60,28 +63,34 @@ public class WW1WrGrtrThanEq extends ContextFreePumpingLemma {
             + " 5 for all values of <i>i</i>.";
   }
 
-  protected void addCases() {
+  @Override
+protected void addCases() {
     // TODO Auto-generated method stub
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", m) + "babab" + pumpString("a", m);
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {1, 7};
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     // always chooses the middle character, which is part of w1
     setDecomposition(new int[] {w.length() / 2, 1, 0, 0});
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
 

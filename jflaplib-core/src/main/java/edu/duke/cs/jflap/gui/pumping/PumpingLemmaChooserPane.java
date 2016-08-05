@@ -188,6 +188,7 @@ public class PumpingLemmaChooserPane extends JPanel {
 
       this.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               myChooser.reset(myIndex);
               myChooser.setCurrent(myIndex);

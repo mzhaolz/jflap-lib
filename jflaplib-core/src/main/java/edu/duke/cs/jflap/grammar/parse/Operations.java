@@ -370,7 +370,7 @@ public class Operations {
      *            the production
      * @return an array of productions, each indicating an item
      */
-    public static Production[] getItems(Production production) {
+    public static List<Production> getItems(Production production) {
         StringBuffer sb = new StringBuffer(production.getRHS());
         String rhs = production.getRHS();
         Production[] items = new Production[rhs.length() + 1];
@@ -391,7 +391,7 @@ public class Operations {
      * @return an array containing all the symbols one can do a goto on for this
      *         item set
      */
-    public static String[] getCanGoto(Set<Production> items) {
+    public static List<String> getCanGoto(Set<Production> items) {
         Iterator<Production> it = items.iterator();
         Set<String> symbols = new HashSet<>();
         while (it.hasNext()) {

@@ -23,12 +23,6 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.Universe;
-import edu.duke.cs.jflap.gui.grammar.automata.ConvertController;
-import edu.duke.cs.jflap.gui.grammar.automata.ConvertPane;
-import edu.duke.cs.jflap.gui.grammar.automata.FSAConvertController;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-import edu.duke.cs.jflap.gui.viewer.ZoomPane;
-
 import java.awt.BorderLayout;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,7 +57,8 @@ public class ConvertFSAToGrammarAction extends ConvertAutomatonToGrammarAction {
   /**
    * Checks the FSA to make sure it's ready to be converted.
    */
-  protected boolean checkAutomaton() {
+  @Override
+protected boolean checkAutomaton() {
     // If we have more than 26 states, we can't have a single
     // letter for all states.
     if (getAutomaton().getStates().length > 26) {

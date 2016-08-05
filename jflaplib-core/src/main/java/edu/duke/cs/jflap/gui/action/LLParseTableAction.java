@@ -22,8 +22,6 @@ import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.parse.LLParseTableDerivationPane;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
@@ -54,7 +52,8 @@ public class LLParseTableAction extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar();
     if (g == null) return;
     if (!Operations.isLL1(g)) {

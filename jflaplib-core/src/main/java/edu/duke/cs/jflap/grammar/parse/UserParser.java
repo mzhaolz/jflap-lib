@@ -36,8 +36,8 @@ import java.util.Set;
  */
 public abstract class UserParser {
   /** Stuff for the possibilities. **/
-  private static final Production[] P = new Production[0];
-  private static final int[] S = new int[0];
+  private static final List<Production> P = new Production[0];
+  private static final List<int> S = new int[0];
 
   /** Starting ParseNode **/
   private static final ParseNode E = new ParseNode("", P, S);

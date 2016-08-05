@@ -329,7 +329,7 @@ public class LambdaProductionRemover {
      *         <CODE>production</CODE>. The returned list of productions are all
      *         permutations of <CODE>production</CODE>.
      */
-    public static Production[] getProductionsToAddForProduction(Production production,
+    public static List<Production> getProductionsToAddForProduction(Production production,
             Set<String> lambdaSet) {
         // Stupid...
         /*
@@ -382,7 +382,7 @@ public class LambdaProductionRemover {
      *         <CODE>grammar</CODE> based on the variables in
      *         <CODE>lambdaSet</CODE>.
      */
-    public static Production[] getProductionsToAddToGrammar(Grammar grammar,
+    public static List<Production> getProductionsToAddToGrammar(Grammar grammar,
             Set<String> lambdaSet) {
         List<Production> list = new ArrayList<>();
         Production[] productions = grammar.getProductions();
@@ -402,7 +402,7 @@ public class LambdaProductionRemover {
      *            the grammar
      * @return all non lambda productions in <CODE>grammar</CODE>.
      */
-    public static Production[] getNonLambdaProductions(Grammar grammar) {
+    public static List<Production> getNonLambdaProductions(Grammar grammar) {
         List<Production> list = new ArrayList<>();
         Production[] productions = grammar.getProductions();
         for (int k = 0; k < productions.length; k++) {

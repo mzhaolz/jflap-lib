@@ -62,7 +62,8 @@ public class CircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph<V> graph, Set<V> notMoving) {
+  @Override
+public void layout(Graph<V> graph, Set<V> notMoving) {
     List<V> vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
 

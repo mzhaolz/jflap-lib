@@ -52,7 +52,8 @@ public class VDGTransition extends Transition {
    *            the new to state
    * @return a copy of this transition with the new states
    */
-  public Transition copy(State from, State to) {
+  @Override
+public Transition copy(State from, State to) {
     return new VDGTransition(from, to);
   }
 
@@ -63,7 +64,8 @@ public class VDGTransition extends Transition {
    * @see edu.duke.cs.jflap.automata.Transition#toString
    * @return a string representation of this object
    */
-  public String toString() {
+  @Override
+public String toString() {
     return super.toString();
   }
 }

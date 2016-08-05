@@ -34,7 +34,7 @@ public class MealyTransitionCreator extends TableTransitionCreator {
   /**
    * Table column names.
    */
-  private static final String NAME[] = {"Label", "Output"};
+  private static final List<String NAME> = {"Label", "Output"};
 
   /**
    * Instantiates a new transition creator.

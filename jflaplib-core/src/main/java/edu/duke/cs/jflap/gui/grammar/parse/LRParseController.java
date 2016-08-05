@@ -322,7 +322,7 @@ class LRParseController {
     // These would be local variables in a parse function...
     private IntStack STACK;
 
-    private Production[] productions;
+    private List<Production> productions;
 
     private int P;
 
@@ -339,7 +339,7 @@ class LRParseController {
     private DefaultTreeModel tree;
 
     /** The array of nodes as they are added. */
-    private TreeNode[] nodes;
+    private List<TreeNode> nodes;
 
     private static class IntStack extends Stack<Object> {
         /**

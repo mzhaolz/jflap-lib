@@ -16,7 +16,6 @@
 
 package edu.duke.cs.jflap.gui.pumping;
 
-import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
 import edu.duke.cs.jflap.pumping.PumpingLemma;
 
 import java.awt.BorderLayout;
@@ -236,7 +235,8 @@ public abstract class PumpingLemmaInputPane extends JPanel {
 
     explain.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             updateTopPane(true);
           }
         });
@@ -345,7 +345,8 @@ public abstract class PumpingLemmaInputPane extends JPanel {
     myStepAnimation = new JButton("Step");
     myStepAnimation.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             stepAnimation();
             myCanvas.start();
           }
@@ -357,7 +358,8 @@ public abstract class PumpingLemmaInputPane extends JPanel {
     myStartAnimation = new JButton("Restart");
     myStartAnimation.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             setCanvas();
             myCanvas.stop();
             repaint();

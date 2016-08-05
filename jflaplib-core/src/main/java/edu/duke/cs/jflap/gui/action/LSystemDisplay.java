@@ -52,7 +52,8 @@ public class LSystemDisplay extends LSystemAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     LSystem lsystem = getEnvironment().getLSystem();
 
     if (lsystem.getAxiom().size() == 0) {

@@ -96,7 +96,7 @@ public class PDATransitionCreator extends TableTransitionCreator {
     };
   }
 
-  private static final String NAME[] = {"Read", "Pop", "Push"};
+  private static final List<String NAME> = {"Read", "Pop", "Push"};
 
   /**
    * Modifies a transition according to what's in the table.

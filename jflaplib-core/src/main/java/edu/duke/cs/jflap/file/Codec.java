@@ -33,7 +33,8 @@ public abstract class Codec extends FileFilter implements Encoder, Decoder {
    *            the file to check for acceptance
    * @return in this implementation, always <CODE>true</CODE>
    */
-  public boolean accept(File f) {
+  @Override
+public boolean accept(File f) {
     return true;
   }
 
@@ -49,7 +50,8 @@ public abstract class Codec extends FileFilter implements Encoder, Decoder {
    *            the structure that will be saved
    * @return the new suggestion for a name
    */
-  public String proposeFilename(String filename, Serializable structure) {
+  @Override
+public String proposeFilename(String filename, Serializable structure) {
     return filename;
   }
 
@@ -60,7 +62,8 @@ public abstract class Codec extends FileFilter implements Encoder, Decoder {
    * @return an encoder that encodes in the same format this decodes in, or
    *         <CODE>null</CODE> if there is no such encoder
    */
-  public Encoder correspondingEncoder() {
+  @Override
+public Encoder correspondingEncoder() {
     return this;
   }
 

@@ -113,6 +113,7 @@ public class NoInteractionSimulateAction extends SimulateAction {
      *            object in most cases, but may differ for multiple tape turing
      *            machines
      */
+    @Override
     public void handleInteraction(Automaton automaton, AutomatonSimulator simulator,
             Configuration[] configs, Object initialInput) {
         JFrame frame = Universe.frameForEnvironment(environment);

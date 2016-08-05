@@ -31,20 +31,14 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.JTableExtender;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.TableTextSizeSlider;
-import edu.duke.cs.jflap.gui.editor.ArrowDisplayOnlyTool;
-import edu.duke.cs.jflap.gui.editor.EditorPane;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Profile;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-import edu.duke.cs.jflap.gui.grammar.parse.BruteParsePane;
 import edu.duke.cs.jflap.gui.sim.TraceWindow;
 import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -287,6 +281,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
         bar.add(new AbstractAction("Load Inputs") {
             private static final long serialVersionUID = 71L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
                 try {
@@ -328,6 +323,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
         bar.add(new AbstractAction("Run Inputs") {
             private static final long serialVersionUID = 72L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     // Make sure any recent changes are registered.
@@ -419,6 +415,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("Clear") {
                 private static final long serialVersionUID = 73L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         // Make sure any recent changes are registered.
@@ -445,6 +442,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("Enter " + empty /* "Enter Lambda" */) {
                 private static final long serialVersionUID = 74L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     int row = table.getSelectedRow();
                     if (row == -1)
@@ -458,6 +456,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("View Trace") {
                 private static final long serialVersionUID = 75L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     int[] rows = table.getSelectedRows();
                     InputTableModel tm = (InputTableModel) table.getModel();
@@ -506,6 +505,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("Edit File") {
                 private static final long serialVersionUID = 76L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     int k = getMachineIndexBySelectedRow(table);
                     if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -531,6 +531,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("Add input string") {
                 private static final long serialVersionUID = 77L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     boolean turing = false;
                     if (getEnvironment().myObjects.get(0) instanceof TuringMachine) {
@@ -593,6 +594,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("Add file") {
                 private static final long serialVersionUID = 79L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     TestAction test = new TestAction();
                     test.chooseFile(getEnvironment().getActive(), false);
@@ -604,6 +606,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("Remove file") {
                 private static final long serialVersionUID = 80L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     int k = getMachineIndexBySelectedRow(table);
                     if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -627,6 +630,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
             bar.add(new AbstractAction("Save Results") {
                 private static final long serialVersionUID = 81L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     final JFrame frame = new JFrame("Save Location");
 
@@ -635,11 +639,13 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
                     defaultLocation.setMnemonic(KeyEvent.VK_B);
                     defaultLocation.setActionCommand("Save Results with Original File");
                     defaultLocation.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent event) {
                         }
                     });
                     final JRadioButton specifyLocation = new JRadioButton("Specify New Location");
                     specifyLocation.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent event) {
                         }
                     });
@@ -657,6 +663,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
                     JButton accept = new JButton("Accept");
                     accept.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent event) {
                             frame.setVisible(false);
                             String filepath = "";
@@ -864,6 +871,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
      * @param e
      *            the action event
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         performAction((Component) e.getSource());
     }
@@ -954,7 +962,7 @@ public class MultipleSimulateAction extends NoInteractionSimulateAction {
 
     protected JTable table = null;
 
-    private static String[] RESULT = { "Accept", "Reject", "Cancelled" };
+    private static List<String> RESULT = { "Accept", "Reject", "Cancelled" };
 
     protected JPanel myPanel = null;
 }

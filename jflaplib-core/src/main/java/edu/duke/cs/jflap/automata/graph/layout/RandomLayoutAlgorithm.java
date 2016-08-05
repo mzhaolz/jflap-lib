@@ -74,7 +74,8 @@ public class RandomLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
     super(pSize, vDim, vBuffer);
   }
 
-  public void layout(Graph<V> graph, Set<V> notMoving) {
+  @Override
+public void layout(Graph<V> graph, Set<V> notMoving) {
     // First, check to see that movable vertices exist
     vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
@@ -128,7 +129,8 @@ public class RandomLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
     Collections.sort(
         xOrder,
         new Comparator<Object>() {
-          public int compare(Object o1, Object o2) {
+          @Override
+        public int compare(Object o1, Object o2) {
             if (((Point2D) o1).getX() == ((Point2D) o2).getX()) return 0;
             else if (((Point2D) o1).getX() < ((Point2D) o2).getX()) return 1;
             else return -1;
@@ -137,7 +139,8 @@ public class RandomLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
     Collections.sort(
         yOrder,
         new Comparator<Object>() {
-          public int compare(Object o1, Object o2) {
+          @Override
+        public int compare(Object o1, Object o2) {
             if (((Point2D) o1).getY() == ((Point2D) o2).getY()) return 0;
             else if (((Point2D) o1).getY() < ((Point2D) o2).getY()) return 1;
             else return -1;

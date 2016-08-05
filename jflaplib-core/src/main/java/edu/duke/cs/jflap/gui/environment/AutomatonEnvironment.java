@@ -23,7 +23,6 @@ import edu.duke.cs.jflap.automata.event.AutomataStateEvent;
 import edu.duke.cs.jflap.automata.event.AutomataStateListener;
 import edu.duke.cs.jflap.automata.event.AutomataTransitionEvent;
 import edu.duke.cs.jflap.automata.event.AutomataTransitionListener;
-import edu.duke.cs.jflap.gui.editor.UndoKeeper;
 
 public class AutomatonEnvironment extends Environment {
   /**
@@ -96,14 +95,17 @@ public class AutomatonEnvironment extends Environment {
    */
   private class Listener
       implements AutomataStateListener, AutomataTransitionListener, AutomataNoteListener {
+    @Override
     public void automataTransitionChange(AutomataTransitionEvent e) {
       setDirty();
     }
 
+    @Override
     public void automataStateChange(AutomataStateEvent e) {
       setDirty();
     }
 
+    @Override
     public void automataNoteChange(AutomataNoteEvent e) {
       setDirty();
     }

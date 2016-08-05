@@ -83,7 +83,8 @@ public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
     l.setFirstPlayer(PumpingLemma.COMPUTER);
   }
 
-  protected JPanel initDecompPanel() {
+  @Override
+protected JPanel initDecompPanel() {
     JPanel p = new JPanel();
     decompLabel = new JLabel();
     p.add(decompLabel);
@@ -93,19 +94,23 @@ public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
     return p;
   }
 
-  public void resetDecompPanel() {
+  @Override
+public void resetDecompPanel() {
     decompLabel.setText("");
   }
 
-  public void setDecomposition(int[] decomposition) {
+  @Override
+public void setDecomposition(int[] decomposition) {
     myLemma.setDecomposition(decomposition);
     decompLabel.setText(myLemma.getDecompositionAsString());
   }
 
-  protected String addTopGameFeatures(JButton b) {
+  @Override
+protected String addTopGameFeatures(JButton b) {
     b.addActionListener(
         new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             myWDisplay.setText("");
             updateTopPane(false);
             reset();
@@ -116,7 +121,8 @@ public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
     return OBJECTIVE;
   }
 
-  protected String addMGameFeatures() {
+  @Override
+protected String addMGameFeatures() {
     myMDisplay = new JTextArea(1, 10);
     myMDisplay.setEditable(false);
     if (myLemma.getM() == -1) // only not -1 if loading a file
@@ -125,12 +131,14 @@ public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
     return DESCRIBE_M;
   }
 
-  protected String addWGameFeatures() {
+  @Override
+protected String addWGameFeatures() {
     myWDisplay = new JTextField(20);
     ((JTextField) myWDisplay)
         .addActionListener(
             new ActionListener() {
-              public void actionPerformed(ActionEvent ev) {
+              @Override
+            public void actionPerformed(ActionEvent ev) {
                 for (int i = 3; i < stages.length; i++) stages[i].setVisible(false);
                 String w = myWDisplay.getText();
 
@@ -175,12 +183,14 @@ public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
     return PROMPT_W;
   }
 
-  protected String addIGameFeatures() {
+  @Override
+protected String addIGameFeatures() {
     myIDisplay = new JTextField(20);
     ((JTextField) myIDisplay)
         .addActionListener(
             new ActionListener() {
-              public void actionPerformed(ActionEvent ev) {
+              @Override
+            public void actionPerformed(ActionEvent ev) {
                 try {
                   int i = Integer.parseInt(myIDisplay.getText());
                   if (!(i >= 0 && i != 1 && i <= 12)) throw new NumberFormatException();
@@ -221,7 +231,8 @@ public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
     return PROMPT_I;
   }
 
-  public void displayEnd() {
+  @Override
+public void displayEnd() {
     String s = myLemma.createPumpedString();
     myPumpedStringDisplay.setText(s);
     if (myLemma.isInLang(s))

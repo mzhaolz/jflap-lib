@@ -116,8 +116,8 @@ public class TransitionTableModel extends AbstractTableModel {
   }
 
   /** The list of transitions displayed in the table. */
-  private Transition[] transitions;
+  private List<Transition> transitions;
 
   /** The column names. */
-  private static final String[] COLUMN_NAMES = {"From", "To", "Label"};
+  private static final List<String> COLUMN_NAMES = {"From", "To", "Label"};
 }

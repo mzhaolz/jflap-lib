@@ -32,15 +32,18 @@ public class AB2n extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = -391351138185176935L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "(ab)^2n : n = 1,2,...";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "(<i>ab</i>)<i><sup>2n</sup></i> : <i>n</i> " + "= 1,2,...";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a regular language, a valid decomposition exists.  As long as <i>m</i> "
@@ -51,25 +54,30 @@ public class AB2n extends RegularPumpingLemma {
             + "pumped for any <i>i</i> value.";
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {4, 10};
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     if (m % 2 == 0) w = pumpString("ab", m);
     else w = pumpString("ab", m + 1);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     // The string "abab"
     setDecomposition(new int[] {0, 4});
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     String temp = s;
     int n = 0;
     while (temp.startsWith("ab")) {

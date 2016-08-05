@@ -252,20 +252,20 @@ public class FirstFollowModel extends AbstractTableModel {
   }
 
   /** The variables. */
-  private String[] variables;
+  private List<String> variables;
 
   /** The user defined first sets strings. */
-  private String[] firstSets;
+  private List<String> firstSets;
 
   /** The user defined follow sets strings. */
-  private String[] followSets;
+  private List<String> followSets;
 
   /** The permissions to edit each column. */
-  private boolean[] canEditColumn = new boolean[] {false, false, false};
+  private List<boolean> canEditColumn = new boolean[] {false, false, false};
 
   /** The lambda string. */
   public static String LAMBDA = Universe.curProfile.getEmptyString();
 
   /** The names of columns. */
-  public static String[] COLUMN_NAMES = {" ", "FIRST", "FOLLOW"};
+  public static List<String> COLUMN_NAMES = {" ", "FIRST", "FOLLOW"};
 }

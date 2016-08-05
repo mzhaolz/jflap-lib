@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.file;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
@@ -30,13 +32,17 @@ import edu.duke.cs.jflap.regular.RegularExpression;
 
 import com.google.common.collect.Lists;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This is the codec for reading JFLAP structures in the JFLAP 3 saved file
@@ -60,7 +66,8 @@ public class JFLAP3Codec extends Codec {
    * @throws ParseException
    *             if there was a problem reading the file
    */
-  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
+  @Override
+public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     if (file.getName().endsWith(GRAMMAR_SUFFIX)) return readGrammar(file);
     if (file.getName().endsWith(REGULAR_EXPRESSION_SUFFIX)) return readRE(file);
     return readAutomaton(file);
@@ -159,12 +166,12 @@ public class JFLAP3Codec extends Codec {
     FiniteStateAutomaton fa =
         new FiniteStateAutomaton();
     // Generic states.
-    State[] states = readStateCreate(fa, reader);
-    String[][][] groups = readTransitionGroups(2, 1, states.length, reader);
+    List<State> states = readStateCreate(fa, reader);
+    String[][][] groups = readTransitionGroups(2, 1, states.size(), reader);
     for (int s = 0; s < groups.length; s++) {
       for (int g = 0; g < groups[s].length; g++) {
         String[] group = groups[s][g];
-        State to = states[Integer.parseInt(group[1]) - 1], from = states[s];
+        State to = states.get(Integer.parseInt(group[1]) - 1), from = states.get(s);
         if (group[0].equals("null")) group[0] = "";
         Transition t = new edu.duke.cs.jflap.automata.fsa.FSATransition(from, to, group[0]);
         fa.addTransition(t);
@@ -188,12 +195,12 @@ public class JFLAP3Codec extends Codec {
     PushdownAutomaton pda =
         new PushdownAutomaton();
     // Generic states.
-    State[] states = readStateCreate(pda, reader);
-    String[][][] groups = readTransitionGroups(5, 3, states.length, reader);
+    List<State> states = readStateCreate(pda, reader);
+    String[][][] groups = readTransitionGroups(5, 3, states.size(), reader);
     for (int s = 0; s < groups.length; s++) {
       for (int g = 0; g < groups[s].length; g++) {
         String[] group = groups[s][g];
-        State to = states[Integer.parseInt(group[3]) - 1], from = states[s];
+        State to = states.get(Integer.parseInt(group[3]) - 1), from = states.get(s);
         try {
           Transition t;
           // Take care of lambda symbols.
@@ -235,12 +242,12 @@ public class JFLAP3Codec extends Codec {
     TuringMachine tm =
         new TuringMachine(tapes);
     // Generic states.
-    State[] states = readStateCreate(tm, reader);
-    String[][][] groups = readTransitionGroups(1 + 3 * tm.tapes(), 1, states.length, reader);
+    List<State> states = readStateCreate(tm, reader);
+    String[][][] groups = readTransitionGroups(1 + 3 * tm.tapes(), 1, states.size(), reader);
     for (int s = 0; s < groups.length; s++) {
       for (int g = 0; g < groups[s].length; g++) {
         String[] group = groups[s][g];
-        State to = states[Integer.parseInt(group[1]) - 1], from = states[s];
+        State to = states.get(Integer.parseInt(group[1]) - 1), from = states.get(s);
         try {
           Transition t;
           // Take care of blank tape symbols.
@@ -279,31 +286,37 @@ public class JFLAP3Codec extends Codec {
    *            the buffered reader
    * @return an array of the states created
    */
-  private State[] readStateCreate(Automaton automaton, BufferedReader reader) throws IOException {
+  private List<State> readStateCreate(Automaton automaton, BufferedReader reader) throws IOException {
     // Read the number of states.
-    State[] states = null;
+    int numStates = -1;
     try {
-      int numStates = Integer.parseInt(reader.readLine());
+      numStates = Integer.parseInt(reader.readLine());
       if (numStates < 0) throw new ParseException("Number of states cannot be " + numStates + "!");
-      states = new State[numStates];
     } catch (NumberFormatException e) {
       throw new ParseException("Bad format for number of states!");
     }
-    for (int i = 0; i < states.length; i++)
-      states[i] = automaton.createState(new java.awt.Point(0, 0));
+    checkArgument(numStates < -1, "Number of states cannot be negative.");
+    
+    List<State> states = Stream.generate(Point::new)
+            .limit(numStates)
+            .map(point -> automaton.createState(point))
+            .collect(Collectors.toList());
+
     // Next possibly two lines have something to do with alphabet.
     reader.readLine();
     if (!(automaton instanceof FiniteStateAutomaton))
       reader.readLine();
     // Read the ID of the initial state.
+    int initStateID = -1;
     try {
-      int initStateID = Integer.parseInt(reader.readLine());
-      if (initStateID < 1 || initStateID > states.length)
-        throw new ParseException("Initial state cannot be " + initStateID + ".");
-      automaton.setInitialState(states[initStateID - 1]);
+      initStateID = Integer.parseInt(reader.readLine());
     } catch (NumberFormatException e) {
       throw new ParseException("Bad format for initial state ID!");
     }
+    checkArgument(initStateID < 1 || initStateID > states.size(), "Initial state cannot be " + initStateID + ".");
+    
+    automaton.setInitialState(states.get(initStateID - 1));
+
     // Read the IDs of the final states.
     String line = reader.readLine();
     String[] lineTokens = line.split("\\s+");
@@ -313,7 +326,7 @@ public class JFLAP3Codec extends Codec {
       if (last != 0) throw new ParseException("Final state list not terminated with 0!");
       try {
         for (int i = 0; i < lineTokens.length - 1; i++) {
-          automaton.addFinalState(states[Integer.parseInt(lineTokens[i]) - 1]);
+          automaton.addFinalState(states.get(Integer.parseInt(lineTokens[i]) - 1));
         }
       } catch (ArrayIndexOutOfBoundsException e) {
         throw new ParseException("Bad final state ID read!");
@@ -332,8 +345,8 @@ public class JFLAP3Codec extends Codec {
    * @param reader
    *            the buffered reader
    */
-  private void readStateMove(State[] states, BufferedReader reader) throws IOException {
-    for (int i = 0; i < states.length; i++) {
+  private void readStateMove(List<State> states, BufferedReader reader) throws IOException {
+    for (int i = 0; i < states.size(); i++) {
       int x, y;
       String[] tokens = reader.readLine().split("\\s+");
       try {
@@ -344,7 +357,7 @@ public class JFLAP3Codec extends Codec {
       } catch (ArrayIndexOutOfBoundsException e) {
         throw new ParseException("State " + (i + 1) + "'s position string too short.");
       }
-      states[i].getPoint().setLocation(x, y);
+      states.get(i).getPoint().setLocation(x, y);
     }
   }
 
@@ -399,7 +412,8 @@ public class JFLAP3Codec extends Codec {
    * @throws EncodeException
    *             if there was a problem writing the file
    */
-  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
+  @Override
+public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     return file;
   }
 
@@ -414,7 +428,8 @@ public class JFLAP3Codec extends Codec {
    * @return if the structure, perhaps with minor changes, could possibly be
    *         written to a file
    */
-  public boolean canEncode(Serializable structure) {
+  @Override
+public boolean canEncode(Serializable structure) {
     return false;
   }
 
@@ -423,7 +438,8 @@ public class JFLAP3Codec extends Codec {
    *
    * @return the description of this codec
    */
-  public String getDescription() {
+  @Override
+public String getDescription() {
     return "JFLAP 3 File";
   }
 

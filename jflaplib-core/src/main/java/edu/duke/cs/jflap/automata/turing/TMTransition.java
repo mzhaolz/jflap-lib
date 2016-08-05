@@ -118,6 +118,7 @@ public class TMTransition extends Transition {
      *            the new to state
      * @return a copy of this transition with the new states
      */
+    @Override
     public Transition copy(State from, State to) {
         return new TMTransition(from, to, toRead, toWrite, direction);
     }
@@ -232,6 +233,7 @@ public class TMTransition extends Transition {
      *         the string to write to the tape, and the direction to move the
      *         read/write tape head for each tape
      */
+    @Override
     public String getDescription() {
         StringBuffer sb = new StringBuffer();
         int t = this.tapes();
@@ -257,6 +259,7 @@ public class TMTransition extends Transition {
      * @see edu.duke.cs.jflap.automata.Transition#toString
      * @return a string representation of this object
      */
+    @Override
     public String toString() {
         return super.toString() + ": \"" + this.getDescription() + "\"";
     }
@@ -266,6 +269,7 @@ public class TMTransition extends Transition {
      *
      * @return the hashcode for this transition
      */
+    @Override
     public int hashCode() {
         int code = super.hashCode() ^ toRead.hashCode() ^ toWrite.hashCode() ^ direction.hashCode();
         return code;
@@ -279,6 +283,7 @@ public class TMTransition extends Transition {
      * @return <CODE>true</CODE> if this transition equals the passed in object,
      *         <CODE>false</CODE> otherwise
      */
+    @Override
     public boolean equals(Object object) {
         try {
             TMTransition t = (TMTransition) object;

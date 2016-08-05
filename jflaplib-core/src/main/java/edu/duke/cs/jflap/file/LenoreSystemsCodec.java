@@ -44,7 +44,8 @@ public class LenoreSystemsCodec extends Codec {
    * @throws ParseException
    *             if there was a problem reading the file
    */
-  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
+  @Override
+public <K, V> Serializable decode(File file, Map<K, V> parameters) {
     throw new ParseException("This codec is not implemented yet.");
   }
 
@@ -62,7 +63,8 @@ public class LenoreSystemsCodec extends Codec {
    * @throws EncodeException
    *             if there was a problem writing the file
    */
-  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
+  @Override
+public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
     return file;
   }
 
@@ -74,7 +76,8 @@ public class LenoreSystemsCodec extends Codec {
    * @return if the structure, perhaps with minor changes, could possibly be
    *         written to a file
    */
-  public boolean canEncode(Serializable structure) {
+  @Override
+public boolean canEncode(Serializable structure) {
     return false;
   }
 
@@ -83,7 +86,8 @@ public class LenoreSystemsCodec extends Codec {
    *
    * @return the description of this codec
    */
-  public String getDescription() {
+  @Override
+public String getDescription() {
     return "Lenore-Systems File";
   }
 

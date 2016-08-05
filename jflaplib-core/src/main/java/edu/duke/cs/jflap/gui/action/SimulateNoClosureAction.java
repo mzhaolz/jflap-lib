@@ -63,7 +63,8 @@ public class SimulateNoClosureAction extends SimulateAction {
    *            the automaton to get the simulator for
    * @return a simulator for this automaton
    */
-  protected AutomatonSimulator getSimulator(Automaton automaton) {
+  @Override
+protected AutomatonSimulator getSimulator(Automaton automaton) {
     if (automaton instanceof edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton)
       return new edu.duke.cs.jflap.automata.fsa.FSAStepByStateSimulator(automaton);
     else return new edu.duke.cs.jflap.automata.pda.PDAStepByStateSimulator(automaton);

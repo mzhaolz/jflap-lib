@@ -17,15 +17,8 @@
 package edu.duke.cs.jflap.gui.deterministic;
 
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
-import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
-import edu.duke.cs.jflap.gui.editor.Tool;
-import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
-import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
@@ -104,7 +97,8 @@ public class AddTrapStatePane extends JPanel {
                */
               private static final long serialVersionUID = 3085654730397188499L;
 
-              public void actionPerformed(ActionEvent e) {
+              @Override
+            public void actionPerformed(ActionEvent e) {
                 controller.doAll();
               }
             }));

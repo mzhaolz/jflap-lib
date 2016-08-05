@@ -34,11 +34,13 @@ public class AiBjCk extends ContextFreePumpingLemma {
    */
   private static final long serialVersionUID = 4161793826486881891L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "a^i b^j c^k : i > j, i > k";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>a<sup>i</sup>b<sup>j</sup>c<sup>k</sup></i> : <i>i</i> "
         + GREATER_THAN
         + " <i>j</i>, <i>i</i> "
@@ -46,7 +48,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
         + " <i>k</i>";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i>+1</sup>"
@@ -56,11 +59,13 @@ public class AiBjCk extends ContextFreePumpingLemma {
             + "is not context-free.";
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", getM() + 1) + pumpString("b", getM()) + pumpString("c", getM());
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     int a, b, c;
     a = LemmaMath.countInstances(w, 'a');
     b = LemmaMath.countInstances(w, 'b');
@@ -69,22 +74,26 @@ public class AiBjCk extends ContextFreePumpingLemma {
     else super.chooseDecomposition();
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     if (getV().indexOf("a") == -1 && getY().indexOf("a") == -1) i = 2;
     else i = 0;
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {3, 7};
   }
 
-  protected void addCases() {
+  @Override
+protected void addCases() {
     /*
      * v is a string of a's and y is a string of a's
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") == -1
@@ -94,11 +103,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s and y is a string of \"a\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {0, 1, 0, 1};
           }
         });
@@ -107,7 +117,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") == -1
@@ -117,11 +128,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s and y is a string of \"a\"s followed by \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {m - 1, 1, 0, 2};
           }
         });
@@ -130,7 +142,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") == -1
@@ -140,11 +153,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s and y is a string of \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {m, 1, 0, 1};
           }
         });
@@ -153,7 +167,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -163,11 +178,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s followed by \"b\"s and y is a string of \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {m, 2, 0, 1};
           }
         });
@@ -176,7 +192,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -186,11 +203,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s and y is a string of \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {m + 1, 1, 0, 1};
           }
         });
@@ -199,7 +217,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -209,11 +228,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s and y is a string of \"b\"s followed by \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m - 1, 1, 0, 2};
           }
         });
@@ -222,7 +242,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -232,11 +253,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s and y is a string of \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 1, 0, 1};
           }
         });
@@ -245,7 +267,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") > -1
@@ -255,11 +278,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s followed by \"c\"s and y is a string of \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 2, 0, 1};
           }
         });
@@ -268,7 +292,8 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") > -1
@@ -278,11 +303,12 @@ public class AiBjCk extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"c\"s and y is a string of \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m + 1, 1, 0, 1};
           }
         });
@@ -291,16 +317,18 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.length() == 0 && y.length() > 0) return true;
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is an empty string and y is a non-empty string";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 0, 1, 1};
           }
         });
@@ -309,22 +337,25 @@ public class AiBjCk extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.length() > 0 && y.length() == 0) return true;
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a non-empty string and y is an empty string";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 1, 0, 0};
           }
         });
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int a, b, c;
     char[] list = new char[] {'a', 'b', 'c'};
     if (LemmaMath.isMixture(s, list)) return false;

@@ -47,7 +47,8 @@ public class NewHelpAction extends HelpAction {
    * @param event
    *            the action event
    */
-  public void actionPerformed(ActionEvent event) {
+  @Override
+public void actionPerformed(ActionEvent event) {
     /*
      * Formerly the help page was shown, but for now, we just refer one to
      * the tutorial.

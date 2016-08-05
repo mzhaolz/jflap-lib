@@ -69,7 +69,8 @@ public class DisplayPane extends JPanel {
     JSpinner spinner = new JSpinner(spinnerModel);
     spinnerModel.addChangeListener(
         new ChangeListener() {
-          public void stateChanged(ChangeEvent e) {
+          @Override
+        public void stateChanged(ChangeEvent e) {
             updateDisplay();
           }
         });
@@ -80,7 +81,8 @@ public class DisplayPane extends JPanel {
         s3 = new JSpinner(yawModel);
     ChangeListener c =
         new ChangeListener() {
-          public void stateChanged(ChangeEvent e) {
+          @Override
+        public void stateChanged(ChangeEvent e) {
             updateDisplay();
             // displayAction.setEnabled(true);
           }
@@ -122,7 +124,8 @@ public class DisplayPane extends JPanel {
         new javax.swing.Timer(
             30,
             new ActionListener() {
-              public void actionPerformed(ActionEvent e) {
+              @Override
+            public void actionPerformed(ActionEvent e) {
                 int i = renderer.getDoneSymbols() - 1;
                 progressBar.setValue(i);
                 progressBar.repaint();
@@ -131,7 +134,8 @@ public class DisplayPane extends JPanel {
 
     final Thread drawThread =
         new Thread() {
-          public void run() {
+          @Override
+        public void run() {
             if (expansion.size() < 70) {
               String expansionString = LSystemInputPane.listAsString(expansion);
               expansionDisplay.setText(expansionString);
@@ -166,7 +170,8 @@ public class DisplayPane extends JPanel {
    * @param g
    *            the graphics interface for the printer device
    */
-  public void printComponent(Graphics g) {
+  @Override
+public void printComponent(Graphics g) {
     int recursionDepth = spinnerModel.getNumber().intValue();
     List<String> expansion = expander.expansionForLevel(recursionDepth);
     // Now, set the display.
@@ -188,7 +193,8 @@ public class DisplayPane extends JPanel {
    * @param g
    *            the graphics object to paint to
    */
-  public void printChildren(Graphics g) {}
+  @Override
+public void printChildren(Graphics g) {}
 
   /** The L-system we are displaying here. */
   private LSystem lsystem;

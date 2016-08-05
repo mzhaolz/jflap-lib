@@ -28,8 +28,6 @@ import edu.duke.cs.jflap.grammar.cfg.CFGToPDALLConverter;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.convert.ConvertPane;
-
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
@@ -61,7 +59,8 @@ public class ConvertCFGLL extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Grammar grammar = environment.getGrammar();
     if (grammar == null) return;
     if (grammar.getProductions().length == 0) {

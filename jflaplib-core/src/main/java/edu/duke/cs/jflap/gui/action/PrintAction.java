@@ -62,7 +62,8 @@ public class PrintAction extends RestrictedAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     JComponent c = (JComponent) environment.getActive();
     PrintUtilities.printComponent(c);
   }
@@ -112,6 +113,7 @@ public class PrintAction extends RestrictedAction {
       }
     }
 
+    @Override
     public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
       if (pageIndex > 0) {
         return NO_SUCH_PAGE;

@@ -43,7 +43,8 @@ public class ColorComparator implements Comparator<Color> {
    * @return a negative quantity if <TT>o1</TT> is ordered before <TT>o2</TT>,
    *         0 if they're equal, and positive otherwise.
    */
-  public int compare(Color first, Color second) {
+  @Override
+public int compare(Color first, Color second) {
     if (first.getAlpha() != second.getAlpha()) return (second.getAlpha() - first.getAlpha());
     // Extract the HSB, and impose the ordering.
     float[] firstHSB = Color.RGBtoHSB(first.getRed(), first.getGreen(), first.getBlue(), null);
@@ -83,7 +84,8 @@ public class ColorComparator implements Comparator<Color> {
    * @return <TT>true</TT>> if the passed in object is equal to this
    *         comparator.
    */
-  public boolean equals(Object object) {
+  @Override
+public boolean equals(Object object) {
     return true;
   }
 

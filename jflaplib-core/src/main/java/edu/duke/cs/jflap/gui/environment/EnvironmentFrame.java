@@ -20,10 +20,6 @@ import edu.duke.cs.jflap.file.Codec;
 import edu.duke.cs.jflap.file.EncodeException;
 import edu.duke.cs.jflap.file.Encoder;
 import edu.duke.cs.jflap.file.ParseException;
-import edu.duke.cs.jflap.gui.editor.EditBlockPane;
-import edu.duke.cs.jflap.gui.editor.EditorPane;
-import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-
 import java.awt.BorderLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -58,7 +54,8 @@ public class EnvironmentFrame extends JFrame {
     this.environment = environment;
     environment.addFileChangeListener(
         new FileChangeListener() {
-          public void fileChanged(FileChangeEvent e) {
+          @Override
+        public void fileChanged(FileChangeEvent e) {
             refreshTitle();
           }
         });
@@ -86,7 +83,8 @@ public class EnvironmentFrame extends JFrame {
     this.environment = environment;
     environment.addFileChangeListener(
         new FileChangeListener() {
-          public void fileChanged(FileChangeEvent e) {
+          @Override
+        public void fileChanged(FileChangeEvent e) {
             refreshTitle();
           }
         });
@@ -323,7 +321,8 @@ public class EnvironmentFrame extends JFrame {
   public void resizeWatcher() {
     this.addComponentListener(
         new java.awt.event.ComponentAdapter() {
-          public void componentResized(ComponentEvent event) {
+          @Override
+        public void componentResized(ComponentEvent event) {
             environment.resizeSplit();
           }
         });
@@ -334,7 +333,8 @@ public class EnvironmentFrame extends JFrame {
    *
    * @return the string that describes this frame
    */
-  public String toString() {
+  @Override
+public String toString() {
     return getDescription();
   }
 
@@ -351,6 +351,7 @@ public class EnvironmentFrame extends JFrame {
    * The window listener for this frame.
    */
   private class Listener extends WindowAdapter {
+    @Override
     public void windowClosing(WindowEvent event) {
       close();
     }

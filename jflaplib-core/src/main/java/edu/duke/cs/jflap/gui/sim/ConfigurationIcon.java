@@ -18,8 +18,6 @@ package edu.duke.cs.jflap.gui.sim;
 
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.Configuration;
-import edu.duke.cs.jflap.gui.viewer.StateDrawer;
-
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -53,7 +51,8 @@ public abstract class ConfigurationIcon implements Icon {
    *
    * @return the default preferred width is 150 pixels
    */
-  public int getIconWidth() {
+  @Override
+public int getIconWidth() {
     return 400;
   }
 
@@ -61,7 +60,8 @@ public abstract class ConfigurationIcon implements Icon {
    * Returns the preferred height of the icon, which is just enought to draw
    * the state.
    */
-  public int getIconHeight() {
+  @Override
+public int getIconHeight() {
     return STATE_RADIUS * 2;
   }
 
@@ -86,7 +86,8 @@ public abstract class ConfigurationIcon implements Icon {
    * @param y
    *            the start <CODE>y</CODE> coordinate to draw at
    */
-  public void paintIcon(Component c, Graphics g, int x, int y) {
+  @Override
+public void paintIcon(Component c, Graphics g, int x, int y) {
     Graphics2D g2 = (Graphics2D) g.create();
     g2.translate(x, y);
     // Draws the state.

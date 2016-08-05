@@ -83,6 +83,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *
      * @return a copy of this table
      */
+    @Override
     public Object clone() {
         return new LLParseTable(this);
     }
@@ -93,6 +94,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * @param object
      *            the object to compare against
      */
+    @Override
     public boolean equals(Object object) {
         try {
             LLParseTable other = (LLParseTable) object;
@@ -114,6 +116,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *
      * @return the hashcode for this parse table
      */
+    @Override
     public int hashCode() {
         // Lazy, stupid, and dangerous, but unlike me has the virtue
         // of working...
@@ -132,7 +135,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             if either variable or lookahead is not a variable or terminal
      *             (or $) respectively in the grammar
      */
-    private int[] getLocation(String variable, String lookahead) {
+    private List<int> getLocation(String variable, String lookahead) {
         int[] r = new int[2];
         r[0] = getRow(variable);
         r[1] = getColumn(lookahead) - 1;
@@ -315,6 +318,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *
      * @return the number of rows
      */
+    @Override
     public int getRowCount() {
         return variables.length;
     }
@@ -323,6 +327,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * Returns the number of columns, equal to the number of terminals plus 1
      * for the $ symbol plus 1 for the column devoted to variables.
      */
+    @Override
     public int getColumnCount() {
         return terminals.length + 2;
     }
@@ -333,6 +338,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * @param column
      *            the index for a column
      */
+    @Override
     public String getColumnName(int column) {
         if (column == 0)
             return " ";
@@ -395,6 +401,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *         </CODE>column != 0</CODE>, or if <CODE>column == 0</CODE> returns
      *         the variable for the row.
      */
+    @Override
     public Object getValueAt(int row, int column) {
         if (column == 0)
             return variables[row];
@@ -407,6 +414,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * @param value
      *            the new value for an entry
      */
+    @Override
     public void setValueAt(Object value, int row, int column) {
         despaceSet((String) value, entries[row][column - 1]);
         fireTableCellUpdated(row, column);
@@ -420,6 +428,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * @param column
      *            the column index
      */
+    @Override
     public boolean isCellEditable(int row, int column) {
         if (frozen)
             return false;
@@ -438,13 +447,13 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     }
 
     /** The list of terminals, each corresponding to a column. */
-    private String[] terminals;
+    private List<String> terminals;
 
     /** The variables in the grammar, each corresponding to a row. */
-    private String[] variables;
+    private List<String> variables;
 
     /** The entries in the parse table. */
-    private SortedSet<String>[][] entries;
+    private List<SortedSet<String>>[] entries;
 
     /** Is the table noneditable? */
     private boolean frozen = false;

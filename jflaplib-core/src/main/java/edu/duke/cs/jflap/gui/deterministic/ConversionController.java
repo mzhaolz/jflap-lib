@@ -108,7 +108,7 @@ public class ConversionController {
         dfa.getInitialState().setPoint(p);
     }
 
-    private State[] getStatesForString(String label, Automaton automaton) {
+    private List<State> getStatesForString(String label, Automaton automaton) {
         StringTokenizer tokenizer = new StringTokenizer(label, " \t\n\r\f,q");
         ArrayList<State> states = new ArrayList<State>();
         while (tokenizer.hasMoreTokens())
@@ -265,6 +265,7 @@ public class ConversionController {
         stateQueue.addAll(Arrays.asList(dfa.getStates()));
         // When a state is added to the DFA, make sure we know about it.
         AutomataStateListener listener = new AutomataStateListener() {
+            @Override
             public void automataStateChange(AutomataStateEvent e) {
                 if (!e.isAdd())
                     return;

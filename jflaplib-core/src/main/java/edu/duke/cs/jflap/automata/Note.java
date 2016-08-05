@@ -76,7 +76,8 @@ public class Note extends JTextArea {
     this.setBackground(new Color(255, 255, 150));
     this.addMouseMotionListener(
         new MouseMotionListener() {
-          public void mouseDragged(MouseEvent e) {
+          @Override
+        public void mouseDragged(MouseEvent e) {
             if (e.isPopupTrigger()) return;
             if (!((Note) e.getSource()).isEditable()) {
               int diffX = e.getPoint().x - initialPointClick.x;
@@ -92,7 +93,8 @@ public class Note extends JTextArea {
             myView.repaint();
           }
 
-          public void mouseMoved(MouseEvent e) {
+          @Override
+        public void mouseMoved(MouseEvent e) {
             // TODO Auto-generated method stub
 
           }
@@ -100,7 +102,8 @@ public class Note extends JTextArea {
     this.addMouseListener(
         new MouseListener() {
 
-          public void mouseClicked(MouseEvent e) {
+          @Override
+        public void mouseClicked(MouseEvent e) {
             if (myView.getDrawer().getAutomaton().getEnvironmentFrame() != null)
               ((AutomatonEnvironment)
                       myView.getDrawer().getAutomaton().getEnvironmentFrame().getEnvironment())
@@ -110,7 +113,8 @@ public class Note extends JTextArea {
             ((Note) e.getComponent()).setCaretColor(null);
           }
 
-          public void mousePressed(MouseEvent e) {
+          @Override
+        public void mousePressed(MouseEvent e) {
             if (myView.getDrawer().getAutomaton().getEnvironmentFrame() != null) {
               ((AutomatonEnvironment)
                       myView.getDrawer().getAutomaton().getEnvironmentFrame().getEnvironment())
@@ -133,17 +137,20 @@ public class Note extends JTextArea {
             }
           }
 
-          public void mouseReleased(MouseEvent e) {
+          @Override
+        public void mouseReleased(MouseEvent e) {
             // TODO Auto-generated method stub
 
           }
 
-          public void mouseEntered(MouseEvent e) {
+          @Override
+        public void mouseEntered(MouseEvent e) {
             // TODO Auto-generated method stub
 
           }
 
-          public void mouseExited(MouseEvent e) {
+          @Override
+        public void mouseExited(MouseEvent e) {
             // TODO Auto-generated method stub
 
           }
@@ -183,7 +190,8 @@ public class Note extends JTextArea {
     }
   }
 
-  public void setLocation(Point p) {
+  @Override
+public void setLocation(Point p) {
     if (moving) {
       if (myView != null) {
         myViewPoint = p;
@@ -192,7 +200,8 @@ public class Note extends JTextArea {
     }
   }
 
-  public void setLocation(int x, int y) {
+  @Override
+public void setLocation(int x, int y) {
     if (moving) {
       super.setLocation(x, y);
     }

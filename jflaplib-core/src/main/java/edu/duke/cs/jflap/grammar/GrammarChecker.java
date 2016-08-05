@@ -147,7 +147,7 @@ public class GrammarChecker {
      * @return all productions in <CODE>grammar</CODE> whose lhs is
      *         <CODE>variable</CODE>.
      */
-    public static Production[] getProductionsOnVariable(String variable, Grammar grammar) {
+    public static List<Production> getProductionsOnVariable(String variable, Grammar grammar) {
         List<Production> list = new ArrayList<>();
         Production[] productions = grammar.getProductions();
         for (int k = 0; k < productions.length; k++) {
@@ -171,7 +171,7 @@ public class GrammarChecker {
      *         <CODE>variable</CODE> as the only character on the left hand side
      *         and are not unit productions.
      */
-    public static Production[] getNonUnitProductionsOnVariable(String variable, Grammar grammar) {
+    public static List<Production> getNonUnitProductionsOnVariable(String variable, Grammar grammar) {
         List<Production> list = new ArrayList<>();
         Production[] productions = grammar.getProductions();
         for (int k = 0; k < productions.length; k++) {
@@ -214,7 +214,7 @@ public class GrammarChecker {
      * @return all productions in <CODE>grammar</CODE> that have
      *         <CODE>variable</CODE> in them, either on the rhs or lhs.
      */
-    public static Production[] getProductionsWithVariable(String variable, Grammar grammar) {
+    public static List<Production> getProductionsWithVariable(String variable, Grammar grammar) {
         List<Production> list = new ArrayList<>();
         Production[] productions = grammar.getProductions();
         for (int k = 0; k < productions.length; k++) {
@@ -236,7 +236,7 @@ public class GrammarChecker {
      * @return all productions in <CODE>grammar</CODE> that have
      *         <CODE>variable</CODE> on the right hand side.
      */
-    public static Production[] getProductionsWithVariableOnRHS(String variable, Grammar grammar) {
+    public static List<Production> getProductionsWithVariableOnRHS(String variable, Grammar grammar) {
         List<Production> list = new ArrayList<>();
         Production[] productions = grammar.getProductions();
         for (int k = 0; k < productions.length; k++) {
@@ -254,7 +254,7 @@ public class GrammarChecker {
      *            the grammar to check
      * @return an array of the unresolved variables
      */
-    public static String[] getUnresolvedVariables(Grammar grammar) {
+    public static List<String> getUnresolvedVariables(Grammar grammar) {
         String[] variables = grammar.getVariables();
         HashSet<String> variableSet = new HashSet<>();
         for (int i = 0; i < variables.length; i++)

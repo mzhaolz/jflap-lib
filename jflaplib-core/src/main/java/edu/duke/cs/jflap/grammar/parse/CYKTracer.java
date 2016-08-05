@@ -23,15 +23,6 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnitProductionRemover;
 import edu.duke.cs.jflap.grammar.UselessProductionRemover;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-import edu.duke.cs.jflap.gui.grammar.transform.ChomskyPane;
-import edu.duke.cs.jflap.gui.grammar.transform.LambdaController;
-import edu.duke.cs.jflap.gui.grammar.transform.LambdaPane;
-import edu.duke.cs.jflap.gui.grammar.transform.UnitController;
-import edu.duke.cs.jflap.gui.grammar.transform.UnitPane;
-import edu.duke.cs.jflap.gui.grammar.transform.UselessController;
-import edu.duke.cs.jflap.gui.grammar.transform.UselessPane;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -362,7 +353,7 @@ public class CYKTracer {
 
   }
 
-  private int[] searchForRest(ArrayList<Production> list, Production p, int[] visited) {
+  private List<int> searchForRest(ArrayList<Production> list, Production p, int[] visited) {
     HashSet<Production> visitedProd = new HashSet<Production>();
     // System.out.println("Searching through "+list);
     int[] original = visited;
@@ -427,7 +418,7 @@ public class CYKTracer {
 
   }
 
-  public Production[] getAnswer() {
+  public List<Production> getAnswer() {
 
     /*
      * Collections.sort(myAnswer, new Comparator<Production>(){ public int

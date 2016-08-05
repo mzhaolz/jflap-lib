@@ -57,7 +57,8 @@ public class LSystemEnvironment extends Environment {
     this.input = input;
     input.addLSystemInputListener(
         new LSystemInputListener() {
-          public void lSystemChanged(LSystemInputEvent event) {
+          @Override
+        public void lSystemChanged(LSystemInputEvent event) {
             setDirty();
           }
         });
@@ -71,7 +72,8 @@ public class LSystemEnvironment extends Environment {
    * @see edu.duke.cs.jflap.gui.lsystem.LSystemInputPane#getLSystem
    * @return the <CODE>LSystem</CODE> for this environment
    */
-  public Serializable getObject() {
+  @Override
+public Serializable getObject() {
     return getLSystem();
   }
 

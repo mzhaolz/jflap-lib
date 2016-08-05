@@ -42,7 +42,8 @@ public class FSALambdaTransitionChecker extends LambdaTransitionChecker {
    * @return true if <CODE>transition</CODE> is a lambda transition (i.e. it's
    *         label is the lambda string).
    */
-  public boolean isLambdaTransition(Transition transition) {
+  @Override
+public boolean isLambdaTransition(Transition transition) {
     FSATransition trans = (FSATransition) transition;
     if (trans.getLabel().equals(LAMBDA)) return true;
     return false;

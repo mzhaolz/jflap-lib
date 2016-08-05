@@ -1,0 +1,1 @@
+let g:syntastic_java_javac_classpath = '/home/nazenji/cs3100/third_party/java/jflap-lib/jflaplib-core/src/main/java'

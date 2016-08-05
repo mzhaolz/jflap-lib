@@ -72,7 +72,8 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
     return z;
   }
 
-  public String getDecompositionAsString() {
+  @Override
+public String getDecompositionAsString() {
     String[] s = new String[3];
     int counter = 0;
     for (int i = 0; i <= 1; i++) {
@@ -92,7 +93,8 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
    * Clears the information the user and program have set, <i>m</i>, <i>w</i>,
    * <i>x</i>, <i>y</i>, and <i>z</i>.
    */
-  public void reset() {
+  @Override
+public void reset() {
     m = -1;
     i = -1;
     w = "";
@@ -115,7 +117,8 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
    * @return <code>true</code> if this decomposition is legal,
    *         <code>false</code> otherwise
    */
-  public boolean setDecomposition(int[] decomposition, int num) {
+  @Override
+public boolean setDecomposition(int[] decomposition, int num) {
     i = num;
     return setDecomposition(decomposition);
   }
@@ -132,7 +135,8 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
    * @return <code>true</code> if this decomposition is legal,
    *         <code>false</code> otherwise
    */
-  public boolean setDecomposition(int[] decomposition) {
+  @Override
+public boolean setDecomposition(int[] decomposition) {
     myDecomposition = decomposition;
 
     int xLength = decomposition[0];
@@ -152,11 +156,13 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
    *
    * @return the pumped string, <i>xy<sup>i</sup>z</i>
    */
-  public String createPumpedString() {
+  @Override
+public String createPumpedString() {
     return x + pumpString(y, getI()) + z;
   }
 
-  public int addCase(int[] decomposition, int num) {
+  @Override
+public int addCase(int[] decomposition, int num) {
     /*
      * This shouldn't be called for most regular pumping lemmas.
      */
@@ -196,7 +202,8 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
    * implement an overriding method.
    *
    */
-  protected void addCases() {
+  @Override
+protected void addCases() {
     /*
      * For most regular pumping lemmas, there is only one case so we don't
      * bother. Those that have more than one case should write their own
@@ -204,7 +211,8 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
      */
   }
 
-  public boolean replaceCase(int[] decomposition, int num, int index) {
+  @Override
+public boolean replaceCase(int[] decomposition, int num, int index) {
     Case c = myDoneCases.get(index);
     if (c.isCase(y, y)) {
       c.setI(num);
@@ -217,7 +225,8 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
   /**
    * Chooses a random regular decomposition.
    */
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     // Note m must be >= 2 to use the default
     int x = LemmaMath.fetchRandInt(0, getM() - 1);
     setDecomposition(new int[] {x, getM() - x});

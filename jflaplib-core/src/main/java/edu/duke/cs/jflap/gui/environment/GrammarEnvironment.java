@@ -18,8 +18,6 @@ package edu.duke.cs.jflap.gui.environment;
 
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnboundGrammar;
-import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-
 import java.io.Serializable;
 
 import javax.swing.event.TableModelEvent;
@@ -62,7 +60,8 @@ public class GrammarEnvironment extends Environment {
         .getModel()
         .addTableModelListener(
             new TableModelListener() {
-              public void tableChanged(TableModelEvent event) {
+              @Override
+            public void tableChanged(TableModelEvent event) {
                 setDirty();
               }
             });
@@ -76,7 +75,8 @@ public class GrammarEnvironment extends Environment {
    * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar
    * @return the <CODE>Grammar</CODE> for this environment
    */
-  public Serializable getObject() {
+  @Override
+public Serializable getObject() {
     return getGrammar(UnboundGrammar.class);
   }
 

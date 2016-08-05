@@ -119,7 +119,7 @@ public class GrammarViewer extends JTable {
    *
    * @return the currently selected productions
    */
-  public Production[] getSelected() {
+  public List<Production> getSelected() {
     int[] rows = getSelectedRows();
     Production[] selected = new Production[rows.length];
     for (int i = 0; i < rows.length; i++) selected[i] = (Production) data[rows[i]][0];
@@ -149,7 +149,7 @@ public class GrammarViewer extends JTable {
   private Grammar grammar;
 
   /** The data of the table. */
-  private Object[][] data;
+  private List<Object>[] data;
 
   /** The mapping of productions to a row (rows stored as Integer). */
   private Map<Production, Integer> productionToRow = new HashMap<>();

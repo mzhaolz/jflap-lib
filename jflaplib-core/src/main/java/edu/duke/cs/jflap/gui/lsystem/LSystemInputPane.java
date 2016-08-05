@@ -21,8 +21,6 @@ import edu.duke.cs.jflap.grammar.UnboundGrammar;
 import edu.duke.cs.jflap.grammar.lsystem.LSystem;
 import edu.duke.cs.jflap.gui.HighlightTable;
 import edu.duke.cs.jflap.gui.TableTextSizeSlider;
-import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -43,6 +41,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
@@ -135,7 +134,7 @@ public class LSystemInputPane extends JPanel {
         parameterTable.setShowGrid(true);
         parameterTable.setGridColor(Color.lightGray);
 
-        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         /*
          * final JComboBox box = new JComboBox ((String[])
@@ -150,6 +149,7 @@ public class LSystemInputPane extends JPanel {
 
         final JPopupMenu menu = new JPopupMenu();
         ActionListener listener = new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 setEditing(e.getActionCommand());
             }
@@ -160,11 +160,12 @@ public class LSystemInputPane extends JPanel {
         }
         JPanel c = new JPanel();
         c.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 menu.show((Component) e.getSource(), e.getPoint().x, e.getPoint().y);
             }
         });
-        scroller.setCorner(JScrollPane.UPPER_RIGHT_CORNER, c);
+        scroller.setCorner(ScrollPaneConstants.UPPER_RIGHT_CORNER, c);
     }
 
     /**
@@ -172,19 +173,23 @@ public class LSystemInputPane extends JPanel {
      */
     public void initializeListener() {
         axiomField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
             public void changedUpdate(DocumentEvent e) {
                 fireLSystemInputEvent();
             }
 
+            @Override
             public void removeUpdate(DocumentEvent e) {
                 fireLSystemInputEvent();
             }
 
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 fireLSystemInputEvent();
             }
         });
         TableModelListener tml = new TableModelListener() {
+            @Override
             public void tableChanged(TableModelEvent e) {
                 fireLSystemInputEvent();
             }

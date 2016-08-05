@@ -78,7 +78,8 @@ public class TuringMachine extends Automaton {
    * @return the <CODE>Class</CODE> object for
    *         <CODE>automata.tm.TMTransition</CODE>
    */
-  protected Class<? extends Transition> getTransitionClass() {
+  @Override
+protected Class<? extends Transition> getTransitionClass() {
     return edu.duke.cs.jflap.automata.turing.TMTransition.class;
   }
 
@@ -91,7 +92,8 @@ public class TuringMachine extends Automaton {
    *             if this transition requires a different number of tapes than
    *             required by other Turing machines
    */
-  public void addTransition(Transition t) {
+  @Override
+public void addTransition(Transition t) {
     try {
       int ttapes = ((TMTransition) t).tapes();
       if (tapes == 0) tapes = ttapes;
@@ -122,7 +124,8 @@ public class TuringMachine extends Automaton {
    * @param point
    *            the point to put the state at
    */
-  public State createState(Point point) {
+  @Override
+public State createState(Point point) {
     return createTMState(point);
   }
 
@@ -131,7 +134,8 @@ public class TuringMachine extends Automaton {
    * Automaton, because we use TMStates instead of ordinary states, and we
    * handle the building block cloning in a more elegant way.
    */
-  public Object clone() {
+  @Override
+public Object clone() {
     // MERLIN MERLIN MERLIN MERLIN MERLIN//
 
     TuringMachine a = new TuringMachine(this.tapes());

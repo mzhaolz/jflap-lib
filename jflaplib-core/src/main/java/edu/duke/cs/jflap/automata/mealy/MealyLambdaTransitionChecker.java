@@ -43,7 +43,8 @@ public class MealyLambdaTransitionChecker extends LambdaTransitionChecker {
    * @return <code>true</code> if the transition is a lambday transition,
    *         <code>false</code> otherwise
    */
-  public boolean isLambdaTransition(Transition transition) {
+  @Override
+public boolean isLambdaTransition(Transition transition) {
     MealyTransition t = (MealyTransition) transition;
     if (t.getLabel().equals(LAMBDA)) return true;
     else return false;

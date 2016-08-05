@@ -176,7 +176,7 @@ public abstract class PumpingLemma implements Serializable {
    *
    * @return the current decomposition
    */
-  public int[] getDecomposition() {
+  public List<int> getDecomposition() {
     return myDecomposition;
   }
 
@@ -244,7 +244,7 @@ public abstract class PumpingLemma implements Serializable {
    *
    * @return the recommended range for<i>m</i>
    */
-  public int[] getRange() {
+  public List<int> getRange() {
     return myRange;
   }
 

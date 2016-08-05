@@ -82,7 +82,8 @@ public class RegularExpression implements Serializable {
    *
    * @return the regular expression as string
    */
-  public String toString() {
+  @Override
+public String toString() {
     return asString();
   }
 

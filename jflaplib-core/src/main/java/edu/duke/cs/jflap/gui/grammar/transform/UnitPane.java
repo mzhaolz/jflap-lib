@@ -424,7 +424,7 @@ public class UnitPane extends JPanel {
   private int editingRow = -1;
 
   /** Which columsn of the editing row have been edited yet? */
-  private boolean editingColumn[] = new boolean[2];
+  private List<boolean editingColumn> = new boolean[2];
 
   /** The editing grammar table mode. */
   GrammarTableModel editingGrammarModel =

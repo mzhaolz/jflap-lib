@@ -101,7 +101,8 @@ public abstract class BruteParser {
     if (isActive() || isFinished()) return false;
     parseThread =
         new Thread() {
-          public void run() {
+          @Override
+        public void run() {
             while (parseThread != null) parse();
           }
         };
@@ -212,9 +213,9 @@ public abstract class BruteParser {
   }
 
   // Stuff for the possibilities.
-  private static final Production[] P = new Production[0];
+  private static final List<Production> P = new Production[0];
 
-  private static final int[] S = new int[0];
+  private static final List<int> S = new int[0];
 
   private static final ParseNode E = new ParseNode("", P, S);
 

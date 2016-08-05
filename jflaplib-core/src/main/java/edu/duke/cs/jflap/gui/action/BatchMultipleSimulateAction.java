@@ -31,20 +31,14 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.JTableExtender;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.TableTextSizeSlider;
-import edu.duke.cs.jflap.gui.editor.ArrowDisplayOnlyTool;
-import edu.duke.cs.jflap.gui.editor.EditorPane;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Profile;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-import edu.duke.cs.jflap.gui.grammar.parse.BruteParsePane;
 import edu.duke.cs.jflap.gui.sim.TraceWindow;
 import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -113,6 +107,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
      *
      * @return in this base class, returns "Multiple Inputs"
      */
+    @Override
     public String getComponentTitle() {
         return "Multiple Run";
     }
@@ -137,6 +132,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
      * @return <CODE>0</CODE> if this was an accept, <CODE>1</CODE> if reject,
      *         and <CODE>2</CODE> if the user cancelled the run
      */
+    @Override
     protected int handleInput(Automaton automaton, AutomatonSimulator simulator,
             Configuration[] configs, Object initialInput,
             List<Configuration> associatedConfigurations) {
@@ -182,6 +178,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
      * @return a table object for this automaton
      * @see edu.duke.cs.jflap.gui.sim.multiple.InputTableModel
      */
+    @Override
     protected JTableExtender initializeTable(Object obj) {
         // System.out.println("In regular multiple initialize");
         boolean multiple = false;
@@ -234,6 +231,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
         return table;
     }
 
+    @Override
     public void performAction(Component source) {
         if (getObject() instanceof Automaton) {
             if (((Automaton) getObject()).getInitialState() == null) {
@@ -287,6 +285,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
         bar.add(new AbstractAction("Load Inputs") {
             private static final long serialVersionUID = 130L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
                 try {
@@ -328,6 +327,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
         bar.add(new AbstractAction("Run Inputs") {
             private static final long serialVersionUID = 140L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     // Make sure any recent changes are registered.
@@ -418,6 +418,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("Clear") {
                 private static final long serialVersionUID = 150L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         // Make sure any recent changes are registered.
@@ -444,6 +445,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("Enter " + empty /* "Enter Lambda" */) {
                 private static final long serialVersionUID = 160L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     int row = table.getSelectedRow();
                     if (row == -1)
@@ -457,6 +459,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("View Trace") {
                 private static final long serialVersionUID = 160L;
 
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     int[] rows = table.getSelectedRows();
                     InputTableModel tm = (InputTableModel) table.getModel();
@@ -505,6 +508,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("Edit File") {
                 private static final long serialVersionUID = 180L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     int k = getMachineIndexBySelectedRow(table);
                     if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -530,6 +534,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("Add input string") {
                 private static final long serialVersionUID = 190L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     boolean turing = false;
                     if (getEnvironment().myObjects.get(0) instanceof TuringMachine) {
@@ -592,6 +597,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("Add file") {
                 private static final long serialVersionUID = 200L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     TestAction test = new TestAction();
                     test.chooseFile(getEnvironment().getActive(), false);
@@ -603,6 +609,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("Remove file") {
                 private static final long serialVersionUID = 201L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     int k = getMachineIndexBySelectedRow(table);
                     if (k >= 0 && k < getEnvironment().myObjects.size()) {
@@ -626,6 +633,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
             bar.add(new AbstractAction("Save Results") {
                 private static final long serialVersionUID = 202L;
 
+                @Override
                 public void actionPerformed(ActionEvent arg0) {
                     final JFrame frame = new JFrame("Save Location");
 
@@ -634,11 +642,13 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
                     defaultLocation.setMnemonic(KeyEvent.VK_B);
                     defaultLocation.setActionCommand("Save Results with Original File");
                     defaultLocation.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent event) {
                         }
                     });
                     final JRadioButton specifyLocation = new JRadioButton("Specify New Location");
                     specifyLocation.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent event) {
                         }
                     });
@@ -656,6 +666,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
 
                     JButton accept = new JButton("Accept");
                     accept.addActionListener(new ActionListener() {
+                        @Override
                         public void actionPerformed(ActionEvent event) {
                             frame.setVisible(false);
                             String filepath = "";
@@ -819,6 +830,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
         return getMachineIndexByName(machineFileName);
     }
 
+    @Override
     public int getMachineIndexByName(String machineFileName) {
         List<Object> machines = getEnvironment().myObjects;
         if (machines == null)
@@ -840,6 +852,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
         return -1;
     }
 
+    @Override
     public void viewAutomaton(JTableExtender table) {
         InputTableModel model = (InputTableModel) table.getModel();
         if (model.isMultiple) {
@@ -863,6 +876,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
      * @param e
      *            the action event
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         performAction((Component) e.getSource());
     }
@@ -871,6 +885,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
      * @param machineFileName
      *
      */
+    @Override
     protected void updateView(String machineFileName, String input, JTableExtender table) {
         List<Object> machines = this.getEnvironment().myObjects;
         Object current = null;
@@ -953,7 +968,7 @@ public class BatchMultipleSimulateAction extends MultipleSimulateAction {
 
     protected JTable table = null;
 
-    private static String[] RESULT = { "Accept", "Reject", "Cancelled" };
+    private static List<String> RESULT = { "Accept", "Reject", "Cancelled" };
 
     protected JPanel myPanel = null;
 }

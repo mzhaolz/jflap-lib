@@ -63,7 +63,8 @@ public class QuitAction extends RestrictedAction {
    * until the user does something that stops a close, at which point the quit
    * terminates.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     beginQuit();
   }
 }

@@ -16,9 +16,12 @@
 
 package edu.duke.cs.jflap.gui.tree;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -89,7 +92,7 @@ public class SelectTreeDrawer extends DefaultTreeDrawer {
      *
      * @return an array containing the list of all selected nodes
      */
-    public TreeNode[] getSelected() {
+    public List<TreeNode> getSelected() {
         Set<TreeNode> s = new HashSet<TreeNode>(selectedNodes.keySet());
         Iterator<TreeNode> it = s.iterator();
         while (it.hasNext()) {
@@ -97,7 +100,7 @@ public class SelectTreeDrawer extends DefaultTreeDrawer {
             if (n.getParent() == null && n != getModel().getRoot())
                 selectedNodes.remove(n);
         }
-        return selectedNodes.keySet()
+        return Lists.newArrayList(selectedNodes.keySet());
     }
 
     /**
@@ -115,6 +118,7 @@ public class SelectTreeDrawer extends DefaultTreeDrawer {
      * @return the color for this node, which will be either the selected color
      *         if the node is selected, otherwise the deselected color
      */
+    @Override
     protected Color getNodeColor(TreeNode node) {
         return isSelected(node) ? selectedColor : deselectedColor;
         // Color color = super.getNodeColor(node);

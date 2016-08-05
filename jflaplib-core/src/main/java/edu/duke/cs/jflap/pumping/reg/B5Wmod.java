@@ -33,11 +33,13 @@ public class B5Wmod extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = -6699257070534522059L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "b^5w: w element_of {ab}* : (2na(w) + 5nb(w)) % 3 = 0";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>b<sup>5</sup>w</i> : <i>w</i> "
         + ELEMENT_OF
         + " "
@@ -46,7 +48,8 @@ public class B5Wmod extends RegularPumpingLemma {
         + " 5<i>n<sub>b</sub></i> (<i>w</i>)) mod 3 = 0";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a regular language, a valid decomposition exists.  If <i>m</i> "
@@ -56,28 +59,33 @@ public class B5Wmod extends RegularPumpingLemma {
             + "successful.  Pumping any possible combination of 3 characters yields a string divisible by 3.";
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = 0;
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = "bbbbb";
     for (int i = 5; i < m || (i - 5) % 3 != 0; i++)
       if (LemmaMath.flipCoin() == 2) w = w + 'a';
       else w = w + 'b';
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     // first three values of 'w' in the equation fit the equation no matter
     // what.
     setDecomposition(new int[] {5, 3});
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {8, 20};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
     if (!s.startsWith("bbbbb")) return false;

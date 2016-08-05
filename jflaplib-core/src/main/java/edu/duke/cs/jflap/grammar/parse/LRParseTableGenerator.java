@@ -62,7 +62,8 @@ public abstract class LRParseTableGenerator {
            */
           private static final long serialVersionUID = -5184185403146892760L;
 
-          public boolean isCellEditable(int row, int column) {
+          @Override
+        public boolean isCellEditable(int row, int column) {
             return false;
           }
         };

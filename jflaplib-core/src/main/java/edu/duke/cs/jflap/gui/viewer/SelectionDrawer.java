@@ -149,7 +149,7 @@ public class SelectionDrawer extends AutomatonDrawer {
      *
      * @return an array of the selected states
      */
-    public State[] getSelected() {
+    public List<State> getSelected() {
         return selected
     }
 
@@ -236,7 +236,7 @@ public class SelectionDrawer extends AutomatonDrawer {
      *
      * @return an array of the selected transitions
      */
-    public Transition[] getSelectedTransitions() {
+    public List<Transition> getSelectedTransitions() {
         return selectedTransitions
     }
 

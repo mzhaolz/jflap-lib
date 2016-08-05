@@ -45,7 +45,7 @@ public class Trees {
      * @return an array containing the children in the order retrieved from the
      *         enumerator, or an empty array if this is a leaf not
      */
-    public static TreeNode[] children(TreeNode node) {
+    public static List<TreeNode> children(TreeNode node) {
         TreeNode[] children = new TreeNode[node.getChildCount()];
         if (!node.isLeaf()) {
             int i = 0;
@@ -64,7 +64,7 @@ public class Trees {
      *         <CODE>depth()+1</CODE>, and index 0 is always 1 (since only the
      *         root can be at level 0).
      */
-    public static int[] width(TreeModel tree) {
+    public static List<int> width(TreeModel tree) {
         int[] width = new int[depth(tree) + 1];
         Arrays.fill(width, 0);
         Trees.width((TreeNode) tree.getRoot(), 0, width);
@@ -125,7 +125,7 @@ public class Trees {
      *            the tree to get leaves of
      * @return an array with the leaves of the tree
      */
-    public static TreeNode[] leaves(TreeModel tree) {
+    public static List<TreeNode> leaves(TreeModel tree) {
         return leaves((TreeNode) tree.getRoot());
     }
 
@@ -137,7 +137,7 @@ public class Trees {
      *            the node in the tree
      * @return an array of all children in the tree
      */
-    public static TreeNode[] leaves(TreeNode node) {
+    public static List<TreeNode> leaves(TreeNode node) {
         TreeNode[] children = Trees.children(node);
         if (children.length == 0)
             return new TreeNode[] { node };

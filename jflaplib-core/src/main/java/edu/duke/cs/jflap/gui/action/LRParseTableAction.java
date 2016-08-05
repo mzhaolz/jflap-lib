@@ -19,8 +19,6 @@ package edu.duke.cs.jflap.gui.action;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.parse.LRParseTableDerivationPane;
-
 import java.awt.event.ActionEvent;
 
 /**
@@ -48,7 +46,8 @@ public class LRParseTableAction extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar();
     if (g == null) return;
     LRParseTableDerivationPane ptdp = new LRParseTableDerivationPane(environment);

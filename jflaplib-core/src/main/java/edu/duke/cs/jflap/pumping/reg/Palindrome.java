@@ -31,15 +31,18 @@ public class Palindrome extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = 6526761464406572765L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w w^R : w element_of {ab}*";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>ww<sup>R</sup></i> : <i>w</i> " + ELEMENT_OF + " " + AB_STAR;
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>bb"
@@ -48,23 +51,28 @@ public class Palindrome extends RegularPumpingLemma {
             + "a<sup><i>m</i></sup>\", which is not in the language.  Thus, the language is not regular.";
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", m) + "bb" + pumpString("a", m);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     setDecomposition(new int[] {Math.min(w.length() / 2 - 1, m - 2), 2});
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {2, 10};
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int size = s.length();
     if (size == 0) return true;
     if (size % 2 == 1) return false;

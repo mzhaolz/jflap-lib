@@ -66,7 +66,8 @@ public class NewAction extends RestrictedAction {
    * @param event
    *            the action event
    */
-  public void actionPerformed(ActionEvent event) {
+  @Override
+public void actionPerformed(ActionEvent event) {
     showNew();
   }
 
@@ -128,6 +129,7 @@ public class NewAction extends RestrictedAction {
 
       this.addWindowListener(
           new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent event) {
               if (Universe.numberOfFrames() > 0) {
                 NewDialog.this.setVisible(false);
@@ -185,6 +187,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Finite Automaton");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton());
             }
@@ -194,6 +197,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Mealy Machine");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new MealyMachine());
             }
@@ -202,6 +206,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Moore Machine");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new MooreMachine());
             }
@@ -211,6 +216,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Pushdown Automaton");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               Object[] possibleValues = {"Multiple Character Input", "Single Character Input"};
               Object selectedValue =
@@ -234,6 +240,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Turing Machine");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new edu.duke.cs.jflap.automata.turing.TuringMachine(1));
             }
@@ -243,6 +250,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Multi-Tape Turing Machine");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               if (INTS == null) {
                 INTS = new Integer[4];
@@ -262,13 +270,14 @@ public class NewAction extends RestrictedAction {
               createWindow(new edu.duke.cs.jflap.automata.turing.TuringMachine(n.intValue()));
             }
 
-            private Integer[] INTS = null;
+            private List<Integer> INTS = null;
           });
       getContentPane().add(button);
 
       button = new JButton("Grammar");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar());
             }
@@ -278,6 +287,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("L-System");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new edu.duke.cs.jflap.grammar.lsystem.LSystem());
             }
@@ -287,6 +297,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Regular Expression");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new edu.duke.cs.jflap.regular.RegularExpression());
             }
@@ -296,6 +307,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Regular Pumping Lemma");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new RegPumpingLemmaChooser());
             }
@@ -305,6 +317,7 @@ public class NewAction extends RestrictedAction {
       button = new JButton("Context-Free Pumping Lemma");
       button.addActionListener(
           new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
               createWindow(new CFPumpingLemmaChooser());
             }

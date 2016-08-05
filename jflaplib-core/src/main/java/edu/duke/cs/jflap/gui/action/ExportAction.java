@@ -71,7 +71,8 @@ public class ExportAction extends RestrictedAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     JComponent c = (JComponent) environment.getActive();
     Component comp = environment.tabbed.getSelectedComponent();
 

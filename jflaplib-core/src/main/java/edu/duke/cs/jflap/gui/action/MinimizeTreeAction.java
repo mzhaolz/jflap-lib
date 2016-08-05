@@ -63,7 +63,8 @@ public class MinimizeTreeAction extends FSAAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (automaton.getInitialState() == null) {
       JOptionPane.showMessageDialog(
           Universe.frameForEnvironment(environment),

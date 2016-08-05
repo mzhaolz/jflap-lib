@@ -16,8 +16,11 @@
 
 package edu.duke.cs.jflap.gui.tree;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.List;
 import java.util.WeakHashMap;
 
 import javax.swing.tree.TreeNode;
@@ -38,6 +41,7 @@ public class SelectNodeDrawer extends DefaultNodeDrawer {
      * @param node
      *            the node to draw
      */
+    @Override
     public void draw(Graphics2D g, TreeNode node) {
         Color c = g.getColor();
         if (isSelected(node))
@@ -77,8 +81,8 @@ public class SelectNodeDrawer extends DefaultNodeDrawer {
      *
      * @return an array containing the list of all selected nodes
      */
-    public TreeNode[] getSelected() {
-        return selectedNodes.keySet()
+    public List<TreeNode> getSelected() {
+        return Lists.newArrayList(selectedNodes.keySet());
     }
 
     /**

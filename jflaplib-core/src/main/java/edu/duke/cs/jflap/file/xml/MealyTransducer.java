@@ -52,7 +52,8 @@ public class MealyTransducer extends AutomatonTransducer {
    *            the DOM document that is being red
    * @return an empty Mealy machine
    */
-  protected Automaton createEmptyAutomaton(Document document) {
+  @Override
+protected Automaton createEmptyAutomaton(Document document) {
     return new MealyMachine();
   }
 
@@ -72,7 +73,8 @@ public class MealyTransducer extends AutomatonTransducer {
    * @param isBlock
    * @return the new transition
    */
-  protected Transition createTransition(
+  @Override
+protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     /*
      * The boolean isBlock seems to be ignored in FSATransducer.java, so I'm
@@ -96,7 +98,8 @@ public class MealyTransducer extends AutomatonTransducer {
    * @return the newly created element that encodes the transition
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
-  protected Element createTransitionElement(Document document, Transition transition) {
+  @Override
+protected Element createTransitionElement(Document document, Transition transition) {
     Element te = super.createTransitionElement(document, transition);
     MealyTransition t = (MealyTransition) transition;
     te.appendChild(createElement(document, TRANSITION_READ_NAME, null, t.getLabel()));
@@ -109,7 +112,8 @@ public class MealyTransducer extends AutomatonTransducer {
    *
    * @return the string "mealy"
    */
-  public String getType() {
+  @Override
+public String getType() {
     return "mealy";
   }
 }

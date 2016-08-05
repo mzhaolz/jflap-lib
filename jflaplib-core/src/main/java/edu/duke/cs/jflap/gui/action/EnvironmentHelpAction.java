@@ -57,7 +57,8 @@ public class EnvironmentHelpAction extends HelpAction {
    * @param event
    *            the action event
    */
-  public void actionPerformed(ActionEvent event) {
+  @Override
+public void actionPerformed(ActionEvent event) {
     displayHelp(environment.getActive());
   }
 

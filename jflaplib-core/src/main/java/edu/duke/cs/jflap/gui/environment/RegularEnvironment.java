@@ -58,6 +58,7 @@ public class RegularEnvironment extends Environment {
    * file.
    */
   private class Listener implements ExpressionChangeListener {
+    @Override
     public void expressionChanged(ExpressionChangeEvent e) {
       setDirty();
     }
@@ -70,7 +71,8 @@ public class RegularEnvironment extends Environment {
    * @return <CODE>true</CODE> if the environment is dirty, <CODE>false</CODE>
    *         otherwise
    */
-  public boolean isDirty() {
+  @Override
+public boolean isDirty() {
     getExpression().asString(); // Force resolution of reference.
     return super.isDirty();
   }

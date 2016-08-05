@@ -51,7 +51,8 @@ public class ContextFreeGrammar extends Grammar {
    * @throws IllegalArgumentException
    *             if the production is unrestricted on the left hand side
    */
-  public void checkProduction(Production production) {
+  @Override
+public void checkProduction(Production production) {
     if (!ProductionChecker.isRestrictedOnLHS(production)) {
       javax.swing.JOptionPane.showMessageDialog(
           null, "Your production is unrestricted on the left hand side.");

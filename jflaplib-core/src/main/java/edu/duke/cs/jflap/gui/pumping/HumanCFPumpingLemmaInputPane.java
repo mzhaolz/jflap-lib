@@ -56,7 +56,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
     super(l, "<i>L</i> = {" + l.getHTMLTitle() + "} Context-Free Pumping Lemma");
   }
 
-  protected void addDecompPanelGameFeatures(JPanel n) {
+  @Override
+protected void addDecompPanelGameFeatures(JPanel n) {
     decompButtonTitle = new String("Set uvxyz");
     n.setMaximumSize(new Dimension(MAX_SIZE.width, 9 * MAX_SIZE.height / 20));
     n.setPreferredSize(new Dimension(MAX_SIZE.width, 9 * MAX_SIZE.height / 20));
@@ -74,7 +75,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
    * and sets up the sliders and table accordingly.
    *
    */
-  protected void mEnteredReset() {
+  @Override
+protected void mEnteredReset() {
     /*
      * int m = Integer.parseInt(myMDisplay.getText()); reset();
      * myMDisplay.setText(Integer.toString(m));
@@ -104,7 +106,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
     leftPanel.revalidate();
   }
 
-  protected void resetDecompPanel() {
+  @Override
+protected void resetDecompPanel() {
     myUPanel.reset();
     myVPanel.reset();
     myXPanel.reset();
@@ -118,7 +121,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
    * Resets the various fields of <i>u</i>, <i>v</i>, <i>x</i>, <i>y</i>, and
    * <i>z</i>, the display for <i>i</i> and the pumped string, and the canvas.
    */
-  protected void refresh() {
+  @Override
+protected void refresh() {
     try {
       /*
        * Reset the range of each panel depending on the values of the
@@ -184,7 +188,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
     }
   }
 
-  public void setDecomposition(int[] decomposition) {
+  @Override
+public void setDecomposition(int[] decomposition) {
     int u = decomposition[0];
     int v = decomposition[1];
     int x = decomposition[2];
@@ -202,7 +207,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
    * Calculates <i>i</i> and the string <i>uv<sup>i</sup>xy<sup>i</sup>z</i>.
    * based on the user's decomposition of <i>uvxyz</i>.
    */
-  protected void setI() {
+  @Override
+protected void setI() {
     int[] d =
         new int[] {
           myUPanel.getVal(),
@@ -224,7 +230,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
    * <i>x</i>, <i>y</i>, and <i>z</i>.
    *
    */
-  protected void setCanvas() {
+  @Override
+protected void setCanvas() {
     stages[5].setVisible(true);
     myCanvas.reset();
     myCanvas.addText("w =");
@@ -245,7 +252,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
    *
    * @return a string representing <i>uv<sup>i</sup>xy<sup>i</sup>z</i>
    */
-  protected String createXYZ() {
+  @Override
+protected String createXYZ() {
     return "<i>uv</i><sup>"
         + myLemma.getI()
         + "</sup><i>xy</i><sup>"
@@ -253,7 +261,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
         + "</sup><i>z</i>";
   }
 
-  public void update() {
+  @Override
+public void update() {
     ContextFreePumpingLemma pl = (ContextFreePumpingLemma) myLemma;
     stageMessages[0].setText("File loaded.");
     updateTopPane(false);

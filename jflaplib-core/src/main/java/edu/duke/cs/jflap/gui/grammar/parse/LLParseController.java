@@ -86,10 +86,10 @@ class LLParseController {
      * Returns the stack string.
      */
     private String stackString() {
-        Object[] o = STACK
+        Stack<TreeNode> o = STACK;
         StringBuffer sb = new StringBuffer();
-        for (int i = o.length - 1; i >= 0; i--)
-            sb.append(o[i]);
+        for (int i = o.size() - 1; i >= 0; i--)
+            sb.append(o.get(i));
         return sb.toString();
     }
 
@@ -322,7 +322,7 @@ class LLParseController {
 
     private Stack<TreeNode> STACK;
 
-    private TreeNode[] NODES;
+    private List<TreeNode> NODES;
 
     /** The current derivation string. */
     private String derivationString;

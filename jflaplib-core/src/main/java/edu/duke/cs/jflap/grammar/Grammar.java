@@ -60,6 +60,7 @@ public abstract class Grammar implements Serializable, Cloneable {
      *
      * @return a copy of the Grammar object.
      */
+    @Override
     public Object clone() {
         Grammar g;
         try {
@@ -169,20 +170,20 @@ public abstract class Grammar implements Serializable, Cloneable {
         /**
          * add all new variables introduced by production to set of variables.
          */
-        String[] variablesInProduction = production.getVariables();
-        for (int k = 0; k < variablesInProduction.length; k++) {
-            if (!myVariables.contains(variablesInProduction[k])) {
-                addVariable(variablesInProduction[k]);
+        List<String> variablesInProduction = production.getVariables();
+        for (String variableInProduction : variablesInProduction) {
+            if (!myVariables.contains(variableInProduction)) {
+                addVariable(variableInProduction);
             }
         }
 
         /**
          * add all new terminals introduced by production to set of terminals.
          */
-        String[] terminalsInProduction = production.getTerminals();
-        for (int i = 0; i < terminalsInProduction.length; i++) {
-            if (!myTerminals.contains(terminalsInProduction[i])) {
-                addTerminal(terminalsInProduction[i]);
+        List<String> terminalsInProduction = production.getTerminals();
+        for (String terminalInProduction : terminalsInProduction) {
+            if (!myTerminals.contains(terminalInProduction)) {
+                addTerminal(terminalInProduction);
             }
         }
     }
@@ -194,9 +195,9 @@ public abstract class Grammar implements Serializable, Cloneable {
      * @param productions
      *            the set of productions to add to grammar
      */
-    public void addProductions(Production[] productions) {
-        for (int k = 0; k < productions.length; k++) {
-            addProduction(productions[k]);
+    public void addProductions(List<Production> productions) {
+        for (Production production : productions) {
+            addProduction(production);
         }
     }
 
@@ -214,10 +215,10 @@ public abstract class Grammar implements Serializable, Cloneable {
          * Remove any variables that existed only in the production being
          * removed.
          */
-        String[] variablesInProduction = production.getVariables();
-        for (int k = 0; k < variablesInProduction.length; k++) {
-            if (!GrammarChecker.isVariableInProductions(this, variablesInProduction[k])) {
-                removeVariable(variablesInProduction[k]);
+        List<String> variablesInProduction = production.getVariables();
+        for (String variableInProduction : variablesInProduction) {
+            if (!GrammarChecker.isVariableInProductions(this, variableInProduction)) {
+                removeVariable(variableInProduction);
             }
         }
 
@@ -225,10 +226,10 @@ public abstract class Grammar implements Serializable, Cloneable {
          * Remove any terminals that existed only in the production being
          * removed.
          */
-        String[] terminalsInProduction = production.getTerminals();
-        for (int i = 0; i < terminalsInProduction.length; i++) {
-            if (!GrammarChecker.isTerminalInProductions(this, terminalsInProduction[i])) {
-                removeTerminal(terminalsInProduction[i]);
+        List<String> terminalsInProduction = production.getTerminals();
+        for (String terminalInProduction : terminalsInProduction) {
+            if (!GrammarChecker.isTerminalInProductions(this, terminalInProduction)) {
+                removeTerminal(terminalInProduction);
             }
         }
     }
@@ -346,6 +347,7 @@ public abstract class Grammar implements Serializable, Cloneable {
      *
      * @return a string representation of the grammar object.
      */
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(super.toString());

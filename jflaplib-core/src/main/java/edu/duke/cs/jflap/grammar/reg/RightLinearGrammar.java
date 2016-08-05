@@ -40,7 +40,8 @@ public class RightLinearGrammar extends RegularGrammar {
    * @throws IllegalArgumentException
    *             if the production is not a right linear production
    */
-  public void checkProduction(Production production) {
+  @Override
+public void checkProduction(Production production) {
     if (!ProductionChecker.isRightLinear(production))
       throw new IllegalArgumentException("The production is not right linear.");
   }

@@ -34,11 +34,13 @@ public class NaNbNc extends ContextFreePumpingLemma {
    */
   private static final long serialVersionUID = 1741955902444847436L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "w element_of {a, b, c}* : na(w) < nb(w) < nc(w)";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "<i>w</i> "
         + ELEMENT_OF
         + " {<i>a</i>, <i>b</i>, <i>c</i>}* :"
@@ -49,7 +51,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
         + " <i>n<sub>c</sub></i> (<i>w</i>)";
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -59,11 +62,13 @@ public class NaNbNc extends ContextFreePumpingLemma {
             + "meaning there is no adequate decomposition.  Thus, this language is not context-free.";
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("a", m) + pumpString("b", m + 1) + pumpString("c", m + 2);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     int a, b, c;
     a = LemmaMath.countInstances(w, 'a');
     b = LemmaMath.countInstances(w, 'b');
@@ -73,24 +78,28 @@ public class NaNbNc extends ContextFreePumpingLemma {
     else super.chooseDecomposition();
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     int c = LemmaMath.countInstances(getV(), 'c') + LemmaMath.countInstances(getY(), 'c');
 
     if (c > 0) i = 0;
     else i = 2;
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {3, 6};
   }
 
-  protected void addCases() {
+  @Override
+protected void addCases() {
     /*
      * v is a string of a's and y is a string of a's
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") == -1
@@ -100,11 +109,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s and y is a string of \"a\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {0, 1, 0, 1};
           }
         });
@@ -113,7 +123,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") == -1
@@ -123,11 +134,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s and y is a string of \"a\"s followed by \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {1, 1, 0, m - 1};
           }
         });
@@ -136,7 +148,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") == -1
@@ -146,11 +159,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s and y is a string of \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {m - 1, 1, 0, 1};
           }
         });
@@ -159,7 +173,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") > -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -169,11 +184,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"a\"s followed by \"b\"s and y is a string of \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {m - 1, 2, 0, 1};
           }
         });
@@ -182,7 +198,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -192,11 +209,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s and y is a string of \"b\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {m, 1, 0, 1};
           }
         });
@@ -205,7 +223,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -215,11 +234,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s and y is a string of \"b\"s followed by \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m - 1, 1, 0, 2};
           }
         });
@@ -228,7 +248,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") == -1
@@ -238,11 +259,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s and y is a string of \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 1, 0, 1};
           }
         });
@@ -251,7 +273,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") > -1
                 && v.indexOf("c") > -1
@@ -261,11 +284,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"b\"s followed by \"c\"s and y is a string of \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 2, 0, 1};
           }
         });
@@ -274,7 +298,8 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.indexOf("a") == -1
                 && v.indexOf("b") == -1
                 && v.indexOf("c") > -1
@@ -284,11 +309,12 @@ public class NaNbNc extends ContextFreePumpingLemma {
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a string of \"c\"s and y is a string of \"c\"s";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m + 1, 1, 0, 1};
           }
         });
@@ -297,16 +323,18 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.length() == 0 && y.length() > 0) return true;
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is an empty string and y is a non-empty string";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 0, 1, 1};
           }
         });
@@ -315,22 +343,25 @@ public class NaNbNc extends ContextFreePumpingLemma {
      */
     myAllCases.add(
         new Case() {
-          public boolean isCase(String v, String y) {
+          @Override
+        public boolean isCase(String v, String y) {
             if (v.length() > 0 && y.length() == 0) return true;
             return false;
           }
 
-          public String description() {
+          @Override
+        public String description() {
             return "v is a non-empty string and y is an empty string";
           }
 
-          public int[] getPreset() {
+          public List<int> getPreset() {
             return new int[] {2 * m, 1, 0, 0};
           }
         });
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int a, b, c;
     char[] list = new char[] {'a', 'b', 'c'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;

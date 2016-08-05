@@ -135,7 +135,7 @@ public class ChomskyPane extends JPanel {
    *
    * @return an array of row indices that need reduction
    */
-  private int[] getWhatNeedsDone() {
+  private List<int> getWhatNeedsDone() {
     ArrayList<Integer> list = new ArrayList<Integer>();
     for (int i = 0; i < editingGrammarModel.getRowCount() - 1; i++)
       if (!converter.isChomsky(editingGrammarModel.getProduction(i))) list.add(new Integer(i));
@@ -316,7 +316,7 @@ public class ChomskyPane extends JPanel {
    * The array of rows that need to be done. This will be updated every
    * turn... I guess.
    */
-  private int[] need = new int[0];
+  private List<int> need = new int[0];
 
   /** The grammar table. */
   GrammarTable grammarTable;

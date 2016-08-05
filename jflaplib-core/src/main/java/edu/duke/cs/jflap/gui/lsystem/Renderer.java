@@ -408,6 +408,7 @@ public class Renderer {
       this.forward = forward;
     }
 
+    @Override
     public final void handle(String symbol) {
       // Evaluate if necessary.
       if (symbol == null) currentTurtle.go(forward);
@@ -446,6 +447,7 @@ public class Renderer {
       this.clockwise = clockwise;
     }
 
+    @Override
     public final void handle(String symbol) {
       // Evaluate if necessary.
       if (symbol == null) currentTurtle.turn(clockwise);
@@ -466,6 +468,7 @@ public class Renderer {
       this.down = down;
     }
 
+    @Override
     public final void handle(String symbol) {
       if (symbol == null) currentTurtle.pitch(down);
       else {
@@ -485,6 +488,7 @@ public class Renderer {
       this.right = right;
     }
 
+    @Override
     public final void handle(String symbol) {
       if (symbol == null) currentTurtle.roll(right);
       else {
@@ -500,6 +504,7 @@ public class Renderer {
    * This handles pushing on the turtle stack.
    */
   private class PushTurtleHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       turtleStack.push((Turtle) currentTurtle.clone());
     }
@@ -509,6 +514,7 @@ public class Renderer {
    * This handles popping the turtle stack.
    */
   private class PopTurtleHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       capLinePath();
       popTurtleStack();
@@ -524,6 +530,7 @@ public class Renderer {
       this.increment = increment;
     }
 
+    @Override
     public final void handle(String symbol) {
       capLinePath();
       if (symbol == null) currentTurtle.changeLineWidth(increment);
@@ -541,6 +548,7 @@ public class Renderer {
    * This handles change of the draw color.
    */
   private class DrawColorHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       if (!areDrawing) return;
       capLinePath();
@@ -553,6 +561,7 @@ public class Renderer {
    * This handles change of the polygon color.
    */
   private class PolygonColorHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       if (!areDrawing) return;
       currentTurtle.setPolygonColor(symbol);
@@ -563,6 +572,7 @@ public class Renderer {
    * This handles change of the angle increment.
    */
   private class AngleIncrementHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       currentTurtle.setAngleChange(Double.parseDouble(symbol));
     }
@@ -572,6 +582,7 @@ public class Renderer {
    * This handles change of the line width.
    */
   private class LineWidthHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       if (!areDrawing) return;
       capLinePath();
@@ -584,6 +595,7 @@ public class Renderer {
    * This handles change of the line width increment.
    */
   private class LineWidthIncrementHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       currentTurtle.setLineIncrement(Double.parseDouble(symbol));
     }
@@ -593,6 +605,7 @@ public class Renderer {
    * This handles change of individual line lengths.
    */
   private class DistanceHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       currentTurtle.distance = Double.parseDouble(symbol);
     }
@@ -602,6 +615,7 @@ public class Renderer {
    * This handler begins a polygon.
    */
   private class BeginPolygonHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       if (!areDrawing || polygon != null) return; // Hrm.
       capLinePath();
@@ -614,6 +628,7 @@ public class Renderer {
    * This handler closes a polygon.
    */
   private class ClosePolygonHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       if (!areDrawing) return;
       capLinePath();
@@ -629,6 +644,7 @@ public class Renderer {
    * The reverse handler.
    */
   private class ReverseHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       currentTurtle.turn(180.0);
     }
@@ -638,6 +654,7 @@ public class Renderer {
    * This handles change of the hue angle increment.
    */
   private class HueAngleIncrementHandler extends CommandHandler {
+    @Override
     public final void handle(String symbol) {
       currentTurtle.setHueChange(Double.parseDouble(symbol));
     }
@@ -652,6 +669,7 @@ public class Renderer {
       this.add = add;
     }
 
+    @Override
     public final void handle(String symbol) {
       if (!areDrawing) return;
       capLinePath();

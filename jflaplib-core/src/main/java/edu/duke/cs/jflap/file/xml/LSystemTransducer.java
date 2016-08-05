@@ -27,6 +27,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +46,8 @@ public class LSystemTransducer extends AbstractTransducer {
    *
    * @return the string "lsystem"
    */
-  public String getType() {
+  @Override
+public String getType() {
     return "lsystem";
   }
 
@@ -75,15 +77,15 @@ public class LSystemTransducer extends AbstractTransducer {
    * @param node
    *            the node the encapsulates a production
    */
-  private static Production[] createRules(Node node) {
+  private static List<Production> createRules(Node node) {
     Map<?, ?> e2t = elementsToText(node);
     String left = (String) e2t.get(RULE_LEFT_NAME);
     if (left == null) left = "";
     NodeList list = ((Element) node).getElementsByTagName(RULE_RIGHT_NAME);
-    Production[] p = new Production[list.getLength()];
+    List<Production> p = new ArrayList<>();
     for (int i = 0; i < list.getLength(); i++) {
       String right = containedText(list.item(i));
-      p[i] = new Production(left, right == null ? "" : right);
+      p.add(new Production(left, right == null ? "" : right));
     }
     return p;
   }
@@ -102,9 +104,9 @@ public class LSystemTransducer extends AbstractTransducer {
   public static Element createRuleElement(Document document, LSystem lsystem, String left) {
     Element re = createElement(document, RULE_NAME, null, null);
     re.appendChild(createElement(document, RULE_LEFT_NAME, null, left));
-    List<String>[] replacements = lsystem.getReplacements(left);
-    for (int i = 0; i < replacements.length; i++) {
-      re.appendChild(createElement(document, RULE_RIGHT_NAME, null, listAsString(replacements[i])));
+    List<List<String>> replacements = lsystem.getReplacements(left);
+    for (int i = 0; i < replacements.size(); i++) {
+      re.appendChild(createElement(document, RULE_RIGHT_NAME, null, listAsString(replacements.get(i))));
     }
     return re;
   }
@@ -135,8 +137,7 @@ public class LSystemTransducer extends AbstractTransducer {
     Grammar g = new UnboundGrammar();
     NodeList list = document.getDocumentElement().getElementsByTagName(RULE_NAME);
     for (int i = 0; i < list.getLength(); i++) {
-      Production[] p = createRules(list.item(i));
-      for (int j = 0; j < p.length; j++) g.addProduction(p[j]);
+      g.addProductions(createRules(list.item(i)));
     }
     return g;
   }
@@ -172,7 +173,8 @@ public class LSystemTransducer extends AbstractTransducer {
    *            the DOM document to convert
    * @return the {@link edu.duke.cs.jflap.grammar.lsystem.LSystem} instance
    */
-  public java.io.Serializable fromDOM(Document document) {
+  @Override
+public java.io.Serializable fromDOM(Document document) {
     String axiom = readAxiom(document);
     Grammar rules = readGrammar(document);
     Map<String, String> parameters = readParameters(document);
@@ -187,7 +189,8 @@ public class LSystemTransducer extends AbstractTransducer {
    *            the JFLAP L-system to encode
    * @return a DOM document instance
    */
-  public Document toDOM(java.io.Serializable structure) {
+  @Override
+public Document toDOM(java.io.Serializable structure) {
     LSystem lsystem = (LSystem) structure;
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();

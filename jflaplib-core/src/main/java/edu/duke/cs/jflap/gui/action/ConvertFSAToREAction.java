@@ -19,8 +19,6 @@ package edu.duke.cs.jflap.gui.action;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.regular.ConvertPane;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
@@ -55,7 +53,8 @@ public class ConvertFSAToREAction extends FSAAction {
    * @param event
    *            the action event
    */
-  public void actionPerformed(ActionEvent event) {
+  @Override
+public void actionPerformed(ActionEvent event) {
     JFrame frame = Universe.frameForEnvironment(environment);
     if (environment.getAutomaton().getInitialState() == null) {
       JOptionPane.showMessageDialog(

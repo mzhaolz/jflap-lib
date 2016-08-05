@@ -51,6 +51,7 @@ public class TableTextSizeSlider extends JSlider {
   }
 
   class SliderListener implements ChangeListener {
+    @Override
     public void stateChanged(ChangeEvent e) {
       JSlider source = (JSlider) e.getSource();
       myTable.setFont(new Font("Default", Font.PLAIN, source.getValue() / 10));

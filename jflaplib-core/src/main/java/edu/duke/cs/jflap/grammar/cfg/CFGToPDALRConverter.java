@@ -69,7 +69,8 @@ public class CFGToPDALRConverter extends GrammarToAutomatonConverter {
    *            the production
    * @return the equivalent transition.
    */
-  public Transition getTransitionForProduction(Production production) {
+  @Override
+public Transition getTransitionForProduction(Production production) {
     String lhs = production.getLHS();
     String rhs = production.getRHS();
     String rrhs = getReverse(rhs);
@@ -89,7 +90,8 @@ public class CFGToPDALRConverter extends GrammarToAutomatonConverter {
    * @param automaton
    *            the automaton being created.
    */
-  public void createStatesForConversion(Grammar grammar, Automaton automaton) {
+  @Override
+public void createStatesForConversion(Grammar grammar, Automaton automaton) {
     initialize();
     StatePlacer sp = new StatePlacer();
 

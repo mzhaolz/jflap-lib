@@ -49,7 +49,8 @@ public class CompRegPumpingLemmaInputPane extends ComputerFirstPane {
    * and <i>z</i>.
    *
    */
-  protected void setCanvas() {
+  @Override
+protected void setCanvas() {
     stages[5].setVisible(true);
     myCanvas.reset();
     myCanvas.addText("w =");
@@ -68,11 +69,13 @@ public class CompRegPumpingLemmaInputPane extends ComputerFirstPane {
    *
    * @return a string representing <i>xy<sup>i</sup>z</i>
    */
-  protected String createXYZ() {
+  @Override
+protected String createXYZ() {
     return "<i>xy</i><sup>" + myLemma.getI() + "</sup><i>z</i>";
   }
 
-  public void update() {
+  @Override
+public void update() {
     RegularPumpingLemma pl = (RegularPumpingLemma) myLemma;
     stageMessages[0].setText("File loaded.");
     updateTopPane(false);

@@ -29,6 +29,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 /**
  * A class that epitomizes the ultimate in bad design: a fusion of model, view,
@@ -69,7 +70,7 @@ public class TraceWindow extends JFrame {
      */
     public static JScrollPane getPastPane(Configuration configuration) {
         JScrollPane sp = new JScrollPane(new PastPane(configuration),
-                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sp.validate();
         if (sp.getSize().height > MAXHEIGHT) {
             sp.setSize(sp.getSize().width, MAXHEIGHT);
@@ -115,6 +116,7 @@ public class TraceWindow extends JFrame {
             this.setPreferredSize(new Dimension(width, height));
         }
 
+        @Override
         public void paintComponent(Graphics g) {
             Rectangle visible = getVisibleRect();
             int height = ARROW_LENGTH + icons[0].getIconHeight();
@@ -148,7 +150,7 @@ public class TraceWindow extends JFrame {
             g.translate(0, icon.getIconHeight());
         }
 
-        private Icon[] icons;
+        private List<Icon> icons;
 
         private static final int ARROW_LENGTH = 20;
     }

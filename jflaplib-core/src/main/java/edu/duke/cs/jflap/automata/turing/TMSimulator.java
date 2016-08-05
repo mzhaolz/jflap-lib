@@ -100,6 +100,7 @@ public class TMSimulator extends AutomatonSimulator {
      * @param input
      *            the input string
      */
+    @Override
     public List<Configuration> getInitialConfigurations(String input) {
         int tapes = ((TuringMachine) myAutomaton).tapes();
         List<String> inputs = new ArrayList<>();
@@ -237,6 +238,7 @@ public class TMSimulator extends AutomatonSimulator {
      * @return ArrayList containing the single configuration, or null if there
      *         are no valid transitions.
      */
+    @Override
     public List<Configuration> stepConfiguration(Configuration config) { // one
                                                                          // step,
                                                                          // and
@@ -303,6 +305,7 @@ public class TMSimulator extends AutomatonSimulator {
             // sort the ones with the ! symbol to be the later ones. If there
             // are multiple !, then the choice is arbitrary.
             trans.sort(new Comparator<Transition>() {
+                @Override
                 public int compare(Transition a, Transition b) { // variables
                                                                  // are only
                                                                  // allowed with
@@ -418,6 +421,7 @@ public class TMSimulator extends AutomatonSimulator {
      * @return true if the simulation of the input string on the automaton left
      *         the machine in a final state
      */
+    @Override
     public boolean isAccepted() {
         return false;
     }
@@ -429,6 +433,7 @@ public class TMSimulator extends AutomatonSimulator {
      *            the input string to be run on the automaton
      * @return true if the automaton accepts the input
      */
+    @Override
     public boolean simulateInput(String input) {
         /** clear the configurations to begin new simulation. */
         // System.out.println("In Simulate Input");

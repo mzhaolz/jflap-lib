@@ -20,11 +20,6 @@ import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.gui.TooltipAction;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.automata.ConvertController;
-import edu.duke.cs.jflap.gui.grammar.automata.ConvertPane;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -76,7 +71,8 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
    * @param e
    *            the event to process
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (automaton.getInitialState() == null) {
       JOptionPane.showMessageDialog(
           environment,
@@ -93,7 +89,8 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
     AutomatonPane apane = pane.getAutomatonPane();
     apane.addMouseListener(
         new MouseAdapter() {
-          public void mouseClicked(MouseEvent event) {
+          @Override
+        public void mouseClicked(MouseEvent event) {
             Object o = drawer.stateAtPoint(event.getPoint());
             if (o == null) o = drawer.transitionAtPoint(event.getPoint());
             if (o == null) return;
@@ -125,7 +122,8 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
            */
           private static final long serialVersionUID = 1L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             controller.revealRandomProductions();
           }
         });
@@ -136,7 +134,8 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
            */
           private static final long serialVersionUID = 1L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             controller.revealAllProductions();
           }
         });
@@ -148,7 +147,8 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
            */
           private static final long serialVersionUID = 1L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             controller.highlightUntransformed();
           }
         });
@@ -159,7 +159,8 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
            */
           private static final long serialVersionUID = 1L;
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+        public void actionPerformed(ActionEvent e) {
             controller.exportGrammar();
           }
         });

@@ -116,7 +116,8 @@ public class State implements Serializable {
    * and the point object is at <CODE>(50,80)</CODE>, then the string
    * representation will be </CODE>"q_5 at (50,80)"</CODE>
    */
-  public String toString() {
+  @Override
+public String toString() {
     return "q_"
         + Integer.toString(getID())
         + " at ("

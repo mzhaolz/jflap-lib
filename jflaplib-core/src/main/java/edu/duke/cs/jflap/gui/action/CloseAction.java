@@ -16,7 +16,6 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.editor.EditBlockPane;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.tag.PermanentTag;
 import edu.duke.cs.jflap.gui.environment.tag.Tag;
@@ -54,7 +53,8 @@ public class CloseAction extends RestrictedAction {
     putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, MAIN_MENU_MASK));
     environment.addChangeListener(
         new ChangeListener() {
-          public void stateChanged(ChangeEvent e) {
+          @Override
+        public void stateChanged(ChangeEvent e) {
             checkEnabled();
           }
         });
@@ -67,7 +67,8 @@ public class CloseAction extends RestrictedAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (environment.getActive() instanceof EditBlockPane) {
       EditBlockPane blockEditor = (EditBlockPane) environment.getActive();
       blockEditor.getAutomaton();

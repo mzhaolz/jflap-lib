@@ -20,12 +20,8 @@ import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.NondeterminismDetector;
 import edu.duke.cs.jflap.automata.NondeterminismDetectorFactory;
 import edu.duke.cs.jflap.automata.State;
-import edu.duke.cs.jflap.gui.editor.ArrowDisplayOnlyTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
@@ -60,7 +56,8 @@ public class NondeterminismAction extends AutomatonAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     SelectionDrawer drawer = new SelectionDrawer(automaton);
     NondeterminismDetector d = NondeterminismDetectorFactory.getDetector(automaton);
     State[] nd = d.getNondeterministicStates(automaton);

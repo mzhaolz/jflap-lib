@@ -63,8 +63,9 @@ public class ParameterTableModel<T> extends GrowableTableModel<T> {
    *
    * @return an array with two empty strings
    */
-  @SuppressWarnings("unchecked")
-  public T[] initializeRow(int row) {
+  @Override
+@SuppressWarnings("unchecked")
+  public List<T> initializeRow(int row) {
     return (T[]) new Object[] {"", ""};
   }
 
@@ -93,7 +94,8 @@ public class ParameterTableModel<T> extends GrowableTableModel<T> {
    *            the column index
    * @return <CODE>true</CODE> always
    */
-  public boolean isCellEditable(int row, int column) {
+  @Override
+public boolean isCellEditable(int row, int column) {
     return true;
   }
 
@@ -104,7 +106,8 @@ public class ParameterTableModel<T> extends GrowableTableModel<T> {
    *            the index of the column
    * @return the name of a particular column
    */
-  public String getColumnName(int column) {
+  @Override
+public String getColumnName(int column) {
     return column == 0 ? "Name" : "Parameter";
   }
 }

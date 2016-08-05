@@ -74,7 +74,8 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    * @param input
    *            the input string.
    */
-  public List<Configuration> getInitialConfigurations(String input) {
+  @Override
+public List<Configuration> getInitialConfigurations(String input) {
     /** The stack should contain the bottom of stack marker. */
     List<Configuration> configs = new ArrayList<>();
     CharacterStack stack = new CharacterStack();
@@ -92,7 +93,8 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    * @param config
    *            the configuration to simulate the one step on
    */
-  public List<? extends Configuration> stepConfiguration(Configuration config) {
+  @Override
+public List<? extends Configuration> stepConfiguration(Configuration config) {
     List<Configuration> list = new ArrayList<>();
     PDAConfiguration configuration = (PDAConfiguration) config;
     /** get all information from configuration. */
@@ -147,7 +149,8 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    * @return true if the simulation of the input string on the automaton left
    *         the machine in a final state.
    */
-  public boolean isAccepted() {
+  @Override
+public boolean isAccepted() {
     Iterator<Configuration> it = myConfigurations.iterator();
     while (it.hasNext()) {
       PDAConfiguration configuration = (PDAConfiguration) it.next();
@@ -173,7 +176,8 @@ public class PDAStepByStateSimulator extends AutomatonSimulator {
    *            the input string to be run on the automaton
    * @return true if the automaton accepts the input
    */
-  public boolean simulateInput(String input) {
+  @Override
+public boolean simulateInput(String input) {
     /** clear the configurations to begin new simulation. */
     myConfigurations.clear();
     List<Configuration> initialConfigs = getInitialConfigurations(input);

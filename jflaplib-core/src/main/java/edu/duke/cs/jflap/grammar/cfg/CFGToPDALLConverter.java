@@ -52,7 +52,8 @@ public class CFGToPDALLConverter extends GrammarToAutomatonConverter {
    *            the production
    * @return the equivalent transition.
    */
-  public Transition getTransitionForProduction(Production production) {
+  @Override
+public Transition getTransitionForProduction(Production production) {
     String lhs = production.getLHS();
     String rhs = production.getRHS();
     Transition transition = new PDATransition(INTERMEDIATE_STATE, INTERMEDIATE_STATE, "", lhs, rhs);
@@ -71,7 +72,8 @@ public class CFGToPDALLConverter extends GrammarToAutomatonConverter {
    * @param automaton
    *            the automaton being created.
    */
-  public void createStatesForConversion(Grammar grammar, Automaton automaton) {
+  @Override
+public void createStatesForConversion(Grammar grammar, Automaton automaton) {
     initialize();
     StatePlacer sp = new StatePlacer();
 

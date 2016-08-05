@@ -55,7 +55,8 @@ public class RightLinearGrammarToFSAConverter extends GrammarToAutomatonConverte
    *            the production
    * @return the equivalent transition.
    */
-  public Transition getTransitionForProduction(Production production) {
+  @Override
+public Transition getTransitionForProduction(Production production) {
     String lhs = production.getLHS();
     State from = getStateForVariable(lhs);
 
@@ -90,7 +91,8 @@ public class RightLinearGrammarToFSAConverter extends GrammarToAutomatonConverte
    * @param automaton
    *            the automaton being created.
    */
-  public void createStatesForConversion(Grammar grammar, Automaton automaton) {
+  @Override
+public void createStatesForConversion(Grammar grammar, Automaton automaton) {
     initialize();
     StatePlacer sp = new StatePlacer();
     String[] variables = grammar.getVariables();

@@ -16,7 +16,6 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.editor.EditorPane;
 import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.awt.Component;
@@ -121,24 +120,28 @@ class FileNameExtensionFilter extends FileFilter {
     myAcceptedFormats = formats;
   }
 
-  public boolean accept(File f) {
+  @Override
+public boolean accept(File f) {
     if (f.isDirectory()) return true;
     for (int i = 0; i < myAcceptedFormats.length; i++)
       if (f.getName().endsWith("." + myAcceptedFormats[i])) return true;
     return false;
   }
 
-  public String getDescription() {
+  @Override
+public String getDescription() {
     return myDescription;
   }
 }
 
 class AcceptAllFileFilter extends FileFilter {
-  public boolean accept(File f) {
+  @Override
+public boolean accept(File f) {
     return true;
   }
 
-  public String getDescription() {
+  @Override
+public String getDescription() {
     return "All files";
   }
 }

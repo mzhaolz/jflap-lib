@@ -28,8 +28,6 @@ import edu.duke.cs.jflap.grammar.reg.RightLinearGrammarToFSAConverter;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.convert.ConvertPane;
-
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
@@ -64,7 +62,8 @@ public class ConvertRegularGrammarToFSA extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     // Construct the regular grammar.
     RightLinearGrammar grammar =
         (RightLinearGrammar) environment.getGrammar(RightLinearGrammar.class);

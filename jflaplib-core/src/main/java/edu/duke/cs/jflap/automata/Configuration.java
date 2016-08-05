@@ -65,7 +65,8 @@ public abstract class Configuration implements Cloneable {
    *
    * @return a string representation of this object
    */
-  public String toString() {
+  @Override
+public String toString() {
     return "[" + getCurrentState().toString() + "]";
   }
 
@@ -99,7 +100,8 @@ public abstract class Configuration implements Cloneable {
    * @param configuration
    *            the configuration to test for equality
    */
-  public boolean equals(Object configuration) {
+  @Override
+public boolean equals(Object configuration) {
     Configuration config = (Configuration) configuration;
     if (parent != config.parent) return false;
     return config.myCurrentState == myCurrentState;
@@ -112,7 +114,8 @@ public abstract class Configuration implements Cloneable {
    *
    * @return a value for hashing
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return myCurrentState.hashCode() ^ (parent == null ? 0 : parent.primitiveHashCode());
   }
 

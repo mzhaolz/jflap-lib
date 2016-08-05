@@ -460,7 +460,7 @@ public class UselessProductionRemover {
      * @return a set of transitions that represent all the dependencies
      *         determined by <CODE>production</CODE>.
      */
-    public static Transition[] getTransitionsForProduction(Production production,
+    public static List<Transition> getTransitionsForProduction(Production production,
             VariableDependencyGraph graph) {
         List<Transition> list = new ArrayList<>();
         String v1 = production.getLHS();
@@ -489,7 +489,7 @@ public class UselessProductionRemover {
      *         can never be reached from the start symbol. This is determined by
      *         the variable dependency graph <CODE>graph</CODE>.
      */
-    public static String[] getUselessVariables(Grammar grammar, VariableDependencyGraph graph) {
+    public static List<String> getUselessVariables(Grammar grammar, VariableDependencyGraph graph) {
         List<String> list = new ArrayList<>();
         UnreachableStatesDetector usd = new UnreachableStatesDetector(graph);
         State[] states = usd.getUnreachableStates();

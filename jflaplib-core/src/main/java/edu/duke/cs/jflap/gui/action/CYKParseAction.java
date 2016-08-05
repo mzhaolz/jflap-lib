@@ -27,14 +27,6 @@ import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.parse.CYKParsePane;
-import edu.duke.cs.jflap.gui.grammar.transform.LambdaController;
-import edu.duke.cs.jflap.gui.grammar.transform.LambdaPane;
-import edu.duke.cs.jflap.gui.grammar.transform.UnitController;
-import edu.duke.cs.jflap.gui.grammar.transform.UnitPane;
-import edu.duke.cs.jflap.gui.grammar.transform.UselessController;
-import edu.duke.cs.jflap.gui.grammar.transform.UselessPane;
-
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Set;
@@ -95,7 +87,8 @@ public class CYKParseAction extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     myGrammar = g;
     if (g == null) return;

@@ -47,7 +47,8 @@ public class RegPumpingLemmaTransducer extends PumpingLemmaTransducer {
    */
   public static String Y_NAME = "yLength";
 
-  public Serializable fromDOM(Document document) {
+  @Override
+public Serializable fromDOM(Document document) {
     RegularPumpingLemma pl =
         (RegularPumpingLemma)
             PumpingLemmaFactory.createPumpingLemma(
@@ -73,7 +74,8 @@ public class RegPumpingLemmaTransducer extends PumpingLemmaTransducer {
     return pl;
   }
 
-  public Document toDOM(Serializable structure) {
+  @Override
+public Document toDOM(Serializable structure) {
     RegularPumpingLemma pl = (RegularPumpingLemma) structure;
     Document doc = newEmptyDocument();
     Element elem = doc.getDocumentElement();
@@ -94,7 +96,8 @@ public class RegPumpingLemmaTransducer extends PumpingLemmaTransducer {
     return doc;
   }
 
-  public String getType() {
+  @Override
+public String getType() {
     return TYPE;
   }
 }

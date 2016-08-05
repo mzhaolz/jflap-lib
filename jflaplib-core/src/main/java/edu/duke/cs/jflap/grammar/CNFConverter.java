@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.grammar;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -106,20 +108,20 @@ public class CNFConverter {
      * @throws UnsupportedOperationException
      *             if the number of variables needed exceeds 26
      */
-    public static Production[] convert(List<Production> list) {
+    public static List<Production> convert(List<Production> list) {
         // Figure out what we need, and what's available.
         TreeSet<String> vars = new TreeSet<>(); // Set of available vars.
         for (char c = 'A'; c <= 'Z'; c++)
             vars.add("" + c);
         TreeSet<String> unresolved = new TreeSet<>(); // Set of vars needing
                                                       // conversion.
-        for (int i = 0; i < list.length; i++) {
-            List<String> tokens = separateString(list[i].getRHS());
-            for (int j = 0; j < tokens.length; j++)
-                if (tokens[j].length() == 1)
-                    vars.remove(tokens[j]);
-                else unresolved.add(tokens[j]);
-            vars.remove(list[i].getLHS());
+        for (int i = 0; i < list.size(); i++) {
+            List<String> tokens = separateString(list.get(i).getRHS());
+            for (int j = 0; j < tokens.size(); j++)
+                if (tokens.get(i).length() == 1)
+                    vars.remove(tokens.get(j));
+                else unresolved.add(tokens.get(j));
+            vars.remove(list.get(i).getLHS());
         }
         // Can it be done?
         int needed = unresolved.size() + 26 - vars.size();
@@ -134,18 +136,18 @@ public class CNFConverter {
         while (it.hasNext())
             replacements.put(it.next(), it2.next());
         // Make the substitutions.
-        Production[] pnew = new Production[list.length];
-        for (int i = 0; i < list.length; i++) {
-            List<String> tokens = separateString(list[i].getRHS());
+        List<Production> pnew = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            List<String> tokens = separateString(list.get(i).getRHS());
             String rhs = "";
-            for (int j = 0; j < tokens.length; j++)
-                if (tokens[j].length() == 1)
-                    rhs += tokens[j];
-                else rhs += replacements.get(tokens[j]);
-            String lhs = list[i].getLHS();
+            for (int j = 0; j < tokens.size(); j++)
+                if (tokens.get(i).length() == 1)
+                    rhs += tokens.get(j);
+                else rhs += replacements.get(tokens.get(j));
+            String lhs = list.get(i).getLHS();
             if (lhs.length() != 1)
                 lhs = replacements.get(lhs);
-            pnew[i] = new Production(lhs, rhs);
+            pnew.add(new Production(lhs, rhs));
         }
         return pnew;
     }
@@ -171,7 +173,7 @@ public class CNFConverter {
      * @throws IllegalArgumentException
      *             if the production does not need to be replaced
      */
-    public Production[] replacements(Production production) {
+    public List<Production> replacements(Production production) {
         String rhs = production.getRHS(), lhs = production.getLHS();
         if (rhs.length() == 1) {
             // Given that unit productions have been removed, this
@@ -180,21 +182,23 @@ public class CNFConverter {
         }
         List<String> tokens = separateString(rhs);
         // Do we need to determinalize this?
-        for (int i = 0; i < tokens.length; i++)
-            if (grammar.isTerminal(tokens[i]))
+        for (int i = 0; i < tokens.size(); i++)
+            if (grammar.isTerminal(tokens.get(i)))
                 return determinalize(production);
         // No termianls to resolve...
-        if (tokens.length <= 2)
-            if (tokens.length == 2)
-                throw new IllegalArgumentException(production + " has two variables already!");
-            else throw new IllegalArgumentException(production + " is in bad form!");
+        if (tokens.size() == 2)
+            throw new IllegalArgumentException(production + " has two variables already!");
+        else if (tokens.size() < 2)
+            throw new IllegalArgumentException(production + " is in bad form!");
         // Now we're all right.
-        String remainder = rhs.substring(tokens[0].length());
+        String remainder = rhs.substring(tokens.get(0).length());
         String left = getLeft(remainder);
-        if (leftAdded)
-            return new Production[] { new Production(lhs, tokens[0] + left),
-                            new Production(left, remainder) };
-        else return new Production[] { new Production(lhs, tokens[0] + left) };
+        if (leftAdded) {
+            return Lists.newArrayList(
+                new Production(lhs, tokens.get(0) + left),
+                new Production(left, remainder));
+        }
+        return Lists.newArrayList(new Production(lhs, tokens.get(0) + left));
     }
 
     /**
@@ -207,11 +211,11 @@ public class CNFConverter {
      */
     public boolean isChomsky(Production production) {
         List<String> tokens = separateString(production.getRHS());
-        switch (tokens.length) {
+        switch (tokens.size()) {
             case 1:
-                return grammar.isTerminal(tokens[0]);
+                return grammar.isTerminal(tokens.get(0));
             case 2:
-                return !(grammar.isTerminal(tokens[0]) || grammar.isTerminal(tokens[1]));
+                return !(grammar.isTerminal(tokens.get(0)) || grammar.isTerminal(tokens.get(1)));
             default:
                 return false;
         }
@@ -224,20 +228,20 @@ public class CNFConverter {
      *            a production to "determinalize"
      * @return the determinalized production
      */
-    public Production[] determinalize(Production production) {
+    public List<Production> determinalize(Production production) {
         List<String> tokens = separateString(production.getRHS());
         List<Production> list = new ArrayList<>();
         String rhs = "";
-        for (int i = 0; i < tokens.length; i++) {
-            if (grammar.isTerminal(tokens[i])) {
-                String newR = getLeft(tokens[i]);
+        for (int i = 0; i < tokens.size(); i++) {
+            if (grammar.isTerminal(tokens.get(i))) {
+                String newR = getLeft(tokens.get(i));
                 if (leftAdded)
-                    list.add(new Production(newR, tokens[i]));
+                    list.add(new Production(newR, tokens.get(i)));
                 rhs += newR;
-            } else rhs += tokens[i];
+            } else rhs += tokens.get(i);
         }
         list.add(0, new Production(production.getLHS(), rhs));
-        return list
+        return list;
     }
 
     /**
@@ -266,8 +270,8 @@ public class CNFConverter {
         public ProductionDirectory(Grammar grammar) {
             List<Production> p = grammar.getProductions();
             // Create the map of LHSes to RHSes.
-            for (int i = 0; i < p.length; i++) {
-                String lhs = p[i].getLHS(), rhs = p[i].getRHS();
+            for (int i = 0; i < p.size(); i++) {
+                String lhs = p.get(i).getLHS(), rhs = p.get(i).getRHS();
                 if (rhs.indexOf('(') != -1)
                     throw new IllegalArgumentException(
                             "Grammar has the ( character, which is reserved.");
@@ -275,7 +279,7 @@ public class CNFConverter {
                     throw new IllegalArgumentException(
                             "Grammar has the ) character, which is reserved.");
                 // Add it to the list of productions.
-                productions.add(p[i]);
+                productions.add(p.get(i));
                 // Check the right hand side map.
                 Set<String> rhses = lhsToRhs.get(lhs);
                 if (rhses == null) {

@@ -48,7 +48,8 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
     super(l, "<i>L</i> = {" + l.getHTMLTitle() + "} Regular Pumping Lemma");
   }
 
-  protected void addDecompPanelGameFeatures(JPanel n) {
+  @Override
+protected void addDecompPanelGameFeatures(JPanel n) {
     n.setMaximumSize(new Dimension(MAX_SIZE.width, 3 * MAX_SIZE.height / 10));
     n.setPreferredSize(new Dimension(MAX_SIZE.width, 3 * MAX_SIZE.height / 10));
     decompButtonTitle = new String("Set xyz");
@@ -60,7 +61,8 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
    * and sets up the sliders and table accordingly.
    *
    */
-  protected void mEnteredReset() {
+  @Override
+protected void mEnteredReset() {
     String s = myLemma.getW();
     myWDisplay.setText(s);
     myXPanel.setSliderMax(s.length());
@@ -74,7 +76,8 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
     leftPanel.revalidate();
   }
 
-  protected void resetDecompPanel() {
+  @Override
+protected void resetDecompPanel() {
     myXPanel.reset();
     myYPanel.reset();
     myZDisplay.setText("");
@@ -86,7 +89,8 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
    * Resets the various fields of <i>x</i>, <i>y</i>, and <i>z</i>, the
    * display for <i>i</i> and the pumped string, and the canvas.
    */
-  protected void refresh() {
+  @Override
+protected void refresh() {
     try {
       myXPanel.setRange(0, myYPanel.getVal() - 1);
       myYPanel.setRange(myXPanel.getVal(), myLemma.getM());
@@ -122,7 +126,8 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
     }
   }
 
-  public void setDecomposition(int[] decomposition) {
+  @Override
+public void setDecomposition(int[] decomposition) {
     myXPanel.setVal(decomposition[0]);
     myYPanel.setVal(decomposition[0] + decomposition[1]);
   }
@@ -131,7 +136,8 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
    * Calculates <i>i</i> and the string xy<sup>i</sup>z</i>. based on the
    * user's decomposition of <i>xyz</i>..
    */
-  protected void setI() {
+  @Override
+protected void setI() {
     int[] d = new int[] {myXPanel.getVal(), myYPanel.getVal() - myXPanel.getVal()};
     myLemma.setDecomposition(d);
     myLemma.chooseI();
@@ -145,7 +151,8 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
    * Initializes the animation canvas with the values of <i>x</i>, <i>y</i>,
    * and <i>z</i>.
    */
-  protected void setCanvas() {
+  @Override
+protected void setCanvas() {
     stages[5].setVisible(true);
     myCanvas.reset();
     myCanvas.addText("w =");
@@ -164,11 +171,13 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
    *
    * @return a string representing <i>xy<sup>i</sup>z</i>
    */
-  protected String createXYZ() {
+  @Override
+protected String createXYZ() {
     return "<i>xy</i><sup>" + myLemma.getI() + "</sup><i>z</i>";
   }
 
-  public void update() {
+  @Override
+public void update() {
 
     RegularPumpingLemma pl = (RegularPumpingLemma) myLemma;
     stageMessages[0].setText("File loaded.");

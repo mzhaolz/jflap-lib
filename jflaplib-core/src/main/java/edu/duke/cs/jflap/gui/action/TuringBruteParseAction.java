@@ -21,8 +21,6 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.grammar.parse.TMBruteParsePane;
-
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
@@ -56,7 +54,8 @@ public class TuringBruteParseAction extends GrammarAction {
     this.environment = environment;
   }
 
-  public void actionPerformed(ActionEvent arg0) {
+  @Override
+public void actionPerformed(ActionEvent arg0) {
     // TODO Auto-generated method stub
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     Production[] p = g.getProductions();

@@ -124,7 +124,7 @@ public class LRParseTableChooserPane extends LRParseTablePane {
      * The array of cell editors for row/column, which may be null if
      * non-editable
      */
-    private TableCellEditor[][] cellEditors;
+    private List<TableCellEditor>[] cellEditors;
 
     /** The renderer for those cells that are ambiguous. */
     private static final DefaultTableCellRenderer RENDERER = new DefaultTableCellRenderer();

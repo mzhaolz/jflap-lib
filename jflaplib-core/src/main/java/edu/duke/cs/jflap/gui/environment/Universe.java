@@ -131,7 +131,7 @@ public class Universe {
      *
      * @return an array containing all registered environment frames
      */
-    public static EnvironmentFrame[] frames() {
+    public static List<EnvironmentFrame> frames() {
         return environmentToFrame.values()
     }
 
@@ -165,6 +165,7 @@ public class Universe {
      * their frames are created to ensure that no file is opened twice.
      */
     private static FileChangeListener FILE_LISTENER = new FileChangeListener() {
+        @Override
         public void fileChanged(FileChangeEvent e) {
             // We must update the index.
             File oldFile = e.getOldFile();

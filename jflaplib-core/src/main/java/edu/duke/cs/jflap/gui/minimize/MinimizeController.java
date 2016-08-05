@@ -22,8 +22,6 @@ import edu.duke.cs.jflap.automata.fsa.MinimizeTreeNode;
 import edu.duke.cs.jflap.automata.fsa.Minimizer;
 import edu.duke.cs.jflap.gui.tree.SelectTreeDrawer;
 import edu.duke.cs.jflap.gui.tree.Trees;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -436,7 +434,7 @@ class MinimizeController {
      *            the node whose children must be destroyed
      * @return the array of children removed
      */
-    private MinimizeTreeNode[] killChildren(MinimizeTreeNode node) {
+    private List<MinimizeTreeNode> killChildren(MinimizeTreeNode node) {
         TreeNode[] children = Trees.children(node);
         MinimizeTreeNode[] toReturn = new MinimizeTreeNode[children.length];
         for (int i = 0; i < children.length; i++) {

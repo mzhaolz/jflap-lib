@@ -48,7 +48,8 @@ public class MultipleBruteParseAction extends GrammarAction {
   /**
    * Performs the action.
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     performAction((Component) e.getSource());
   }
 

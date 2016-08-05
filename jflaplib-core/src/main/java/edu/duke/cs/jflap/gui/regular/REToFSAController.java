@@ -84,7 +84,7 @@ public class REToFSAController {
    *            the array of string expressions to replace the transition with
    * @return the array of transitions created
    */
-  private FSATransition[] replaceTransition(FSATransition transition, String[] exps) {
+  private List<FSATransition> replaceTransition(FSATransition transition, String[] exps) {
     // Compose the transform.
     AffineTransform at = new AffineTransform();
     Point pStart = transition.getFromState().getPoint();
@@ -428,7 +428,7 @@ public class REToFSAController {
   private int transitionNeeded = 0;
 
   /** The replacement transitions. */
-  private FSATransition[] replacements = null;
+  private List<FSATransition> replacements = null;
 
   /**
    * The codes for actions on an expression, which are, in order, that

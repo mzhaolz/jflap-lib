@@ -72,7 +72,7 @@ public class CYKParsePane extends BruteParsePane {
 
   private ParseNode myCurrentAnswerNode;
 
-  private Production[] myAnswers;
+  private List<Production> myAnswers;
 
   private LinkedList<ParseNode> myQueue;
 

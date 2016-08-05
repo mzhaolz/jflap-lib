@@ -432,14 +432,14 @@ public class PDAToCFGConverter {
    *         node.
    */
   private void purgeProductionsHelper(
-      String lhs, Production[] productions, HashSet<String> valid, int[] validProductions) {
+      String lhs, List<Production> productions, HashSet<String> valid, int[] validProductions) {
     List<String> variables;
     String rhs;
-    for (int i = 0; i < productions.length; i++)
-      if (productions[i].getLHS().equals(lhs) && validProductions[i] == 0) {
+    for (int i = 0; i < productions.size(); i++)
+      if (productions.get(i).getLHS().equals(lhs) && validProductions[i] == 0) {
         validProductions[i] = 1;
         variables = new ArrayList<>();
-        rhs = new String(productions[i].getRHS());
+        rhs = new String(productions.get(i).getRHS());
         while (rhs.indexOf(LEFT_PAREN) > -1) {
           variables.add(rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
           if (rhs.indexOf(RIGHT_PAREN) != rhs.length() - 1)
@@ -469,12 +469,11 @@ public class PDAToCFGConverter {
    * @author Chris Morgan
    */
   public void purgeProductions(Automaton automaton, GrammarTableModel model) {
-    Production[] productions = model.getProductions();
+    List<Production> productions = model.getProductions();
     HashSet<String> valid = new HashSet<>();
     Stack<String> variables, invalid;
     boolean updated;
-    int[] validProductions = new int[productions.length];
-    for (int i = 0; i < productions.length; i++) validProductions[i] = 0;
+    int[] validProductions = new int[productions.size()];
 
     // After initializing variables, add all variables that can eventually
     // end in terminals
@@ -484,7 +483,7 @@ public class PDAToCFGConverter {
       for (int i = 0; i < validProductions.length; i++) {
         variables = new Stack<>();
         invalid = new Stack<>();
-        String rhs = productions[i].getRHS();
+        String rhs = productions.get(i).getRHS();
         while (rhs.indexOf(LEFT_PAREN) > -1) {
           variables.push(rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
           if (rhs.indexOf(RIGHT_PAREN) != rhs.length() - 1)
@@ -495,9 +494,9 @@ public class PDAToCFGConverter {
         while (variables.size() > 0)
           if (!valid.contains(variables.peek())) invalid.push(variables.pop());
           else variables.pop();
-        if (invalid.size() == 0 && !valid.contains(productions[i].getLHS())) {
+        if (invalid.size() == 0 && !valid.contains(productions.get(i).getLHS())) {
           updated = true;
-          valid.add(productions[i].getLHS());
+          valid.add(productions.get(i).getLHS());
         }
       }
     } while (updated);
@@ -522,7 +521,7 @@ public class PDAToCFGConverter {
     for (int i = validProductions.length - 1; i >= 0; i--)
       if (validProductions[i] < 2) model.deleteRow(i);
       else {
-        key = productions[i].getLHS();
+        key = productions.get(i).getLHS();
         newMap.put(key, MAP.get(key));
         if (MAP.get(key).charAt(0) <= 'Z') freeValues.remove(MAP.get(key));
       }

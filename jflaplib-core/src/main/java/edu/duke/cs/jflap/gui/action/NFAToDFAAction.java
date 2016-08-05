@@ -61,7 +61,8 @@ public class NFAToDFAAction extends FSAAction {
    * @param e
    *            the action event
    */
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (automaton.getInitialState() == null) {
       JOptionPane.showMessageDialog(
           environment,

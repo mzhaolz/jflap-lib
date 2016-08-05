@@ -33,11 +33,13 @@ public class ABnAk extends RegularPumpingLemma {
    */
   private static final long serialVersionUID = 2542738704518014246L;
 
-  public String getTitle() {
+  @Override
+public String getTitle() {
     return "(ab)^n a^k : n > k, k >= 0";
   }
 
-  public String getHTMLTitle() {
+  @Override
+public String getHTMLTitle() {
     return "(<i>ab</i>)<i><sup>n</sup>a<sup>k</sup></i> : <i>n</i> "
         + GREATER_THAN
         + " <i>k</i>, <i>k</i> "
@@ -45,11 +47,13 @@ public class ABnAk extends RegularPumpingLemma {
         + " 0";
   }
 
-  protected void setRange() {
+  @Override
+protected void setRange() {
     myRange = new int[] {2, 11};
   }
 
-  public void setDescription() {
+  @Override
+public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"(ab)<sup><i>m</i>+1</sup>"
@@ -58,19 +62,23 @@ public class ABnAk extends RegularPumpingLemma {
             + "the language when <i>i</i> = 0, meaning this is not a regular language.";
   }
 
-  protected void chooseW() {
+  @Override
+protected void chooseW() {
     w = pumpString("ab", m + 1) + pumpString("a", m);
   }
 
-  public void chooseDecomposition() {
+  @Override
+public void chooseDecomposition() {
     setDecomposition(new int[] {0, 2});
   }
 
-  public void chooseI() {
+  @Override
+public void chooseI() {
     i = 0;
   }
 
-  public boolean isInLang(String s) {
+  @Override
+public boolean isInLang(String s) {
     int a, b;
     char[] list = new char[] {'a'};
     String temp = s;

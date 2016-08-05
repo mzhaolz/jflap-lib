@@ -20,13 +20,9 @@ import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.LambdaCheckerFactory;
 import edu.duke.cs.jflap.automata.LambdaTransitionChecker;
 import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.gui.editor.ArrowDisplayOnlyTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
@@ -57,7 +53,8 @@ public class LambdaHighlightAction extends AutomatonAction {
   /**
    * Highlights states with lambda transitions.
    */
-  public void actionPerformed(ActionEvent event) {
+  @Override
+public void actionPerformed(ActionEvent event) {
     Transition[] t = automaton.getTransitions();
     Set<Transition> lambdas = new HashSet<Transition>();
     LambdaTransitionChecker checker = LambdaCheckerFactory.getLambdaChecker(automaton);

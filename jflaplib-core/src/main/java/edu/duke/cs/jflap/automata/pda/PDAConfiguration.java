@@ -113,7 +113,8 @@ public class PDAConfiguration extends Configuration {
    * @see edu.duke.cs.jflap.automata.Configuration#toString
    * @return a string representation of this object.
    */
-  public String toString() {
+  @Override
+public String toString() {
     return super.toString() + " INPUT: " + getUnprocessedInput() + " STACK: " + myStack.toString();
   }
 
@@ -125,7 +126,8 @@ public class PDAConfiguration extends Configuration {
    * @return <CODE>true</CODE> if this configuration is accepting,
    *         <CODE>false</CODE> otherwise
    */
-  public boolean isAccept() {
+  @Override
+public boolean isAccept() {
     if (myAcceptance == FINAL_STATE) {
       if (getUnprocessedInput().length() != 0) return false;
       State s = getCurrentState();
@@ -151,7 +153,8 @@ public class PDAConfiguration extends Configuration {
    * @return <CODE>true</CODE> if the configuration is equal to this one,
    *         <CODE>false</CODE> if it is not
    */
-  public boolean equals(Object configuration) {
+  @Override
+public boolean equals(Object configuration) {
     if (configuration == this) return true;
     try {
       return super.equals(configuration)
@@ -167,7 +170,8 @@ public class PDAConfiguration extends Configuration {
    *
    * @return a hash code for this configuration
    */
-  public int hashCode() {
+  @Override
+public int hashCode() {
     return super.hashCode() ^ myStack.hashCode() ^ myUnprocessedInput.hashCode();
   }
 
