@@ -44,7 +44,7 @@ public class PDATransducer extends AutomatonTransducer {
    * @return an empty PDA
    */
   @Override
-protected Automaton createEmptyAutomaton(Document document) {
+  protected Automaton createEmptyAutomaton(Document document) {
     return new PushdownAutomaton();
   }
 
@@ -64,7 +64,7 @@ protected Automaton createEmptyAutomaton(Document document) {
    * @return the new transition
    */
   @Override
-protected Transition createTransition(
+  protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean bool) {
     String read = e2t.get(TRANSITION_READ_NAME);
     String pop = e2t.get(TRANSITION_POP_NAME);
@@ -91,7 +91,7 @@ protected Transition createTransition(
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
   @Override
-protected Element createTransitionElement(Document document, Transition transition) {
+  protected Element createTransitionElement(Document document, Transition transition) {
     Element te = super.createTransitionElement(document, transition);
     PDATransition t = (PDATransition) transition;
     // Add the characterizing strings for this transition.
@@ -107,7 +107,7 @@ protected Element createTransitionElement(Document document, Transition transiti
    * @return the string "pda"
    */
   @Override
-public String getType() {
+  public String getType() {
     return "pda";
   }
 

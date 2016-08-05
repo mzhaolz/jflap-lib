@@ -46,7 +46,7 @@ public class FSAAlphabetRetriever extends AlphabetRetriever {
    * @return the alphabet, in a string[].
    */
   @Override
-public List<String> getAlphabet(Automaton automaton) {
+  public List<String> getAlphabet(Automaton automaton) {
     List<String> list = new ArrayList<>();
     List<Transition> transitions = automaton.getTransitions();
     for (int k = 0; k < transitions.size(); k++) {

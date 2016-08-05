@@ -174,7 +174,7 @@ public class ImageDisplayComponent extends JComponent implements Scrollable {
    *            the graphics object to paint upon
    */
   @Override
-public void paintComponent(Graphics g) {
+  public void paintComponent(Graphics g) {
     if (myImage == null) return;
 
     Rectangle r = getVisibleRect(), r2 = new Rectangle(getPreferredSize());
@@ -195,17 +195,17 @@ public void paintComponent(Graphics g) {
   }
 
   @Override
-public Dimension getPreferredScrollableViewportSize() {
+  public Dimension getPreferredScrollableViewportSize() {
     return getPreferredSize();
   }
 
   @Override
-public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
     return orientation == SwingConstants.VERTICAL ? visibleRect.height : visibleRect.width;
   }
 
   @Override
-public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+  public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
     return 5;
   }
 
@@ -214,7 +214,7 @@ public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, in
    * as the containing scroll pane.
    */
   @Override
-public boolean getScrollableTracksViewportWidth() {
+  public boolean getScrollableTracksViewportWidth() {
     return getPreferredSize().width < getParent().getSize().width;
   }
 
@@ -223,7 +223,7 @@ public boolean getScrollableTracksViewportWidth() {
    * as the containing scroll pane.
    */
   @Override
-public boolean getScrollableTracksViewportHeight() {
+  public boolean getScrollableTracksViewportHeight() {
     return getPreferredSize().height < getParent().getSize().height;
   }
 

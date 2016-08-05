@@ -82,7 +82,7 @@ public class MooreTransition extends MealyTransition {
    * @return a copy of this transition with new states
    */
   @Override
-public Transition copy(State from, State to) {
+  public Transition copy(State from, State to) {
     return new MooreTransition(from, to, getLabel(), getOutput());
   }
 
@@ -93,7 +93,7 @@ public Transition copy(State from, State to) {
    * @see MooreMachine#getOutput(State)
    */
   @Override
-public String getOutput() {
+  public String getOutput() {
     return ((MooreMachine) (to.getAutomaton())).getOutput(to);
   }
 
@@ -106,7 +106,7 @@ public String getOutput() {
    *            the new output for this transition
    */
   @Override
-protected void setOutput(String output) {
+  protected void setOutput(String output) {
     ((MooreMachine) to.getAutomaton()).setOutput(to, output);
   }
 
@@ -117,7 +117,7 @@ protected void setOutput(String output) {
    * @return the description of this transition
    */
   @Override
-public String getDescription() {
+  public String getDescription() {
     if (getLabel() == null || getLabel().length() == 0) return Universe.curProfile.getEmptyString();
     else return getLabel();
   }

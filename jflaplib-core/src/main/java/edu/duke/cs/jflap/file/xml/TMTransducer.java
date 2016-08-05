@@ -50,7 +50,7 @@ public class TMTransducer extends AutomatonTransducer {
    * @return an empty Turing machine
    */
   @Override
-protected Automaton createEmptyAutomaton(Document document) {
+  protected Automaton createEmptyAutomaton(Document document) {
     Map<String, String> e2t = elementsToText(document.getDocumentElement());
     String s = e2t.get(TURING_TAPES_NAME);
     if (s == null) s = "1";
@@ -80,7 +80,7 @@ protected Automaton createEmptyAutomaton(Document document) {
    * @return the new transition
    */
   @Override
-protected Transition createTransition(
+  protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     TuringMachine tm = (TuringMachine) from.getAutomaton();
     int tapes = tm.tapes();
@@ -89,11 +89,13 @@ protected Transition createTransition(
         writeStrings = new ArrayList<>(),
         moveStrings = new ArrayList<>();
     // Set defaults in case the transition for that tape is not specified.
-    IntStream.range(0, tapes).forEach(i -> {
-        readStrings.add("");
-        writeStrings.add("");
-        moveStrings.add("R");
-    });
+    IntStream.range(0, tapes)
+        .forEach(
+            i -> {
+              readStrings.add("");
+              writeStrings.add("");
+              moveStrings.add("R");
+            });
     // Avoid undue code duplication.
     Map<String, List<String>> tag2array = new HashMap<>();
     tag2array.put(TRANSITION_READ_NAME, readStrings);
@@ -162,7 +164,7 @@ protected Transition createTransition(
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
   @Override
-protected Element createTransitionElement(Document document, Transition transition) {
+  protected Element createTransitionElement(Document document, Transition transition) {
     Element te = super.createTransitionElement(document, transition);
     TMTransition t = (TMTransition) transition;
     TuringMachine tm = (TuringMachine) t.getFromState().getAutomaton();
@@ -190,7 +192,7 @@ protected Element createTransitionElement(Document document, Transition transiti
    * @return the string "pda"
    */
   @Override
-public String getType() {
+  public String getType() {
     return "turing";
   }
 
@@ -205,7 +207,7 @@ public String getType() {
    *            the structure, which should be a turing machine
    */
   @Override
-public Document toDOM(java.io.Serializable structure) {
+  public Document toDOM(java.io.Serializable structure) {
     Document dom = super.toDOM(structure);
     TuringMachine tm = (TuringMachine) structure;
     if (tm.tapes() > 1) {

@@ -39,7 +39,7 @@ public class JTableExtender extends JTable {
   }
 
   @Override
-public void changeSelection(int row, int column, boolean toggle, boolean extend) {
+  public void changeSelection(int row, int column, boolean toggle, boolean extend) {
     super.changeSelection(row, column, toggle, extend);
     myMultSimAct.viewAutomaton(this);
   }

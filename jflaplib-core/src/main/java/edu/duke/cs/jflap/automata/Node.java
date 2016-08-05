@@ -134,7 +134,7 @@ public class Node {
    * @return a string representation of the Node object.
    */
   @Override
-public String toString() {
+  public String toString() {
     return "STATE: " + myState.toString() + " COLOR: " + myColor;
   }
 

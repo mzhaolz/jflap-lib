@@ -64,7 +64,7 @@ public class CombineAutomaton extends AutomatonAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     JComboBox<EnvironmentFrame> combo = new JComboBox<EnvironmentFrame>();
     // Figure out what existing environments in the program have
     // the type of automaton that we need.

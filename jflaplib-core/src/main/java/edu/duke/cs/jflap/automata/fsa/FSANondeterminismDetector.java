@@ -44,7 +44,7 @@ public class FSANondeterminismDetector extends NondeterminismDetector {
    * @return true if the transitions are nondeterministic.
    */
   @Override
-public boolean areNondeterministic(Transition t1, Transition t2) {
+  public boolean areNondeterministic(Transition t1, Transition t2) {
     FSATransition transition1 = (FSATransition) t1;
     FSATransition transition2 = (FSATransition) t2;
     if (transition1.getLabel().equals(transition2.getLabel())) return true;

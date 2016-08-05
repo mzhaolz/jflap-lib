@@ -81,7 +81,7 @@ public class FSAConfiguration extends Configuration {
    * @return a string representation of this object.
    */
   @Override
-public String toString() {
+  public String toString() {
     return super.toString() + ": " + getUnprocessedInput();
   }
 
@@ -94,7 +94,7 @@ public String toString() {
    *         <CODE>false</CODE> otherwise
    */
   @Override
-public boolean isAccept() {
+  public boolean isAccept() {
     if (getUnprocessedInput().length() != 0) return false;
     State s = getCurrentState();
     Automaton a = s.getAutomaton();
@@ -113,7 +113,7 @@ public boolean isAccept() {
    *         <CODE>false</CODE> otherwise
    */
   @Override
-public boolean equals(Object configuration) {
+  public boolean equals(Object configuration) {
     if (configuration == this) return true;
     try {
       return super.equals(configuration)
@@ -129,7 +129,7 @@ public boolean equals(Object configuration) {
    * @return a hashcode for this object
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     return super.hashCode() ^ myUnprocessedInput.hashCode();
   }
 

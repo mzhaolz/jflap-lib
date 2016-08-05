@@ -57,7 +57,7 @@ public class NondeterminismAction extends AutomatonAction {
    * Performs the action.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     SelectionDrawer drawer = new SelectionDrawer(automaton);
     NondeterminismDetector d = NondeterminismDetectorFactory.getDetector(automaton);
     State[] nd = d.getNondeterministicStates(automaton);

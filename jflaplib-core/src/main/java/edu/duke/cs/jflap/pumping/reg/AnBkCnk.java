@@ -34,12 +34,12 @@ public class AnBkCnk extends RegularPumpingLemma {
   private static final long serialVersionUID = -2843533645633275259L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "a^n b^k c^(n+k) : n >= 0, k >= 0";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>a<sup>n</sup>b<sup>k</sup>c<sup>n+k</sup></i> : <i>n</i> "
         + GREATER_OR_EQ
         + " 0, <i>k</i> "
@@ -48,7 +48,7 @@ public String getHTMLTitle() {
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -58,22 +58,22 @@ public void setDescription() {
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {2, 9};
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = pumpString("a", getM()) + pumpString("b", getM()) + pumpString("c", getM() * 2);
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     int a, b, c;
     char[] list = new char[] {'a', 'b', 'c'};
     if (LemmaMath.isMixture(s, list)) return false;

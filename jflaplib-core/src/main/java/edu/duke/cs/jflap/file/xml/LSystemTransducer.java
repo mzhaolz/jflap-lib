@@ -47,7 +47,7 @@ public class LSystemTransducer extends AbstractTransducer {
    * @return the string "lsystem"
    */
   @Override
-public String getType() {
+  public String getType() {
     return "lsystem";
   }
 
@@ -106,7 +106,8 @@ public String getType() {
     re.appendChild(createElement(document, RULE_LEFT_NAME, null, left));
     List<List<String>> replacements = lsystem.getReplacements(left);
     for (int i = 0; i < replacements.size(); i++) {
-      re.appendChild(createElement(document, RULE_RIGHT_NAME, null, listAsString(replacements.get(i))));
+      re.appendChild(
+          createElement(document, RULE_RIGHT_NAME, null, listAsString(replacements.get(i))));
     }
     return re;
   }
@@ -174,7 +175,7 @@ public String getType() {
    * @return the {@link edu.duke.cs.jflap.grammar.lsystem.LSystem} instance
    */
   @Override
-public java.io.Serializable fromDOM(Document document) {
+  public java.io.Serializable fromDOM(Document document) {
     String axiom = readAxiom(document);
     Grammar rules = readGrammar(document);
     Map<String, String> parameters = readParameters(document);
@@ -190,7 +191,7 @@ public java.io.Serializable fromDOM(Document document) {
    * @return a DOM document instance
    */
   @Override
-public Document toDOM(java.io.Serializable structure) {
+  public Document toDOM(java.io.Serializable structure) {
     LSystem lsystem = (LSystem) structure;
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();

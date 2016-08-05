@@ -70,7 +70,7 @@ public class LayoutStorageAction extends AutomatonAction {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             graph.moveAutomatonStates();
           }
         };
@@ -87,7 +87,7 @@ public class LayoutStorageAction extends AutomatonAction {
   }
 
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     graph = new AutomatonGraph(automaton);
     restoreAction.setEnabled(true);
   }

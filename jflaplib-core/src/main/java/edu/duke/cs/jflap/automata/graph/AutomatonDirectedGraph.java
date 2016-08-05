@@ -52,7 +52,7 @@ public class AutomatonDirectedGraph extends AutomatonGraph {
    *            the object to which this edge is pointing.
    */
   @Override
-public void addEdge(State from, State to) {
+  public void addEdge(State from, State to) {
     adjacent(from).add(to);
   }
 
@@ -66,7 +66,7 @@ public void addEdge(State from, State to) {
    *            the object to which this edge is pointing.
    */
   @Override
-public void removeEdge(State from, State to) {
+  public void removeEdge(State from, State to) {
     adjacent(from).remove(to);
   }
 

@@ -20,7 +20,10 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test Suite for CYK Tracer
@@ -32,7 +35,6 @@ public class CYKTracerTester {
 
   public static void main(String[] args) {
     Grammar g = new ContextFreeGrammar();
-    Production[] p = new Production[5];
     /*
      * p[0]=new Production("S","bAC"); p[1]=new Production("A","C");
      * p[2]=new Production("A","a"); p[3]=new Production("B","bAE");
@@ -40,12 +42,12 @@ public class CYKTracerTester {
      * Production("C",""); p[7]=new Production("E","cE"); p[8]=new
      * Production("D","dFA"); p[9]=new Production("F","e");
      */
-
-    p[0] = new Production("S", "aSb");
-    p[1] = new Production("S", "bB");
-    p[2] = new Production("B", "bbB");
-    p[3] = new Production("B", "");
-    p[4] = new Production("S", "SS");
+    List<Production> p = Lists.newArrayList(
+    new Production("S", "aSb"),
+    new Production("S", "bB"),
+    new Production("B", "bbB"),
+    new Production("B", ""),
+    new Production("S", "SS"));
 
     g.addProductions(p);
 

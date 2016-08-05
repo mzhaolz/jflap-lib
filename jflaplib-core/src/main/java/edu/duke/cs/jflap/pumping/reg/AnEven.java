@@ -32,17 +32,17 @@ public class AnEven extends RegularPumpingLemma {
   private static final long serialVersionUID = 6813155572111784226L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "a^n : n is even";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>a<sup>n</sup></i> : <i>n</i> is even";
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a regular language, a valid decomposition exists.  If <i>m</i> "
@@ -52,23 +52,23 @@ public void setDescription() {
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     if (getM() % 2 == 0) w = pumpString("a", getM());
     else w = pumpString("a", getM() + 1);
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {2, 18};
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     setDecomposition(new int[] {0, 2});
   }
 
@@ -78,7 +78,7 @@ public void chooseDecomposition() {
    * @return <code>true</code> if it is, <code>false</code> otherwise
    */
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     String temp;
     char[] list = new char[] {'a'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;

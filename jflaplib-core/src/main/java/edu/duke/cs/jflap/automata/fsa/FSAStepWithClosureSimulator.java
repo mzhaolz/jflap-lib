@@ -54,7 +54,7 @@ public class FSAStepWithClosureSimulator extends FSAStepByStateSimulator {
    *            the input string.
    */
   @Override
-public List<Configuration> getInitialConfigurations(String input) {
+  public List<Configuration> getInitialConfigurations(String input) {
     State init = myAutomaton.getInitialState();
     List<State> closure = ClosureTaker.getClosure(init, myAutomaton);
     List<Configuration> configs = new ArrayList<>();
@@ -72,7 +72,7 @@ public List<Configuration> getInitialConfigurations(String input) {
    *            the configuration to simulate the one step on.
    */
   @Override
-public List<Configuration> stepConfiguration(Configuration config) {
+  public List<Configuration> stepConfiguration(Configuration config) {
     List<Configuration> list = new ArrayList<>();
     FSAConfiguration configuration = (FSAConfiguration) config;
     /** get all information from configuration. */

@@ -52,7 +52,7 @@ public class CloseWindowAction extends RestrictedAction {
    * Handles the closing of the window.
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     frame.close();
   }
 

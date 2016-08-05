@@ -119,7 +119,7 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
    * @return a panel that takes the decomposition from the user
    */
   @Override
-protected JPanel initDecompPanel() {
+  protected JPanel initDecompPanel() {
     JPanel n = new JPanel(new BorderLayout());
 
     JPanel o = new JPanel();
@@ -168,7 +168,7 @@ protected JPanel initDecompPanel() {
     myDecompButton.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent ev) {
+          public void actionPerformed(ActionEvent ev) {
             stages[4].setVisible(true);
             stages[5].setVisible(true);
             resetMessages();
@@ -215,11 +215,11 @@ protected JPanel initDecompPanel() {
   }
 
   @Override
-protected String addTopGameFeatures(JButton b) {
+  protected String addTopGameFeatures(JButton b) {
     b.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             myMDisplay.setText("");
             updateTopPane(false);
             reset();
@@ -229,13 +229,13 @@ protected String addTopGameFeatures(JButton b) {
   }
 
   @Override
-protected String addMGameFeatures() {
+  protected String addMGameFeatures() {
     myMDisplay = new JTextField(10);
     ((JTextField) myMDisplay)
         .addActionListener(
             new ActionListener() {
               @Override
-            public void actionPerformed(ActionEvent ev) {
+              public void actionPerformed(ActionEvent ev) {
                 try {
                   reset();
                   int m = Integer.parseInt(ev.getActionCommand());
@@ -267,7 +267,7 @@ protected String addMGameFeatures() {
   }
 
   @Override
-protected String addWGameFeatures() {
+  protected String addWGameFeatures() {
     myWDisplay = new JTextArea(1, 20);
     myWDisplay.setEditable(false);
     return new String(DESCRIBE_W);
@@ -283,14 +283,14 @@ protected String addWGameFeatures() {
   protected abstract void addDecompPanelGameFeatures(JPanel p);
 
   @Override
-protected String addIGameFeatures() {
+  protected String addIGameFeatures() {
     myIDisplay = new JTextArea(1, 5);
     myIDisplay.setEditable(false);
     return new String(DESCRIBE_I);
   }
 
   @Override
-public void displayEnd() {
+  public void displayEnd() {
     String s = myLemma.createPumpedString();
     myPumpedStringDisplay.setText(s);
     if (myLemma.isInLang(s))

@@ -20,7 +20,7 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,13 +82,13 @@ public class Unrestricted {
    */
   public static Set<String> smallerSymbols(Grammar grammar) {
     Set<String> smaller = new HashSet<>();
-    Production[] prods = grammar.getProductions();
+    List<Production> prods = grammar.getProductions();
     boolean added;
     do {
       added = false;
-      for (int i = 0; i < prods.length; i++) {
-        String left = prods[i].getLHS();
-        String right = prods[i].getRHS();
+      for (int i = 0; i < prods.size(); i++) {
+        String left = prods.get(i).getLHS();
+        String right = prods.get(i).getRHS();
         int rightLength = minimumLength(right, smaller);
         int leftLength = minimumLength(left, smaller);
         if (leftLength > rightLength) {
@@ -114,8 +114,8 @@ public class Unrestricted {
    * @return if a grammar is unrestricted
    */
   public static boolean isUnrestricted(Grammar grammar) {
-    Production[] prods = grammar.getProductions();
-    for (int i = 0; i < prods.length; i++) if (prods[i].getLHS().length() != 1) return true;
+    List<Production> prods = grammar.getProductions();
+    for (int i = 0; i < prods.size(); i++) if (prods.get(i).getLHS().length() != 1) return true;
     return false;
   }
 
@@ -133,18 +133,18 @@ public class Unrestricted {
    */
   public static UnrestrictedGrammar optimize(Grammar grammar) {
     String startVariable = grammar.getStartVariable();
-    Production[] prods = grammar.getProductions();
+    List<Production> prods = grammar.getProductions();
     // Which symbols in the grammar may possibly lead to just
     // terminals? First, we just add all those symbols with just
     // terminals on the right hand side.
     Set<String> terminating = new HashSet<>();
     // Add those variables that lead to success.
-    boolean[] added = new boolean[prods.length];
-    for (int i = 0; i < prods.length; i++) {
-      added[i] = false;
-      if (prods[i].getVariablesOnRHS().length == 0) {
-        terminating.addAll(Arrays.asList(prods[i].getSymbols()));
-        added[i] = true;
+    List<Boolean> added = new ArrayList<>();
+    for (int i = 0; i < prods.size(); i++) {
+      added.set(i, false);
+      if (prods.get(i).getVariablesOnRHS().size() == 0) {
+        terminating.addAll(prods.get(i).getSymbols());
+        added.set(i, true);
       }
     }
     // Repeat
@@ -152,11 +152,11 @@ public class Unrestricted {
     do {
       changed = false;
       // If a production has only "terminating" variables, add it.
-      for (int i = 0; i < prods.length; i++) {
-        List<String> l = Arrays.asList(prods[i].getVariablesOnRHS());
-        if (!added[i] && terminating.containsAll(l)) {
-          terminating.addAll(Arrays.asList(prods[i].getSymbols()));
-          added[i] = changed = true;
+      for (int i = 0; i < prods.size(); i++) {
+        List<String> l = prods.get(i).getVariablesOnRHS();
+        if (!added.get(i) && terminating.containsAll(l)) {
+          terminating.addAll(prods.get(i).getSymbols());
+          added.set(i, changed = true);
         }
       }
     } while (changed);
@@ -164,12 +164,12 @@ public class Unrestricted {
     g.setStartVariable(grammar.getStartVariable());
     // Need to find a production with just the start var on LHS.
     int i;
-    for (i = 0; i < prods.length; i++)
-      if (added[i] && prods[i].getLHS().equals(startVariable)) break;
-    if (i == prods.length) return null;
-    g.addProduction(prods[i]);
-    added[i] = false;
-    for (i = 0; i < prods.length; i++) if (added[i]) g.addProduction(prods[i]);
+    for (i = 0; i < prods.size(); i++)
+      if (added.get(i) && prods.get(i).getLHS().equals(startVariable)) break;
+    if (i == prods.size()) return null;
+    g.addProduction(prods.get(i));
+    added.set(i, false);
+    for (i = 0; i < prods.size(); i++) if (added.get(i)) g.addProduction(prods.get(i));
     return g;
   }
 }

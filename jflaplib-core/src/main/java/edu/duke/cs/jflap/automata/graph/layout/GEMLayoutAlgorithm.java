@@ -65,7 +65,7 @@ public class GEMLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   }
 
   @Override
-public void layout(Graph<V> graph, Set<V> isovertices) {
+  public void layout(Graph<V> graph, Set<V> isovertices) {
     if (isovertices == null) isovertices = Collections.emptySet();
     List<V> vArray = graph.vertices();
     int Rmax = 120 * (vArray.size() - isovertices.size());

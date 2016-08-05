@@ -73,7 +73,7 @@ public class MealyTransition extends Transition {
    * @return a copy of this transition with new states
    */
   @Override
-public Transition copy(State from, State to) {
+  public Transition copy(State from, State to) {
     return new MealyTransition(from, to, myLabel, myOutput);
   }
 
@@ -131,7 +131,7 @@ public Transition copy(State from, State to) {
    * @return the description for this transition
    */
   @Override
-public String getDescription() {
+  public String getDescription() {
     String label = getLabel();
     String output = getOutput();
     if (label == null || label.length() == 0) label = Universe.curProfile.getEmptyString();
@@ -149,7 +149,7 @@ public String getDescription() {
    * @return a string representation of this object
    */
   @Override
-public String toString() {
+  public String toString() {
     return super.toString() + ": \"" + getLabel() + "/" + getOutput() + "\"";
   }
 
@@ -165,7 +165,7 @@ public String toString() {
    *         otherwise
    */
   @Override
-public boolean equals(Object object) {
+  public boolean equals(Object object) {
     try {
       MealyTransition t = (MealyTransition) object;
       return super.equals(t)
@@ -182,7 +182,7 @@ public boolean equals(Object object) {
    * @return the hash code for this transition
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     return super.hashCode() ^ getLabel().hashCode() ^ getOutput().hashCode();
   }
 }

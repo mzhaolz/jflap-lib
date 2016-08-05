@@ -34,12 +34,12 @@ public class B5Wmod extends RegularPumpingLemma {
   private static final long serialVersionUID = -6699257070534522059L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "b^5w: w element_of {ab}* : (2na(w) + 5nb(w)) % 3 = 0";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>b<sup>5</sup>w</i> : <i>w</i> "
         + ELEMENT_OF
         + " "
@@ -49,7 +49,7 @@ public String getHTMLTitle() {
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = true;
     explanation =
         "Because this is a regular language, a valid decomposition exists.  If <i>m</i> "
@@ -60,12 +60,12 @@ public void setDescription() {
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = 0;
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = "bbbbb";
     for (int i = 5; i < m || (i - 5) % 3 != 0; i++)
       if (LemmaMath.flipCoin() == 2) w = w + 'a';
@@ -73,19 +73,19 @@ protected void chooseW() {
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     // first three values of 'w' in the equation fit the equation no matter
     // what.
     setDecomposition(new int[] {5, 3});
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {8, 20};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
     if (!s.startsWith("bbbbb")) return false;

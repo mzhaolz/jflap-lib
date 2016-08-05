@@ -99,7 +99,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
         new TreeMap<>(
             new Comparator<Integer>() {
               @Override
-            public int compare(Integer o1, Integer o2) {
+              public int compare(Integer o1, Integer o2) {
                 return o1.intValue() - o2.intValue();
                 // if (o1 instanceof Integer && !(o2 instanceof Integer)) return
                 // -1;
@@ -386,7 +386,7 @@ public abstract class AutomatonTransducer extends AbstractTransducer {
    *         {@link edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton}instance
    */
   @Override
-public java.io.Serializable fromDOM(Document document) {
+  public java.io.Serializable fromDOM(Document document) {
     automatonMap.clear();
     Node parent = document.getDocumentElement().getElementsByTagName(AUTOMATON_NAME).item(0);
     if (parent == null) parent = document.getDocumentElement();
@@ -615,7 +615,7 @@ public java.io.Serializable fromDOM(Document document) {
    * @return a DOM document instance
    */
   @Override
-public Document toDOM(java.io.Serializable structure) {
+  public Document toDOM(java.io.Serializable structure) {
     Automaton automaton = (Automaton) structure;
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();

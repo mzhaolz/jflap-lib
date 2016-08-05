@@ -27,6 +27,7 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.ProductionChecker;
 
 import java.awt.Point;
+import java.util.List;
 
 /**
  * The right linear grammar converter can be used to convert regular grammars,
@@ -56,14 +57,14 @@ public class RightLinearGrammarToFSAConverter extends GrammarToAutomatonConverte
    * @return the equivalent transition.
    */
   @Override
-public Transition getTransitionForProduction(Production production) {
+  public Transition getTransitionForProduction(Production production) {
     String lhs = production.getLHS();
     State from = getStateForVariable(lhs);
 
     /** if of the form A->xB */
     if (ProductionChecker.isRightLinearProductionWithVariable(production)) {
-      String[] variables = production.getVariablesOnRHS();
-      String variable = variables[0];
+      List<String> variables = production.getVariablesOnRHS();
+      String variable = variables.get(0);
       State to = getStateForVariable(variable);
       String rhs = production.getRHS();
       String label = rhs.substring(0, rhs.length() - 1);
@@ -92,12 +93,12 @@ public Transition getTransitionForProduction(Production production) {
    *            the automaton being created.
    */
   @Override
-public void createStatesForConversion(Grammar grammar, Automaton automaton) {
+  public void createStatesForConversion(Grammar grammar, Automaton automaton) {
     initialize();
     StatePlacer sp = new StatePlacer();
-    String[] variables = grammar.getVariables();
-    for (int k = 0; k < variables.length; k++) {
-      String variable = variables[k];
+    List<String> variables = grammar.getVariables();
+    for (int k = 0; k < variables.size(); k++) {
+      String variable = variables.get(k);
       Point point = sp.getPointForState(automaton);
       State state = automaton.createState(point);
       if (variable.equals(grammar.getStartVariable())) automaton.setInitialState(state);

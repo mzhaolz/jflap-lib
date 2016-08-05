@@ -63,7 +63,7 @@ public class ConvertRegularGrammarToFSA extends GrammarAction {
    * Performs the action.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     // Construct the regular grammar.
     RightLinearGrammar grammar =
         (RightLinearGrammar) environment.getGrammar(RightLinearGrammar.class);

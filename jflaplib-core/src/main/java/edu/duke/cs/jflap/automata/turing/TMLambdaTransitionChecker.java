@@ -34,7 +34,7 @@ public class TMLambdaTransitionChecker extends LambdaTransitionChecker {
    * @return true if <CODE>transition</CODE> is a lambda transition
    */
   @Override
-public boolean isLambdaTransition(Transition transition) {
+  public boolean isLambdaTransition(Transition transition) {
     return false;
   }
 }

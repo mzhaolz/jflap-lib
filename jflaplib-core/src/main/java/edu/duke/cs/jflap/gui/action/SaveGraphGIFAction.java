@@ -63,7 +63,7 @@ public class SaveGraphGIFAction extends RestrictedAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent arg0) {
+  public void actionPerformed(ActionEvent arg0) {
     Component apane = environment.tabbed.getSelectedComponent();
     JComponent c = (JComponent) environment.getActive();
     SaveGraphUtility.saveGraph(apane, c, "GIF files", "gif");
@@ -72,12 +72,12 @@ public void actionPerformed(ActionEvent arg0) {
 
 class GIFFileFilter extends FileFilter {
   @Override
-public boolean accept(File f) {
+  public boolean accept(File f) {
     return f.getName().endsWith(".gif") || f.isDirectory();
   }
 
   @Override
-public String getDescription() {
+  public String getDescription() {
     return ".gif";
   }
 }

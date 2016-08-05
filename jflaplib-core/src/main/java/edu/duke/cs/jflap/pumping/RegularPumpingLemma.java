@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.pumping;
 import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A <code>RegularPumpingLemma</code> is a <code>PumpingLemma</code> that
@@ -73,12 +74,12 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
   }
 
   @Override
-public String getDecompositionAsString() {
+  public String getDecompositionAsString() {
     String[] s = new String[3];
     int counter = 0;
     for (int i = 0; i <= 1; i++) {
-      s[i] = w.substring(counter, counter + myDecomposition[i]);
-      counter += myDecomposition[i];
+      s[i] = w.substring(counter, counter + myDecomposition.get(i));
+      counter += myDecomposition.get(i);
     }
     s[2] = w.substring(counter);
 
@@ -94,7 +95,7 @@ public String getDecompositionAsString() {
    * <i>x</i>, <i>y</i>, and <i>z</i>.
    */
   @Override
-public void reset() {
+  public void reset() {
     m = -1;
     i = -1;
     w = "";
@@ -118,7 +119,7 @@ public void reset() {
    *         <code>false</code> otherwise
    */
   @Override
-public boolean setDecomposition(int[] decomposition, int num) {
+  public boolean setDecomposition(int[] decomposition, int num) {
     i = num;
     return setDecomposition(decomposition);
   }
@@ -135,12 +136,11 @@ public boolean setDecomposition(int[] decomposition, int num) {
    * @return <code>true</code> if this decomposition is legal,
    *         <code>false</code> otherwise
    */
-  @Override
-public boolean setDecomposition(int[] decomposition) {
+  public boolean setDecomposition(List<Integer> decomposition) {
     myDecomposition = decomposition;
 
-    int xLength = decomposition[0];
-    int yLength = decomposition[1];
+    int xLength = decomposition.get(0);
+    int yLength = decomposition.get(1);
     if (xLength + yLength > m || yLength < 1 || xLength < 0) return false;
 
     x = w.substring(0, xLength);
@@ -157,12 +157,11 @@ public boolean setDecomposition(int[] decomposition) {
    * @return the pumped string, <i>xy<sup>i</sup>z</i>
    */
   @Override
-public String createPumpedString() {
+  public String createPumpedString() {
     return x + pumpString(y, getI()) + z;
   }
 
-  @Override
-public int addCase(int[] decomposition, int num) {
+  public int addCase(List<Integer> decomposition, int num) {
     /*
      * This shouldn't be called for most regular pumping lemmas.
      */
@@ -203,7 +202,7 @@ public int addCase(int[] decomposition, int num) {
    *
    */
   @Override
-protected void addCases() {
+  protected void addCases() {
     /*
      * For most regular pumping lemmas, there is only one case so we don't
      * bother. Those that have more than one case should write their own
@@ -211,8 +210,7 @@ protected void addCases() {
      */
   }
 
-  @Override
-public boolean replaceCase(int[] decomposition, int num, int index) {
+  public boolean replaceCase(List<Integer> decomposition, int num, int index) {
     Case c = myDoneCases.get(index);
     if (c.isCase(y, y)) {
       c.setI(num);
@@ -226,7 +224,7 @@ public boolean replaceCase(int[] decomposition, int num, int index) {
    * Chooses a random regular decomposition.
    */
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     // Note m must be >= 2 to use the default
     int x = LemmaMath.fetchRandInt(0, getM() - 1);
     setDecomposition(new int[] {x, getM() - x});

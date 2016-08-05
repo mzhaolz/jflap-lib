@@ -53,7 +53,7 @@ public class VDGTransition extends Transition {
    * @return a copy of this transition with the new states
    */
   @Override
-public Transition copy(State from, State to) {
+  public Transition copy(State from, State to) {
     return new VDGTransition(from, to);
   }
 
@@ -65,7 +65,7 @@ public Transition copy(State from, State to) {
    * @return a string representation of this object
    */
   @Override
-public String toString() {
+  public String toString() {
     return super.toString();
   }
 }

@@ -67,7 +67,7 @@ public class NewAction extends RestrictedAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     showNew();
   }
 

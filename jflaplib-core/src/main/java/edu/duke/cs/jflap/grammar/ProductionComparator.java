@@ -79,7 +79,7 @@ public class ProductionComparator implements Comparator<Production> {
    * @return a hash code for this object
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     return getClass().hashCode() ^ start.hashCode();
   }
 
@@ -92,7 +92,7 @@ public int hashCode() {
    * @return if the two objects are equal
    */
   @Override
-public boolean equals(Object object) {
+  public boolean equals(Object object) {
     try {
       ProductionComparator c = (ProductionComparator) object;
       return c.start.equals(start);

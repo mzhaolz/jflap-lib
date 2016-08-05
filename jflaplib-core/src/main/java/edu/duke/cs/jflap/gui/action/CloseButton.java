@@ -65,7 +65,7 @@ public class CloseButton extends javax.swing.JButton {
     env.addChangeListener(
         new ChangeListener() {
           @Override
-        public void stateChanged(ChangeEvent e) {
+          public void stateChanged(ChangeEvent e) {
             checkEnabled();
           }
         });
@@ -73,7 +73,7 @@ public class CloseButton extends javax.swing.JButton {
         new ActionListener() {
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             boolean editor = false;
             if (env.getActive() instanceof EditBlockPane) {
               editor = true;

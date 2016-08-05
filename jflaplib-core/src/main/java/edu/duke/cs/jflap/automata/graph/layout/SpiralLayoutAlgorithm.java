@@ -62,7 +62,7 @@ public class SpiralLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
   }
 
   @Override
-public void layout(Graph<V> g, Set<V> notMoving) {
+  public void layout(Graph<V> g, Set<V> notMoving) {
     graph = g;
     List<V> vertices = getMovableVertices(graph, notMoving);
     if (graph == null || vertices.size() == 0) return;
@@ -77,7 +77,7 @@ public void layout(Graph<V> g, Set<V> notMoving) {
         vertices,
         new Comparator<V>() {
           @Override
-        public int compare(V o1, V o2) {
+          public int compare(V o1, V o2) {
             if (graph.degree(o1) == graph.degree(o2)) return 0;
             else if (graph.degree(o1) > graph.degree(o2)) return -1;
             else return 1;

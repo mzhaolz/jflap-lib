@@ -55,7 +55,7 @@ public class EnvironmentFrame extends JFrame {
     environment.addFileChangeListener(
         new FileChangeListener() {
           @Override
-        public void fileChanged(FileChangeEvent e) {
+          public void fileChanged(FileChangeEvent e) {
             refreshTitle();
           }
         });
@@ -84,7 +84,7 @@ public class EnvironmentFrame extends JFrame {
     environment.addFileChangeListener(
         new FileChangeListener() {
           @Override
-        public void fileChanged(FileChangeEvent e) {
+          public void fileChanged(FileChangeEvent e) {
             refreshTitle();
           }
         });
@@ -322,7 +322,7 @@ public class EnvironmentFrame extends JFrame {
     this.addComponentListener(
         new java.awt.event.ComponentAdapter() {
           @Override
-        public void componentResized(ComponentEvent event) {
+          public void componentResized(ComponentEvent event) {
             environment.resizeSplit();
           }
         });
@@ -334,7 +334,7 @@ public class EnvironmentFrame extends JFrame {
    * @return the string that describes this frame
    */
   @Override
-public String toString() {
+  public String toString() {
     return getDescription();
   }
 

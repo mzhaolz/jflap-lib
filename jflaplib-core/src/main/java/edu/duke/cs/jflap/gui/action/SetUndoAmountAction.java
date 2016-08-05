@@ -54,7 +54,7 @@ public class SetUndoAmountAction extends RestrictedAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     String str;
     int n;
     while (true) {

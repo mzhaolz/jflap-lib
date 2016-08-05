@@ -57,7 +57,7 @@ public class UserControlParseAction extends GrammarAction {
    * Performs the action.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
     if (g == null) return;
     UserControlParsePane userPane = new UserControlParsePane(environment, g);

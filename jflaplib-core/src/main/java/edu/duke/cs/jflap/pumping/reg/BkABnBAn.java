@@ -33,7 +33,7 @@ public class BkABnBAn extends RegularPumpingLemma {
   private static final long serialVersionUID = -6541146292359541038L;
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>b<sup>k</sup>(ab)<sup>n</sup>(ba)<sup>n</sup></i> : <i>k</i> "
         + GREATER_OR_EQ
         + " 4"
@@ -41,12 +41,12 @@ public String getHTMLTitle() {
   }
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "b^k (ab)^n (ba)^n: k>=4, n = 1,2,...";
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"b<sup>4</sup>"
@@ -56,12 +56,12 @@ public void setDescription() {
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = 0;
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     int a, abba;
     a = w.indexOf('a');
     abba = a + (w.length() - a) / 2 - 2;
@@ -71,18 +71,18 @@ public void chooseDecomposition() {
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     int power = m / 2;
     w = "bbbb" + pumpString("ab", power) + pumpString("ba", power);
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {4, 15};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     int k, n;
     k = s.indexOf("a");
     if (k < 4) return false;

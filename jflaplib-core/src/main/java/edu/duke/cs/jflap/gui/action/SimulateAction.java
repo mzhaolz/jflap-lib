@@ -197,7 +197,7 @@ public class SimulateAction extends AutomatonAction {
         new ActionListener() {
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
             JFileChooser ourChooser =
                 new JFileChooser(System.getProperties().getProperty("user.dir"));
@@ -283,7 +283,7 @@ public class SimulateAction extends AutomatonAction {
    * Performs the action.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     if (environment.getActive() instanceof EditBlockPane) {
       EditBlockPane newPane = (EditBlockPane) environment.getActive();
       automaton = newPane.getAutomaton();

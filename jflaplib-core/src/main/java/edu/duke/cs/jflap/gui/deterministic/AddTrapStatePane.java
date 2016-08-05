@@ -98,7 +98,7 @@ public class AddTrapStatePane extends JPanel {
               private static final long serialVersionUID = 3085654730397188499L;
 
               @Override
-            public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 controller.doAll();
               }
             }));

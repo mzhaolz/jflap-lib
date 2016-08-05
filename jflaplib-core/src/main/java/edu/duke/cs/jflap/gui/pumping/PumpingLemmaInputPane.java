@@ -236,7 +236,7 @@ public abstract class PumpingLemmaInputPane extends JPanel {
     explain.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             updateTopPane(true);
           }
         });
@@ -346,7 +346,7 @@ public abstract class PumpingLemmaInputPane extends JPanel {
     myStepAnimation.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             stepAnimation();
             myCanvas.start();
           }
@@ -359,7 +359,7 @@ public abstract class PumpingLemmaInputPane extends JPanel {
     myStartAnimation.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             setCanvas();
             myCanvas.stop();
             repaint();

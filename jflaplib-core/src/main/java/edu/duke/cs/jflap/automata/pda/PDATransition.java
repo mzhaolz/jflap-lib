@@ -68,7 +68,7 @@ public class PDATransition extends Transition {
    * @return a copy of this trnasition with the new from and to states
    */
   @Override
-public Transition copy(State from, State to) {
+  public Transition copy(State from, State to) {
     return new PDATransition(from, to, getInputToRead(), getStringToPop(), getStringToPush());
   }
 
@@ -155,7 +155,7 @@ public Transition copy(State from, State to) {
    *         pop off the stack, and the string to push on the stack.
    */
   @Override
-public String getDescription() {
+  public String getDescription() {
     String input = getInputToRead();
     if (input.length() == 0) input = Universe.curProfile.getEmptyString();
     String toPop = getStringToPop();
@@ -171,7 +171,7 @@ public String getDescription() {
    * @return the hashcode for this transition
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     return super.hashCode()
         ^ myInputToRead.hashCode()
         ^ myStringToPop.hashCode()
@@ -187,7 +187,7 @@ public int hashCode() {
    *         <CODE>false</CODE> otherwise
    */
   @Override
-public boolean equals(Object object) {
+  public boolean equals(Object object) {
     try {
       PDATransition t = (PDATransition) object;
       return super.equals(object)
@@ -208,7 +208,7 @@ public boolean equals(Object object) {
    * @return a string representation of this object
    */
   @Override
-public String toString() {
+  public String toString() {
     return super.toString()
         + ": \""
         + getInputToRead()

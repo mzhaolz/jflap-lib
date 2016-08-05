@@ -52,7 +52,7 @@ public class ContextFreeGrammar extends Grammar {
    *             if the production is unrestricted on the left hand side
    */
   @Override
-public void checkProduction(Production production) {
+  public void checkProduction(Production production) {
     if (!ProductionChecker.isRestrictedOnLHS(production)) {
       javax.swing.JOptionPane.showMessageDialog(
           null, "Your production is unrestricted on the left hand side.");

@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.pumping;
 import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A <code>ContextFreePumpingLemma</code> is a <code>PumpingLemma</code> that
@@ -100,12 +101,12 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
   }
 
   @Override
-public String getDecompositionAsString() {
+  public String getDecompositionAsString() {
     String[] s = new String[5];
     int counter = 0;
     for (int i = 0; i <= 3; i++) {
-      s[i] = w.substring(counter, counter + myDecomposition[i]);
-      counter += myDecomposition[i];
+      s[i] = w.substring(counter, counter + myDecomposition.get(i));
+      counter += myDecomposition.get(i);
     }
     s[4] = w.substring(counter);
 
@@ -130,7 +131,7 @@ public String getDecompositionAsString() {
    * <i>w</i>, <i>i</i>, <i>u</i>, <i>v</i>, <i>x</i>, <i>y</i>, and <i>z</i>.
    */
   @Override
-public void reset() {
+  public void reset() {
     m = -1;
     i = -1;
     w = "";
@@ -153,13 +154,12 @@ public void reset() {
    * @return <code>true</code> if this deocmposition is legal,
    *         <code>false</code> otherwise
    */
-  @Override
-public boolean setDecomposition(int[] decomposition) {
+  public boolean setDecomposition(List<Integer> decomposition) {
     myDecomposition = decomposition;
-    int uLength = decomposition[0];
-    int vLength = decomposition[1];
-    int xLength = decomposition[2];
-    int yLength = decomposition[3];
+    int uLength = decomposition.get(0);
+    int vLength = decomposition.get(1);
+    int xLength = decomposition.get(2);
+    int yLength = decomposition.get(3);
     if (vLength + xLength + yLength > m || vLength + yLength < 1) return false;
 
     u = w.substring(0, uLength);
@@ -188,7 +188,7 @@ public boolean setDecomposition(int[] decomposition) {
    *         tried before, <code>false</code> otherwise
    */
   @Override
-public boolean setDecomposition(int[] decomposition, int num) {
+  public boolean setDecomposition(int[] decomposition, int num) {
     i = num;
     return setDecomposition(decomposition);
   }
@@ -200,7 +200,7 @@ public boolean setDecomposition(int[] decomposition, int num) {
    * @return the pumped string, <i>uv<sup>i</sup>xy<sup>i</sup>z</i>
    */
   @Override
-public String createPumpedString() {
+  public String createPumpedString() {
     return u + pumpString(v, getI()) + x + pumpString(y, getI()) + z;
   }
 
@@ -218,8 +218,7 @@ public String createPumpedString() {
    *         greater than or equal to the total number of cases, which can be
    *         found by calling {@link PumpingLemma#numCasesTotal()}.
    */
-  @Override
-public int addCase(int[] decomposition, int num) {
+  public int addCase(List<Integer> decomposition, int num) {
     /*
      * addCase(int[]) should only be called after
      * chooseDecomposition(int[]), so it should be a legal decomposition and
@@ -249,8 +248,7 @@ public int addCase(int[] decomposition, int num) {
     return -1;
   }
 
-  @Override
-public boolean replaceCase(int[] decomposition, int num, int index) {
+  public boolean replaceCase(List<Integer> decomposition, int num, int index) {
     Case c = myDoneCases.get(index);
     if (c.isCase(v, y)) {
       c.setI(num);
@@ -335,7 +333,7 @@ public boolean replaceCase(int[] decomposition, int num, int index) {
    * Chooses a random context-free decomposition, ignoring cases.
    */
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     // Currently just chooses a decomposition without cases. The code for
     // choosing it
     // with cases is currently commented out, but can be added if desired.

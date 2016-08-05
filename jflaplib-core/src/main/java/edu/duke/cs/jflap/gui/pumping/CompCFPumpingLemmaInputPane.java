@@ -50,7 +50,7 @@ public class CompCFPumpingLemmaInputPane extends ComputerFirstPane {
    *
    */
   @Override
-protected void setCanvas() {
+  protected void setCanvas() {
     stages[5].setVisible(true);
     myCanvas.reset();
     myCanvas.addText("w =");
@@ -73,7 +73,7 @@ protected void setCanvas() {
    * @return a string representing <i>uv<sup>i</sup>xy<sup>i</sup>z</i>
    */
   @Override
-protected String createXYZ() {
+  protected String createXYZ() {
     return "<i>uv</i><sup>"
         + myLemma.getI()
         + "</sup><i>xy</i><sup>"
@@ -82,7 +82,7 @@ protected String createXYZ() {
   }
 
   @Override
-public void update() {
+  public void update() {
     ContextFreePumpingLemma pl = (ContextFreePumpingLemma) myLemma;
     stageMessages[0].setText("File loaded.");
     updateTopPane(false);

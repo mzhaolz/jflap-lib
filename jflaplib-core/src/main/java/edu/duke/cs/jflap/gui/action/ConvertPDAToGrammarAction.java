@@ -58,7 +58,7 @@ public class ConvertPDAToGrammarAction extends ConvertAutomatonToGrammarAction {
    * Checks the PDA to make sure it's ready to be converted.
    */
   @Override
-protected boolean checkAutomaton() {
+  protected boolean checkAutomaton() {
     EnvironmentFrame frame = Universe.frameForEnvironment(getEnvironment());
     JPanel messagePanel = new JPanel(new BorderLayout());
     SelectionDrawer drawer = new SelectionDrawer(getAutomaton());

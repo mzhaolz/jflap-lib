@@ -91,7 +91,7 @@ public abstract class Case {
    * @return a string representing this case
    */
   @Override
-public String toString() {
+  public String toString() {
     return description();
   }
 
@@ -106,7 +106,7 @@ public String toString() {
    *         <code>false</code> otherwise
    */
   @Override
-public boolean equals(Object o) {
+  public boolean equals(Object o) {
     try {
       return toString().equals(((Case) o).toString());
     } catch (ClassCastException e) {

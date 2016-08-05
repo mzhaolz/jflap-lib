@@ -49,7 +49,7 @@ public class TMConfigurationIcon extends ConfigurationIcon implements TuringCons
    * @return the height of this icon
    */
   @Override
-public int getIconHeight() {
+  public int getIconHeight() {
     // Why not...
     return super.getIconHeight() + 25 * config.getTapes().size();
   }
@@ -64,7 +64,7 @@ public int getIconHeight() {
    *            the <CODE>Graphics2D</CODE> object to draw on
    */
   @Override
-public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
+  public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
     if (c != null) super.paintConfiguration(c, g, width, height);
     float position = BELOW_STATE.y + 5.0f;
     int headx = BELOW_STATE.x + width / 2;

@@ -52,7 +52,7 @@ public class REToFSAAction extends RegularAction {
    *            the event to process
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     // JFrame frame = Universe.frameForEnvironment(environment);
     try {
       getExpression().asCheckedString();

@@ -25,6 +25,8 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.GrammarToAutomatonConverter;
 import edu.duke.cs.jflap.grammar.Production;
 
+import java.util.List;
+
 /**
  * The CFG to PDA (LL parsing) converter can be used to convert a context free
  * grammar to a pushdown automaton that can be used for LL parsing. You can do
@@ -53,7 +55,7 @@ public class CFGToPDALLConverter extends GrammarToAutomatonConverter {
    * @return the equivalent transition.
    */
   @Override
-public Transition getTransitionForProduction(Production production) {
+  public Transition getTransitionForProduction(Production production) {
     String lhs = production.getLHS();
     String rhs = production.getRHS();
     Transition transition = new PDATransition(INTERMEDIATE_STATE, INTERMEDIATE_STATE, "", lhs, rhs);
@@ -73,7 +75,7 @@ public Transition getTransitionForProduction(Production production) {
    *            the automaton being created.
    */
   @Override
-public void createStatesForConversion(Grammar grammar, Automaton automaton) {
+  public void createStatesForConversion(Grammar grammar, Automaton automaton) {
     initialize();
     StatePlacer sp = new StatePlacer();
 
@@ -95,10 +97,11 @@ public void createStatesForConversion(Grammar grammar, Automaton automaton) {
         new PDATransition(intermediateState, finalState, "", BOTTOM_OF_STACK, "");
     automaton.addTransition(trans2);
 
-    String[] terminals = grammar.getTerminals();
-    for (int k = 0; k < terminals.length; k++) {
+    List<String> terminals = grammar.getTerminals();
+    for (int k = 0; k < terminals.size(); k++) {
       PDATransition trans =
-          new PDATransition(intermediateState, intermediateState, terminals[k], terminals[k], "");
+          new PDATransition(
+              intermediateState, intermediateState, terminals.get(k), terminals.get(k), "");
       automaton.addTransition(trans);
     }
   }

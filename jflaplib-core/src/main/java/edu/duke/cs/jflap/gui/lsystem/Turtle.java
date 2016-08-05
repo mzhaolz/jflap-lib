@@ -125,7 +125,7 @@ class Turtle implements Cloneable, Serializable {
    * @return a copy of the current turtle
    */
   @Override
-public Object clone() {
+  public Object clone() {
     return new Turtle(this);
   }
 
@@ -492,7 +492,7 @@ public Object clone() {
    * @return a string representation of this turtle
    */
   @Override
-public final String toString() {
+  public final String toString() {
     StringBuffer sb = new StringBuffer();
     sb.append("{ " + super.toString());
     sb.append(", distance=" + distance);

@@ -34,12 +34,12 @@ public class AnBlAk extends RegularPumpingLemma {
   private static final long serialVersionUID = 7114226724693300070L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "a^n b^l a^k : n > 5, l > 3, k <= l";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>a<sup>n</sup>b<sup>l</sup>a<sup>k</sup></i> : <i>n</i> "
         + GREATER_THAN
         + " 5, <i>l</i> "
@@ -50,7 +50,7 @@ public String getHTMLTitle() {
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value "
@@ -64,30 +64,30 @@ public void setDescription() {
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     if (getM() <= 3) w = pumpString("a", 6) + pumpString("b", 4) + pumpString("a", 4);
     else w = pumpString("a", 6) + pumpString("b", getM()) + pumpString("a", getM());
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     int b = w.indexOf('b');
     if (b > 6) setDecomposition(new int[] {0, 1});
     else setDecomposition(new int[] {Math.min(b, m - 1), 1});
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = 0;
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {2, 15};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     int a, b, a2;
     char[] list = new char[] {'a', 'b', 'a'};
     if (LemmaMath.isMixture(s, list)) return false;

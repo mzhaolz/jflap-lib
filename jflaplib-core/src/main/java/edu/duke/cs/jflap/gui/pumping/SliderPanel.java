@@ -106,7 +106,7 @@ public class SliderPanel extends JPanel {
     mySlider.addChangeListener(
         new ChangeListener() {
           @Override
-        public void stateChanged(ChangeEvent e) {
+          public void stateChanged(ChangeEvent e) {
             refresh();
             myPane.refresh();
           }

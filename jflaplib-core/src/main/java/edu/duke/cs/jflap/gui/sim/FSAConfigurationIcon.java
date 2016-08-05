@@ -54,7 +54,7 @@ public class FSAConfigurationIcon extends ConfigurationIcon {
    *            the height that the configuration is painted in
    */
   @Override
-public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
+  public void paintConfiguration(Component c, Graphics2D g, int width, int height) {
     super.paintConfiguration(c, g, width, height);
     FSAConfiguration config = (FSAConfiguration) getConfiguration();
     // Draw the torn tape with the rest of the input.

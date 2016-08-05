@@ -44,7 +44,7 @@ public class ColorComparator implements Comparator<Color> {
    *         0 if they're equal, and positive otherwise.
    */
   @Override
-public int compare(Color first, Color second) {
+  public int compare(Color first, Color second) {
     if (first.getAlpha() != second.getAlpha()) return (second.getAlpha() - first.getAlpha());
     // Extract the HSB, and impose the ordering.
     float[] firstHSB = Color.RGBtoHSB(first.getRed(), first.getGreen(), first.getBlue(), null);
@@ -85,7 +85,7 @@ public int compare(Color first, Color second) {
    *         comparator.
    */
   @Override
-public boolean equals(Object object) {
+  public boolean equals(Object object) {
     return true;
   }
 

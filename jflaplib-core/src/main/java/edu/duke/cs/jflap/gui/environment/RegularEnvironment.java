@@ -72,7 +72,7 @@ public class RegularEnvironment extends Environment {
    *         otherwise
    */
   @Override
-public boolean isDirty() {
+  public boolean isDirty() {
     getExpression().asString(); // Force resolution of reference.
     return super.isDirty();
   }

@@ -117,7 +117,7 @@ public class Profile {
     transTuringFinalCheckBox.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             setTransitionsFromTuringFinalStateAllowed(transTuringFinalCheckBox.isSelected());
             savePreferences();
           }
@@ -130,7 +130,7 @@ public class Profile {
     turingAcceptByFinalStateCheckBox.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             setAcceptByFinalState(turingAcceptByFinalStateCheckBox.isSelected());
             savePreferences();
           }
@@ -143,7 +143,7 @@ public class Profile {
     turingAcceptByHaltingCheckBox.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             setAcceptByHalting(turingAcceptByHaltingCheckBox.isSelected());
             savePreferences();
           }
@@ -156,7 +156,7 @@ public class Profile {
     turingAllowStayCheckBox.addActionListener(
         new ActionListener() {
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             setAllowStay(turingAllowStayCheckBox.isSelected());
             savePreferences();
           }

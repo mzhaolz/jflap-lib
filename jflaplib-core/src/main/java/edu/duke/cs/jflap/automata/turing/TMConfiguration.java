@@ -65,7 +65,7 @@ public class TMConfiguration extends Configuration implements Cloneable {
    * @return a string representation of this object.
    */
   @Override
-public String toString() {
+  public String toString() {
     StringBuffer sb = new StringBuffer(super.toString());
     for (int i = 0; i < myTapes.size(); i++) {
       sb.append(" TAPE ");
@@ -86,7 +86,7 @@ public String toString() {
    *         <CODE>false</CODE> otherwise
    */
   @Override
-public boolean isAccept() {
+  public boolean isAccept() {
 
     for (int i = 0; i < myFilters.size(); i++) {
       if (myFilters.get(i).accept(this)) return true;
@@ -111,7 +111,7 @@ public boolean isAccept() {
    *         <CODE>false</CODE> if they are not
    */
   @Override
-public boolean equals(Object configuration) {
+  public boolean equals(Object configuration) {
     if (configuration == this) return true;
     try {
       if (!super.equals(configuration)) return false;
@@ -130,7 +130,7 @@ public boolean equals(Object configuration) {
    * @return a hash code for this configuration
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     int code = super.hashCode();
     for (int i = 0; i < myTapes.size(); i++) code = code ^ myTapes.get(i).hashCode();
     return code;
@@ -165,7 +165,7 @@ public int hashCode() {
   }
 
   @Override
-public Object clone() {
+  public Object clone() {
     TMConfiguration newConfig =
         new TMConfiguration(
             this.getCurrentState(), (TMConfiguration) this.getParent(), myTapes, myFilters);

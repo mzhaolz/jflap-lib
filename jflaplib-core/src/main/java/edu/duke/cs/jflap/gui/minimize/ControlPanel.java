@@ -77,7 +77,7 @@ class ControlPanel extends JToolBar {
           private static final long serialVersionUID = -3445189389952982103L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             MinimizeTreeNode node = getNode();
             if (node == null) {
               JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
@@ -97,7 +97,7 @@ class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 2396044313276565099L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             MinimizeTreeNode node = getNode();
             if (node == null) {
               JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
@@ -118,7 +118,7 @@ class ControlPanel extends JToolBar {
           private static final long serialVersionUID = -8005109949177890385L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             MinimizeTreeNode node = getNode();
             if (node == null) {
               JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
@@ -138,7 +138,7 @@ class ControlPanel extends JToolBar {
           private static final long serialVersionUID = 6094149826872361113L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             controller.check();
             controller.setEnabledness();
           }
@@ -153,7 +153,7 @@ class ControlPanel extends JToolBar {
           private static final long serialVersionUID = -1207792629025600376L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             /*
              * TreeNode[] selected = treeDrawer.getSelected(); for (int i=0;
              * i<selected.length; i++)
@@ -173,7 +173,7 @@ class ControlPanel extends JToolBar {
           private static final long serialVersionUID = -2415907778321643162L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             TreeNode[] selected = treeDrawer.getSelected();
             for (int i = 0; i < selected.length; i++)
               controller.removeNode((MinimizeTreeNode) selected[i]);
@@ -190,7 +190,7 @@ class ControlPanel extends JToolBar {
           private static final long serialVersionUID = -732801539899143007L;
 
           @Override
-        public void actionPerformed(ActionEvent event) {
+          public void actionPerformed(ActionEvent event) {
             controller.finished();
             controller.setEnabledness();
           }

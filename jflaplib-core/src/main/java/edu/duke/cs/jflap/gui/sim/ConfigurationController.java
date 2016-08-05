@@ -455,7 +455,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
    *            the selection event
    */
   @Override
-public void configurationSelectionChange(ConfigurationSelectionEvent event) {
+  public void configurationSelectionChange(ConfigurationSelectionEvent event) {
     // changeSelection();
   }
 

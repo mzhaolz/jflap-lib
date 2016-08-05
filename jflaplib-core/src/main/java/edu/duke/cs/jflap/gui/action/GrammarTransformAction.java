@@ -55,7 +55,7 @@ public class GrammarTransformAction extends GrammarAction {
    * Performs the action.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     Grammar g = environment.getGrammar();
     if (g == null) return;
     hypothesizeLambda(environment, g);

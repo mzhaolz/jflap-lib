@@ -70,7 +70,7 @@ public class DisplayPane extends JPanel {
     spinnerModel.addChangeListener(
         new ChangeListener() {
           @Override
-        public void stateChanged(ChangeEvent e) {
+          public void stateChanged(ChangeEvent e) {
             updateDisplay();
           }
         });
@@ -82,7 +82,7 @@ public class DisplayPane extends JPanel {
     ChangeListener c =
         new ChangeListener() {
           @Override
-        public void stateChanged(ChangeEvent e) {
+          public void stateChanged(ChangeEvent e) {
             updateDisplay();
             // displayAction.setEnabled(true);
           }
@@ -125,7 +125,7 @@ public class DisplayPane extends JPanel {
             30,
             new ActionListener() {
               @Override
-            public void actionPerformed(ActionEvent e) {
+              public void actionPerformed(ActionEvent e) {
                 int i = renderer.getDoneSymbols() - 1;
                 progressBar.setValue(i);
                 progressBar.repaint();
@@ -135,7 +135,7 @@ public class DisplayPane extends JPanel {
     final Thread drawThread =
         new Thread() {
           @Override
-        public void run() {
+          public void run() {
             if (expansion.size() < 70) {
               String expansionString = LSystemInputPane.listAsString(expansion);
               expansionDisplay.setText(expansionString);
@@ -171,7 +171,7 @@ public class DisplayPane extends JPanel {
    *            the graphics interface for the printer device
    */
   @Override
-public void printComponent(Graphics g) {
+  public void printComponent(Graphics g) {
     int recursionDepth = spinnerModel.getNumber().intValue();
     List<String> expansion = expander.expansionForLevel(recursionDepth);
     // Now, set the display.
@@ -194,7 +194,7 @@ public void printComponent(Graphics g) {
    *            the graphics object to paint to
    */
   @Override
-public void printChildren(Graphics g) {}
+  public void printChildren(Graphics g) {}
 
   /** The L-system we are displaying here. */
   private LSystem lsystem;

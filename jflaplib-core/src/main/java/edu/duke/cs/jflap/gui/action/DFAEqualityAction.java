@@ -63,7 +63,7 @@ public class DFAEqualityAction extends FSAAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     JComboBox<EnvironmentFrame> combo = new JComboBox<EnvironmentFrame>();
     // Figure out what existing environments in the program have
     // the type of structure that we need.

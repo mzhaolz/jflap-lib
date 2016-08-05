@@ -41,7 +41,7 @@ public class GrammarTransducer extends AbstractTransducer {
    * @return the string "grammar"
    */
   @Override
-public String getType() {
+  public String getType() {
     return "edu/duke/cs/jflap/grammar";
   }
 
@@ -85,7 +85,7 @@ public String getType() {
    * @return the {@link edu.duke.cs.jflap.grammar.Grammar} instance
    */
   @Override
-public java.io.Serializable fromDOM(Document document) {
+  public java.io.Serializable fromDOM(Document document) {
     Grammar g = new UnboundGrammar();
     NodeList list = document.getDocumentElement().getElementsByTagName(PRODUCTION_NAME);
     for (int i = 0; i < list.getLength(); i++) {
@@ -104,7 +104,7 @@ public java.io.Serializable fromDOM(Document document) {
    * @return a DOM document instance
    */
   @Override
-public Document toDOM(java.io.Serializable structure) {
+  public Document toDOM(java.io.Serializable structure) {
     Grammar grammar = (Grammar) structure;
     Document doc = newEmptyDocument();
     Element se = doc.getDocumentElement();

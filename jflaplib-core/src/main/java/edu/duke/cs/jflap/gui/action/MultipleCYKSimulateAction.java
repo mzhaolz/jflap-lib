@@ -77,7 +77,7 @@ public class MultipleCYKSimulateAction extends MultipleSimulateAction {
   }
 
   @Override
-public void performAction(Component source) {
+  public void performAction(Component source) {
 
     table = initializeTable(getObject());
     if (((InputTableModel) table.getModel()).isMultiple) {
@@ -94,7 +94,7 @@ public void performAction(Component source) {
           private static final long serialVersionUID = 43L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
             try {
               // Make sure any recent changes are registered.
@@ -129,7 +129,7 @@ public void performAction(Component source) {
           private static final long serialVersionUID = 45L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             try {
               // Make sure any recent changes are registered.
               table.getCellEditor().stopCellEditing();
@@ -503,7 +503,7 @@ public void performAction(Component source) {
   }
 
   @Override
-public int getMachineIndexByName(String machineFileName) {
+  public int getMachineIndexByName(String machineFileName) {
     List<Object> machines = getEnvironment().myObjects;
     if (machines == null) return -1;
     for (int k = 0; k < machines.size(); k++) {
@@ -525,7 +525,7 @@ public int getMachineIndexByName(String machineFileName) {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     performAction((Component) e.getSource());
   }
 
@@ -534,7 +534,7 @@ public void actionPerformed(ActionEvent e) {
    *
    */
   @Override
-protected void updateView(String machineFileName, String input, JTableExtender table) {
+  protected void updateView(String machineFileName, String input, JTableExtender table) {
     List<Object> machines = this.getEnvironment().myObjects;
     Object current = null;
     if (machines != null) current = machines.get(0);

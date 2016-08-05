@@ -114,7 +114,7 @@ public class PDAConfiguration extends Configuration {
    * @return a string representation of this object.
    */
   @Override
-public String toString() {
+  public String toString() {
     return super.toString() + " INPUT: " + getUnprocessedInput() + " STACK: " + myStack.toString();
   }
 
@@ -127,7 +127,7 @@ public String toString() {
    *         <CODE>false</CODE> otherwise
    */
   @Override
-public boolean isAccept() {
+  public boolean isAccept() {
     if (myAcceptance == FINAL_STATE) {
       if (getUnprocessedInput().length() != 0) return false;
       State s = getCurrentState();
@@ -154,7 +154,7 @@ public boolean isAccept() {
    *         <CODE>false</CODE> if it is not
    */
   @Override
-public boolean equals(Object configuration) {
+  public boolean equals(Object configuration) {
     if (configuration == this) return true;
     try {
       return super.equals(configuration)
@@ -171,7 +171,7 @@ public boolean equals(Object configuration) {
    * @return a hash code for this configuration
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     return super.hashCode() ^ myStack.hashCode() ^ myUnprocessedInput.hashCode();
   }
 

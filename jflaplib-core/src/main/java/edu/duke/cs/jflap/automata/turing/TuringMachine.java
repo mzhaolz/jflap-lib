@@ -79,7 +79,7 @@ public class TuringMachine extends Automaton {
    *         <CODE>automata.tm.TMTransition</CODE>
    */
   @Override
-protected Class<? extends Transition> getTransitionClass() {
+  protected Class<? extends Transition> getTransitionClass() {
     return edu.duke.cs.jflap.automata.turing.TMTransition.class;
   }
 
@@ -93,7 +93,7 @@ protected Class<? extends Transition> getTransitionClass() {
    *             required by other Turing machines
    */
   @Override
-public void addTransition(Transition t) {
+  public void addTransition(Transition t) {
     try {
       int ttapes = ((TMTransition) t).tapes();
       if (tapes == 0) tapes = ttapes;
@@ -125,7 +125,7 @@ public void addTransition(Transition t) {
    *            the point to put the state at
    */
   @Override
-public State createState(Point point) {
+  public State createState(Point point) {
     return createTMState(point);
   }
 
@@ -135,7 +135,7 @@ public State createState(Point point) {
    * handle the building block cloning in a more elegant way.
    */
   @Override
-public Object clone() {
+  public Object clone() {
     // MERLIN MERLIN MERLIN MERLIN MERLIN//
 
     TuringMachine a = new TuringMachine(this.tapes());

@@ -33,7 +33,7 @@ public class NaNb extends RegularPumpingLemma {
   private static final long serialVersionUID = 1706121984502776649L;
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>w</i> "
         + ELEMENT_OF
         + " "
@@ -44,12 +44,12 @@ public String getHTMLTitle() {
   }
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "w element_of {ab}* : na(w) < nb(w)";
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
@@ -63,27 +63,27 @@ public void setDescription() {
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     w = pumpString("a", getM()) + pumpString("b", getM() + 1);
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     setDecomposition(new int[] {Math.min(m - 1, w.indexOf('b')), 1});
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = 2;
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {2, 17};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     int a, b;
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;

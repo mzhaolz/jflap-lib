@@ -98,7 +98,8 @@ public class SimulatorPane extends JPanel {
     // Initialize the scroll pane for the configuration view.
     JScrollPane scroller =
         new JScrollPane(
-            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
     // Set up the configurations pane.
     ConfigurationPane configurations = new ConfigurationPane(automaton);
@@ -112,7 +113,7 @@ public class SimulatorPane extends JPanel {
     env.addChangeListener(
         new ChangeListener() {
           @Override
-        public void stateChanged(ChangeEvent e) {
+          public void stateChanged(ChangeEvent e) {
             if (env.contains(SimulatorPane.this)) return;
             env.removeChangeListener(this);
             controller.cleanup();

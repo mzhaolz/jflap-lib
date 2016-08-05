@@ -72,7 +72,7 @@ public abstract class ConvertAutomatonToGrammarAction extends AutomatonAction {
    *            the event to process
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     if (automaton.getInitialState() == null) {
       JOptionPane.showMessageDialog(
           environment,
@@ -90,7 +90,7 @@ public void actionPerformed(ActionEvent e) {
     apane.addMouseListener(
         new MouseAdapter() {
           @Override
-        public void mouseClicked(MouseEvent event) {
+          public void mouseClicked(MouseEvent event) {
             Object o = drawer.stateAtPoint(event.getPoint());
             if (o == null) o = drawer.transitionAtPoint(event.getPoint());
             if (o == null) return;
@@ -123,7 +123,7 @@ public void actionPerformed(ActionEvent e) {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.revealRandomProductions();
           }
         });
@@ -135,7 +135,7 @@ public void actionPerformed(ActionEvent e) {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.revealAllProductions();
           }
         });
@@ -148,7 +148,7 @@ public void actionPerformed(ActionEvent e) {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.highlightUntransformed();
           }
         });
@@ -160,7 +160,7 @@ public void actionPerformed(ActionEvent e) {
           private static final long serialVersionUID = 1L;
 
           @Override
-        public void actionPerformed(ActionEvent e) {
+          public void actionPerformed(ActionEvent e) {
             controller.exportGrammar();
           }
         });

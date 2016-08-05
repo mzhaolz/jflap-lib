@@ -201,7 +201,7 @@ public class Tape implements Serializable {
    * @return a string representation of the tape object.
    */
   @Override
-public String toString() {
+  public String toString() {
     return "[" + buffer.toString() + "]" + " TAPE HEAD AT " + tapeHead;
   }
 
@@ -237,7 +237,7 @@ public String toString() {
    *         they are not
    */
   @Override
-public boolean equals(Object tape) {
+  public boolean equals(Object tape) {
     if (tape == this) return true;
     Tape t;
     try {
@@ -268,7 +268,7 @@ public boolean equals(Object tape) {
    * @return a hash code for this tape
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     if (cachedHash != 0xdeadbeef) return cachedHash;
     int[] bounds = new int[2];
     this.nonTrivial(bounds);

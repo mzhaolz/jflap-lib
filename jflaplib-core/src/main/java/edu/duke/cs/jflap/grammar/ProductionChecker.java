@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.grammar;
 
+import java.util.List;
+
 /**
  * The Production checker object can be used to check certain properties of
  * production objects.
@@ -84,8 +86,8 @@ public class ProductionChecker {
     /**
      * if only one variable on rhs and it is first char on rhs.
      */
-    String[] variables = production.getVariablesOnRHS();
-    if (variables.length == 1) {
+    List<String> variables = production.getVariablesOnRHS();
+    if (variables.size() == 1) {
       char ch = rhs.charAt(0);
       if (isVariable(ch)) {
         return true;
@@ -109,8 +111,8 @@ public class ProductionChecker {
     /**
      * if only one variable on rhs and it is last char on rhs.
      */
-    String[] variables = production.getVariablesOnRHS();
-    if (variables.length == 1) {
+    List<String> variables = production.getVariablesOnRHS();
+    if (variables.size() == 1) {
       char ch = rhs.charAt(rhs.length() - 1);
       if (isVariable(ch)) {
         return true;
@@ -132,8 +134,8 @@ public class ProductionChecker {
     if (!isRestrictedOnLHS(production)) return false;
     String rhs = production.getRHS();
     /** if rhs is all terminals. */
-    String[] terminals = production.getTerminalsOnRHS();
-    if (rhs.length() == terminals.length) return true;
+    List<String> terminals = production.getTerminalsOnRHS();
+    if (rhs.length() == terminals.size()) return true;
     return false;
   }
 
@@ -147,8 +149,8 @@ public class ProductionChecker {
   public static boolean isUnitProduction(Production production) {
     if (!isRestrictedOnLHS(production)) return false;
     String rhs = production.getRHS();
-    String[] variablesOnRHS = production.getVariablesOnRHS();
-    if (rhs.length() == 1 && variablesOnRHS.length == 1) {
+    List<String> variablesOnRHS = production.getVariablesOnRHS();
+    if (rhs.length() == 1 && variablesOnRHS.size() == 1) {
       return true;
     }
     return false;
@@ -181,8 +183,8 @@ public class ProductionChecker {
    */
   public static boolean isRestrictedOnLHS(Production production) {
     String lhs = production.getLHS();
-    String[] variablesOnLHS = production.getVariablesOnLHS();
-    if (lhs.length() == 1 && variablesOnLHS.length == 1) {
+    List<String> variablesOnLHS = production.getVariablesOnLHS();
+    if (lhs.length() == 1 && variablesOnLHS.size() == 1) {
       return true;
     }
     return false;
@@ -199,9 +201,9 @@ public class ProductionChecker {
    * @return true if <CODE>variable</CODE> is in the production.
    */
   public static boolean isVariableInProduction(String variable, Production production) {
-    String[] variables = production.getVariables();
-    for (int k = 0; k < variables.length; k++) {
-      if (variables[k].equals(variable)) return true;
+    List<String> variables = production.getVariables();
+    for (int k = 0; k < variables.size(); k++) {
+      if (variables.get(k).equals(variable)) return true;
     }
     return false;
   }
@@ -217,9 +219,9 @@ public class ProductionChecker {
    * @return true if <CODE>terminal</CODE> is in the production.
    */
   public static boolean isTerminalInProduction(String terminal, Production production) {
-    String[] terminals = production.getTerminals();
-    for (int k = 0; k < terminals.length; k++) {
-      if (terminals[k].equals(terminal)) return true;
+    List<String> terminals = production.getTerminals();
+    for (int k = 0; k < terminals.size(); k++) {
+      if (terminals.get(k).equals(terminal)) return true;
     }
     return false;
   }
@@ -278,9 +280,9 @@ public class ProductionChecker {
    *         <CODE>production</CODE>.
    */
   public static boolean isVariableOnRHS(Production production, String variable) {
-    String[] variables = production.getVariablesOnRHS();
-    for (int k = 0; k < variables.length; k++) {
-      if (variables[k].equals(variable)) return true;
+    List<String> variables = production.getVariablesOnRHS();
+    for (int k = 0; k < variables.size(); k++) {
+      if (variables.get(k).equals(variable)) return true;
     }
     return false;
   }

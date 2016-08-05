@@ -53,7 +53,7 @@ public class MealyTransducer extends AutomatonTransducer {
    * @return an empty Mealy machine
    */
   @Override
-protected Automaton createEmptyAutomaton(Document document) {
+  protected Automaton createEmptyAutomaton(Document document) {
     return new MealyMachine();
   }
 
@@ -74,7 +74,7 @@ protected Automaton createEmptyAutomaton(Document document) {
    * @return the new transition
    */
   @Override
-protected Transition createTransition(
+  protected Transition createTransition(
       State from, State to, Node node, Map<String, String> e2t, boolean isBlock) {
     /*
      * The boolean isBlock seems to be ignored in FSATransducer.java, so I'm
@@ -99,7 +99,7 @@ protected Transition createTransition(
    * @see edu.duke.cs.jflap.file.xml.AutomatonTransducer#createTransitionElement
    */
   @Override
-protected Element createTransitionElement(Document document, Transition transition) {
+  protected Element createTransitionElement(Document document, Transition transition) {
     Element te = super.createTransitionElement(document, transition);
     MealyTransition t = (MealyTransition) transition;
     te.appendChild(createElement(document, TRANSITION_READ_NAME, null, t.getLabel()));
@@ -113,7 +113,7 @@ protected Element createTransitionElement(Document document, Transition transiti
    * @return the string "mealy"
    */
   @Override
-public String getType() {
+  public String getType() {
     return "mealy";
   }
 }

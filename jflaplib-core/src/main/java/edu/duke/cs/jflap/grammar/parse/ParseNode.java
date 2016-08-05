@@ -16,9 +16,12 @@
 
 package edu.duke.cs.jflap.grammar.parse;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import edu.duke.cs.jflap.grammar.Production;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -47,18 +50,18 @@ public class ParseNode extends DefaultMutableTreeNode {
    *
    * @param derivation
    *            the derivation of this rule
-   * @param productions
+   * @param productions2
    *            the productions that led to this derivation
-   * @param substitutions
+   * @param subs2
    *            the positions in the parent string derivation that the
    *            productions were substituted in to achieve this derivation
    */
-  public ParseNode(String derivation, Production[] productions, int[] substitutions) {
+  public ParseNode(String derivation, List<Production> productions2, List<Integer> subs2) {
     this.derivation = derivation;
-    if (productions.length != substitutions.length)
-      throw new IllegalArgumentException("Production and substitution array sizes mismatch!");
-    this.productions = productions;
-    this.subs = substitutions;
+    checkArgument(productions2.size() != subs2.size(), "Production and subsitutions sizes must match.");
+
+    this.productions = productions2;
+    this.subs = subs2;
   }
 
   /**
@@ -98,7 +101,7 @@ public class ParseNode extends DefaultMutableTreeNode {
    * @return the positions for the substitutions of the productions in the
    *         parent derivation that led to this current derivation
    */
-  public List<int> getSubstitutions() {
+  public List<Integer> getSubstitutions() {
     return subs;
   }
 
@@ -113,9 +116,9 @@ public String toString() {
     sb.append(", ");
     sb.append(Arrays.asList(productions) + ", ");
     sb.append('[');
-    for (int j = 0; j < subs.length; j++) {
+    for (int j = 0; j < subs.size(); j++) {
       if (j != 0) sb.append(", ");
-      sb.append(subs[j]);
+      sb.append(subs.get(j));
     }
     sb.append(']');
     return sb.toString();
@@ -128,5 +131,5 @@ public String toString() {
   private List<Production> productions;
 
   /** The positions at which substitutions were attempted. */
-  private List<int> subs;
+  private List<Integer> subs;
 }

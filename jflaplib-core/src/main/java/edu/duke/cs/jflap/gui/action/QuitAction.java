@@ -64,7 +64,7 @@ public class QuitAction extends RestrictedAction {
    * terminates.
    */
   @Override
-public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     beginQuit();
   }
 }

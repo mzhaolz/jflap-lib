@@ -57,7 +57,7 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
   }
 
   @Override
-protected void addDecompPanelGameFeatures(JPanel n) {
+  protected void addDecompPanelGameFeatures(JPanel n) {
     decompButtonTitle = new String("Set uvxyz");
     n.setMaximumSize(new Dimension(MAX_SIZE.width, 9 * MAX_SIZE.height / 20));
     n.setPreferredSize(new Dimension(MAX_SIZE.width, 9 * MAX_SIZE.height / 20));
@@ -76,7 +76,7 @@ protected void addDecompPanelGameFeatures(JPanel n) {
    *
    */
   @Override
-protected void mEnteredReset() {
+  protected void mEnteredReset() {
     /*
      * int m = Integer.parseInt(myMDisplay.getText()); reset();
      * myMDisplay.setText(Integer.toString(m));
@@ -107,7 +107,7 @@ protected void mEnteredReset() {
   }
 
   @Override
-protected void resetDecompPanel() {
+  protected void resetDecompPanel() {
     myUPanel.reset();
     myVPanel.reset();
     myXPanel.reset();
@@ -122,7 +122,7 @@ protected void resetDecompPanel() {
    * <i>z</i>, the display for <i>i</i> and the pumped string, and the canvas.
    */
   @Override
-protected void refresh() {
+  protected void refresh() {
     try {
       /*
        * Reset the range of each panel depending on the values of the
@@ -189,7 +189,7 @@ protected void refresh() {
   }
 
   @Override
-public void setDecomposition(int[] decomposition) {
+  public void setDecomposition(int[] decomposition) {
     int u = decomposition[0];
     int v = decomposition[1];
     int x = decomposition[2];
@@ -208,7 +208,7 @@ public void setDecomposition(int[] decomposition) {
    * based on the user's decomposition of <i>uvxyz</i>.
    */
   @Override
-protected void setI() {
+  protected void setI() {
     int[] d =
         new int[] {
           myUPanel.getVal(),
@@ -231,7 +231,7 @@ protected void setI() {
    *
    */
   @Override
-protected void setCanvas() {
+  protected void setCanvas() {
     stages[5].setVisible(true);
     myCanvas.reset();
     myCanvas.addText("w =");
@@ -253,7 +253,7 @@ protected void setCanvas() {
    * @return a string representing <i>uv<sup>i</sup>xy<sup>i</sup>z</i>
    */
   @Override
-protected String createXYZ() {
+  protected String createXYZ() {
     return "<i>uv</i><sup>"
         + myLemma.getI()
         + "</sup><i>xy</i><sup>"
@@ -262,7 +262,7 @@ protected String createXYZ() {
   }
 
   @Override
-public void update() {
+  public void update() {
     ContextFreePumpingLemma pl = (ContextFreePumpingLemma) myLemma;
     stageMessages[0].setText("File loaded.");
     updateTopPane(false);

@@ -49,7 +49,7 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
   }
 
   @Override
-protected void addDecompPanelGameFeatures(JPanel n) {
+  protected void addDecompPanelGameFeatures(JPanel n) {
     n.setMaximumSize(new Dimension(MAX_SIZE.width, 3 * MAX_SIZE.height / 10));
     n.setPreferredSize(new Dimension(MAX_SIZE.width, 3 * MAX_SIZE.height / 10));
     decompButtonTitle = new String("Set xyz");
@@ -62,7 +62,7 @@ protected void addDecompPanelGameFeatures(JPanel n) {
    *
    */
   @Override
-protected void mEnteredReset() {
+  protected void mEnteredReset() {
     String s = myLemma.getW();
     myWDisplay.setText(s);
     myXPanel.setSliderMax(s.length());
@@ -77,7 +77,7 @@ protected void mEnteredReset() {
   }
 
   @Override
-protected void resetDecompPanel() {
+  protected void resetDecompPanel() {
     myXPanel.reset();
     myYPanel.reset();
     myZDisplay.setText("");
@@ -90,7 +90,7 @@ protected void resetDecompPanel() {
    * display for <i>i</i> and the pumped string, and the canvas.
    */
   @Override
-protected void refresh() {
+  protected void refresh() {
     try {
       myXPanel.setRange(0, myYPanel.getVal() - 1);
       myYPanel.setRange(myXPanel.getVal(), myLemma.getM());
@@ -127,7 +127,7 @@ protected void refresh() {
   }
 
   @Override
-public void setDecomposition(int[] decomposition) {
+  public void setDecomposition(int[] decomposition) {
     myXPanel.setVal(decomposition[0]);
     myYPanel.setVal(decomposition[0] + decomposition[1]);
   }
@@ -137,7 +137,7 @@ public void setDecomposition(int[] decomposition) {
    * user's decomposition of <i>xyz</i>..
    */
   @Override
-protected void setI() {
+  protected void setI() {
     int[] d = new int[] {myXPanel.getVal(), myYPanel.getVal() - myXPanel.getVal()};
     myLemma.setDecomposition(d);
     myLemma.chooseI();
@@ -152,7 +152,7 @@ protected void setI() {
    * and <i>z</i>.
    */
   @Override
-protected void setCanvas() {
+  protected void setCanvas() {
     stages[5].setVisible(true);
     myCanvas.reset();
     myCanvas.addText("w =");
@@ -172,12 +172,12 @@ protected void setCanvas() {
    * @return a string representing <i>xy<sup>i</sup>z</i>
    */
   @Override
-protected String createXYZ() {
+  protected String createXYZ() {
     return "<i>xy</i><sup>" + myLemma.getI() + "</sup><i>z</i>";
   }
 
   @Override
-public void update() {
+  public void update() {
 
     RegularPumpingLemma pl = (RegularPumpingLemma) myLemma;
     stageMessages[0].setText("File loaded.");

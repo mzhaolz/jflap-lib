@@ -34,12 +34,12 @@ public class B5W extends RegularPumpingLemma {
   private static final long serialVersionUID = 5646526422163373705L;
 
   @Override
-public String getTitle() {
+  public String getTitle() {
     return "b^5w: w element_of {ab}* : 2na(w) = 3nb(w)";
   }
 
   @Override
-public String getHTMLTitle() {
+  public String getHTMLTitle() {
     return "<i>b<sup>5</sup>w</i> : <i>w</i> "
         + ELEMENT_OF
         + " "
@@ -49,7 +49,7 @@ public String getHTMLTitle() {
   }
 
   @Override
-public void setDescription() {
+  public void setDescription() {
     partitionIsValid = false;
     explanation =
         "For any <i>m</i> value "
@@ -67,18 +67,18 @@ public void setDescription() {
   }
 
   @Override
-public void chooseI() {
+  public void chooseI() {
     i = LemmaMath.flipCoin();
   }
 
   @Override
-protected void chooseW() {
+  protected void chooseW() {
     int count = m - 5;
     w = "bbbbb" + pumpString("b", 2 * count) + pumpString("a", 3 * count);
   }
 
   @Override
-public void chooseDecomposition() {
+  public void chooseDecomposition() {
     int a, count;
     count = 5;
     a = 0;
@@ -91,12 +91,12 @@ public void chooseDecomposition() {
   }
 
   @Override
-protected void setRange() {
+  protected void setRange() {
     myRange = new int[] {6, 10};
   }
 
   @Override
-public boolean isInLang(String s) {
+  public boolean isInLang(String s) {
     char[] list = new char[] {'a', 'b'};
     if (LemmaMath.otherCharactersFound(s, list)) return false;
     if (!s.startsWith("bbbbb")) return false;

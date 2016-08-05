@@ -65,7 +65,7 @@ public abstract class Transition implements Serializable, Cloneable {
    * @return a copy of this transition as described
    */
   @Override
-public Object clone() {
+  public Object clone() {
     Transition res = copy(getFromState(), getToState());
     res.isSelected = this.isSelected;
     res.myControlPoint = this.myControlPoint == null ? null : new Point(this.myControlPoint);
@@ -137,7 +137,7 @@ public Object clone() {
    * @return a string representation of this object
    */
   @Override
-public String toString() {
+  public String toString() {
     return "[" + getFromState().toString() + "] -> [" + getToState().toString() + "]";
   }
 
@@ -150,7 +150,7 @@ public String toString() {
    *         otherwise
    */
   @Override
-public boolean equals(Object object) {
+  public boolean equals(Object object) {
     try {
       Transition t = (Transition) object;
       return from == t.from && to == t.to;
@@ -165,7 +165,7 @@ public boolean equals(Object object) {
    * @return the hash code for this transition
    */
   @Override
-public int hashCode() {
+  public int hashCode() {
     return from.hashCode() ^ to.hashCode();
   }
 

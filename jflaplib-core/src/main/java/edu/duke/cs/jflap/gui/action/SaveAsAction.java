@@ -60,7 +60,7 @@ public class SaveAsAction extends RestrictedAction {
    *            the action event
    */
   @Override
-public void actionPerformed(ActionEvent event) {
+  public void actionPerformed(ActionEvent event) {
     Universe.frameForEnvironment(environment).save(true);
   }
 

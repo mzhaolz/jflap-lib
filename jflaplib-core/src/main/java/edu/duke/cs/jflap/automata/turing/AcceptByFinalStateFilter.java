@@ -39,7 +39,7 @@ public class AcceptByFinalStateFilter implements AcceptanceFilter { // note that
   // nonTopLevel.
 
   @Override
-public boolean accept(TMConfiguration tmc) {
+  public boolean accept(TMConfiguration tmc) {
     TMState tms = (TMState) tmc.getCurrentState();
     if (((TuringMachine) tms.getAutomaton()).getParent() != null)
       return false; // first, we check if this is a top-level state, if it
@@ -51,7 +51,7 @@ public boolean accept(TMConfiguration tmc) {
   }
 
   @Override
-public String getName() {
+  public String getName() {
     return "Accept by Final State";
   }
 }
