@@ -1,3 +1,10 @@
+# Modifications to the jflap-lib project.
+
+* Generifying the code, removing raw types. Completed.
+* Moving from arrays to lists and other Guava collections. In progress.
+* Improve implementation by de-duplicating logic. Not started.
+* Improve concurrency. Not started.
+
 jflap-lib
 ==============
 
