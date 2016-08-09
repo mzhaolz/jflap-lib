@@ -38,75 +38,72 @@ import javax.swing.JOptionPane;
  *
  */
 public class MooreStateTool extends StateTool {
-  /**
-   * Instantiates a new state tool.
-   *
-   * @param view
-   *            the view where the automaton is drawn
-   * @param drawer
-   *            the object that draws the automaton
-   */
-  public MooreStateTool(AutomatonPane view, AutomatonDrawer drawer) {
-    super(view, drawer);
-  }
+    /**
+     * Instantiates a new state tool.
+     *
+     * @param view
+     *            the view where the automaton is drawn
+     * @param drawer
+     *            the object that draws the automaton
+     */
+    public MooreStateTool(AutomatonPane view, AutomatonDrawer drawer) {
+        super(view, drawer);
+    }
 
-  /**
-   * This method overrides the superclass and allows us to indicate to undo
-   * that the action is incomplete.
-   *
-   */
-  @Override
-  public void mousePressed(MouseEvent m) {
-    super.mousePressed(m);
-  }
+    /**
+     * This method overrides the superclass and allows us to indicate to undo
+     * that the action is incomplete.
+     *
+     */
+    @Override
+    public void mousePressed(MouseEvent m) {
+        super.mousePressed(m);
+    }
 
-  /**
-   * This allows the user to edit the output of a Moore machine state. It is
-   * called by {@link #mouseReleased(MouseEvent)} and
-   * {@link MooreArrowTool#mouseClicked(MouseEvent)}.
-   *
-   * @param s
-   *            the state to edit the output of
-   */
-  protected static void editState(State s) {
-    MooreMachine m = (MooreMachine) (s.getAutomaton());
+    /**
+     * This allows the user to edit the output of a Moore machine state. It is
+     * called by {@link #mouseReleased(MouseEvent)} and
+     * {@link MooreArrowTool#mouseClicked(MouseEvent)}.
+     *
+     * @param s
+     *            the state to edit the output of
+     */
+    protected static void editState(State s) {
+        MooreMachine m = (MooreMachine) (s.getAutomaton());
 
-    String output =
-        (String)
-            JOptionPane.showInputDialog(
-                null, // I don't
+        String output = (String) JOptionPane.showInputDialog(null, // I don't
                 // seem to
                 // need a
                 // parent
                 // component
-                "Enter output:",
-                "Set Output",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
+                "Enter output:", "Set Output", JOptionPane.QUESTION_MESSAGE, null, null,
                 m.getOutput(s));
 
-    /*
-     * null checking happens in setOutput too, but this is just to be safe
-     */
-    if (output == null) m.setOutput(s, "");
-    else m.setOutput(s, output);
-    /*
-     * This is a cheap hack. It will not immediately display the output
-     * otherwise, and I don't really want to mess around with the guts of
-     * this program.
-     */
-    s.setLabel(s.getLabel());
-  }
+        /*
+         * null checking happens in setOutput too, but this is just to be safe
+         */
+        if (output == null) {
+            m.setOutput(s, "");
+        } else {
+            m.setOutput(s, output);
+        }
+        /*
+         * This is a cheap hack. It will not immediately display the output
+         * otherwise, and I don't really want to mess around with the guts of
+         * this program.
+         */
+        s.setLabel(s.getLabel());
+    }
 
-  /**
-   * This prompts the user for the state output after a state is created (when
-   * the mouse is released).
-   *
-   * @param event
-   *            the mouse event
-   */
-  public void mouseReleased(MouseEvent event) {
-    editState(state);
-  }
+    /**
+     * This prompts the user for the state output after a state is created (when
+     * the mouse is released).
+     *
+     * @param event
+     *            the mouse event
+     */
+    @Override
+    public void mouseReleased(MouseEvent event) {
+        editState(state);
+    }
 }
