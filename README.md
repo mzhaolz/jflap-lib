@@ -1,3 +1,12 @@
+# Modifications to the jflap-lib project.
+
+* Generifying the code, removing raw types. Completed.
+* Moving from arrays to lists and other Guava collections. In progress.
+* Adding Bazel BUILD files, for no particular reason. In progress.
+* Improve implementation by using immutability (e.g. making Grammars immutable, since they're treated that way). Not started.
+* Improve implementation by de-duplicating logic. Not started.
+* Improve concurrency. Not started.
+
 jflap-lib
 ==============
 
