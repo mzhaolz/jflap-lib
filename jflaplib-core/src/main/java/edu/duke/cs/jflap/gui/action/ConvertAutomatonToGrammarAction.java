@@ -20,6 +20,10 @@ import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.gui.TooltipAction;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.grammar.automata.ConvertController;
+import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

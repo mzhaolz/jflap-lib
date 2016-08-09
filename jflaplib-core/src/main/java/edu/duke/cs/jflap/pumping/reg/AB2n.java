@@ -19,6 +19,8 @@ package edu.duke.cs.jflap.pumping.reg;
 import edu.duke.cs.jflap.pumping.LemmaMath;
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
 
+import com.google.common.collect.Lists;
+
 /**
  * The regular pumping lemma for <i>L</i> = {(<i>ab</i>)<i><sup>2n</sup></i> :
  * <i>n</i> = 1,2,...}.
@@ -56,7 +58,7 @@ public class AB2n extends RegularPumpingLemma {
 
   @Override
   protected void setRange() {
-    myRange = new int[] {4, 10};
+    myRange = Lists.newArrayList(4, 10);
   }
 
   @Override
@@ -73,7 +75,7 @@ public class AB2n extends RegularPumpingLemma {
   @Override
   public void chooseDecomposition() {
     // The string "abab"
-    setDecomposition(new int[] {0, 4});
+    setDecomposition(Lists.newArrayList(0, 4));
   }
 
   @Override
@@ -88,4 +90,23 @@ public class AB2n extends RegularPumpingLemma {
     if (n > 0 && n % 2 == 0 && temp.length() == 0) return true;
     return false;
   }
+
+    @Override
+    public boolean setDecomposition(int[] decomposition) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    
+    @Override
+    public int addCase(int[] decomposition, int num) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    
+    @Override
+    public boolean replaceCase(int[] decomposition, int num, int index) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

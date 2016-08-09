@@ -17,6 +17,8 @@
 package edu.duke.cs.jflap.gui.environment;
 
 import edu.duke.cs.jflap.file.xml.DOMPrettier;
+import edu.duke.cs.jflap.gui.editor.TMTransitionCreator;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

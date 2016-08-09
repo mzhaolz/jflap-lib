@@ -19,6 +19,8 @@ package edu.duke.cs.jflap.pumping.reg;
 import edu.duke.cs.jflap.pumping.LemmaMath;
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
 
+import com.google.common.collect.Lists;
+
 /**
  * The regular pumping lemma for <i>L</i> = {<i>ww<sup>R</sup></i> : <i>w</i>
  * &#8712; {<i>a</i>, <i>b</i>}*}.
@@ -58,7 +60,7 @@ public class Palindrome extends RegularPumpingLemma {
 
   @Override
   public void chooseDecomposition() {
-    setDecomposition(new int[] {Math.min(w.length() / 2 - 1, m - 2), 2});
+    setDecomposition(Lists.newArrayList(Math.min(w.length() / 2 - 1, m - 2), 2));
   }
 
   @Override
@@ -68,7 +70,7 @@ public class Palindrome extends RegularPumpingLemma {
 
   @Override
   protected void setRange() {
-    myRange = new int[] {2, 10};
+    myRange = Lists.newArrayList(2, 10);
   }
 
   @Override
@@ -83,4 +85,22 @@ public class Palindrome extends RegularPumpingLemma {
     for (int i = 0; i <= halfSize; i++) if (s.charAt(i) != s.charAt(size - i - 1)) return false;
     return true;
   }
+
+@Override
+public boolean setDecomposition(int[] decomposition) {
+    // TODO Auto-generated method stub
+    return false;
+}
+
+@Override
+public int addCase(int[] decomposition, int num) {
+    // TODO Auto-generated method stub
+    return 0;
+}
+
+@Override
+public boolean replaceCase(int[] decomposition, int num, int index) {
+    // TODO Auto-generated method stub
+    return false;
+}
 }

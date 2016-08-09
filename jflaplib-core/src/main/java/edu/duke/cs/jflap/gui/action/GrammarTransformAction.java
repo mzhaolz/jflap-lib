@@ -24,6 +24,11 @@ import edu.duke.cs.jflap.grammar.UnitProductionRemover;
 import edu.duke.cs.jflap.grammar.UselessProductionRemover;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.grammar.transform.ChomskyPane;
+import edu.duke.cs.jflap.gui.grammar.transform.LambdaPane;
+import edu.duke.cs.jflap.gui.grammar.transform.UnitPane;
+import edu.duke.cs.jflap.gui.grammar.transform.UselessPane;
+
 import java.awt.event.ActionEvent;
 import java.util.Set;
 

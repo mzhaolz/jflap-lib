@@ -16,9 +16,13 @@
 
 package edu.duke.cs.jflap.gui.tree;
 
+import com.google.common.collect.Lists;
+
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.tree.TreeModel;
@@ -49,9 +53,9 @@ public class LeafNodePlacer implements NodePlacer {
   public Map<TreeNode, Float> placeNodes(TreeModel tree, NodeDrawer drawer) {
     HashMap<TreeNode, Float> nodeToPoint = new HashMap<TreeNode, Float>();
     Trees.width(tree);
-    TreeNode[] leaves = Trees.leaves(tree);
+    List<TreeNode> leaves = Trees.leaves(tree);
     int depth = Trees.depth(tree);
-    setPoints((TreeNode) tree.getRoot(), depth, 0, leaves.length, new int[] {0}, nodeToPoint);
+    setPoints((TreeNode) tree.getRoot(), depth, 0, leaves.size(), Lists.newArrayList(0), nodeToPoint);
     return nodeToPoint;
   }
 
@@ -66,7 +70,7 @@ public class LeafNodePlacer implements NodePlacer {
    *            the depth of this node
    * @param leaves
    *            the total number of leaves
-   * @param sofar
+   * @param arrayList
    *            the number of leaves placed sofar
    * @param nodeToPoint
    *            the mapping of nodes to points
@@ -76,22 +80,22 @@ public class LeafNodePlacer implements NodePlacer {
       int depth,
       int thisDepth,
       int leaves,
-      int[] sofar,
+      ArrayList<Integer> arrayList,
       Map<TreeNode, Float> nodeToPoint) {
-    TreeNode[] children = Trees.children(node);
+    List<TreeNode> children = Trees.children(node);
     float y = (float) (thisDepth + 1) / (float) (depth + 2);
-    if (children.length == 0) {
+    if (children.size() == 0) {
       // It is a leaf!
-      float x = (float) (sofar[0] + 1) / (float) (leaves + 1);
+      float x = (float) (arrayList.get(0) + 1) / (float) (leaves + 1);
       nodeToPoint.put(node, new Point2D.Float(x, y));
-      sofar[0]++;
+      arrayList.set(0, arrayList.get(0) + 1);
       return;
     }
     // Not a leaf!
-    for (int i = 0; i < children.length; i++)
-      setPoints(children[i], depth, thisDepth + 1, leaves, sofar, nodeToPoint);
-    Point2D leftmost = nodeToPoint.get(children[0]);
-    Point2D rightmost = nodeToPoint.get(children[children.length - 1]);
+    for (int i = 0; i < children.size(); i++)
+      setPoints(children.get(i), depth, thisDepth + 1, leaves, arrayList, nodeToPoint);
+    Point2D leftmost = nodeToPoint.get(children.get(0));
+    Point2D rightmost = nodeToPoint.get(children.get(children.size() - 1));
     float x = (float) ((leftmost.getX() + rightmost.getX()) / 2.0);
     nodeToPoint.put(node, new Point2D.Float(x, y));
   }

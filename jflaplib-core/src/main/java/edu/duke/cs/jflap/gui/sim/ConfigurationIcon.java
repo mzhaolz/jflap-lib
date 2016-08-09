@@ -18,6 +18,8 @@ package edu.duke.cs.jflap.gui.sim;
 
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.Configuration;
+import edu.duke.cs.jflap.gui.viewer.StateDrawer;
+
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

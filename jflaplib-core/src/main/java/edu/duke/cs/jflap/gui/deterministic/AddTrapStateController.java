@@ -21,6 +21,8 @@ import edu.duke.cs.jflap.automata.Transition;
 import edu.duke.cs.jflap.automata.fsa.FSATransition;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;

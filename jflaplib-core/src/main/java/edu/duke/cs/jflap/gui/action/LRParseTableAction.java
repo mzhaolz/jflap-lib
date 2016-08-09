@@ -19,6 +19,8 @@ package edu.duke.cs.jflap.gui.action;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.grammar.parse.LRParseTableDerivationPane;
+
 import java.awt.event.ActionEvent;
 
 /**

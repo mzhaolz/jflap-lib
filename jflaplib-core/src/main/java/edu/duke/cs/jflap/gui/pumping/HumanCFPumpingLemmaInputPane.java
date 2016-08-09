@@ -210,7 +210,7 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
   @Override
   protected void setI() {
     int[] d =
-        new int[] {
+        Lists.newArrayList(
           myUPanel.getVal(),
           myVPanel.getVal() - myUPanel.getVal(),
           myXPanel.getVal() - myVPanel.getVal(),
@@ -240,7 +240,7 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getX(), "x");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getY(), "y");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getZ(), "z");
-    myCanvas.moveText(new int[] {0, 1, myLemma.getI(), 1, myLemma.getI(), 1});
+    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1, myLemma.getI(), 1});
     myStepAnimation.setEnabled(true);
     myStartAnimation.setEnabled(false);
     repaint();
@@ -286,7 +286,7 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
      * Everything below has to be done in a specific order.
      */
     int[] decomposition =
-        new int[] {pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length()};
+        Lists.newArrayList(pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length()};
 
     /*
      * We need to call SliderPanel.setText and SliderPanel.setSliderMax

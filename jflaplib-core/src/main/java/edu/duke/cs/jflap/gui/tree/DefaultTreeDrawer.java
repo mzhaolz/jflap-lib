@@ -23,6 +23,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -128,8 +129,8 @@ public class DefaultTreeDrawer implements TreeDrawer, TreeModelListener {
     if (visible && parent != null)
       g.drawLine((int) parent.getX(), (int) parent.getY(), (int) p.getX(), (int) p.getY());
     // Recurse on the children.
-    TreeNode[] c = Trees.children(node);
-    for (int i = 0; i < c.length; i++) draw(g, c[i], size, visible ? p : null);
+    List<TreeNode> c = Trees.children(node);
+    for (int i = 0; i < c.size(); i++) draw(g, c.get(i), size, visible ? p : null);
     // Draw the node in postorder.
     if (!visible) return;
     Graphics2D g2 = (Graphics2D) g.create();

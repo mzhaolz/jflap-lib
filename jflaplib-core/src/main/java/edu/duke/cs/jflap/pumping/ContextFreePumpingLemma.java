@@ -294,7 +294,7 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    *
    * if (v.length() + x.length() + y.length() <= m && v.length() + y.length()
    * >= 1) { matchesUnusedCase = decompMatchesUnusedCase(v, y); if
-   * (matchesUnusedCase) { decomp = new int[] {a, b-a, c-b, d-c};
+   * (matchesUnusedCase) { decomp = Lists.newArrayList(a, b-a, c-b, d-c};
    * setDecomposition(decomp); return; } } } }
    */
 

@@ -18,6 +18,8 @@ package edu.duke.cs.jflap.pumping.reg;
 
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
 
+import com.google.common.collect.Lists;
+
 /**
  * The regular pumping lemma for <i>L</i> =
  * {<i>b<sup>k</sup>(ab)<sup>n</sup>(ba)<sup>n</sup></i> : <i>k</i> &#8805; 4,
@@ -27,82 +29,108 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class BkABnBAn extends RegularPumpingLemma {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = -6541146292359541038L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -6541146292359541038L;
 
-  @Override
-  public String getHTMLTitle() {
-    return "<i>b<sup>k</sup>(ab)<sup>n</sup>(ba)<sup>n</sup></i> : <i>k</i> "
-        + GREATER_OR_EQ
-        + " 4"
-        + ", <i>n</i> = 1,2...";
-  }
-
-  @Override
-  public String getTitle() {
-    return "b^k (ab)^n (ba)^n: k>=4, n = 1,2,...";
-  }
-
-  @Override
-  public void setDescription() {
-    partitionIsValid = false;
-    explanation =
-        "For any <i>m</i> value, a possible value for <i>w</i> is \"b<sup>4</sup>"
-            + "(ab)<sup><i>m</i>/2</sup>(ba)<sup><i>m</i>/2</sup>\".  No possible <i>y</i> value among the "
-            + "\"b<sup>4</sup>(ab)<sup><i>m</i>/2</sup>\" segment will work, so the "
-            + "language is not regular.";
-  }
-
-  @Override
-  public void chooseI() {
-    i = 0;
-  }
-
-  @Override
-  public void chooseDecomposition() {
-    int a, abba;
-    a = w.indexOf('a');
-    abba = a + (w.length() - a) / 2 - 2;
-    if (a > 4) setDecomposition(new int[] {0, 1});
-    else if (abba + 4 <= m) setDecomposition(new int[] {abba, 4});
-    else super.chooseDecomposition();
-  }
-
-  @Override
-  protected void chooseW() {
-    int power = m / 2;
-    w = "bbbb" + pumpString("ab", power) + pumpString("ba", power);
-  }
-
-  @Override
-  protected void setRange() {
-    myRange = new int[] {4, 15};
-  }
-
-  @Override
-  public boolean isInLang(String s) {
-    int k, n;
-    k = s.indexOf("a");
-    if (k < 4) return false;
-
-    String temp = s.substring(k);
-    if (!temp.startsWith("ab")) return false;
-
-    n = 0;
-    while (temp.startsWith("ab")) {
-      temp = temp.substring(2);
-      n++;
+    @Override
+    public String getHTMLTitle() {
+        return "<i>b<sup>k</sup>(ab)<sup>n</sup>(ba)<sup>n</sup></i> : <i>k</i> " + GREATER_OR_EQ
+                + " 4" + ", <i>n</i> = 1,2...";
     }
 
-    while (temp.startsWith("ba")) {
-      temp = temp.substring(2);
-      n--;
+    @Override
+    public String getTitle() {
+        return "b^k (ab)^n (ba)^n: k>=4, n = 1,2,...";
     }
 
-    if (n == 0 && temp.length() == 0) return true;
-    // TODO Auto-generated method stub
-    return false;
-  }
+    @Override
+    public void setDescription() {
+        partitionIsValid = false;
+        explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"b<sup>4</sup>"
+                + "(ab)<sup><i>m</i>/2</sup>(ba)<sup><i>m</i>/2</sup>\".  No possible <i>y</i> value among the "
+                + "\"b<sup>4</sup>(ab)<sup><i>m</i>/2</sup>\" segment will work, so the "
+                + "language is not regular.";
+    }
+
+    @Override
+    public void chooseI() {
+        i = 0;
+    }
+
+    @Override
+    public void chooseDecomposition() {
+        int a, abba;
+        a = w.indexOf('a');
+        abba = a + (w.length() - a) / 2 - 2;
+        if (a > 4) {
+            setDecomposition(Lists.newArrayList(0, 1));
+        } else if (abba + 4 <= m) {
+            setDecomposition(Lists.newArrayList(abba, 4));
+        } else {
+            super.chooseDecomposition();
+        }
+    }
+
+    @Override
+    protected void chooseW() {
+        int power = m / 2;
+        w = "bbbb" + pumpString("ab", power) + pumpString("ba", power);
+    }
+
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(4, 15);
+
+    }
+
+    @Override
+    public boolean isInLang(String s) {
+        int k, n;
+        k = s.indexOf("a");
+        if (k < 4) {
+            return false;
+        }
+
+        String temp = s.substring(k);
+        if (!temp.startsWith("ab")) {
+            return false;
+        }
+
+        n = 0;
+        while (temp.startsWith("ab")) {
+            temp = temp.substring(2);
+            n++;
+        }
+
+        while (temp.startsWith("ba")) {
+            temp = temp.substring(2);
+            n--;
+        }
+
+        if (n == 0 && temp.length() == 0) {
+            return true;
+        }
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean setDecomposition(int[] decomposition) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public int addCase(int[] decomposition, int num) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public boolean replaceCase(int[] decomposition, int num, int index) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

@@ -28,6 +28,7 @@ import edu.duke.cs.jflap.automata.mealy.MealyMachine;
 import edu.duke.cs.jflap.automata.turing.TMSimulator;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.grammar.Grammar;
+import edu.duke.cs.jflap.gui.editor.EditBlockPane;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
@@ -40,6 +41,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -105,7 +107,7 @@ public class SimulateAction extends AutomatonAction {
    *            the automaton input is simulated on
    * @param simulator
    *            the automaton simulator for this automaton
-   * @param configurations
+   * @param configs
    *            the initial configurations generated
    * @param initialInput
    *            the object that represents the initial input; this is a String
@@ -115,10 +117,10 @@ public class SimulateAction extends AutomatonAction {
   public void handleInteraction(
       Automaton automaton,
       AutomatonSimulator simulator,
-      Configuration[] configurations,
+      List<Configuration> configs,
       Object initialInput) {
     SimulatorPane simpane =
-        new SimulatorPane(automaton, simulator, configurations, environment, false);
+        new SimulatorPane(automaton, simulator, configs, environment, false);
     if (initialInput instanceof String[])
       initialInput = java.util.Arrays.asList((String[]) initialInput);
     environment.add(simpane, "Simulate: " + initialInput, new CriticalTag() {});

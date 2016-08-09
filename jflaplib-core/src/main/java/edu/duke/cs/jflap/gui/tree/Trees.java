@@ -16,9 +16,12 @@
 
 package edu.duke.cs.jflap.gui.tree;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
@@ -46,12 +49,13 @@ public class Trees {
      *         enumerator, or an empty array if this is a leaf not
      */
     public static List<TreeNode> children(TreeNode node) {
-        TreeNode[] children = new TreeNode[node.getChildCount()];
+        List<TreeNode> children = new ArrayList<>();
         if (!node.isLeaf()) {
             int i = 0;
             Enumeration<?> enumer = node.children();
-            while (i < children.length)
-                children[i++] = (TreeNode) enumer.nextElement();
+            while (i++ < node.getChildCount()) {
+                children.add((TreeNode) enumer.nextElement());
+            }
         }
         return children;
     }
@@ -64,9 +68,8 @@ public class Trees {
      *         <CODE>depth()+1</CODE>, and index 0 is always 1 (since only the
      *         root can be at level 0).
      */
-    public static List<int> width(TreeModel tree) {
-        int[] width = new int[depth(tree) + 1];
-        Arrays.fill(width, 0);
+    public static List<Integer> width(TreeModel tree) {
+        List<Integer> width = Collections.nCopies(depth(tree) + 1, 0);
         Trees.width((TreeNode) tree.getRoot(), 0, width);
         return width;
     }
@@ -79,16 +82,16 @@ public class Trees {
      *            the node that we are currently visiting
      * @param depth
      *            the current depth of the node
-     * @param array
+     * @param width
      *            the width array being filled
      */
-    private static void width(TreeNode node, int depth, int[] array) {
-        array[depth++]++;
+    private static void width(TreeNode node, int depth, List<Integer> width) {
+        width.set(++depth, width.get(depth) + 1);
         if (node.isLeaf())
             return;
-        TreeNode[] children = Trees.children(node);
-        for (int i = 0; i < children.length; i++)
-            width(children[i], depth, array);
+        List<TreeNode> children = Trees.children(node);
+        for (int i = 0; i < children.size(); i++)
+            width(children.get(i), depth, width);
     }
 
     /**
@@ -111,10 +114,10 @@ public class Trees {
      *         is a left
      */
     public static int depth(TreeNode node) {
-        TreeNode[] children = Trees.children(node);
+        List<TreeNode> children = Trees.children(node);
         int max = -1;
-        for (int i = 0; i < children.length; i++)
-            max = Math.max(max, depth(children[i]));
+        for (int i = 0; i < children.size(); i++)
+            max = Math.max(max, depth(children.get(i)));
         return max + 1;
     }
 
@@ -138,15 +141,15 @@ public class Trees {
      * @return an array of all children in the tree
      */
     public static List<TreeNode> leaves(TreeNode node) {
-        TreeNode[] children = Trees.children(node);
-        if (children.length == 0)
-            return new TreeNode[] { node };
+        List<TreeNode> children = Trees.children(node);
+        if (children.size() == 0)
+            return Lists.newArrayList(node);
         ArrayList<TreeNode> leaves = new ArrayList<TreeNode>();
-        for (int i = 0; i < children.length; i++) {
-            TreeNode[] subleaves = leaves(children[i]);
-            for (int j = 0; j < subleaves.length; j++)
-                leaves.add(subleaves[j]);
+        for (int i = 0; i < children.size(); i++) {
+            List<TreeNode> subleaves = leaves(children.get(i));
+            for (int j = 0; j < subleaves.size(); j++)
+                leaves.add(subleaves.get(j));
         }
-        return leaves
+        return leaves;
     }
 }

@@ -19,7 +19,14 @@ package edu.duke.cs.jflap.gui.deterministic;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.TooltipAction;
+import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
+import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.environment.Environment;
+import edu.duke.cs.jflap.gui.viewer.AutomatonDraggerPane;
+import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
+import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;

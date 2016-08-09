@@ -24,6 +24,8 @@ import edu.duke.cs.jflap.automata.turing.TMConfiguration;
 import edu.duke.cs.jflap.automata.turing.TMSimulator;
 import edu.duke.cs.jflap.automata.turing.TMState;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
