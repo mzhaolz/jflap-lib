@@ -55,8 +55,9 @@ public class TraceWindow extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(getPastPane(last));
         pack();
-        if (getSize().height > MAXHEIGHT)
+        if (getSize().height > MAXHEIGHT) {
             setSize(getSize().width, MAXHEIGHT);
+        }
         setVisible(true);
     }
 
@@ -70,7 +71,8 @@ public class TraceWindow extends JFrame {
      */
     public static JScrollPane getPastPane(Configuration configuration) {
         JScrollPane sp = new JScrollPane(new PastPane(configuration),
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sp.validate();
         if (sp.getSize().height > MAXHEIGHT) {
             sp.setSize(sp.getSize().width, MAXHEIGHT);
@@ -102,7 +104,7 @@ public class TraceWindow extends JFrame {
         }
 
         public void setConfiguration(Configuration last) {
-            java.util.List<Icon> list = new LinkedList<Icon>();
+            java.util.List<Icon> list = new LinkedList<>();
             int height = 0;
             int width = 0;
             while (last != null) {
@@ -113,7 +115,7 @@ public class TraceWindow extends JFrame {
                 last = last.getParent();
             }
             icons = list
-            this.setPreferredSize(new Dimension(width, height));
+            setPreferredSize(new Dimension(width, height));
         }
 
         @Override

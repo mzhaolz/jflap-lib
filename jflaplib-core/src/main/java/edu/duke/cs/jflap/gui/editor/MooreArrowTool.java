@@ -38,49 +38,53 @@ import java.awt.event.MouseEvent;
  *
  */
 public class MooreArrowTool extends MealyArrowTool {
-  /**
-   * Instantiates a new arrow tool.
-   *
-   * @param view
-   *            the view where the automaton is drawn
-   * @param drawer
-   *            the object that draws the automaton
-   * @param creator
-   *            the transition creator used for editing transitions
-   */
-  public MooreArrowTool(AutomatonPane view, AutomatonDrawer drawer, TransitionCreator creator) {
-    super(view, drawer, creator);
-  }
-
-  /**
-   * Instantiates a new arrow tool.
-   *
-   * @param view
-   *            the view where the automaton is drawn
-   * @param drawer
-   *            the object that draws the automaton
-   */
-  public MooreArrowTool(AutomatonPane view, AutomatonDrawer drawer) {
-    super(view, drawer);
-  }
-
-  /**
-   * Checks if the mouse was clicked on a state, and offers to change the
-   * state output if so. Otherwise, {@link ArrowTool#mouseClicked(MouseEvent)}
-   * is called so that other mouse events proceed as specified in
-   * <code>ArrowTool</code>.
-   *
-   * @param event
-   *            the mouse event
-   * @see ArrowTool#mouseClicked(MouseEvent)
-   */
-  public void mouseClicked(MouseEvent event) {
-    ((AutomatonEnvironment) getDrawer().getAutomaton().getEnvironmentFrame().getEnvironment())
-        .saveStatus();
-    if (event.getButton() == MouseEvent.BUTTON1) {
-      State state = getDrawer().stateAtPoint(event.getPoint());
-      if (state == null) super.mouseClicked(event);
-      else MooreStateTool.editState(state);
+    /**
+     * Instantiates a new arrow tool.
+     *
+     * @param view
+     *            the view where the automaton is drawn
+     * @param drawer
+     *            the object that draws the automaton
+     * @param creator
+     *            the transition creator used for editing transitions
+     */
+    public MooreArrowTool(AutomatonPane view, AutomatonDrawer drawer, TransitionCreator creator) {
+        super(view, drawer, creator);
     }
-  }
+
+    /**
+     * Instantiates a new arrow tool.
+     *
+     * @param view
+     *            the view where the automaton is drawn
+     * @param drawer
+     *            the object that draws the automaton
+     */
+    public MooreArrowTool(AutomatonPane view, AutomatonDrawer drawer) {
+        super(view, drawer);
+    }
+
+    /**
+     * Checks if the mouse was clicked on a state, and offers to change the
+     * state output if so. Otherwise, {@link ArrowTool#mouseClicked(MouseEvent)}
+     * is called so that other mouse events proceed as specified in
+     * <code>ArrowTool</code>.
+     *
+     * @param event
+     *            the mouse event
+     * @see ArrowTool#mouseClicked(MouseEvent)
+     */
+    @Override
+    public void mouseClicked(MouseEvent event) {
+        ((AutomatonEnvironment) getDrawer().getAutomaton().getEnvironmentFrame().getEnvironment())
+                .saveStatus();
+        if (event.getButton() == MouseEvent.BUTTON1) {
+            State state = getDrawer().stateAtPoint(event.getPoint());
+            if (state == null) {
+                super.mouseClicked(event);
+            } else {
+                MooreStateTool.editState(state);
+            }
+        }
+    }
 }

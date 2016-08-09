@@ -73,8 +73,9 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      *            or FREEZE
      */
     public void add(Configuration configuration, int state) {
-        if (contains(configuration))
+        if (contains(configuration)) {
             return;
+        }
         ConfigurationButton button = new ConfigurationButton(configuration, state);
         configurationToButtonMap.put(configuration, button);
         add(button);
@@ -112,10 +113,12 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      */
     public void setReject(Configuration configuration) {
         ConfigurationButton button = configurationToButtonMap.get(configuration);
-        if (button == null)
+        if (button == null) {
             return;
-        if (button.state == ConfigurationButton.NORMAL)
+        }
+        if (button.state == ConfigurationButton.NORMAL) {
             button.setState(ConfigurationButton.REJECT);
+        }
         button.doClick();
     }
 
@@ -128,17 +131,20 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      */
     public void setFrozen(Configuration configuration) {
         ConfigurationButton button = configurationToButtonMap.get(configuration);
-        if (button == null)
+        if (button == null) {
             return;
-        if (button.state == ConfigurationButton.NORMAL)
+        }
+        if (button.state == ConfigurationButton.NORMAL) {
             button.setState(ConfigurationButton.FREEZE);
+        }
         button.doClick();
     }
 
     public void setFocused(Configuration configuration) {
         ConfigurationButton button = configurationToButtonMap.get(configuration);
-        if (button == null)
+        if (button == null) {
             return;
+        }
         if (button.state == ConfigurationButton.NORMAL) {
             // System.out.println("Setting color");
             button.setState(ConfigurationButton.FOCUSED);
@@ -167,12 +173,14 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      */
     public void setNormal(Configuration configuration) {
         ConfigurationButton button = configurationToButtonMap.get(configuration);
-        if (button == null)
+        if (button == null) {
             return;
-        if (button.state == ConfigurationButton.FREEZE)
+        }
+        if (button.state == ConfigurationButton.FREEZE) {
             button.setState(ConfigurationButton.NORMAL);
-        else if (button.state == ConfigurationButton.FOCUSED)
+        } else if (button.state == ConfigurationButton.FOCUSED) {
             button.setState(ConfigurationButton.NORMAL);
+        }
         button.doClick();
     }
 
@@ -184,8 +192,9 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      */
     public void remove(Configuration configuration) {
         Component comp = configurationToButtonMap.remove(configuration);
-        if (comp == null)
+        if (comp == null) {
             return;
+        }
         selected.remove(configuration);
         remove(comp);
     }
@@ -232,13 +241,14 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      */
     public List<Configuration> getValidConfigurations() {
         // A state is valid for return if it is normal.
-        ArrayList<Configuration> list = new ArrayList<Configuration>();
+        ArrayList<Configuration> list = new ArrayList<>();
         Iterator<ConfigurationButton> it = configurationToButtonMap.values().iterator();
         while (it.hasNext()) {
             ConfigurationButton button = it.next();
             if (button.state == ConfigurationButton.NORMAL
-                    || button.state == ConfigurationButton.FOCUSED)
+                    || button.state == ConfigurationButton.FOCUSED) {
                 list.add(button.getConfiguration());
+            }
         }
         return list
     }
@@ -249,15 +259,16 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      */
     public void clearFinal() {
         // Avoid concurrent modification exceptions.
-        ArrayList<ConfigurationButton> list = new ArrayList<ConfigurationButton>();
+        ArrayList<ConfigurationButton> list = new ArrayList<>();
         list.addAll(configurationToButtonMap.values());
         Iterator<ConfigurationButton> it = list.iterator();
 
         while (it.hasNext()) {
             ConfigurationButton button = it.next();
             if (button.state == ConfigurationButton.ACCEPT
-                    || button.state == ConfigurationButton.REJECT)
+                    || button.state == ConfigurationButton.REJECT) {
                 remove(button.getConfiguration());
+            }
         }
     }
 
@@ -266,14 +277,15 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      */
     public void clearThawed() {
         // Avoid concurrent modification exceptions.
-        ArrayList<ConfigurationButton> list = new ArrayList<ConfigurationButton>();
+        ArrayList<ConfigurationButton> list = new ArrayList<>();
         list.addAll(configurationToButtonMap.values());
         Iterator<ConfigurationButton> it = list.iterator();
 
         while (it.hasNext()) {
             ConfigurationButton button = it.next();
-            if (button.state != ConfigurationButton.FREEZE)
+            if (button.state != ConfigurationButton.FREEZE) {
                 remove(button.getConfiguration());
+            }
         }
     }
 
@@ -293,11 +305,14 @@ public class ConfigurationPane extends JPanel implements ActionListener {
             return; // Then, we don't care.
         }
         Configuration config = button.getConfiguration();
-        if (!configurationToButtonMap.containsKey(config))
+        if (!configurationToButtonMap.containsKey(config)) {
             return;
-        if (button.isSelected())
+        }
+        if (button.isSelected()) {
             selected.add(config);
-        else selected.remove(config);
+        } else {
+            selected.remove(config);
+        }
         distributeSelectionEvent(new ConfigurationSelectionEvent(this));
     }
 
@@ -336,11 +351,11 @@ public class ConfigurationPane extends JPanel implements ActionListener {
     }
 
     /** The map from configurations to their buttons. */
-    private HashMap<Configuration, ConfigurationButton> configurationToButtonMap = new HashMap<Configuration, ConfigurationButton>();
+    private HashMap<Configuration, ConfigurationButton> configurationToButtonMap = new HashMap<>();
 
     /** The set of selected configurations. */
-    private HashSet<Configuration> selected = new HashSet<Configuration>();
+    private HashSet<Configuration> selected = new HashSet<>();
 
     /** The set of listeners to selection events. */
-    private transient HashSet<ConfigurationSelectionListener> selectionListeners = new HashSet<ConfigurationSelectionListener>();
+    private transient HashSet<ConfigurationSelectionListener> selectionListeners = new HashSet<>();
 }
