@@ -138,7 +138,7 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
    */
   @Override
   protected void setI() {
-    int[] d = new int[] {myXPanel.getVal(), myYPanel.getVal() - myXPanel.getVal()};
+    int[] d = Lists.newArrayList(myXPanel.getVal(), myYPanel.getVal() - myXPanel.getVal()};
     myLemma.setDecomposition(d);
     myLemma.chooseI();
     if (myCases != null) {
@@ -159,7 +159,7 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
     myCanvas.addText(((RegularPumpingLemma) myLemma).getX(), "x");
     myCanvas.addText(((RegularPumpingLemma) myLemma).getY(), "y");
     myCanvas.addText(((RegularPumpingLemma) myLemma).getZ(), "z");
-    myCanvas.moveText(new int[] {0, 1, myLemma.getI(), 1});
+    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1});
     myStepAnimation.setEnabled(true);
     myStartAnimation.setEnabled(false);
     repaint();
@@ -193,7 +193,7 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
     myYPanel.setText(pl.getW());
     myYPanel.setSliderMax(pl.getW().length());
 
-    setDecomposition(new int[] {pl.getX().length(), pl.getY().length()}, pl.getI());
+    setDecomposition(Lists.newArrayList(pl.getX().length(), pl.getY().length()}, pl.getI());
     updateTable();
 
     stages[2].setVisible(true);

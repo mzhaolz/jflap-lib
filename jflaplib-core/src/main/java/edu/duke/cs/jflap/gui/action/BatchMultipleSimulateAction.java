@@ -31,6 +31,7 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.JTableExtender;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
 import edu.duke.cs.jflap.gui.TableTextSizeSlider;
+import edu.duke.cs.jflap.gui.editor.ArrowDisplayOnlyTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;

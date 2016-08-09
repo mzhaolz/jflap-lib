@@ -60,7 +60,7 @@ public class CompCFPumpingLemmaInputPane extends ComputerFirstPane {
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getX(), "x");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getY(), "y");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getZ(), "z");
-    myCanvas.moveText(new int[] {0, 1, myLemma.getI(), 1, myLemma.getI(), 1});
+    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1, myLemma.getI(), 1});
     myStepAnimation.setEnabled(true);
     myStartAnimation.setEnabled(false);
     repaint();
@@ -106,7 +106,7 @@ public class CompCFPumpingLemmaInputPane extends ComputerFirstPane {
      *
      */
     int[] decomposition =
-        new int[] {pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length()};
+        Lists.newArrayList(pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length()};
 
     setDecomposition(decomposition, pl.getI());
     if (myCases != null) myCases.setDecomposition(decomposition);

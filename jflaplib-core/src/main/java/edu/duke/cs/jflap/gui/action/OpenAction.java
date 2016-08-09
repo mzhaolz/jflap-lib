@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.gui.action;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.file.Codec;
 import edu.duke.cs.jflap.file.DataException;
+import edu.duke.cs.jflap.file.Decoder;
 import edu.duke.cs.jflap.file.ParseException;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.FrameFactory;
@@ -158,7 +159,7 @@ public class OpenAction extends RestrictedAction {
      * @throws ParseException
      *             if there was an error with all or one of the codecs
      */
-    public static void openFile(File file, Codec[] codecs) {
+    public static void openFile(File file, List<Decoder> codecs) {
         ParseException p = null;
         for (int i = 0; i < codecs.length; i++) {
             try {

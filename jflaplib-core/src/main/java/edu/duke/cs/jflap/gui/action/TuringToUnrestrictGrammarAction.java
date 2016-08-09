@@ -19,6 +19,9 @@ package edu.duke.cs.jflap.gui.action;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
+import edu.duke.cs.jflap.gui.grammar.automata.ConvertController;
+import edu.duke.cs.jflap.gui.grammar.automata.TuringConvertController;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 
 /**
  * Class for converting Turing Machine to Unrestricted Grammar

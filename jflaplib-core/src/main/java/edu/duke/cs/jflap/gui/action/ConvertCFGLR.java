@@ -28,6 +28,7 @@ import edu.duke.cs.jflap.grammar.cfg.CFGToPDALRConverter;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 

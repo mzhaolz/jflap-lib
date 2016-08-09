@@ -18,6 +18,8 @@ package edu.duke.cs.jflap.gui.action;
 
 import edu.duke.cs.jflap.gui.environment.RegularEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.regular.ConvertToAutomatonPane;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;

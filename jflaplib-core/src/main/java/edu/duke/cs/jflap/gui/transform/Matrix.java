@@ -18,6 +18,7 @@ package edu.duke.cs.jflap.gui.transform;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * This is an affine transform matrix rather like the
@@ -253,7 +254,7 @@ public Object clone() {
    *            wish a newly allocated array
    * @return the array
    */
-  public List<final double> origin(double[] array) {
+  public final List<Double> origin(double[] array) {
     if (array == null) array = new double[3];
     for (int i = 0; i < 3; i++) for (int j = 0; j < 3; j++) INVERSE.entry[i][j] = entry[j][i];
     premultiply(INVERSE);
@@ -263,7 +264,7 @@ public Object clone() {
     entry = entry2;
     entry2 = old;
     // Yay.
-    return array;
+    return Lists.newArrayList(array);
   }
 
   /**
@@ -294,7 +295,7 @@ public final String toString() {
   public double[][] entry;
 
   /** The backup entries. */
-  private List<double>[] entry2 = new double[4][4];
+  private double[][] entry2 = new double[4][4];
 
   /** The old angles for each of the cached turn matrices. */
   private static double
@@ -306,7 +307,7 @@ public final String toString() {
   private static Matrix XAXIS_TURN, YAXIS_TURN, ZAXIS_TURN;
 
   /** The old distances for each of the cache translation matrices. */
-  private List<static List<double> DIRS = new double> {0.0, 0.0, 0.0};
+  private static double[] DIRS = new double[] {0.0, 0.0, 0.0};
 
   /** The old translation matrix. */
   private static final Matrix TRANSLATE = new Matrix();
@@ -320,7 +321,7 @@ public final String toString() {
    * Used for the origin methods, so new arrays needn't constantly be
    * allocated.
    */
-  private static final List<double> ORIGIN_REUSE = new double[3];
+  private static final double[] ORIGIN_REUSE = new double[3];
 
   public static final String arrayString(double[] d) {
     return "( " + d[0] + ", " + d[1] + ", " + d[2] + " )";

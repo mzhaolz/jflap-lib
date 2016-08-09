@@ -21,11 +21,14 @@ import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
 import edu.duke.cs.jflap.automata.event.AutomataStateEvent;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.event.ChangeEvent;
@@ -55,9 +58,11 @@ public class SelectionDrawer extends AutomatonDrawer {
      * @param event
      *            the state event
      */
+    @Override
     protected void stateChange(AutomataStateEvent event) {
-        if (event.isDelete())
+        if (event.isDelete()) {
             selected.remove(event.getState());
+        }
         super.stateChange(event);
     }
 
@@ -70,13 +75,17 @@ public class SelectionDrawer extends AutomatonDrawer {
      * @param state
      *            the state to draw
      */
+    @Override
     public void drawState(Graphics g, State state) {
         if (selected.contains(state)) {
             getStateDrawer().drawState(g, getAutomaton(), state, state.getPoint(), SELECTED_COLOR);
-            if (doesDrawStateLabels())
+            if (doesDrawStateLabels()) {
                 getStateDrawer().drawStateLabel(g, state, state.getPoint(),
                         StateDrawer.STATE_COLOR);
-        } else super.drawState(g, state);
+            }
+        } else {
+            super.drawState(g, state);
+        }
     }
 
     /**
@@ -86,12 +95,13 @@ public class SelectionDrawer extends AutomatonDrawer {
      * @param g
      *            the graphics object to draw upon
      */
+    @Override
     protected void drawTransitions(Graphics g) {
         java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
         super.drawTransitions(g);
-        Iterator<Serializable> it = selectedTransitions.iterator();
+        Iterator<Transition> it = selectedTransitions.iterator();
         while (it.hasNext()) {
-            Transition t = (Transition) it.next();
+            Transition t = it.next();
             try {
                 arrowForTransition(t).drawHighlight(g2);
             } catch (NullPointerException e) {
@@ -150,7 +160,7 @@ public class SelectionDrawer extends AutomatonDrawer {
      * @return an array of the selected states
      */
     public List<State> getSelected() {
-        return selected
+        return Lists.newArrayList(selected);
     }
 
     /**
@@ -181,7 +191,7 @@ public class SelectionDrawer extends AutomatonDrawer {
      *
      * @return the set of selected states
      */
-    protected Set<Serializable> selected() {
+    protected Set<? extends Serializable> selected() {
         return selected;
     }
 
@@ -190,7 +200,7 @@ public class SelectionDrawer extends AutomatonDrawer {
      *
      * @return the set of selected transitions
      */
-    protected Set<Serializable> selectedTransitions() {
+    protected Set<? extends Serializable> selectedTransitions() {
         return selectedTransitions;
     }
 
@@ -201,8 +211,9 @@ public class SelectionDrawer extends AutomatonDrawer {
      *            the transition to add
      */
     public void addSelected(Transition transition) {
-        if (transition.getFromState().getAutomaton() != getAutomaton())
+        if (transition.getFromState().getAutomaton() != getAutomaton()) {
             throw new IllegalArgumentException("Transition to select not in correct automaton!");
+        }
         if (!selectedTransitions.contains(transition)) {
             selectedTransitions.add(transition);
             distributeChangeEvent();
@@ -237,7 +248,7 @@ public class SelectionDrawer extends AutomatonDrawer {
      * @return an array of the selected transitions
      */
     public List<Transition> getSelectedTransitions() {
-        return selectedTransitions
+        return Lists.newArrayList(selectedTransitions);
     }
 
     /**
@@ -288,17 +299,18 @@ public class SelectionDrawer extends AutomatonDrawer {
     protected void distributeChangeEvent() {
         ChangeEvent e = new ChangeEvent(this);
         Iterator<ChangeListener> it = listeners.iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             it.next().stateChanged(e);
+        }
     }
 
     /** The set of selected states, and the set of selected transitions. */
-    private Set<Serializable> selected = new HashSet<Serializable>(),
-            selectedTransitions = new HashSet<Serializable>();
+    private Set<State> selected = new HashSet<>();
+    private Set<Transition> selectedTransitions = new HashSet<>();
 
     /** The color to draw selected states in. */
     protected static final Color SELECTED_COLOR = StateDrawer.STATE_COLOR.darker().darker();
 
     /** This set of listeners. */
-    private Set<ChangeListener> listeners = new HashSet<ChangeListener>();
+    private Set<ChangeListener> listeners = new HashSet<>();
 }

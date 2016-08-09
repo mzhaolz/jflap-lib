@@ -24,6 +24,11 @@ import edu.duke.cs.jflap.automata.pda.PushdownAutomaton;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.environment.EnvironmentFrame;
 import edu.duke.cs.jflap.gui.environment.Universe;
+import edu.duke.cs.jflap.gui.grammar.automata.ConvertController;
+import edu.duke.cs.jflap.gui.grammar.automata.PDAConvertController;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+import edu.duke.cs.jflap.gui.viewer.ZoomPane;
+
 import java.awt.BorderLayout;
 import java.util.HashSet;
 import java.util.Iterator;

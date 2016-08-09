@@ -20,6 +20,8 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.grammar.transform.ChomskyPane;
+
 import java.awt.event.ActionEvent;
 
 /**

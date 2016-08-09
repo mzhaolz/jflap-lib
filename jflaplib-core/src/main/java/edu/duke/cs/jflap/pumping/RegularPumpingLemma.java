@@ -18,6 +18,8 @@ package edu.duke.cs.jflap.pumping;
 
 import edu.duke.cs.jflap.gui.environment.Universe;
 
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -227,6 +229,6 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
   public void chooseDecomposition() {
     // Note m must be >= 2 to use the default
     int x = LemmaMath.fetchRandInt(0, getM() - 1);
-    setDecomposition(new int[] {x, getM() - x});
+    setDecomposition(Lists.newArrayList(x, getM() - x));
   }
 }

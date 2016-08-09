@@ -18,8 +18,9 @@ package edu.duke.cs.jflap.gui.tree;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.tree.TreeModel;
@@ -49,9 +50,9 @@ public class DefaultNodePlacer implements NodePlacer {
   @Override
   public Map<TreeNode, Float> placeNodes(TreeModel tree, NodeDrawer drawer) {
     HashMap<TreeNode, Float> nodeToPoint = new HashMap<TreeNode, Float>();
-    int[] width = Trees.width(tree), sofar = new int[width.length];
-    Arrays.fill(sofar, 0);
-    setPoints((TreeNode) tree.getRoot(), width.length - 1, 0, width, sofar, nodeToPoint);
+    List<Integer> width = Trees.width(tree);
+    List<Integer> sofar = Collections.nCopies(width.size(), 0);
+    setPoints((TreeNode) tree.getRoot(), width.size() - 1, 0, width, sofar, nodeToPoint);
     return nodeToPoint;
   }
 
@@ -67,7 +68,7 @@ public class DefaultNodePlacer implements NodePlacer {
    *            the depth of this particular node
    * @param width
    *            the array of all widths
-   * @param widthSofar
+   * @param sofar
    *            the widths sofar
    * @param nodeToPoint
    *            the mapping of nodes to points built
@@ -76,20 +77,20 @@ public class DefaultNodePlacer implements NodePlacer {
       TreeNode node,
       int depth,
       int thisDepth,
-      int[] width,
-      int[] widthSofar,
+      List<Integer> width,
+      List<Integer> sofar,
       Map<TreeNode, Float> nodeToPoint) {
     // Scale points along ([0,1], [0,1]).
-    float x = (float) (widthSofar[thisDepth] + 1) / (float) (width[thisDepth] + 1);
+    float x = (float) (sofar.get(thisDepth) + 1) / (float) (width.get(thisDepth) + 1);
     float y = (float) (thisDepth + 1) / (float) (depth + 2);
     nodeToPoint.put(node, new Point2D.Float(x, y));
     // Check the maximum width.
     // max_width = Math.max(max_width, width[thisDepth]);
     // Update the depth and width figures.
-    widthSofar[thisDepth++]++;
+    sofar.set(++thisDepth, sofar.get(thisDepth) + 1);
     // Recurse on children.
-    TreeNode[] children = Trees.children(node);
-    for (int i = 0; i < children.length; i++)
-      setPoints(children[i], depth, thisDepth, width, widthSofar, nodeToPoint);
+    List<TreeNode> children = Trees.children(node);
+    for (int i = 0; i < children.size(); i++)
+      setPoints(children.get(i), depth, thisDepth, width, sofar, nodeToPoint);
   }
 }

@@ -27,6 +27,8 @@ import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.Profile;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
+import edu.duke.cs.jflap.gui.grammar.parse.CYKParsePane;
 import edu.duke.cs.jflap.gui.sim.multiple.InputTableModel;
 
 import java.awt.BorderLayout;

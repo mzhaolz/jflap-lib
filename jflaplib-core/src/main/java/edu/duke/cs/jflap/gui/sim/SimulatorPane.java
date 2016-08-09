@@ -20,9 +20,14 @@ import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.AutomatonSimulator;
 import edu.duke.cs.jflap.automata.Configuration;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
+import edu.duke.cs.jflap.gui.editor.ArrowDisplayOnlyTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
+import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -57,7 +62,7 @@ public class SimulatorPane extends JPanel {
    *            the automaton to create the simulator pane for
    * @param simulator
    *            the automaton simulator which we step through the automaton on
-   * @param configurations
+   * @param configs
    *            the initial configurations that this simulator should start
    *            with
    * @param env
@@ -66,12 +71,12 @@ public class SimulatorPane extends JPanel {
   public SimulatorPane(
       Automaton automaton,
       AutomatonSimulator simulator,
-      Configuration[] configurations,
+      List<Configuration> configs,
       Environment env,
       boolean blockStep) {
     this.automaton = automaton;
     this.simulator = simulator;
-    initView(configurations, env, blockStep);
+    initView(configs, env, blockStep);
   }
 
   /**
@@ -82,7 +87,7 @@ public class SimulatorPane extends JPanel {
    * @param env
    *            the environment the simulator pane will be added to
    */
-  private void initView(Configuration[] configs, final Environment env, boolean blockStep) {
+  private void initView(List<Configuration> configs, final Environment env, boolean blockStep) {
     this.setLayout(new BorderLayout());
     // Set up the main display.
     SelectionDrawer drawer = new SelectionDrawer(automaton);

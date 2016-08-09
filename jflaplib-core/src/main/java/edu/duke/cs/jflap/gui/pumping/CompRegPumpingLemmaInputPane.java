@@ -57,7 +57,7 @@ public class CompRegPumpingLemmaInputPane extends ComputerFirstPane {
     myCanvas.addText(((RegularPumpingLemma) myLemma).getX(), "x");
     myCanvas.addText(((RegularPumpingLemma) myLemma).getY(), "y");
     myCanvas.addText(((RegularPumpingLemma) myLemma).getZ(), "z");
-    myCanvas.moveText(new int[] {0, 1, myLemma.getI(), 1});
+    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1});
     myStepAnimation.setEnabled(true);
     myStartAnimation.setEnabled(false);
     repaint();
@@ -85,7 +85,7 @@ public class CompRegPumpingLemmaInputPane extends ComputerFirstPane {
 
     myWDisplay.setText(pl.getW());
 
-    setDecomposition(new int[] {pl.getX().length(), pl.getY().length()}, pl.getI());
+    setDecomposition(Lists.newArrayList(pl.getX().length(), pl.getY().length()}, pl.getI());
     decompLabel.setText(myLemma.getDecompositionAsString());
 
     stages[3].setVisible(true);

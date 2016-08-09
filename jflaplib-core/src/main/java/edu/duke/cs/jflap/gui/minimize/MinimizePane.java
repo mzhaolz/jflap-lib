@@ -24,10 +24,16 @@ import edu.duke.cs.jflap.automata.fsa.Minimizer;
 import edu.duke.cs.jflap.automata.graph.AutomatonGraph;
 import edu.duke.cs.jflap.automata.graph.layout.GEMLayoutAlgorithm;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
+import edu.duke.cs.jflap.gui.editor.ToolBox;
+import edu.duke.cs.jflap.gui.editor.TransitionTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.tree.SelectTreeDrawer;
 import edu.duke.cs.jflap.gui.tree.TreePanel;
 import edu.duke.cs.jflap.gui.tree.Trees;
+import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
+import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;

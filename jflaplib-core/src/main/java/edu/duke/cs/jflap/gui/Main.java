@@ -16,7 +16,7 @@
 
 package edu.duke.cs.jflap.gui;
 
-import edu.duke.cs.jflap.file.Codec;
+import edu.duke.cs.jflap.file.Decoder;
 import edu.duke.cs.jflap.file.ParseException;
 import edu.duke.cs.jflap.gui.action.NewAction;
 import edu.duke.cs.jflap.gui.action.OpenAction;
@@ -29,6 +29,7 @@ import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -89,8 +90,9 @@ public class Main {
         try {
             // Well, Apple WAS stupid...
             if (System.getProperty("os.name").startsWith("Mac OS")
-                    && System.getProperty("java.specification.version").equals("1.3"))
+                    && System.getProperty("java.specification.version").equals("1.3")) {
                 System.setProperty("com.apple.hwaccel", "false");
+            }
         } catch (SecurityException e) {
             // Bleh.
         }
@@ -106,12 +108,12 @@ public class Main {
             if (args[0].equals("text")) {
             }
 
-            for (int i = 0; i < args.length; i++) {
-                Codec[] codecs = Universe.CODEC_REGISTRY.getDecoders()
+            for (String arg : args) {
+                List<Decoder> codecs = Universe.CODEC_REGISTRY.getDecoders();
                 try {
-                    OpenAction.openFile(new File(args[i]), codecs);
+                    OpenAction.openFile(new File(arg), codecs);
                 } catch (ParseException e) {
-                    System.err.println("Could not open " + args[i] + ": " + e.getMessage());
+                    System.err.println("Could not open " + arg + ": " + e.getMessage());
                 }
             }
         }
@@ -148,10 +150,11 @@ public class Main {
                             .getElementsByTagName(current.EMPTY_STRING_NAME).item(0);
                     if (parent != null) {
                         String empty = parent.getTextContent();
-                        if (empty.equals(current.lambdaText))
+                        if (empty.equals(current.lambdaText)) {
                             current.setEmptyString(current.lambda);
-                        else if (empty.equals(current.epsilonText))
+                        } else if (empty.equals(current.epsilonText)) {
                             current.setEmptyString(current.epsilon);
+                        }
                     }
 
                     // Then set the Turing final state constant
@@ -159,9 +162,11 @@ public class Main {
                             .getElementsByTagName(Profile.TURING_FINAL_NAME).item(0);
                     if (parent != null) {
                         String turingFinal = parent.getTextContent();
-                        if (turingFinal.equals("true"))
+                        if (turingFinal.equals("true")) {
                             current.setTransitionsFromTuringFinalStateAllowed(true);
-                        else current.setTransitionsFromTuringFinalStateAllowed(false);
+                        } else {
+                            current.setTransitionsFromTuringFinalStateAllowed(false);
+                        }
                     }
 
                     // set the Turing Acceptance ways.
@@ -169,18 +174,22 @@ public class Main {
                             .getElementsByTagName(Profile.ACCEPT_FINAL_STATE).item(0);
                     if (parent != null) {
                         String acceptFinal = parent.getTextContent();
-                        if (acceptFinal.equals("true"))
+                        if (acceptFinal.equals("true")) {
                             current.setAcceptByFinalState(true);
-                        else current.setAcceptByFinalState(false);
+                        } else {
+                            current.setAcceptByFinalState(false);
+                        }
                     }
 
                     parent = doc.getDocumentElement().getElementsByTagName(Profile.ACCEPT_HALT)
                             .item(0);
                     if (parent != null) {
                         String acceptHalt = parent.getTextContent();
-                        if (acceptHalt.equals("true"))
+                        if (acceptHalt.equals("true")) {
                             current.setAcceptByHalting(true);
-                        else current.setAcceptByHalting(false);
+                        } else {
+                            current.setAcceptByHalting(false);
+                        }
                     }
 
                     // set the AllowStay option
@@ -188,9 +197,11 @@ public class Main {
                             .item(0);
                     if (parent != null) {
                         String allowStay = parent.getTextContent();
-                        if (allowStay.equals("true"))
+                        if (allowStay.equals("true")) {
                             current.setAllowStay(true);
-                        else current.setAllowStay(false);
+                        } else {
+                            current.setAllowStay(false);
+                        }
                     }
 
                     // Now set the Undo amount

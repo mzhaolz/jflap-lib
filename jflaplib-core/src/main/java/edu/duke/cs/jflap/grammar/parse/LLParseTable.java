@@ -18,9 +18,13 @@ package edu.duke.cs.jflap.grammar.parse;
 
 import edu.duke.cs.jflap.grammar.Grammar;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Table;
+import com.google.common.collect.Table.Cell;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -49,17 +53,17 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * @param grammar
      *            the grammar to create the table for
      */
-    @SuppressWarnings("unchecked")
     public LLParseTable(Grammar grammar) {
         variables = grammar.getVariables();
         variables.sort((x,y) -> x.compareTo(y));
         terminals.sort((x,y) -> x.compareTo(y));
         terminals = grammar.getTerminals();
-
-        entries = new SortedSet[variables.length][terminals.length + 1];
-        for (int i = 0; i < entries.length; i++)
-            for (int j = 0; j < entries[i].length; j++)
-                entries[i][j] = new TreeSet<>();
+        entries = HashBasedTable.<Integer, Integer, SortedSet<String>>create();
+        for (int i = 0; i < variables.size(); ++i) {
+            for (int j = 0; j < terminals.size() + 1; ++j) {
+                entries.put(i, j, new TreeSet<>());
+            }
+        }
     }
 
     /**
@@ -68,14 +72,11 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * @param table
      *            the table to copy
      */
-    @SuppressWarnings("unchecked")
     public LLParseTable(LLParseTable table) {
         variables = table.variables;
         terminals = table.terminals;
-        entries = new SortedSet[variables.length][terminals.length + 1];
-        for (int i = 0; i < entries.length; i++)
-            for (int j = 0; j < entries[i].length; j++)
-                entries[i][j] = new TreeSet<String>(table.entries[i][j]);
+        entries = HashBasedTable.<Integer, Integer, SortedSet<String>>create();
+        entries.putAll(table.entries);
     }
 
     /**
@@ -98,13 +99,12 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     public boolean equals(Object object) {
         try {
             LLParseTable other = (LLParseTable) object;
-            if (!Arrays.equals(variables, other.variables))
+            if (!variables.equals(other.variables))
                 return false;
-            if (!Arrays.equals(terminals, other.terminals))
+            if (!terminals.equals(other.terminals))
                 return false;
-            for (int i = 0; i < variables.length; i++)
-                if (!Arrays.equals(entries[i], other.entries[i]))
-                    return false;
+            if (!entries.equals(other.entries))
+                return false;
             return true;
         } catch (ClassCastException e) {
             return false;
@@ -120,7 +120,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     public int hashCode() {
         // Lazy, stupid, and dangerous, but unlike me has the virtue
         // of working...
-        return variables.length ^ terminals.length;
+        return variables.size() ^ terminals.size();
     }
 
     /**
@@ -135,10 +135,10 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             if either variable or lookahead is not a variable or terminal
      *             (or $) respectively in the grammar
      */
-    private List<int> getLocation(String variable, String lookahead) {
-        int[] r = new int[2];
-        r[0] = getRow(variable);
-        r[1] = getColumn(lookahead) - 1;
+    private List<Integer> getLocation(String variable, String lookahead) {
+        List<Integer> r = new ArrayList<>();
+        r.add(getRow(variable));
+        r.add(getColumn(lookahead) - 1);
         return r;
     }
 
@@ -152,7 +152,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             if the variable is not a variable in the grammar
      */
     public int getRow(String variable) {
-        int row = Arrays.binarySearch(variables, variable);
+        int row = Collections.binarySearch(variables, variable);
         if (row < 0)
             throw new IllegalArgumentException(variable + " is not a variable!");
         return row;
@@ -166,9 +166,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             (or $) respectively in the grammar
      */
     public int getColumn(String lookahead) {
-        int column = terminals.length;
+        int column = terminals.size();
         if (!lookahead.equals("$"))
-            column = Arrays.binarySearch(terminals, lookahead);
+            column = Collections.binarySearch(terminals, lookahead); 
         if (column < 0)
             throw new IllegalArgumentException(lookahead + " is not a terminal!");
         return column + 1;
@@ -188,19 +188,19 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             if the other parse table does not have the same variables and
      *             lookahead terminals
      */
-    public String[][] getDifferences(LLParseTable table) {
-        if (!Arrays.equals(variables, table.variables)
-                || !Arrays.equals(terminals, table.terminals))
+    public List<List<String>> getDifferences(LLParseTable table) {
+        if (!variables.equals(table.variables)
+                || !terminals.equals(table.terminals))
             throw new IllegalArgumentException("Tables differ in variables or terminals.");
-        List<String[]> differences = new ArrayList<>();
-        for (int v = 0; v < entries.length; v++)
-            for (int t = 0; t < entries[v].length; t++)
-                if (!entries[v][t].equals(table.entries[v][t])) {
-                    if (t == terminals.length)
-                        differences.add(new String[] { variables[v], "$" });
-                    else differences.add(new String[] { variables[v], terminals[t] });
-                }
-        return differences
+        List<List<String>> differences = new ArrayList<>();
+        for (Cell<Integer, Integer, SortedSet<String>> c : entries.cellSet()) {
+            if (!c.getValue().equals(table.entries.get(c.getRowKey(), c.getColumnKey()))) {
+                differences.add(Lists.newArrayList(variables.get(c.getRowKey()), "$"));
+            } else {
+                differences.add(Lists.newArrayList(variables.get(c.getRowKey()), terminals.get(c.getColumnKey())));
+            }
+        }
+        return differences;
     }
 
     /**
@@ -220,10 +220,10 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             (or $) respectively in the grammar
      */
     public int addEntry(String variable, String lookahead, String expansion) {
-        int[] r = getLocation(variable, lookahead);
-        entries[r[0]][r[1]].add(expansion);
-        fireTableCellUpdated(r[0], r[1] + 1);
-        return entries[r[0]][r[1]].size();
+        List<Integer> r = getLocation(variable, lookahead);
+        entries.get(r.get(0), r.get(1)).add(expansion);
+        fireTableCellUpdated(r.get(0), r.get(1) + 1);
+        return entries.get(r.get(0), r.get(1)).size();
     }
 
     /**
@@ -242,9 +242,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             (or $) respectively in the grammar
      */
     public boolean removeEntry(String variable, String lookahead, String expansion) {
-        int[] r = getLocation(variable, lookahead);
-        boolean removed = entries[r[0]][r[1]].remove(expansion);
-        fireTableCellUpdated(r[0], r[1] + 1);
+        List<Integer> r = getLocation(variable, lookahead);
+        boolean removed = entries.get(r.get(0), r.get(1)).remove(expansion);
+        fireTableCellUpdated(r.get(0), r.get(1) + 1);
         return removed;
     }
 
@@ -252,9 +252,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      * This will clear all entries in the table.
      */
     public void clear() {
-        for (int i = 0; i < entries.length; i++)
-            for (int j = 0; j < entries[i].length; j++)
-                entries[i][j].clear();
+        for (Cell<Integer, Integer, SortedSet<String>> c : entries.cellSet()) {
+            c.getValue().clear();
+        }
         fireTableDataChanged();
     }
 
@@ -271,9 +271,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             (or $) respectively in the grammar
      */
     public void clear(String variable, String lookahead) {
-        int[] r = getLocation(variable, lookahead);
-        entries[r[0]][r[1]].clear();
-        fireTableCellUpdated(r[0], r[1] + 1);
+        List<Integer> r = getLocation(variable, lookahead);
+        entries.get(r.get(0), r.get(1)).clear();
+        fireTableCellUpdated(r.get(0), r.get(1) + 1);
     }
 
     /**
@@ -288,8 +288,8 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             (or $) respectively in the grammar
      */
     public SortedSet<String> get(String variable, String lookahead) {
-        int[] r = getLocation(variable, lookahead);
-        return Collections.unmodifiableSortedSet(entries[r[0]][r[1]]);
+        List<Integer> r = getLocation(variable, lookahead);
+        return Collections.unmodifiableSortedSet(entries.get(r.get(0), r.get(1)));
     }
 
     /**
@@ -306,9 +306,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             (or $) respectively in the grammar
      */
     public void set(Set<String> productions, String variable, String lookahead) {
-        int[] r = getLocation(variable, lookahead);
-        entries[r[0]][r[1]].clear();
-        entries[r[0]][r[1]].addAll(productions);
+        List<Integer> r = getLocation(variable, lookahead);
+        entries.get(r.get(0), r.get(1)).clear();
+        entries.get(r.get(0), r.get(1)).addAll(productions);
     }
 
     // ABSTRACT TABLE MODEL METHODS BELOW
@@ -320,7 +320,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     @Override
     public int getRowCount() {
-        return variables.length;
+        return variables.size();
     }
 
     /**
@@ -329,7 +329,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     @Override
     public int getColumnCount() {
-        return terminals.length + 2;
+        return terminals.size() + 2;
     }
 
     /**
@@ -342,9 +342,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     public String getColumnName(int column) {
         if (column == 0)
             return " ";
-        if (column == terminals.length + 1)
+        if (column == terminals.size() + 1)
             return "$";
-        return terminals[column - 1];
+        return terminals.get(column - 1);
     }
 
     /**
@@ -404,8 +404,8 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     @Override
     public Object getValueAt(int row, int column) {
         if (column == 0)
-            return variables[row];
-        return spaceSet(entries[row][column - 1]);
+            return variables.get(row);
+        return spaceSet(entries.get(row, column - 1));
     }
 
     /**
@@ -416,7 +416,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     @Override
     public void setValueAt(Object value, int row, int column) {
-        despaceSet((String) value, entries[row][column - 1]);
+        despaceSet((String) value, entries.get(row, column - 1));
         fireTableCellUpdated(row, column);
     }
 
@@ -453,7 +453,7 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     private List<String> variables;
 
     /** The entries in the parse table. */
-    private List<SortedSet<String>>[] entries;
+    private Table<Integer, Integer, SortedSet<String>> entries;
 
     /** Is the table noneditable? */
     private boolean frozen = false;
