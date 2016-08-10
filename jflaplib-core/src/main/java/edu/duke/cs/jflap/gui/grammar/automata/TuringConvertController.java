@@ -29,6 +29,7 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -77,12 +78,12 @@ public class TuringConvertController extends ConvertController {
    * @return an array containing the productions that correspond to a
    *         particular state
    */
-  protected Production[] getProductions(State state) {
+  protected List<Production> getProductions(State state) {
     if (myTuringMachine.isInitialState(state)) {
-      Transition[] tm = myTuringMachine.getTransitions();
+      List<Transition> tm = myTuringMachine.getTransitions();
       return converter.createProductionsForInit(state, tm);
     }
-    return new Production[0];
+    return new ArrayList<>();
   }
 
   /**
@@ -94,7 +95,7 @@ public class TuringConvertController extends ConvertController {
    * @return an array containing the productions that correspond to a
    *         particular transition
    */
-  protected Production[] getProductions(Transition transition) {
+  protected List<Production> getProductions(Transition transition) {
     /*
      * return (Production[]) converter.createProductionsForTransition(
      * transition, getAutomaton())
@@ -175,8 +176,8 @@ public class TuringConvertController extends ConvertController {
     try {
       ConvertedUnrestrictedGrammar g = getGrammar();
       ArrayList<Production> prods = new ArrayList<Production>();
-      Production[] temp = g.getProductions();
-      for (int i = 0; i < temp.length; i++) prods.add(temp[i]);
+      List<Production> temp = g.getProductions();
+      for (int i = 0; i < temp.size(); i++) prods.add(temp.get(i));
 
       Collections.sort(
           prods,
@@ -187,7 +188,7 @@ public class TuringConvertController extends ConvertController {
             }
           });
       ConvertedUnrestrictedGrammar gg = new ConvertedUnrestrictedGrammar();
-      for (int i = 0; i < temp.length; i++) temp[i] = prods.get(i);
+      for (int i = 0; i < temp.size(); i++) temp.set(i, prods.get(i));
       gg.setStartVariable("S");
       gg.addProductions(temp);
       FrameFactory.createFrame(gg, 0);

@@ -54,7 +54,7 @@ public class TuringToGrammarConverter {
     myAllWritableString = new HashSet<String>();
   }
 
-  public List<Production> createProductionsForInit(State state, Transition[] tm) {
+  public List<Production> createProductionsForInit(State state, List<Transition> tm) {
     // TODO Auto-generated method stub
     int id = state.getID();
     ArrayList<Production> init = new ArrayList<Production>();
@@ -65,8 +65,8 @@ public class TuringToGrammarConverter {
     init.add(new Production("S", "T"));
     myAllReadableString.add(SQUARE);
 
-    for (int i = 0; i < tm.length; i++) {
-      TMTransition trans = (TMTransition) tm[i];
+    for (int i = 0; i < tm.size(); i++) {
+      TMTransition trans = (TMTransition) tm.get(i);
       int tape = trans.getTapeLength();
       for (int j = 0; j < tape; j++) {
         String str = trans.getRead(j);
@@ -93,16 +93,16 @@ public class TuringToGrammarConverter {
    * productions
    *
    * @param transition
-   * @param states
+   * @param list2
    * @return
    */
-  public List<Production> createProductionsForTransition(Transition transition, State[] states) {
+  public List<Production> createProductionsForTransition(Transition transition, List<State> list2) {
     // TODO Auto-generated method stub
     ArrayList<Production> list = new ArrayList<Production>();
     TMTransition trans = (TMTransition) transition;
     HashMap<Integer, Boolean> finalStateMap = new HashMap<Integer, Boolean>();
-    for (int i = 0; i < states.length; i++) {
-      finalStateMap.put(states[i].getID(), true);
+    for (int i = 0; i < list2.size(); i++) {
+      finalStateMap.put(list2.get(i).getID(), true);
     }
     // what is exactly tape??
     int fromState = trans.getFromState().getID();

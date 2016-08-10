@@ -55,7 +55,7 @@ class LLParseController {
      */
     public void initialize(String string) {
         dehighlight();
-        ArrayList<MutableTreeNode> nodes = new ArrayList<MutableTreeNode>();
+        ArrayList<MutableTreeNode> nodes = new ArrayList<>();
         tree = parseTree(string, pane.grammar, pane.table, nodes);
         pane.treeDrawer.setModel(tree);
         pane.treeDrawer.hideAll();
@@ -63,9 +63,9 @@ class LLParseController {
         pane.stepAction.setEnabled(true);
         pane.derivationModel.setRowCount(0);
         // Initialize those global structures! :)
-        NODES = nodes
+        NODES = nodes;
         STRING = string + "$";
-        STACK = new Stack<TreeNode>();
+        STACK = new Stack<>();
         P = 0;
         NODECOUNT = 0;
         stepMode = INITIALIZE;
@@ -88,8 +88,9 @@ class LLParseController {
     private String stackString() {
         Stack<TreeNode> o = STACK;
         StringBuffer sb = new StringBuffer();
-        for (int i = o.size() - 1; i >= 0; i--)
+        for (int i = o.size() - 1; i >= 0; i--) {
             sb.append(o.get(i));
+        }
         return sb.toString();
     }
 
@@ -100,8 +101,8 @@ class LLParseController {
         String read = STRING.substring(P, P + 1);
         switch (stepMode) {
             case INITIALIZE:
-                STACK.push(NODES[0]); // Push the root.
-                pane.treeDrawer.show(NODES[0]);
+                STACK.push(NODES.get(0)); // Push the root.
+                pane.treeDrawer.show(NODES.get(0));
                 pane.treePanel.repaint();
                 NODECOUNT++;
                 stepMode = NORMAL;
@@ -156,8 +157,9 @@ class LLParseController {
                             + derivationString.substring(first + 1);
                     pane.derivationModel.addRow(new String[] { rule, derivationString });
                     // What? About? Lambda?
-                    if (ENTRY.length() == 0)
+                    if (ENTRY.length() == 0) {
                         ENTRY = Universe.curProfile.getEmptyString();
+                    }
                     ENTRYP = ENTRY.length() - 1;
                     pane.statusDisplay.setText("Replacing " + top + " with " + ENTRY + ".");
 
@@ -171,11 +173,12 @@ class LLParseController {
                     step();
                     return;
                 }
-                TreeNode node = NODES[NODECOUNT++];
+                TreeNode node = NODES.get(NODECOUNT++);
                 pane.treeDrawer.show(node);
                 pane.treePanel.repaint();
-                if (!node.toString().equals(Universe.curProfile.getEmptyString()))
+                if (!node.toString().equals(Universe.curProfile.getEmptyString())) {
                     STACK.push(node);
+                }
                 ENTRYP--;
                 updateStatus();
                 return;
@@ -266,7 +269,7 @@ class LLParseController {
             List<MutableTreeNode> nodes) {
         int p = 0;
         string = string + "$";
-        Stack<MutableTreeNode> stack = new Stack<MutableTreeNode>();
+        Stack<MutableTreeNode> stack = new Stack<>();
         MutableTreeNode root = new DefaultMutableTreeNode(grammar.getStartVariable());
         stack.push(root);
         nodes.add(root);
@@ -322,7 +325,7 @@ class LLParseController {
 
     private Stack<TreeNode> STACK;
 
-    private List<TreeNode> NODES;
+    private List<? extends TreeNode> NODES;
 
     /** The current derivation string. */
     private String derivationString;

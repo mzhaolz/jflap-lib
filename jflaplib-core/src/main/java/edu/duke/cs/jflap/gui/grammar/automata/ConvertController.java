@@ -28,11 +28,11 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -106,24 +106,24 @@ public abstract class ConvertController {
      * constructor, whenever the controller is ready to produce the productions.
      */
     protected void fillMap() {
-        State[] states = automaton.getStates();
-        for (int i = 0; i < states.length; i++) {
-            Production[] prods = getProductions(states[i]);
-            if (prods.length == 0)
+        List<State> states = automaton.getStates();
+        for (State si : states) {
+            List<Production> prods = getProductions(si);
+            if (prods.size() == 0)
                 continue;
-            objectToProduction.put(states[i], prods);
-            for (int j = 0; j < prods.length; j++)
-                productionToObject.put(prods[j], states[i]);
+            objectToProduction.put(si, prods);
+            for (int j = 0; j < prods.size(); j++)
+                productionToObject.put(prods.get(j), si);
         }
         // Now let's get the other cannon!
-        Transition[] transitions = automaton.getTransitions();
-        for (int i = 0; i < transitions.length; i++) {
-            Production[] prods = getProductions(transitions[i]);
-            if (prods.length == 0)
+        List<Transition> transitions = automaton.getTransitions();
+        for (Transition transi : transitions) {
+            List<Production> prods = getProductions(transi);
+            if (prods.size() == 0)
                 continue;
-            objectToProduction.put(transitions[i], prods);
-            for (int j = 0; j < prods.length; j++)
-                productionToObject.put(prods[j], transitions[i]);
+            objectToProduction.put(transi, prods);
+            for (int j = 0; j < prods.size(); j++)
+                productionToObject.put(prods.get(j), transi);
         }
     }
 
@@ -160,8 +160,8 @@ public abstract class ConvertController {
      *         revealed
      */
     public List<Production> revealObjectProductions(Object object) {
-        Production[] p = objectToProduction.get(object);
-        if (p == null || p.length == 0) {
+        List<Production> p = objectToProduction.get(object);
+        if (p == null || p.size() == 0) {
             // There are no productions!
             JOptionPane.showMessageDialog(convertPane, "There are no productions for that object!");
             return null;
@@ -169,10 +169,10 @@ public abstract class ConvertController {
         if (alreadyDone.contains(object)) {
             // Been there, done that.
             JOptionPane.showMessageDialog(convertPane, "This object has already been converted!");
-            return new Production[0];
+            return new ArrayList<>();
         }
         alreadyDone.add(object);
-        addProductions(Arrays.asList(p));
+        addProductions(p);
         return p;
     }
 
@@ -184,15 +184,15 @@ public abstract class ConvertController {
      *         if no object remains to have its productions revealed
      */
     public Object revealRandomProductions() {
-        Iterator<Map.Entry<Serializable, Production[]>> it = objectToProduction.entrySet()
+        Iterator<Map.Entry<Serializable, List<Production>>> it = objectToProduction.entrySet()
                 .iterator();
         while (it.hasNext()) {
-            Map.Entry<Serializable, Production[]> entry = it.next();
+            Map.Entry<Serializable, List<Production>> entry = it.next();
             Serializable key = entry.getKey();
             if (alreadyDone.contains(key))
                 continue;
-            Production[] p = objectToProduction.get(key);
-            addProductions(Arrays.asList(p));
+            List<Production> p = objectToProduction.get(key);
+            addProductions(p);
             alreadyDone.add(entry.getKey());
             return key;
         }
@@ -212,8 +212,8 @@ public abstract class ConvertController {
         Iterator<Serializable> it = remaining.iterator();
         Collection<Production> ps = new ArrayList<Production>();
         while (it.hasNext()) {
-            Production[] p = objectToProduction.get(it.next());
-            ps.addAll(Arrays.asList(p));
+            List<Production> p = objectToProduction.get(it.next());
+            ps.addAll(p);
         }
         addProductions(ps);
         alreadyDone.addAll(remaining);
@@ -226,16 +226,16 @@ public abstract class ConvertController {
      *
      * @return an array of the objects which as yet have not been transformed
      */
-    public List<Object> highlightUntransformed() {
+    public List<Serializable> highlightUntransformed() {
         HashSet<Serializable> unselectedSet = new HashSet<Serializable>(
                 objectToProduction.keySet());
         unselectedSet.removeAll(alreadyDone);
-        Object[] unselected = unselectedSet
+        List<Serializable> unselected = new ArrayList<>(unselectedSet);
         drawer.clearSelected();
-        for (int i = 0; i < unselected.length; i++)
-            if (unselected[i] instanceof State)
-                drawer.addSelected((State) unselected[i]);
-            else drawer.addSelected((Transition) unselected[i]);
+        for (Serializable s : unselected)
+            if (s instanceof State)
+                drawer.addSelected((State) s);
+            else drawer.addSelected((Transition) s);
         convertPane.getAutomatonPane().repaint();
         return unselected;
     }
@@ -299,8 +299,8 @@ public abstract class ConvertController {
      * @return an array containing the productions that correspond to a
      *         particular state
      */
-    protected Production[] getProductions(State state) {
-        return new Production[0];
+    protected List<Production> getProductions(State state) {
+        return new ArrayList<>();
     }
 
     /**
@@ -312,8 +312,8 @@ public abstract class ConvertController {
      * @return an array containing the productions that correspond to a
      *         particular transition
      */
-    protected Production[] getProductions(Transition transition) {
-        return new Production[0];
+    protected List<Production> getProductions(Transition transition) {
+        return new ArrayList<>();
     }
 
     /**
@@ -330,7 +330,7 @@ public abstract class ConvertController {
      * If there are no productions for an object, the map will not contain the
      * key.
      */
-    protected HashMap<Serializable, Production[]> objectToProduction = new HashMap<Serializable, Production[]>();
+    protected HashMap<Serializable, List<Production>> objectToProduction = new HashMap<>();
 
     /**
      * The mapping of productions to whatever object they correspond to, which

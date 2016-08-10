@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -122,10 +123,10 @@ class ConvertController {
     grammarView.addSelectionListener(
         new SelectionListener() {
           public void selectionChanged(SelectionEvent event) {
-            Production[] p = grammarView.getSelected();
+            List<Production> p = grammarView.getSelected();
             drawer.clearSelected();
-            for (int i = 0; i < p.length; i++) {
-              drawer.addSelected(pToT.get(p[i]));
+            for (int i = 0; i < p.size(); i++) {
+              drawer.addSelected(pToT.get(p.get(i)));
             }
             parent.repaint();
           }
@@ -151,10 +152,10 @@ class ConvertController {
    * automaton.
    */
   public void createForSelected() {
-    Production[] p = grammarView.getSelected();
-    for (int i = 0; i < p.length; i++) {
-      if (alreadyDone.contains(p[i])) continue;
-      Transition t = pToT.get(p[i]);
+    List<Production> p = grammarView.getSelected();
+    for (int i = 0; i < p.size(); i++) {
+      if (alreadyDone.contains(p.get(i))) continue;
+      Transition t = pToT.get(p.get(i));
       automaton.addTransition(t);
     }
   }

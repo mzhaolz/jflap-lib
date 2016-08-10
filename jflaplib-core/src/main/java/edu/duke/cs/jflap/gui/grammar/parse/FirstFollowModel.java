@@ -19,9 +19,12 @@ package edu.duke.cs.jflap.gui.grammar.parse;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.environment.Universe;
 
-import java.util.Arrays;
+import com.google.common.collect.ImmutableList;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -50,12 +53,10 @@ public class FirstFollowModel extends AbstractTableModel {
    */
   public FirstFollowModel(Grammar grammar) {
     variables = grammar.getVariables();
-    Arrays.sort(variables);
+    variables.sort((x, y) -> x.compareTo(y));
 
-    firstSets = new String[variables.length];
-    followSets = new String[variables.length];
-    Arrays.fill(firstSets, "");
-    Arrays.fill(followSets, "");
+    firstSets = Collections.nCopies(variables.size(), "");
+    followSets = Collections.nCopies(variables.size(), "");
   }
 
   /**
@@ -85,7 +86,7 @@ public class FirstFollowModel extends AbstractTableModel {
    *            <CODE>true</CODE> if editing is allowed
    */
   public void setCanEditFirst(boolean canEdit) {
-    canEditColumn[1] = canEdit;
+    canEditColumn.set(1, canEdit);
   }
 
   /**
@@ -95,7 +96,7 @@ public class FirstFollowModel extends AbstractTableModel {
    *            <CODE>true</CODE> if editing is allowed
    */
   public void setCanEditFollow(boolean canEdit) {
-    canEditColumn[2] = canEdit;
+    canEditColumn.set(2, canEdit);
   }
 
   /**
@@ -103,8 +104,9 @@ public class FirstFollowModel extends AbstractTableModel {
    *
    * @return the number of variables
    */
-  public int getRowCount() {
-    return variables.length;
+  @Override
+public int getRowCount() {
+    return variables.size();
   }
 
   /**
@@ -113,7 +115,8 @@ public class FirstFollowModel extends AbstractTableModel {
    *
    * @return 3
    */
-  public int getColumnCount() {
+  @Override
+public int getColumnCount() {
     return 3;
   }
 
@@ -123,8 +126,9 @@ public class FirstFollowModel extends AbstractTableModel {
    * @param column
    *            the index of a column to get the name for
    */
-  public String getColumnName(int column) {
-    return COLUMN_NAMES[column];
+  @Override
+public String getColumnName(int column) {
+    return COLUMN_NAMES.get(column);
   }
 
   /**
@@ -136,14 +140,15 @@ public class FirstFollowModel extends AbstractTableModel {
    *            the column to get data for
    * @return the data for this column
    */
-  public Object getValueAt(int row, int column) {
+  @Override
+public Object getValueAt(int row, int column) {
     switch (column) {
       case 0:
-        return variables[row];
+        return variables.get(row);
       case 1:
-        return firstSets[row];
+        return firstSets.get(row);
       case 2:
-        return followSets[row];
+        return followSets.get(row);
     }
     return null;
   }
@@ -156,8 +161,9 @@ public class FirstFollowModel extends AbstractTableModel {
    * @param column
    *            the column of the cell
    */
-  public boolean isCellEditable(int row, int column) {
-    return canEditColumn[column];
+  @Override
+public boolean isCellEditable(int row, int column) {
+    return canEditColumn.get(column);
   }
 
   /**
@@ -172,7 +178,7 @@ public class FirstFollowModel extends AbstractTableModel {
    */
   public Set<String> getSet(int row, int column) {
     String s = (String) getValueAt(row, column);
-    Set<String> set = new TreeSet<String>();
+    Set<String> set = new TreeSet<>();
     for (int i = 0; i < s.length(); i++) {
       if (s.charAt(i) == '!') {
         set.add("");
@@ -197,11 +203,13 @@ public class FirstFollowModel extends AbstractTableModel {
    *         removed
    */
   private String removeDuplicateCharacters(String s) {
-    Set<Character> characters = new HashSet<Character>();
+    Set<Character> characters = new HashSet<>();
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < s.length(); i++) {
       Character c = new Character(s.charAt(i));
-      if (characters.add(c)) sb.append(c.charValue());
+      if (characters.add(c)) {
+        sb.append(c.charValue());
+    }
     }
     return sb.toString();
   }
@@ -216,16 +224,17 @@ public class FirstFollowModel extends AbstractTableModel {
    * @param column
    *            the column to change
    */
-  public void setValueAt(Object value, int row, int column) {
+  @Override
+public void setValueAt(Object value, int row, int column) {
     switch (column) {
       case 0:
-        variables[row] = (String) value;
+        variables.set(row, (String) value);
         break;
       case 1:
-        firstSets[row] = removeDuplicateCharacters((String) value);
+        firstSets.set(row, removeDuplicateCharacters((String) value));
         break;
       case 2:
-        followSets[row] = removeDuplicateCharacters((String) value);
+        followSets.set(row, removeDuplicateCharacters((String) value));
         break;
     }
   }
@@ -245,7 +254,9 @@ public class FirstFollowModel extends AbstractTableModel {
     Iterator<?> it = set.iterator();
     while (it.hasNext()) {
       String element = (String) it.next();
-      if (element.length() == 0) element = "!";
+      if (element.length() == 0) {
+        element = "!";
+    }
       sb.append(element);
     }
     setValueAt(sb.toString(), row, column);
@@ -261,11 +272,11 @@ public class FirstFollowModel extends AbstractTableModel {
   private List<String> followSets;
 
   /** The permissions to edit each column. */
-  private List<boolean> canEditColumn = new boolean[] {false, false, false};
+  private List<Boolean> canEditColumn = Collections.nCopies(3, false);
 
   /** The lambda string. */
   public static String LAMBDA = Universe.curProfile.getEmptyString();
 
   /** The names of columns. */
-  public static List<String> COLUMN_NAMES = {" ", "FIRST", "FOLLOW"};
+  public static List<String> COLUMN_NAMES = ImmutableList.of(" ", "FIRST", "FOLLOW");
 }
