@@ -18,6 +18,8 @@ package edu.duke.cs.jflap.file.xml;
 
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
 
+import com.google.common.collect.Lists;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -69,7 +71,7 @@ public class RegPumpingLemmaTransducer extends PumpingLemmaTransducer {
     // Decode the decomposition.
     int xLength = Integer.parseInt(document.getElementsByTagName(X_NAME).item(0).getTextContent());
     int yLength = Integer.parseInt(document.getElementsByTagName(Y_NAME).item(0).getTextContent());
-    pl.setDecomposition(new int[] {xLength, yLength});
+    pl.setDecomposition(Lists.newArrayList(xLength, yLength));
 
     return pl;
   }

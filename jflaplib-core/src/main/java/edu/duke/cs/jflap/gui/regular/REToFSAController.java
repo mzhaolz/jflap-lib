@@ -23,11 +23,15 @@ import edu.duke.cs.jflap.gui.environment.FrameFactory;
 import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.regular.Discretizer;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -50,7 +54,7 @@ public class REToFSAController {
   public REToFSAController(ConvertToAutomatonPane pane, FiniteStateAutomaton automaton) {
     this.convertPane = pane;
     this.automaton = automaton;
-    FSATransition t = (FSATransition) automaton.getTransitions()[0];
+    FSATransition t = (FSATransition) automaton.getTransitions().get(0);
     if (requiredAction(t.getLabel()) != 0) toDo.add(t);
     convertPane.exportAction.setEnabled(false);
     nextStep();
@@ -65,8 +69,8 @@ public class REToFSAController {
    */
   private int requiredAction(String expression) {
     if (expression.length() <= 1) return 0;
-    if (Discretizer.or(expression).length > 1) return DEOR;
-    if (Discretizer.cat(expression).length > 1) return DECAT;
+    if (Discretizer.or(expression).size() > 1) return DEOR;
+    if (Discretizer.cat(expression).size() > 1) return DECAT;
     if (expression.charAt(expression.length() - 1) == '*') return DESTAR;
     if (expression.charAt(0) == '(' && expression.charAt(expression.length() - 1) == ')')
       return DEPARENS;
@@ -80,11 +84,11 @@ public class REToFSAController {
    *
    * @param transition
    *            the transition to replace
-   * @param exps
+   * @param list
    *            the array of string expressions to replace the transition with
    * @return the array of transitions created
    */
-  private List<FSATransition> replaceTransition(FSATransition transition, String[] exps) {
+  private List<FSATransition> replaceTransition(FSATransition transition, List<String> list) {
     // Compose the transform.
     AffineTransform at = new AffineTransform();
     Point pStart = transition.getFromState().getPoint();
@@ -93,14 +97,14 @@ public class REToFSAController {
     at.scale(pStart.distance(pEnd), pStart.distance(pEnd));
     at.rotate(Math.atan2(pEnd.y - pStart.y, pEnd.x - pStart.x));
 
-    FSATransition[] t = new FSATransition[exps.length];
+    List<FSATransition> t = new ArrayList<>();
     Point2D.Double ps = new Point2D.Double(0.2, 0.0);
     Point2D.Double pe = new Point2D.Double(0.8, 0.0);
     automaton.removeTransition(transition);
-    for (int i = 0; i < exps.length; i++) {
+    for (int i = 0; i < list.size(); i++) {
       pStart = new Point();
       pEnd = new Point();
-      double y = exps.length > 1 ? (i / (exps.length - 1.0) - 0.5) * 0.5 : 0.0;
+      double y = list.size() > 1 ? (i / (list.size() - 1.0) - 0.5) * 0.5 : 0.0;
       pe.y = ps.y = y;
       at.transform(ps, pStart);
       at.transform(pe, pEnd);
@@ -111,9 +115,9 @@ public class REToFSAController {
       pEnd.y = Math.max(pEnd.y, 20);
       State s = automaton.createState(pStart);
       State e = automaton.createState(pEnd);
-      t[i] = new FSATransition(s, e, exps[i]);
-      automaton.addTransition(t[i]);
-      if (requiredAction(t[i].getLabel()) != 0) toDo.add(t[i]);
+      t.add(new FSATransition(s, e, list.get(i)));
+      automaton.addTransition(t.get(i));
+      if (requiredAction(t.get(i).getLabel()) != 0) toDo.add(t.get(i));
     }
     return t;
   }
@@ -160,16 +164,16 @@ public class REToFSAController {
         replacements =
             replaceTransition(
                 transition,
-                new String[] {Discretizer.delambda(label.substring(0, label.length() - 1))});
+                Lists.newArrayList(Discretizer.delambda(label.substring(0, label.length() - 1))));
         transitionNeeded = 4;
         break;
       case DEOR:
         replacements = replaceTransition(transition, Discretizer.or(label));
-        transitionNeeded = 2 * replacements.length;
+        transitionNeeded = 2 * replacements.size();
         break;
       case DECAT:
         replacements = replaceTransition(transition, Discretizer.cat(label));
-        transitionNeeded = replacements.length + 1;
+        transitionNeeded = replacements.size() + 1;
         break;
     }
     nextStep();
@@ -204,21 +208,21 @@ public class REToFSAController {
         // Probably a deparenthesization, or whatever.
         return;
       case DEOR:
-        for (int i = 0; i < replacements.length; i++) {
-          automaton.addTransition(lambda(from, replacements[i].getFromState()));
-          automaton.addTransition(lambda(replacements[i].getToState(), to));
+        for (int i = 0; i < replacements.size(); i++) {
+          automaton.addTransition(lambda(from, replacements.get(i).getFromState()));
+          automaton.addTransition(lambda(replacements.get(i).getToState(), to));
         }
         break;
       case DECAT:
-        automaton.addTransition(lambda(from, replacements[0].getFromState()));
-        for (int i = 0; i < replacements.length - 1; i++)
+        automaton.addTransition(lambda(from, replacements.get(0).getFromState()));
+        for (int i = 0; i < replacements.size() - 1; i++)
           automaton.addTransition(
-              lambda(replacements[i].getToState(), replacements[i + 1].getFromState()));
-        automaton.addTransition(lambda(replacements[replacements.length - 1].getToState(), to));
+              lambda(replacements.get(i).getToState(), replacements.get(i + 1).getFromState()));
+        automaton.addTransition(lambda(replacements.get(replacements.size() - 1).getToState(), to));
         break;
       case DESTAR:
-        automaton.addTransition(lambda(from, replacements[0].getFromState()));
-        automaton.addTransition(lambda(replacements[0].getToState(), to));
+        automaton.addTransition(lambda(from, replacements.get(0).getFromState()));
+        automaton.addTransition(lambda(replacements.get(0).getToState(), to));
         automaton.addTransition(lambda(from, to));
         automaton.addTransition(lambda(to, from));
         break;
@@ -261,7 +265,7 @@ public class REToFSAController {
    *            the to state
    */
   public void transitionCreate(State from, State to) {
-    boolean alreadyHere = automaton.getTransitionsFromStateToState(from, to).length != 0;
+    boolean alreadyHere = automaton.getTransitionsFromStateToState(from, to).size() != 0;
     boolean valid = false;
     switch (action) {
       case 0:
@@ -273,37 +277,37 @@ public class REToFSAController {
         return;
       case DEOR:
         if (from == transition.getFromState()) {
-          for (int i = 0; i < replacements.length; i++)
-            if (replacements[i].getFromState() == to) {
+          for (int i = 0; i < replacements.size(); i++)
+            if (replacements.get(i).getFromState() == to) {
               valid = true;
               break;
             }
         }
         if (to == transition.getToState()) {
-          for (int i = 0; i < replacements.length; i++)
-            if (replacements[i].getToState() == from) {
+          for (int i = 0; i < replacements.size(); i++)
+            if (replacements.get(i).getToState() == from) {
               valid = true;
               break;
             }
         }
         break;
       case DECAT:
-        if (automaton.getTransitionsFromState(from).length > 0
-            || automaton.getTransitionsToState(to).length > 0) {
+        if (automaton.getTransitionsFromState(from).size() > 0
+            || automaton.getTransitionsToState(to).size() > 0) {
           if (alreadyHere) valid = true; // Let someone take care of it.
           break;
         }
         int index1 = -1, index2 = -1;
-        for (int i = 0; i < replacements.length; i++) {
-          if (replacements[i].getToState() == from) index1 = i;
-          if (replacements[i].getFromState() == to) index2 = i;
+        for (int i = 0; i < replacements.size(); i++) {
+          if (replacements.get(i).getToState() == from) index1 = i;
+          if (replacements.get(i).getFromState() == to) index2 = i;
         }
-        int step = replacements.length + 1 - transitionNeeded;
+        int step = replacements.size() + 1 - transitionNeeded;
         if (index1 == -1 && from != transition.getFromState()) break;
         if (index2 == -1 && to != transition.getToState()) break;
         // If last one, make sure right state.
         if (index2 == -1) {
-          if (step != replacements.length) {
+          if (step != replacements.size()) {
             JOptionPane.showMessageDialog(
                 convertPane,
                 "That may be correct, but the transitions\n" + "must be connected in order.",
@@ -311,13 +315,13 @@ public class REToFSAController {
                 JOptionPane.ERROR_MESSAGE);
             return;
           }
-          valid = from == replacements[replacements.length - 1].getToState();
+          valid = from == replacements.get(replacements.size() - 1).getToState();
           break;
         }
         // ////System.out.println(index1+", "+index2+", "+step);
         // Make sure this is the right transition.
         if ((step == 0 && index1 != -1)
-            || (step > 0 && replacements[step - 1].getToState() != from)) {
+            || (step > 0 && replacements.get(step - 1).getToState() != from)) {
           JOptionPane.showMessageDialog(
               convertPane,
               "That may be correct, but the transitions\n" + "must be connected in order.",
@@ -326,10 +330,10 @@ public class REToFSAController {
           return;
         }
         // Handle internal cases.
-        if (replacements[index2].getLabel().equals(replacements[step].getLabel())) {
-          FSATransition t = replacements[step];
-          replacements[step] = replacements[index2];
-          replacements[index2] = t;
+        if (replacements.get(index2).getLabel().equals(replacements.get(step).getLabel())) {
+          FSATransition t = replacements.get(step);
+          replacements.set(step, replacements.get(index2));
+          replacements.set(index2, t);
           valid = true;
         } else {
           valid = false;
@@ -338,9 +342,9 @@ public class REToFSAController {
       case DESTAR:
         if (to == transition.getToState() && from == transition.getFromState()) valid = true;
         else if (from == transition.getToState() && to == transition.getFromState()) valid = true;
-        else if (to == transition.getToState() && from == replacements[0].getToState())
+        else if (to == transition.getToState() && from == replacements.get(0).getToState())
           valid = true;
-        else if (from == transition.getFromState() && to == replacements[0].getFromState())
+        else if (from == transition.getFromState() && to == replacements.get(0).getFromState())
           valid = true;
         break;
     }

@@ -20,6 +20,8 @@ import edu.duke.cs.jflap.automata.Transition;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -86,7 +88,7 @@ public class TransitionWindow extends JFrame {
                   TransitionWindow.this.controller.tableTransitionSelected(null);
                   return;
                 }
-                Transition t = transitions[table.getSelectedRow()];
+                Transition t = transitions.get(table.getSelectedRow());
                 TransitionWindow.this.controller.tableTransitionSelected(t);
                 ;
               }
@@ -106,19 +108,19 @@ public class TransitionWindow extends JFrame {
    * Sets the array of transitions the table in this window displays, and
    * shows the window.
    *
-   * @param transitions
+   * @param list
    *            the new array of transitions
    */
-  public void setTransitions(Transition[] transitions) {
-    this.transitions = transitions;
-    table.setModel(new TransitionTableModel(transitions));
+  public void setTransitions(List<Transition> list) {
+    this.transitions = list;
+    table.setModel(new TransitionTableModel(list));
   }
 
   /** The controller object for this window. */
   private FSAToREController controller;
 
   /** The array of transitions displayed. */
-  private List<Transition> transitions = new Transition[0];
+  private List<Transition> transitions = new ArrayList<>();
 
   /** The table object that displays the transitions. */
   private JTable table = new JTable(new TransitionTableModel());

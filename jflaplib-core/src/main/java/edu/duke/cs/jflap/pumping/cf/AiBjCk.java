@@ -375,20 +375,21 @@ public class AiBjCk extends ContextFreePumpingLemma {
     }
 
     @Override
-    public boolean setDecomposition(int[] decomposition) {
+    public boolean setDecomposition(List<Integer> decomposition) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public int addCase(int[] decomposition, int num) {
+    public int addCase(List<Integer> decomposition, int num) {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public boolean replaceCase(int[] decomposition, int num, int index) {
+    public boolean replaceCase(List<Integer> decomposition, int num, int index) {
         // TODO Auto-generated method stub
         return false;
     }
+
 }

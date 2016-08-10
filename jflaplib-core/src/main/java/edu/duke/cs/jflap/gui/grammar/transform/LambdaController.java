@@ -24,6 +24,7 @@ import edu.duke.cs.jflap.gui.grammar.GrammarTableModel;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -73,19 +74,19 @@ public class LambdaController {
         pane.updateDeleteEnabledness();
         pane.updateCompleteSelectedEnabledness();
         pane.mainLabel.setText("Modify the grammar to remove lambdas.");
-        Production[] p = grammar.getProductions();
-        for (int i = 0; i < p.length; i++) {
-          pane.editingGrammarModel.addProduction(p[i]);
-          currentProductions.add(p[i]);
-          if (p[i].getRHS().length() == 0) {
-            lambdaProductions.add(p[i]);
+        List<Production> p = grammar.getProductions();
+        for (Production pi : p) {
+          pane.editingGrammarModel.addProduction(pi);
+          currentProductions.add(pi);
+          if (pi.getRHS().length() == 0) {
+            lambdaProductions.add(pi);
             continue;
           }
-          Production[] p2 =
-              LambdaProductionRemover.getProductionsToAddForProduction(p[i], lambdaVariables);
-          desiredProductions.add(p[i]);
-          productionsToExpansion.put(p[i], p2);
-          for (int j = 0; j < p2.length; j++) desiredProductions.add(p2[j]);
+          List<Production> p2 =
+              LambdaProductionRemover.getProductionsToAddForProduction(pi, lambdaVariables);
+          desiredProductions.add(pi);
+          productionsToExpansion.put(pi, p2);
+          p2.forEach(prod -> desiredProductions.add(prod));
         }
         pane.editingActive = true;
         updateDisplay();
@@ -104,7 +105,7 @@ public class LambdaController {
     }
   }
 
-  public Map<Production, Production[]> getExpansionMap() {
+  public Map<Production, List<Production>> getExpansionMap() {
     return productionsToExpansion;
   }
 
@@ -117,13 +118,13 @@ public class LambdaController {
    */
   public void expandRowProduction(int row) {
     Production p = pane.grammarTable.getGrammarModel().getProduction(row);
-    Production[] ps = productionsToExpansion.get(p);
+    List<Production> ps = productionsToExpansion.get(p);
     if (ps == null) return;
     pane.editingActive = false;
-    for (int i = 0; i < ps.length; i++) {
-      if (!currentProductions.contains(ps[i]) && desiredProductions.contains(ps[i])) {
-        pane.editingGrammarModel.addProduction(ps[i]);
-        currentProductions.add(ps[i]);
+    for (Production psi : ps) {
+      if (!currentProductions.contains(psi) && desiredProductions.contains(psi)) {
+        pane.editingGrammarModel.addProduction(psi);
+        currentProductions.add(psi);
       }
       productionsToExpansion.remove(p); // May as well...
     }
@@ -306,7 +307,7 @@ public class LambdaController {
   /**
    * The mapping of productions to those elements they are supposed to add.
    */
-  Map<Production, Production[]> productionsToExpansion = new HashMap<Production, Production[]>();
+  Map<Production, List<Production>> productionsToExpansion = new HashMap<>();
 
   /** The current step. */
   int step = 0;

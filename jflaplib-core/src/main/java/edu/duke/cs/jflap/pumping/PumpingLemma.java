@@ -293,14 +293,14 @@ public abstract class PumpingLemma implements Serializable {
   /**
    * Sets <i>i</i> and sets the decomposition given.
    *
-   * @param decomposition
+   * @param list
    *            the decomposition to set for this lemma
    * @param num
    *            the number to set <i>i</i> to
    * @return <code>true</code> if this deocmposition is legal,
    *         <code>false</code> otherwise
    */
-  public abstract boolean setDecomposition(int[] decomposition, int num);
+  public abstract boolean setDecomposition(List<Integer> list, int num);
 
   /**
    * Sets the decomposition, with the length of each part of the decomposition
@@ -314,7 +314,7 @@ public abstract class PumpingLemma implements Serializable {
    * @return <code>true</code> if this decomposition is legal,
    *         <code>false</code> otherwise
    */
-  public abstract boolean setDecomposition(int[] decomposition);
+  public abstract boolean setDecomposition(List<Integer> decomposition);
 
   /**
    * Sets the <i>i</i> this instance of the pumping lemma uses.
@@ -455,7 +455,7 @@ public abstract class PumpingLemma implements Serializable {
    *         than or equal to the total number of cases, which can be found by
    *         calling {@link #numCasesTotal()}.
    */
-  public abstract int addCase(int[] decomposition, int num);
+  public abstract int addCase(List<Integer> decomposition, int num);
 
   /**
    * Replaces the decomposition in the list of that the user has done. It
@@ -465,7 +465,7 @@ public abstract class PumpingLemma implements Serializable {
    *
    * @see Case#isCase(String, String)
    * @see #addCase(int[], int)
-   * @param decomposition
+   * @param tempDecomposition
    *            the decomposition we wish to add
    * @param num
    *            the value of <i>i</i>
@@ -474,7 +474,7 @@ public abstract class PumpingLemma implements Serializable {
    * @return <code>true</code> if the decomposition and case match,
    *         <code>false<code> otherwise
    */
-  public abstract boolean replaceCase(int[] decomposition, int num, int index);
+  public abstract boolean replaceCase(List<Integer> tempDecomposition, int num, int index);
 
   /**
    * Returns an <code>ArrayList</code> of <code>String</code>s that describe

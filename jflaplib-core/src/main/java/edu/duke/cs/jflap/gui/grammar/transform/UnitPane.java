@@ -38,7 +38,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -230,8 +230,8 @@ public class UnitPane extends JPanel {
               // out of the funk.
               return;
             }
-            editingColumn[event.getColumn() >> 1] = true;
-            if (editingColumn[0] == true && editingColumn[1] == true) {
+            editingColumn.set(event.getColumn() >> 1, true);
+            if (editingColumn.get(0) && editingColumn.get(1)) {
               Production p = editingGrammarModel.getProduction(r);
               if (p == null) return;
               if (!controller.productionAdded(p, r)) {
@@ -278,11 +278,10 @@ public class UnitPane extends JPanel {
    */
   public Grammar getGrammar() {
     Grammar g = editingGrammarView.getGrammar(grammar.getClass());
-    Production p[] = g.getProductions();
+    List<Production> p = g.getProductions();
     final String S = grammar.getStartVariable();
-    Arrays.sort(
-        p,
-        new Comparator<Production>() {
+    p.sort(
+       new Comparator<Production>() {
           public int compare(Production p1, Production p2) {
             if (S.equals(p1.getLHS())) {
               if (p1.getLHS().equals(p2.getLHS())) return 0;
@@ -423,8 +422,8 @@ public class UnitPane extends JPanel {
   /** The editing row in the table. */
   private int editingRow = -1;
 
-  /** Which columsn of the editing row have been edited yet? */
-  private List<boolean editingColumn> = new boolean[2];
+  /** Which columns of the editing row have been edited yet? */
+  private List<Boolean> editingColumn = Collections.nCopies(2, false);
 
   /** The editing grammar table mode. */
   GrammarTableModel editingGrammarModel =
@@ -441,7 +440,8 @@ public class UnitPane extends JPanel {
           if (editingRow == -1) {
             if (r == getRowCount() - 1) {
               editingRow = r;
-              editingColumn[0] = editingColumn[1] = false;
+              editingColumn.set(0, false);
+              editingColumn.set(1, false);
               return true;
             }
             return false;

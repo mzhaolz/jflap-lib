@@ -121,7 +121,7 @@ public abstract class RegularPumpingLemma extends PumpingLemma implements Serial
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean setDecomposition(int[] decomposition, int num) {
+  public boolean setDecomposition(List<Integer> decomposition, int num) {
     i = num;
     return setDecomposition(decomposition);
   }

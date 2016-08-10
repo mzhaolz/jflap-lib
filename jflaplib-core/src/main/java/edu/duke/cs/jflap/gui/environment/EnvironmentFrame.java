@@ -21,6 +21,7 @@ import edu.duke.cs.jflap.file.EncodeException;
 import edu.duke.cs.jflap.file.Encoder;
 import edu.duke.cs.jflap.file.ParseException;
 import edu.duke.cs.jflap.gui.editor.EditBlockPane;
+import edu.duke.cs.jflap.gui.editor.EditorPane;
 import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
 
 import java.awt.BorderLayout;

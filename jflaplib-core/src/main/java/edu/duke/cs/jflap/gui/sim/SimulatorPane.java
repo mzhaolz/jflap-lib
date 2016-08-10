@@ -106,8 +106,8 @@ public class SimulatorPane extends JPanel {
         // Set up the configurations pane.
         ConfigurationPane configurations = new ConfigurationPane(automaton);
         configurations.setLayout(new GridLayout(0, 4));
-        for (int i = 0; i < configs.length; i++) {
-            configurations.add(configs[i]);
+        for (int i = 0; i < configs.size(); i++) {
+            configurations.add(configs.get(i));
         }
         // Set up the bloody controller device.
         final ConfigurationController controller = new ConfigurationController(configurations,

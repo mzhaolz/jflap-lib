@@ -19,6 +19,8 @@ package edu.duke.cs.jflap.file.xml;
 import edu.duke.cs.jflap.pumping.Case;
 import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
 
+import com.google.common.collect.Lists;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -118,7 +120,7 @@ public class CFPumpingLemmaTransducer extends PumpingLemmaTransducer {
     int xLength = Integer.parseInt(document.getElementsByTagName(X_NAME).item(0).getTextContent());
     int yLength = Integer.parseInt(document.getElementsByTagName(Y_NAME).item(0).getTextContent());
 
-    pl.setDecomposition(new int[] {uLength, vLength, xLength, yLength});
+    pl.setDecomposition(Lists.newArrayList(uLength, vLength, xLength, yLength));
 
     // Return!
     return pl;
@@ -144,7 +146,7 @@ public class CFPumpingLemmaTransducer extends PumpingLemmaTransducer {
       int j =
           Integer.parseInt(
               ((Element) caseNode).getElementsByTagName(CASE_I_NAME).item(0).getTextContent());
-      pl.addCase(new int[] {u, v, x, y}, j);
+      pl.addCase(Lists.newArrayList(u, v, x, y), j);
     }
   }
 

@@ -26,6 +26,8 @@ import edu.duke.cs.jflap.automata.turing.TMState;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +35,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
@@ -66,7 +69,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
         this.component = component;
         changeSelection();
         configurations.addSelectionListener(this);
-        originalConfigurations = configurations.getConfigurations();
+        originalConfigurations = Lists.newArrayList(configurations.getConfigurations());
         // for(int k = 0; k < originalConfigurations.length; k++){
         // Configuration current = originalConfigurations[k];
         // if(current instanceof TMConfiguration){
@@ -84,14 +87,14 @@ public class ConfigurationController implements ConfigurationSelectionListener {
         configurations.clear();
         if (simulator instanceof TMSimulator) {
             TMSimulator tmSim = (TMSimulator) simulator;
-            Configuration[] configs = tmSim.getInitialConfigurations(tmSim.getInputStrings());
+            List<Configuration> configs = tmSim.getInitialConfigurations(tmSim.getInputStrings());
             for (Configuration config : configs) {
                 configurations.add(config);
             }
         } else {
-            for (int i = 0; i < originalConfigurations.length; i++) {
-                originalConfigurations[i].reset();
-                configurations.add(originalConfigurations[i]);
+            for (int i = 0; i < originalConfigurations.size(); i++) {
+                originalConfigurations.get(i).reset();
+                configurations.add(originalConfigurations.get(i));
             }
         }
         // What the devil do I have to do to get it to repaint?
@@ -124,7 +127,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      * @param blockStep
      */
     public void step(boolean blockStep) {
-        Configuration[] configs = configurations.getValidConfigurations();
+        List<Configuration> configs = configurations.getValidConfigurations();
         List<Configuration> list = new ArrayList<>();
         HashSet<Configuration> reject = new HashSet<>();
 
@@ -146,22 +149,22 @@ public class ConfigurationController implements ConfigurationSelectionListener {
             }
         } else {
             do {
-                checkArgument(configs.length == 1);
-                checkArgument(configs[0] instanceof TMConfiguration);
+                checkArgument(configs.size() == 1);
+                checkArgument(configs.get(0) instanceof TMConfiguration);
                 checkArgument(simulator instanceof TMSimulator);
 
-                if (configs.length == 0) {
+                if (configs.size() == 0) {
                     break; // bit of a hack, but not much time to debug right
                     // now.
                 }
 
                 List<Configuration> next = ((TMSimulator) simulator)
-                        .stepBlock((TMConfiguration) configs[0]);
+                        .stepBlock((TMConfiguration) configs.get(0));
                 // MERLIN MERLIN MERLIN MERLIN MERLIN//
                 if (next.size() == 0) { // crucial check for rejection
                     // System.out.println("Rejected");
-                    reject.add(configs[0]);
-                    list.add(configs[0]);
+                    reject.add(configs.get(0));
+                    list.add(configs.get(0));
                 } else {
                     list.addAll(next);
                 }
@@ -237,8 +240,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      * Freezes selected configurations.
      */
     public void freeze() {
-        Configuration[] configs = configurations.getSelected();
-        if (configs.length == 0) {
+        Set<Configuration> configs = configurations.getSelected();
+        if (configs.size() == 0) {
             JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
                     NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
@@ -254,8 +257,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      * Removes the selected configurations.
      */
     public void remove() {
-        Configuration[] configs = configurations.getSelected();
-        if (configs.length == 0) {
+        Set<Configuration> configs = configurations.getSelected();
+        if (configs.size() == 0) {
             JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
                     NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
@@ -271,18 +274,18 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      * Zooms in on selected configuration
      */
     public void focus() {
-        Configuration[] configs = configurations.getSelected();
-        if (configs.length == 0) {
+        List<Configuration> configs = Lists.newArrayList(configurations.getSelected());
+        if (configs.size() == 0) {
             JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
                     NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
-        } else if (configs.length > 1) {
+        } else if (configs.size() > 1) {
             JOptionPane.showMessageDialog(configurations, FOCUS_CONFIGURATION_ERROR,
                     FOCUS_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Configuration toFocus = configs[0];
+        Configuration toFocus = configs.get(0);
         configurations.setFocused(toFocus);
         toFocus.setFocused(true);
 
@@ -323,7 +326,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      */
     public void changeSelection() {
         drawer.clearSelected();
-        Configuration[] configs;
+        Set<Configuration> configs;
         configs = configurations.getConfigurations();
         boolean foundFocused = false;
         for (Configuration current : configs) {
@@ -379,7 +382,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
     }
 
     public void defocus() {
-        Configuration[] configs = configurations.getConfigurations();
+        Set<Configuration> configs = configurations.getConfigurations();
         for (Configuration config : configs) {
             if (config.getFocused()) {
                 configurations.defocus(config);
@@ -394,8 +397,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      * Thaws the selected configurations.
      */
     public void thaw() {
-        Configuration[] configs = configurations.getSelected();
-        if (configs.length == 0) {
+        Set<Configuration> configs = configurations.getSelected();
+        if (configs.size() == 0) {
             JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
                     NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
@@ -411,8 +414,8 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      * Given the selected configurations, shows their "trace."
      */
     public void trace() {
-        Configuration[] configs = configurations.getSelected();
-        if (configs.length == 0) {
+        Set<Configuration> configs = configurations.getSelected();
+        if (configs.size() == 0) {
             JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
                     NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
             return;
@@ -477,7 +480,7 @@ public class ConfigurationController implements ConfigurationSelectionListener {
      * This is the set of original configurations when the configuration pane
      * started.
      */
-    private List<Configuration> originalConfigurations = new Configuration[0];
+    private List<Configuration> originalConfigurations = new ArrayList<>();
 
     /** The error message displayed when there is no config selected. */
     private static final String NO_CONFIGURATION_ERROR = "Select at least one configuration!";

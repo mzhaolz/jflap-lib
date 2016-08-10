@@ -18,7 +18,10 @@ package edu.duke.cs.jflap.gui.lsystem;
 
 import edu.duke.cs.jflap.gui.GrowableTableModel;
 
+import com.google.common.collect.Lists;
+
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -27,7 +30,7 @@ import java.util.TreeMap;
  *
  * @author Thomas Finley
  */
-public class ParameterTableModel<T> extends GrowableTableModel<T> {
+public class ParameterTableModel extends GrowableTableModel<String> {
   /**
    *
    */
@@ -64,9 +67,8 @@ public class ParameterTableModel<T> extends GrowableTableModel<T> {
    * @return an array with two empty strings
    */
   @Override
-  @SuppressWarnings("unchecked")
-  public List<T> initializeRow(int row) {
-    return (T[]) new Object[] {"", ""};
+  public List<String> initializeRow(int row) {
+    return Lists.newArrayList("", "");
   }
 
   /**
@@ -75,10 +77,10 @@ public class ParameterTableModel<T> extends GrowableTableModel<T> {
    * @return the mapping from parameter names to parameters (i.e., map of
    *         contents of the left column to contents of the right column)
    */
-  public Map<T, T> getParameters() {
-    TreeMap<T, T> map = new TreeMap<>();
+  public Map<String, String> getParameters() {
+    TreeMap<String, String> map = new TreeMap<>();
     for (int i = 0; i < getRowCount() - 1; i++) {
-      T o = getValueAt(i, 0);
+      String o = getValueAt(i, 0);
       if (o.equals("")) continue;
       map.put(o, getValueAt(i, 1));
     }

@@ -160,21 +160,4 @@ public class W1VVrW2 extends ContextFreePumpingLemma {
         }
     }
 
-    @Override
-    public boolean setDecomposition(int[] decomposition) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public int addCase(int[] decomposition, int num) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public boolean replaceCase(int[] decomposition, int num, int index) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 }

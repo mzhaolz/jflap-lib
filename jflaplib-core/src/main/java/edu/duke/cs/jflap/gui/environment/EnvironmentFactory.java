@@ -22,6 +22,7 @@ import edu.duke.cs.jflap.automata.mealy.MooreMachine;
 import edu.duke.cs.jflap.grammar.ConvertedUnrestrictedGrammar;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.lsystem.LSystem;
+import edu.duke.cs.jflap.gui.editor.EditorPane;
 import edu.duke.cs.jflap.gui.editor.MealyToolBox;
 import edu.duke.cs.jflap.gui.editor.MooreToolBox;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;

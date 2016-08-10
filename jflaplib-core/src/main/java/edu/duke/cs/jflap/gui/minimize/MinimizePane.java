@@ -24,6 +24,8 @@ import edu.duke.cs.jflap.automata.fsa.Minimizer;
 import edu.duke.cs.jflap.automata.graph.AutomatonGraph;
 import edu.duke.cs.jflap.automata.graph.layout.GEMLayoutAlgorithm;
 import edu.duke.cs.jflap.gui.SplitPaneFactory;
+import edu.duke.cs.jflap.gui.editor.EditorPane;
+import edu.duke.cs.jflap.gui.editor.Tool;
 import edu.duke.cs.jflap.gui.editor.ToolBox;
 import edu.duke.cs.jflap.gui.editor.TransitionTool;
 import edu.duke.cs.jflap.gui.environment.Environment;
@@ -83,9 +85,9 @@ public class MinimizePane extends JPanel {
     // Set up the minimize node drawer.
     MinimizeNodeDrawer nodeDrawer = new MinimizeNodeDrawer();
     treeDrawer.setNodeDrawer(nodeDrawer);
-    TreeNode[] groups = Trees.children((MinimizeTreeNode) tree.getRoot());
-    for (int i = 0; i < groups.length; i++) {
-      MinimizeTreeNode group = (MinimizeTreeNode) groups[i];
+    List<TreeNode> groups = Trees.children((MinimizeTreeNode) tree.getRoot());
+    for (int i = 0; i < groups.size(); i++) {
+      MinimizeTreeNode group = (MinimizeTreeNode) groups.get(i);
       State[] states = (State[]) group.getUserObject();
       if (states.length == 0) continue;
       if (dfa.isFinalState(states[0])) nodeDrawer.setLabel(group, "Final");

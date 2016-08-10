@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -497,15 +498,15 @@ public abstract class PumpingLemmaInputPane extends JPanel {
    * Sets the decomposition in the input pane and sets the decomposition and
    * the value of <i>i</i> of this lemma.
    *
-   * @param decomposition
+   * @param list
    *            the decomposition to be set
    * @param num
    *            the number to set <i>i</i> to
    * @see #setDecomposition(int[])
    */
-  public void setDecomposition(int[] decomposition, int num) {
-    setDecomposition(decomposition);
-    myLemma.setDecomposition(decomposition, num);
+  public void setDecomposition(List<Integer> list, int num) {
+    setDecomposition(list);
+    myLemma.setDecomposition(list, num);
   }
 
   /**
@@ -513,10 +514,10 @@ public abstract class PumpingLemmaInputPane extends JPanel {
    * decomp panel, but does nothing more; the user is left to set the values
    * in the lemma and so on.
    *
-   * @param decomposition
+   * @param list
    *            the values to set the sliders to
    */
-  public abstract void setDecomposition(int[] decomposition);
+  public abstract void setDecomposition(List<Integer> list);
 
   /**
    * Sets up the animation canvas with according to the decomposition of

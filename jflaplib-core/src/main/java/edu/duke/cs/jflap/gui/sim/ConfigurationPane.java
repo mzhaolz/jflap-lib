@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -220,8 +222,8 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      *
      * @return an array of selected configurations
      */
-    public List<Configuration> getSelected() {
-        return selected
+    public Set<Configuration> getSelected() {
+        return selected;
     }
 
     /**
@@ -229,8 +231,8 @@ public class ConfigurationPane extends JPanel implements ActionListener {
      *
      * @return an array of all configurations
      */
-    public List<Configuration> getConfigurations() {
-        return configurationToButtonMap.keySet()
+    public Set<Configuration> getConfigurations() {
+        return configurationToButtonMap.keySet();
     }
 
     /**
@@ -250,7 +252,7 @@ public class ConfigurationPane extends JPanel implements ActionListener {
                 list.add(button.getConfiguration());
             }
         }
-        return list
+        return list;
     }
 
     /**

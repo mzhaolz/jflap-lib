@@ -19,6 +19,7 @@ package edu.duke.cs.jflap.pumping;
 import edu.duke.cs.jflap.gui.environment.Universe;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -188,7 +189,7 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    *         tried before, <code>false</code> otherwise
    */
   @Override
-  public boolean setDecomposition(int[] decomposition, int num) {
+  public boolean setDecomposition(List<Integer> decomposition, int num) {
     i = num;
     return setDecomposition(decomposition);
   }
@@ -304,7 +305,7 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
    */
   private void chooseDecompositionWithoutCases() {
     int temp, counter;
-    int[] decomp = new int[4];
+    Integer[] decomp = new Integer[4];
     counter = 0;
     temp = 0;
 
@@ -326,7 +327,7 @@ public abstract class ContextFreePumpingLemma extends PumpingLemma
       else decomp[3] = LemmaMath.fetchRandInt(1, temp);
     }
 
-    setDecomposition(decomp);
+    setDecomposition(Arrays.asList(decomp));
   }
 
   /**

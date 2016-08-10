@@ -18,6 +18,11 @@ package edu.duke.cs.jflap.gui.regular;
 
 import edu.duke.cs.jflap.automata.Transition;
 
+import com.google.common.collect.ImmutableList;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -36,18 +41,18 @@ public class TransitionTableModel extends AbstractTableModel {
   /**
    * Instantiates a new <CODE>TransitionTableModel</CODE>.
    *
-   * @param transitions
+   * @param list
    *            the array of transitions to create the table for
    */
-  public TransitionTableModel(Transition[] transitions) {
-    this.transitions = transitions;
+  public TransitionTableModel(List<Transition> list) {
+    this.transitions = list;
   }
 
   /**
    * Instantiates a new <CODE>TransitionTableModel</CODE> with no contents.
    */
   public TransitionTableModel() {
-    this(new Transition[0]);
+    this(new ArrayList<>());
   }
 
   /**
@@ -65,7 +70,7 @@ public class TransitionTableModel extends AbstractTableModel {
    * @return the number of transitions
    */
   public int getRowCount() {
-    return transitions.length;
+    return transitions.size();
   }
 
   /**
@@ -77,7 +82,7 @@ public class TransitionTableModel extends AbstractTableModel {
    * @return the transition for this row
    */
   public Transition getTransition(int row) {
-    return transitions[row];
+    return transitions.get(row);
   }
 
   /**
@@ -94,11 +99,11 @@ public class TransitionTableModel extends AbstractTableModel {
   public Object getValueAt(int row, int column) {
     switch (column) {
       case 0:
-        return "" + transitions[row].getFromState().getID();
+        return "" + transitions.get(row).getFromState().getID();
       case 1:
-        return "" + transitions[row].getToState().getID();
+        return "" + transitions.get(row).getToState().getID();
       case 2:
-        return transitions[row].getDescription();
+        return transitions.get(row).getDescription();
       default:
         return null;
     }
@@ -112,12 +117,12 @@ public class TransitionTableModel extends AbstractTableModel {
    * @return the name for the indicated column
    */
   public String getColumnName(int column) {
-    return COLUMN_NAMES[column];
+    return COLUMN_NAMES.get(column);
   }
 
   /** The list of transitions displayed in the table. */
   private List<Transition> transitions;
 
   /** The column names. */
-  private static final List<String> COLUMN_NAMES = {"From", "To", "Label"};
+  private static final List<String> COLUMN_NAMES = ImmutableList.of("From", "To", "Label");
 }

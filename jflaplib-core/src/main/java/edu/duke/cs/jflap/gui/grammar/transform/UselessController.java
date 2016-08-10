@@ -25,9 +25,11 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UselessProductionRemover;
 
+import com.google.common.collect.Lists;
+
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -85,16 +87,16 @@ public class UselessController {
                 pane.detailLabel.setText("For every production, connect start and end.");
                 // Make the VDG.
                 UselessProductionRemover.initializeVariableDependencyGraph(vdg, grammar);
-                State s[] = vdg.getStates();
-                for (int i = 0; i < s.length; i++)
-                    if (terminalVariables.contains(s[i].getName()))
-                        vdg.addFinalState(s[i]);
+                List<State> s = vdg.getStates();
+                for (State si : s)
+                    if (terminalVariables.contains(si.getName()))
+                        vdg.addFinalState(si);
                 // Cache the transitions we have to add.
-                Production[] p = grammar.getProductions();
-                String[] variables = terminalVariables
-                for (int i = 0; i < variables.length; i++)
-                    for (int j = 0; j < variables.length; j++) {
-                        String v1 = variables[i], v2 = variables[j];
+                List<Production> p = grammar.getProductions();
+                List<String> variables = Lists.newArrayList(terminalVariables);
+                for (int i = 0; i < variables.size(); i++)
+                    for (int j = 0; j < variables.size(); j++) {
+                        String v1 = variables.get(i), v2 = variables.get(j);
                         if (i != j && UselessProductionRemover.isDependentOn(v1, v2, grammar))
                             vdgTransitions.add(UselessProductionRemover.getTransition(v1, v2, vdg));
                     }
@@ -116,9 +118,9 @@ public class UselessController {
                 });
                 // Display only those productions with terminal deriving
                 // variables.
-                for (int i = 0; i < p.length; i++) {
-                    pane.editingGrammarModel.addProduction(p[i]);
-                    currentProductions.add(p[i]);
+                for (int i = 0; i < p.size(); i++) {
+                    pane.editingGrammarModel.addProduction(p.get(i));
+                    currentProductions.add(p.get(i));
                 }
                 // Set the actions.
                 updateDisplay();
@@ -128,12 +130,13 @@ public class UselessController {
                 pane.updateDeleteEnabledness();
                 pane.mainLabel.setText("Modify the grammar to remove useless productions.");
                 Grammar g = UselessProductionRemover.getUselessProductionlessGrammar(grammar);
-                Production[] p = grammar.getProductions(), p2 = g.getProductions();
-                Set<Production> usefulProductions = new HashSet<Production>(Arrays.asList(p2));
-                for (int i = 0; i < p.length; i++) {
-                    if (usefulProductions.contains(p[i]))
+                List<Production> p = grammar.getProductions();
+                List<Production> p2 = g.getProductions();
+                p2 = Lists.newArrayList(new HashSet<>(p2));
+                for (int i = 0; i < p.size(); i++) {
+                    if (p2.contains(p.get(i)))
                         continue;
-                    uselessProductions.add(p[i]);
+                    uselessProductions.add(p.get(i));
                 }
                 // ////System.out.println("USEFUL PRODUCTIONS:
                 // "+usefulProductions);
@@ -178,9 +181,8 @@ public class UselessController {
                 nextStep();
                 break;
             case VARAIBLE_GRAPH:
-                Transition[] t = vdgTransitions
-                for (int i = 0; i < t.length; i++)
-                    vdg.addTransition(t[i]);
+                Set<Transition> t = vdgTransitions;
+                t.forEach(trans -> vdg.addTransition(trans));
                 break;
             case PRODUCTION_MODIFY:
                 for (int i = pane.editingGrammarModel.getRowCount() - 2; i >= 0; i--) {

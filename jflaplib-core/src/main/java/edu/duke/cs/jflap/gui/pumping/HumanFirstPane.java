@@ -239,7 +239,7 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
                 try {
                   reset();
                   int m = Integer.parseInt(ev.getActionCommand());
-                  if (!(m >= myLemma.getRange()[0] && m <= myLemma.getRange()[1]))
+                  if (!(m >= myLemma.getRange().get(0) && m <= myLemma.getRange().get(1)))
                     throw new NumberFormatException();
                   myLemma.setM(m);
                   stages[2].setVisible(true);
@@ -254,9 +254,9 @@ public abstract class HumanFirstPane extends PumpingLemmaInputPane {
                   // Something other than a positive integer was entered.
                   String error =
                       "Please enter a positive integer in range ["
-                          + myLemma.getRange()[0]
+                          + myLemma.getRange().get(0)
                           + ", "
-                          + myLemma.getRange()[1]
+                          + myLemma.getRange().get(1)
                           + "] for best results.";
                   myMDisplay.selectAll();
                   stageMessages[1].setText(error);

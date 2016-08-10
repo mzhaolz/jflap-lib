@@ -30,6 +30,7 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 import edu.duke.cs.jflap.regular.RegularExpression;
 
 import java.awt.Point;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -96,8 +97,8 @@ public class FSAToREController {
         currentStep = CREATE_SINGLE_FINAL;
         mainStep.setText("Make Single Noninitial Final State");
         detailStep.setText("Create a new state to make a single final state.");
-        if (automaton.getFinalStates().length != 1
-            || automaton.getFinalStates()[0] == automaton.getInitialState()) {
+        if (automaton.getFinalStates().size() != 1
+            || automaton.getFinalStates().get(0) == automaton.getInitialState()) {
           return;
         }
         currentStep = TRANSITIONS_TO_SINGLE_FINAL;
@@ -127,7 +128,7 @@ public class FSAToREController {
                 + remaining
                 + " more empty transitions needed.");
         if (remaining != 0) return;
-        remaining = automaton.getStates().length - 2;
+        remaining = automaton.getStates().size() - 2;
         currentStep = COLLAPSE_STATES;
       case COLLAPSE_STATES:
         mainStep.setText("Remove States");
@@ -161,11 +162,11 @@ public class FSAToREController {
    * @return the number of collapses needed
    */
   protected int collapsesNeeded() {
-    State[] states = automaton.getStates();
+    List<State> states = automaton.getStates();
     int needed = 0;
-    for (int i = 0; i < states.length; i++)
-      for (int j = 0; j < states.length; j++)
-        if (automaton.getTransitionsFromStateToState(states[i], states[j]).length > 1) needed++;
+    for (State si : states)
+      for (State sj : states)
+        if (automaton.getTransitionsFromStateToState(si, sj).size() > 1) needed++;
     return needed;
   }
 
@@ -176,11 +177,11 @@ public class FSAToREController {
    * @return the number of empty transitions needed
    */
   protected int emptyNeeded() {
-    State[] states = automaton.getStates();
+    List<State> states = automaton.getStates();
     int needed = 0;
-    for (int i = 0; i < states.length; i++)
-      for (int j = 0; j < states.length; j++)
-        if (automaton.getTransitionsFromStateToState(states[i], states[j]).length == 0) needed++;
+    for (State si : states)
+      for (State sj : states)
+        if (automaton.getTransitionsFromStateToState(si, sj).size() == 0) needed++;
     return needed;
   }
 
@@ -201,11 +202,11 @@ public class FSAToREController {
       outOfOrder();
       return null;
     }
-    State[] finals = automaton.getFinalStates();
+    List<State> finals = automaton.getFinalStates();
     drawer.clearSelected();
-    for (int i = 0; i < finals.length; i++) {
-      automaton.removeFinalState(finals[i]);
-      drawer.addSelected(finals[i]);
+    for (State si : finals) {
+      automaton.removeFinalState(si);
+      drawer.addSelected(si);
     }
     State newState = automaton.createState(point);
     automaton.addFinalState(newState);
@@ -233,7 +234,7 @@ public class FSAToREController {
    */
   public Transition transitionCreate(State from, State to) {
     if (currentStep == TRANSITIONS_TO_SINGLE_FINAL) {
-      if (automaton.getFinalStates()[0] != to) {
+      if (automaton.getFinalStates().get(0) != to) {
         JOptionPane.showMessageDialog(
             frame,
             "Transitions must go to the new final state!",
@@ -259,7 +260,7 @@ public class FSAToREController {
       return t;
     }
     if (currentStep == CREATE_EMPTY_TRANSITIONS) {
-      if (automaton.getTransitionsFromStateToState(from, to).length != 0) {
+      if (automaton.getTransitionsFromStateToState(from, to).size() != 0) {
         JOptionPane.showMessageDialog(
             frame,
             "Transitions must go between" + "states with no transitions!",
@@ -296,8 +297,8 @@ public class FSAToREController {
       outOfOrder();
       return null;
     }
-    Transition[] ts = automaton.getTransitionsFromStateToState(from, to);
-    if (ts.length <= 1) {
+    List<Transition> ts = automaton.getTransitionsFromStateToState(from, to);
+    if (ts.size() <= 1) {
       JOptionPane.showMessageDialog(
           frame,
           "Collapse requires 2 or more transitions!",
@@ -336,7 +337,7 @@ public class FSAToREController {
           JOptionPane.ERROR_MESSAGE);
       return false;
     }
-    if (automaton.getFinalStates()[0] == state) {
+    if (automaton.getFinalStates().get(0) == state) {
       JOptionPane.showMessageDialog(
           frame,
           "The final state cannot be removed!",
@@ -396,10 +397,10 @@ public class FSAToREController {
     }
     State from = transition.getFromState();
     State to = transition.getToState();
-    Transition a = automaton.getTransitionsFromStateToState(from, collapseState)[0];
-    Transition b = automaton.getTransitionsFromStateToState(from, to)[0];
-    Transition c = automaton.getTransitionsFromStateToState(collapseState, collapseState)[0];
-    Transition d = automaton.getTransitionsFromStateToState(collapseState, to)[0];
+    Transition a = automaton.getTransitionsFromStateToState(from, collapseState).get(0);
+    Transition b = automaton.getTransitionsFromStateToState(from, to).get(0);
+    Transition c = automaton.getTransitionsFromStateToState(collapseState, collapseState).get(0);
+    Transition d = automaton.getTransitionsFromStateToState(collapseState, to).get(0);
     drawer.addSelected(a);
     drawer.addSelected(b);
     drawer.addSelected(c);
@@ -421,36 +422,36 @@ public class FSAToREController {
             JOptionPane.ERROR_MESSAGE);
         return;
       case TRANSITIONS_TO_SINGLE_FINAL:
-        State[] states = drawer.getSelected();
-        State finalState = automaton.getFinalStates()[0];
-        for (int i = 0; i < states.length; i++) transitionCreate(states[i], finalState);
+        List<State> states = drawer.getSelected();
+        State finalState = automaton.getFinalStates().get(0);
+        for (State si : states) transitionCreate(si, finalState);
         break;
       case CONVERT_TRANSITIONS:
         {
-          State[] s = automaton.getStates();
-          for (int i = 0; i < s.length; i++)
-            for (int j = 0; j < s.length; j++)
-              if (automaton.getTransitionsFromStateToState(s[i], s[j]).length > 1)
-                transitionCollapse(s[i], s[j]);
+          List<State> s = automaton.getStates();
+          for (State si : s)
+            for (State sj : s)
+              if (automaton.getTransitionsFromStateToState(si, sj).size() > 1)
+                transitionCollapse(si, sj);
           break;
         }
       case CREATE_EMPTY_TRANSITIONS:
         {
-          State[] s = automaton.getStates();
-          for (int i = 0; i < s.length; i++)
-            for (int j = 0; j < s.length; j++)
-              if (automaton.getTransitionsFromStateToState(s[i], s[j]).length == 0)
-                transitionCreate(s[i], s[j]);
+          List<State> s = automaton.getStates();
+          for (State si : s)
+            for (State sj : s)
+              if (automaton.getTransitionsFromStateToState(si, sj).size() == 0)
+                transitionCreate(si, sj);
           break;
         }
       case COLLAPSE_STATES:
-        State[] s = automaton.getStates();
-        for (int i = 0; i < s.length; i++) {
-          if (automaton.getFinalStates()[0] == s[i] || automaton.getInitialState() == s[i])
+        List<State> s = automaton.getStates();
+        for (State si : s) {
+          if (automaton.getFinalStates().get(0) == si || automaton.getInitialState() == si)
             continue;
-          Transition[] t =
-              FSAToRegularExpressionConverter.getTransitionsForRemoveState(s[i], automaton);
-          FSAToRegularExpressionConverter.removeState(s[i], t, automaton);
+          List<Transition> t =
+              FSAToRegularExpressionConverter.getTransitionsForRemoveState(si, automaton);
+          FSAToRegularExpressionConverter.removeState(si, t, automaton);
         }
         remaining = 0;
         nextStep();

@@ -28,6 +28,7 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 import java.awt.Component;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -82,9 +83,9 @@ class BuilderController {
    */
   private void determineTransitions() {
     remainingTransitions = new HashSet<>();
-    State[] states = minDfa.getStates();
-    for (int i = 0; i < states.length; i++)
-      remainingTransitions.addAll(minimizer.getTransitionsForState(states[i], minDfa, dfa, tree));
+    List<State> states = minDfa.getStates();
+    for (State si : states)
+      remainingTransitions.addAll(minimizer.getTransitionsForState(si, minDfa, dfa, tree));
   }
 
   /**

@@ -181,9 +181,9 @@ public class AddTrapStateController {
     List<Transition> t = automaton.getTransitions();
     for (int i = 0; i < t.size(); i++) {
       myReadSets.add(t.get(i).getDescription());
-      int id = t[i].getFromState().getID();
+      int id = t.get(i).getFromState().getID();
       ArrayList<String> temp = myTransitionsMap.get(id);
-      temp.add(t[i].getDescription());
+      temp.add(t.get(i).getDescription());
       myTransitionsMap.put(id, temp);
     }
 

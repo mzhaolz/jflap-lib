@@ -19,9 +19,12 @@ package edu.duke.cs.jflap.gui.environment;
 import edu.duke.cs.jflap.file.CodecRegistry;
 import edu.duke.cs.jflap.file.XMLCodec;
 
+import com.google.common.collect.Lists;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
@@ -132,7 +135,7 @@ public class Universe {
      * @return an array containing all registered environment frames
      */
     public static List<EnvironmentFrame> frames() {
-        return environmentToFrame.values()
+        return Lists.newArrayList(environmentToFrame.values());
     }
 
     /**

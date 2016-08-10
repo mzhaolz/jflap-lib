@@ -30,6 +30,7 @@ import edu.duke.cs.jflap.gui.grammar.GrammarTableModel;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -68,11 +69,11 @@ public class UnitController {
                 vdg = new VariableDependencyGraph();
                 UnitProductionRemover.initializeDependencyGraph(vdg, grammar);
                 // Cache the transitions we have to add.
-                Production[] p = grammar.getProductions();
-                for (int i = 0; i < p.length; i++)
-                    if (ProductionChecker.isUnitProduction(p[i]))
+                List<Production> p = grammar.getProductions();
+                for (int i = 0; i < p.size(); i++)
+                    if (ProductionChecker.isUnitProduction(p.get(i)))
                         vdgTransitions.add(
-                                UnitProductionRemover.getTransitionForUnitProduction(p[i], vdg));
+                                UnitProductionRemover.getTransitionForUnitProduction(p.get(i), vdg));
                 // Set up the listener so we know when new actions get
                 // added to the VDG.
                 vdg.addTransitionListener(new AutomataTransitionListener() {
@@ -103,12 +104,12 @@ public class UnitController {
                 pane.updateDeleteEnabledness();
                 pane.updateCompleteSelectedEnabledness();
                 pane.mainLabel.setText("Modify the grammar to remove unit productions.");
-                Production[] p = grammar.getProductions();
-                for (int i = 0; i < p.length; i++) {
-                    pane.editingGrammarModel.addProduction(p[i]);
-                    currentProductions.add(p[i]);
-                    if (ProductionChecker.isUnitProduction(p[i])) {
-                        unitProductions.add(p[i]);
+                List<Production> p = grammar.getProductions();
+                for (Production pi : p) {
+                    pane.editingGrammarModel.addProduction(pi);
+                    currentProductions.add(pi);
+                    if (ProductionChecker.isUnitProduction(pi)) {
+                        unitProductions.add(pi);
                         continue;
                     }
                 }
@@ -116,8 +117,7 @@ public class UnitController {
                 Grammar desiredGrammar = UnitProductionRemover.getUnitProductionlessGrammar(grammar,
                         vdg);
                 p = desiredGrammar.getProductions();
-                for (int i = 0; i < p.length; i++)
-                    desiredProductions.add(p[i]);
+                p.forEach(prod -> desiredProductions.add(prod));
                 updateDisplay();
                 pane.editingActive = true;
                 break;
@@ -192,9 +192,8 @@ public class UnitController {
     public void doStep() {
         switch (step) {
             case VARAIBLE_GRAPH:
-                Transition[] t = vdgTransitions
-                for (int i = 0; i < t.length; i++)
-                    vdg.addTransition(t[i]);
+                Set<Transition> t = vdgTransitions;
+                t.forEach(trans -> vdg.addTransition(trans));
                 break;
             case PRODUCTION_MODIFY:
                 for (int i = pane.editingGrammarModel.getRowCount() - 2; i >= 0; i--) {
@@ -205,11 +204,11 @@ public class UnitController {
                     }
                 }
                 pane.editingActive = false;
-                Production[] p = desiredProductions
-                for (int i = 0; i < p.length; i++) {
-                    if (!currentProductions.add(p[i]))
+                Set<Production> p = desiredProductions;
+                for (Production pi : p) {
+                    if (!currentProductions.add(pi))
                         continue;
-                    pane.editingGrammarModel.addProduction(p[i]);
+                    pane.editingGrammarModel.addProduction(pi);
                 }
                 nextStep();
                 break;

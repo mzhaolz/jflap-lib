@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
@@ -121,13 +122,13 @@ public class ChomskyPane extends JPanel {
    */
   private void updateDisplay() {
     need = getWhatNeedsDone();
-    boolean done = need.length == 0;
+    boolean done = need.size() == 0;
     convertAction.setEnabled(!done);
     doAllAction.setEnabled(!done);
     highlightAction.setEnabled(!done);
     exportAction.setEnabled(done);
     if (done) directionLabel.setText("Conversion done.  Press \"Export\" to use.");
-    else directionLabel.setText(need.length + " production(s) must be converted.");
+    else directionLabel.setText(need.size() + " production(s) must be converted.");
   }
 
   /**
@@ -135,13 +136,11 @@ public class ChomskyPane extends JPanel {
    *
    * @return an array of row indices that need reduction
    */
-  private List<int> getWhatNeedsDone() {
+  private List<Integer> getWhatNeedsDone() {
     ArrayList<Integer> list = new ArrayList<Integer>();
     for (int i = 0; i < editingGrammarModel.getRowCount() - 1; i++)
       if (!converter.isChomsky(editingGrammarModel.getProduction(i))) list.add(new Integer(i));
-    int[] ret = new int[list.size()];
-    for (int i = 0; i < ret.length; i++) ret[i] = list.get(i).intValue();
-    return ret;
+    return list;
   }
 
   /**
@@ -149,9 +148,9 @@ public class ChomskyPane extends JPanel {
    */
   public void doAll() {
     ListSelectionModel model = editingGrammarView.getSelectionModel();
-    while (need.length != 0) {
+    while (need.size() != 0) {
       model.clearSelection();
-      for (int i = 0; i < need.length; i++) model.addSelectionInterval(need[i], need[i]);
+      need.forEach(i -> model.addSelectionInterval(i, i));
       convertSelected();
     }
     mainLabel.setText("All productions completed.");
@@ -164,14 +163,14 @@ public class ChomskyPane extends JPanel {
   private void highlightRemaining() {
     editingGrammarView.dehighlight();
     mainLabel.setText("Productions to convert are selected.");
-    for (int i = 0; i < need.length; i++) editingGrammarView.highlight(need[i]);
+    need.forEach(i -> editingGrammarView.highlight(i));
   }
 
   /**
    * Takes the grammar, and attempts to export it.
    */
   private void export() {
-    Production[] p = editingGrammarModel.getProductions();
+    List<Production> p = editingGrammarModel.getProductions();
     /*
      * System.out.println("PRINTTITTING"); for (int i=0; i<p.length; i++) {
      * System.out.println(p[i]); }
@@ -194,7 +193,7 @@ public class ChomskyPane extends JPanel {
   }
 
   public Grammar getGrammar() {
-    Production[] p = editingGrammarModel.getProductions();
+    List<Production> p = editingGrammarModel.getProductions();
     try {
       p = CNFConverter.convert(p);
     } catch (UnsupportedOperationException e) {
@@ -226,7 +225,7 @@ public class ChomskyPane extends JPanel {
     for (int i = r.length - 1; i >= 0; i--) {
       Production p = editingGrammarModel.getProduction(r[i]);
       if (p == null) return;
-      Production[] ps = null;
+      List<Production> ps = null;
       try {
         ps = converter.replacements(p);
       } catch (IllegalArgumentException e) {
@@ -234,8 +233,8 @@ public class ChomskyPane extends JPanel {
         continue;
       }
       editingGrammarModel.deleteRow(r[i]);
-      for (int j = ps.length - 1; j >= 0; j--) {
-        editingGrammarModel.addProduction(ps[j], r[i]);
+      for (int j = ps.size() - 1; j >= 0; j--) {
+        editingGrammarModel.addProduction(ps.get(j), r[i]);
         Integer integer = new Integer(r[i]);
         list.add(0, integer);
       }
@@ -278,8 +277,7 @@ public class ChomskyPane extends JPanel {
             }
           }
         });
-    Production[] ps = grammar.getProductions();
-    for (int i = 0; i < ps.length; i++) editingGrammarModel.addProduction(ps[i]);
+    grammar.getProductions().forEach(prod -> editingGrammarModel.addProduction(prod));
   }
 
   /**
@@ -316,7 +314,7 @@ public class ChomskyPane extends JPanel {
    * The array of rows that need to be done. This will be updated every
    * turn... I guess.
    */
-  private List<int> need = new int[0];
+  private List<Integer> need = new ArrayList<>();
 
   /** The grammar table. */
   GrammarTable grammarTable;

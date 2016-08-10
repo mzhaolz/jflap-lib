@@ -22,8 +22,14 @@ import edu.duke.cs.jflap.automata.turing.TMTransition;
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Table;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -82,21 +88,9 @@ public class TMTransitionCreator extends TableTransitionCreator {
      *            to too state
      */
     protected Transition initTransition(State from, State to, String directionString) {
-        String[] read = new String[machine.tapes()];
-        for (int i = 0; i < read.length; i++) {
-            read[i] = "";
-        }
-        String[] write = read;
-        if (blockTransition) {
-            write = new String[machine.tapes()];
-            for (int i = 0; i < write.length; i++) {
-                write[i] = "~";
-            }
-        }
-        String[] direction = new String[machine.tapes()];
-        for (int i = 0; i < direction.length; i++) {
-            direction[i] = directionString;
-        }
+        List<String> read = Collections.nCopies(machine.tapes(), "");
+        List<String> write = blockTransition ? Collections.nCopies(machine.tapes(), "~") : read;
+        List<String> direction = Collections.nCopies(machine.tapes(), directionString);
         TMTransition t = new TMTransition(from, to, read, write, direction);
         t.setBlockTransition(blockTransition);
         return t;
@@ -109,18 +103,18 @@ public class TMTransitionCreator extends TableTransitionCreator {
      *            the transition to build the arrays for
      * @return the arrays for the editing table model
      */
-    private List<List<String>> arraysForTransition(TMTransition transition) {
-        String[][] s = new String[machine.tapes()][3];
+    private Table<Integer, Integer, String> arraysForTransition(TMTransition transition) {
+        Table<Integer, Integer, String> s = HashBasedTable.<Integer, Integer, String>create();
         for (int i = machine.tapes() - 1; i >= 0; i--) {
-            s[i][0] = transition.getRead(i);
-            s[i][1] = transition.getWrite(i);
-            if (s[i][0].equals(TMTransition.BLANK)) {
-                s[i][0] = "";
+            s.put(i, 0, transition.getRead(i));
+            s.put(i, 1, transition.getWrite(i));
+            if (s.get(i, 0).equals(TMTransition.BLANK)) {
+                s.put(i, 0, "");
             }
-            if (s[i][1].equals(TMTransition.BLANK)) {
-                s[i][1] = "";
+            if (s.get(i, 1).equals(TMTransition.BLANK)) {
+                s.put(i, 1, "");
             }
-            s[i][2] = transition.getDirection(i);
+            s.put(i, 2, transition.getDirection(i));
         }
         return s;
     }
@@ -143,12 +137,12 @@ public class TMTransitionCreator extends TableTransitionCreator {
 
             @Override
             public Object getValueAt(int row, int column) {
-                return s[row][column];
+                return s.get(row, column);
             }
 
             @Override
             public void setValueAt(Object o, int r, int c) {
-                s[r][c] = (String) o;
+                s.put(r, r, (String) o);
             }
 
             @Override
@@ -181,7 +175,7 @@ public class TMTransitionCreator extends TableTransitionCreator {
                 return name[c];
             }
 
-            String s[][] = arraysForTransition(t);
+            Table<Integer, Integer, String> s = arraysForTransition(t);
 
             String name[] = { "Read", "Write", "Direction" };
         };
@@ -210,8 +204,8 @@ public class TMTransitionCreator extends TableTransitionCreator {
                     ActionMap amap = c.getActionMap();
                     Object o = new Object();
                     amap.put(o, CHANGE_ACTION);
-                    for (int i = 0; i < STROKES.length; i++) {
-                        imap.put(STROKES[i], o);
+                    for (int i = 0; i < STROKES.size(); i++) {
+                        imap.put(STROKES.get(i), o);
                     }
                     return c;
                 }
@@ -227,13 +221,13 @@ public class TMTransitionCreator extends TableTransitionCreator {
     public Transition modifyTransition(Transition transition, TableModel model) {
         TMTransition t = (TMTransition) transition;
         try {
-            String[] reads = new String[machine.tapes()];
-            String[] writes = new String[machine.tapes()];
-            String[] dirs = new String[machine.tapes()];
+            List<String> reads = new ArrayList<>();
+            List<String> writes = new ArrayList<>();
+            List<String> dirs = new ArrayList<>();
             for (int i = 0; i < machine.tapes(); i++) {
-                reads[i] = (String) model.getValueAt(i, 0);
-                writes[i] = (String) model.getValueAt(i, 1);
-                dirs[i] = (String) model.getValueAt(i, 2);
+                reads.add((String) model.getValueAt(i, 0));
+                writes.add((String) model.getValueAt(i, 1));
+                dirs.add((String) model.getValueAt(i, 2));
             }
             TMTransition newTrans = new TMTransition(t.getFromState(), t.getToState(), reads,
                     writes, dirs);
@@ -258,22 +252,23 @@ public class TMTransitionCreator extends TableTransitionCreator {
 
     public static void setDirs(boolean allowStay) {
         if (allowStay) {
-            DIRS = new String[] { "R", "S", "L" }; // made this non-static to
+            DIRS = Lists.newArrayList("R", "S", "L"); // made this non-static to
         } else {
             // EDebug.print("Reduction");
-            DIRS = new String[] { "R", "L" }; // made this non-static to allow
+            DIRS = Lists.newArrayList("R", "L"); // made this non-static to
+                                                 // allow
             // for switching option
         }
 
-        STROKES = new KeyStroke[DIRS.length]; // we shall see ...arrays can't
+        STROKES = new ArrayList<>(); // we shall see ...arrays can't
         // change size though
-        for (int i = 0; i < STROKES.length; i++) {
-            STROKES[i] = KeyStroke.getKeyStroke("shift " + DIRS[i]);
+        for (int i = 0; i < STROKES.size(); i++) {
+            STROKES.add(KeyStroke.getKeyStroke("shift " + DIRS.get(i)));
         }
 
         BOX.removeAllItems();
-        for (int i = 0; i < DIRS.length; i++) {
-            BOX.addItem(DIRS[i]);
+        for (int i = 0; i < DIRS.size(); i++) {
+            BOX.addItem(DIRS.get(i));
         }
     }
 
@@ -283,33 +278,39 @@ public class TMTransitionCreator extends TableTransitionCreator {
     private TuringMachine machine;
 
     /** The directions. */
-    private List<
-    static List<String> DIRS = new String> {"R", "S", "L"}; // made this
-  // non-static
-  // to allow
-  // for
-  // switching
-  // option
+    private static List<String> DIRS = Lists.newArrayList("R", "S", "L"); // made
+                                                                          // this
+    // non-static
+    // to allow
+    // for
+    // switching
+    // option
 
     /** The direction field combo box. */
-    private static JComboBox<String> BOX = new JComboBox<String>(DIRS);
+    private static JComboBox<String> BOX = new JComboBox<>(DIRS.toArray(new String[0]));
 
     /** The array of keystrokes for the direction field. */
     private static List<KeyStroke> STROKES;
-
-    /** The action for the strokes for the direction field. */
-    private static final Action CHANGE_ACTION=new AbstractAction(){
-    /**
-     *
-     */
-    private static final long serialVersionUID=1L;
-
-    public void actionPerformed(ActionEvent e){JComboBox<?>box=(JComboBox<?>)e.getSource();box.setSelectedItem(e.getActionCommand().toUpperCase());}};
-
-  static {
-    STROKES = new KeyStroke[DIRS.length];
-    for (int i = 0; i < STROKES.length; i++) {
-        STROKES[i] = KeyStroke.getKeyStroke("shift " + DIRS[i]);
+    
+    static {
+        STROKES = new ArrayList<>();
+        for (int i = 0; i < STROKES.size(); i++) {
+            STROKES.add(KeyStroke.getKeyStroke("shift " + DIRS.get(i)));
+        }
     }
-  }
+    
+    /** The action for the strokes for the direction field. */
+    private static final Action CHANGE_ACTION = new AbstractAction() {
+        /**
+         *
+         */
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JComboBox<?> box = (JComboBox<?>) e.getSource();
+            box.setSelectedItem(e.getActionCommand().toUpperCase());
+        }
+    };
+
 }

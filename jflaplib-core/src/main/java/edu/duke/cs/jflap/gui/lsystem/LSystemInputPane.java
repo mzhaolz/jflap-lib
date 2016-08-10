@@ -21,6 +21,8 @@ import edu.duke.cs.jflap.grammar.UnboundGrammar;
 import edu.duke.cs.jflap.grammar.lsystem.LSystem;
 import edu.duke.cs.jflap.gui.HighlightTable;
 import edu.duke.cs.jflap.gui.TableTextSizeSlider;
+import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -95,15 +97,15 @@ public class LSystemInputPane extends JPanel {
         UnboundGrammar g = new UnboundGrammar();
         while (it.hasNext()) {
             String symbol = (String) it.next();
-            List<String>[] r = lsystem.getReplacements(symbol);
-            for (int i = 0; i < r.length; i++) {
-                Production p = new Production(symbol, listAsString(r[i]));
+            List<List<String>> r = lsystem.getReplacements(symbol);
+            for (int i = 0; i < r.size(); i++) {
+                Production p = new Production(symbol, listAsString(r.get(i)));
                 g.addProduction(p);
             }
         }
         productionInputPane = new GrammarInputPane(g);
         // Create the parameter table model.
-        parameterModel = new ParameterTableModel<String>(lsystem.getValues());
+        parameterModel = new ParameterTableModel(lsystem.getValues());
         // We may as well use this as our cached system.
         cachedSystem = lsystem;
     }
@@ -154,9 +156,9 @@ public class LSystemInputPane extends JPanel {
                 setEditing(e.getActionCommand());
             }
         };
-        String[] words = Renderer.ASSIGN_WORDS
-        for (int i = 0; i < words.length; i++) {
-            menu.add(words[i]).addActionListener(listener);
+        Set<String> words = Renderer.ASSIGN_WORDS;
+        for (String s : words) {
+            menu.add(s).addActionListener(listener);
         }
         JPanel c = new JPanel();
         c.addMouseListener(new MouseAdapter() {
@@ -302,7 +304,7 @@ public class LSystemInputPane extends JPanel {
     private GrammarInputPane productionInputPane;
 
     /** The parameter table model. */
-    private ParameterTableModel<String> parameterModel;
+    private ParameterTableModel parameterModel;
 
     /** The parameter table view. */
     private HighlightTable parameterTable;
