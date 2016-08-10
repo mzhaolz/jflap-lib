@@ -21,6 +21,7 @@ import edu.duke.cs.jflap.gui.TooltipAction;
 import edu.duke.cs.jflap.gui.tree.SelectTreeDrawer;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
@@ -60,9 +61,9 @@ class ControlPanel extends JToolBar {
    *         are selected
    */
   private MinimizeTreeNode getNode() {
-    TreeNode[] selected = treeDrawer.getSelected();
-    if (selected.length != 1) return null;
-    return (MinimizeTreeNode) selected[0];
+    List<TreeNode> selected = treeDrawer.getSelected();
+    if (selected.size() != 1) return null;
+    return (MinimizeTreeNode) selected.get(0);
   }
 
   /**
@@ -174,9 +175,9 @@ class ControlPanel extends JToolBar {
 
           @Override
           public void actionPerformed(ActionEvent event) {
-            TreeNode[] selected = treeDrawer.getSelected();
-            for (int i = 0; i < selected.length; i++)
-              controller.removeNode((MinimizeTreeNode) selected[i]);
+            List<TreeNode> selected = treeDrawer.getSelected();
+            for (TreeNode seli : selected)
+              controller.removeNode((MinimizeTreeNode) seli);
             controller.setEnabledness();
           }
         };

@@ -18,7 +18,10 @@ package edu.duke.cs.jflap.gui.pumping;
 
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -127,9 +130,9 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
   }
 
   @Override
-  public void setDecomposition(int[] decomposition) {
-    myXPanel.setVal(decomposition[0]);
-    myYPanel.setVal(decomposition[0] + decomposition[1]);
+  public void setDecomposition(List<Integer> decomposition) {
+    myXPanel.setVal(decomposition.get(0));
+    myYPanel.setVal(decomposition.get(0) + decomposition.get(1));
   }
 
   /**
@@ -138,7 +141,7 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
    */
   @Override
   protected void setI() {
-    int[] d = Lists.newArrayList(myXPanel.getVal(), myYPanel.getVal() - myXPanel.getVal()};
+    List<Integer> d = Lists.newArrayList(myXPanel.getVal(), myYPanel.getVal() - myXPanel.getVal());
     myLemma.setDecomposition(d);
     myLemma.chooseI();
     if (myCases != null) {
@@ -159,7 +162,7 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
     myCanvas.addText(((RegularPumpingLemma) myLemma).getX(), "x");
     myCanvas.addText(((RegularPumpingLemma) myLemma).getY(), "y");
     myCanvas.addText(((RegularPumpingLemma) myLemma).getZ(), "z");
-    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1});
+    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1));
     myStepAnimation.setEnabled(true);
     myStartAnimation.setEnabled(false);
     repaint();
@@ -193,7 +196,7 @@ public class HumanRegPumpingLemmaInputPane extends HumanFirstPane {
     myYPanel.setText(pl.getW());
     myYPanel.setSliderMax(pl.getW().length());
 
-    setDecomposition(Lists.newArrayList(pl.getX().length(), pl.getY().length()}, pl.getI());
+    setDecomposition(Lists.newArrayList(pl.getX().length(), pl.getY().length()), pl.getI());
     updateTable();
 
     stages[2].setVisible(true);

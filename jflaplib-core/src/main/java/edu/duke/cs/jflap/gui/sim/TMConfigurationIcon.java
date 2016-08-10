@@ -23,6 +23,7 @@ import edu.duke.cs.jflap.automata.turing.Tape;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.util.List;
 
 /**
  * This is a configuration icon for configurations related to finite state
@@ -72,7 +73,7 @@ public class TMConfigurationIcon extends ConfigurationIcon implements TuringCons
         int headx = BELOW_STATE.x + width / 2;
         int heady = BELOW_STATE.y + 5;
 
-        Tape[] tapes = config.getTapes();
+        List<Tape> tapes = config.getTapes();
 
         for (Tape tape : tapes) {
             float tornHeight = Torn.paintString(g, FIX + tape.getContents() + FIX, BELOW_STATE.x,

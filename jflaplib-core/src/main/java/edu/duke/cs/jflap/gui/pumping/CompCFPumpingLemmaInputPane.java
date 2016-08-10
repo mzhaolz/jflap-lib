@@ -18,6 +18,10 @@ package edu.duke.cs.jflap.gui.pumping;
 
 import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
 
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 /**
  * This is a subclass of <code>ComputerFirstPane</code> that deals with
  * context-free pumping lemmas.
@@ -60,7 +64,7 @@ public class CompCFPumpingLemmaInputPane extends ComputerFirstPane {
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getX(), "x");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getY(), "y");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getZ(), "z");
-    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1, myLemma.getI(), 1});
+    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1, myLemma.getI(), 1));
     myStepAnimation.setEnabled(true);
     myStartAnimation.setEnabled(false);
     repaint();
@@ -93,8 +97,8 @@ public class CompCFPumpingLemmaInputPane extends ComputerFirstPane {
      * If it hasn't, no point doing the rest. If it has, then go on and load
      * w.
      */
-    int[] decomp = pl.getDecomposition();
-    if (decomp[0] == 0 && decomp[1] == 0 && decomp[2] == 0 && decomp[3] == 0) return;
+    List<Integer> decomp = pl.getDecomposition();
+    if (decomp.get(0) == 0 && decomp.get(1) == 0 && decomp.get(2) == 0 && decomp.get(3) == 0) return;
 
     myWDisplay.setText(pl.getW());
 
@@ -105,8 +109,8 @@ public class CompCFPumpingLemmaInputPane extends ComputerFirstPane {
      * anything to go wrong.
      *
      */
-    int[] decomposition =
-        Lists.newArrayList(pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length()};
+    List<Integer> decomposition =
+        Lists.newArrayList(pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length());
 
     setDecomposition(decomposition, pl.getI());
     if (myCases != null) myCases.setDecomposition(decomposition);
@@ -124,4 +128,10 @@ public class CompCFPumpingLemmaInputPane extends ComputerFirstPane {
     myCanvas.setRestartEnabled(true);
     if (myCases != null) myCases.setAddReplaceButtonsEnabled(true);
   }
+
+    @Override
+    public void setDecomposition(List<Integer> list) {
+        // TODO Auto-generated method stub
+        
+    }
 }

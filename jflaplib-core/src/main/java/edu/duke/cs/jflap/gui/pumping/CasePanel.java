@@ -19,11 +19,14 @@ package edu.duke.cs.jflap.gui.pumping;
 import edu.duke.cs.jflap.pumping.Case;
 import edu.duke.cs.jflap.pumping.PumpingLemma;
 
+import com.google.common.collect.Lists;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -75,7 +78,7 @@ public class CasePanel extends JPanel {
    * The last decomposition chosen. This is used when {@link #addCase()} is
    * called.
    */
-  private List<int> tempDecomposition;
+  private List<Integer> tempDecomposition;
   /**
    * The last <i>i</i> used.
    */
@@ -156,8 +159,7 @@ public class CasePanel extends JPanel {
                *
                */
               private static final long serialVersionUID = 1L;
-              @Override
-            public List<final String> COLUMN_NAMES = new String[] {"#", "Description"};
+            public final List<String> COLUMN_NAMES = Lists.newArrayList("#", "Description");
 
               public Object getValueAt(int r, int c) {
                 if (c == 0) return Integer.toString(r + 1);
@@ -166,7 +168,7 @@ public class CasePanel extends JPanel {
 
               @Override
             public String getColumnName(int c) {
-                return COLUMN_NAMES[c];
+                return COLUMN_NAMES.get(c);
               }
 
               @Override
@@ -176,7 +178,7 @@ public class CasePanel extends JPanel {
 
               @Override
             public int getColumnCount() {
-                return COLUMN_NAMES.length;
+                return COLUMN_NAMES.size();
               }
 
               @Override
@@ -430,7 +432,7 @@ public class CasePanel extends JPanel {
    *            the decomposition we wish to remember
    * @see #addCase()
    */
-  protected void setDecomposition(int[] decomposition) {
+  protected void setDecomposition(List<Integer> decomposition) {
     tempDecomposition = decomposition;
   }
 
@@ -480,7 +482,7 @@ public class CasePanel extends JPanel {
    * @see edu.duke.cs.jflap.pumping.ContextFreePumpingLemma#addCase(int[],
    *      int)
    */
-  protected void addCase(int[] decomposition, int i) {
+  protected void addCase(List<Integer> decomposition, int i) {
     int ret = myLemma.addCase(decomposition, i);
     /*
      * refresh() must be called before the rest of the code so we will

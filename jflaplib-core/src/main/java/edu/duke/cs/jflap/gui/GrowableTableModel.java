@@ -17,7 +17,7 @@
 package edu.duke.cs.jflap.gui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -76,16 +76,15 @@ public abstract class GrowableTableModel<T> extends AbstractTableModel implement
    * @param model
    *            the model to copy
    */
-  @SuppressWarnings("unchecked")
   public void copy(GrowableTableModel<T> model) {
     columns = model.getColumnCount();
     data.clear();
-    Iterator<T[]> it = model.data.iterator();
+    Iterator<List<T>> it = model.data.iterator();
     while (it.hasNext()) {
-      T[] oldRow = it.next();
-      T[] row = (T[]) new Object[columns];
-      for (int i = 0; i < oldRow.length; i++) row[i] = oldRow[i];
-      data.add(row);
+      // TODO: this was previous, and still isn't, a deep copy.
+      // Not clear what they wanted.
+      List<T> oldRow = it.next();
+      data.add(oldRow);
     }
     fireTableDataChanged();
   }
@@ -101,10 +100,8 @@ public abstract class GrowableTableModel<T> extends AbstractTableModel implement
    *         <CODE>Object</CODE> array of size equal to the number of columns
    *         with contents set to <CODE>null</CODE>
    */
-  @SuppressWarnings("unchecked")
-  protected T[] initializeRow(int row) {
-    T[] newRow = (T[]) new Object[getColumnCount()];
-    Arrays.fill(newRow, null);
+  protected List<T> initializeRow(int row) {
+    List<T> newRow = Collections.nCopies(getColumnCount(), null);
     return newRow;
   }
 
@@ -152,10 +149,10 @@ public abstract class GrowableTableModel<T> extends AbstractTableModel implement
    * @throws IllegalArgumentException
    *             if the data array length differs from the number of columns
    */
-  public void insertRow(T[] newData, int row) {
-    if (newData.length != columns)
+  public void insertRow(List<T> newData, int row) {
+    if (newData.size() != columns)
       throw new IllegalArgumentException(
-          "Data length is " + newData.length + ", should be " + columns + ".");
+          "Data length is " + newData.size() + ", should be " + columns + ".");
     data.add(row, newData);
     fireTableRowsInserted(row, row);
   }
@@ -171,13 +168,13 @@ public abstract class GrowableTableModel<T> extends AbstractTableModel implement
    */
   @Override
   public T getValueAt(int row, int column) {
-    return data.get(row)[column];
+    return data.get(row).get(column);
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public void setValueAt(Object newData, int row, int column) {
-    data.get(row)[column] = (T) newData;
+    data.get(row).set(column, (T) newData);
     if (row + 1 == getRowCount()) {
       data.add(initializeRow(row + 1));
       fireTableRowsInserted(row + 1, row + 1);
@@ -193,5 +190,5 @@ public abstract class GrowableTableModel<T> extends AbstractTableModel implement
   protected int columns;
 
   /** Each row is stored as an array of objects in this list. */
-  protected List<T[]> data = new ArrayList<>();
+  protected List<List<T>> data = new ArrayList<>();
 }

@@ -384,11 +384,11 @@ public abstract class Environment extends JPanel {
      * @return an array containing all components.
      */
     @Override
-    public List<Component> getComponents() {
-        Component[] comps = new Component[tabbed.getTabCount()];
-        for (int i = 0; i < comps.length; i++)
-            comps[i] = tabbed.getComponentAt(i);
-        return comps;
+    public Component[] getComponents() {
+        List<Component> comps = new ArrayList<>();
+        for (int i = 0; i < comps.size(); i++)
+            comps.add(tabbed.getComponentAt(i));
+        return comps.toArray(new Component[0]);
     }
 
     /**
@@ -406,7 +406,7 @@ public abstract class Environment extends JPanel {
             if (satisfier.satisfies(c, componentTags.get(c)))
                 list.add(c);
         }
-        return list
+        return list;
     }
 
     /**

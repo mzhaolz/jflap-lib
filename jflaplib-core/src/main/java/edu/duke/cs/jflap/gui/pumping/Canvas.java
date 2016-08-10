@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -208,15 +209,15 @@ public class Canvas extends JPanel {
    * text should be. The numbers in the array should be the order that the
    * text was added in.
    *
-   * @param n
+   * @param arrayList
    *            the number of copies of final text
    */
-  public void moveText(int[] n) {
+  public void moveText(List<Integer> arrayList) {
     Point2D p;
     double distance = 0;
     for (int i = 0; i < myInitialText.size(); i++) {
       Text s = myInitialText.get(i);
-      for (int j = 0; j < n[i]; j++) {
+      for (int j = 0; j < arrayList.get(i); j++) {
         if (s.toString().length() == 0 || s.toString().equals(Text.SPACE.toString())) continue;
 
         if (myMovingText.isEmpty()) p = SECOND_ROW;

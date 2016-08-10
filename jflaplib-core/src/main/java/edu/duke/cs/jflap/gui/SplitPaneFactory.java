@@ -20,7 +20,6 @@ import edu.duke.cs.jflap.gui.environment.Environment;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.List;
 
 import javax.swing.JSplitPane;
 
@@ -65,9 +64,9 @@ public class SplitPaneFactory {
                 horizontal ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT, true, left,
                 right);
         Dimension dim = environment.getSize();
-        List<Component> comps = environment.getComponents();
-        if (comps.size() != 0) {
-            dim = comps.get(0).getSize();
+        Component[] comps = environment.getComponents();
+        if (comps.length != 0) {
+            dim = comps[0].getSize();
         }
         int size = horizontal ? dim.width : dim.height;
         split.setDividerLocation((int) (size * ratio));

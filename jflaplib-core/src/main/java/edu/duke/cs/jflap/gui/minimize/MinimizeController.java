@@ -22,7 +22,10 @@ import edu.duke.cs.jflap.automata.fsa.MinimizeTreeNode;
 import edu.duke.cs.jflap.automata.fsa.Minimizer;
 import edu.duke.cs.jflap.gui.tree.SelectTreeDrawer;
 import edu.duke.cs.jflap.gui.tree.Trees;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -68,10 +71,10 @@ class MinimizeController {
     public void stateDown(State state, MouseEvent event) {
         if (state == null)
             return;
-        TreeNode[] selected = treeDrawer.getSelected();
-        if (selected.length != 1)
+        List<TreeNode> selected = treeDrawer.getSelected();
+        if (selected.size() != 1)
             return;
-        toggleState((MinimizeTreeNode) selected[0], state);
+        toggleState((MinimizeTreeNode) selected.get(0), state);
     }
 
     /**
@@ -102,21 +105,21 @@ class MinimizeController {
      * control panel based on the currently selected tree node.
      */
     void setEnabledness() {
-        TreeNode[] selected = treeDrawer.getSelected();
+        List<TreeNode> selected = treeDrawer.getSelected();
         ControlPanel cp = view.controlPanel;
         // We can only proceed if all has been finished.
-        State[] group = minimizer.getDistinguishableGroup(getAutomaton(), getTree());
+        List<State> group = minimizer.getDistinguishableGroup(getAutomaton(), getTree());
         boolean done = expanding == null && group == null;
         if (done) {
             cp.finishAction.setEnabled(true);
-            selected = new TreeNode[0];
+            selected = new ArrayList<>();
             cp.finishAction.setTip("Proceed to automaton building phase.");
         } else {
             cp.finishAction.setEnabled(false);
             cp.finishAction.setTip("Can't proceed.  Distinguishable groups still exist.");
         }
         // Actions that require one be selected...
-        if (selected.length != 1) {
+        if (selected.size() != 1) {
             // Can't do anything if not exactly one node is selected.
             String s = done ? "Tree is complete.  No action needed."
                     : "This requires one node be selected.";
@@ -143,10 +146,10 @@ class MinimizeController {
             cp.addChildAction.setEnabled(true);
             cp.addChildAction.setTip("Add another partition to " + es + ".");
         }
-        if (selected.length != 1)
+        if (selected.size() != 1)
             return;
         // Do items related to beginning an expansion.
-        MinimizeTreeNode node = (MinimizeTreeNode) selected[0];
+        MinimizeTreeNode node = (MinimizeTreeNode) selected.get(0);
 
         if (expanding != null && node.getParent() == expanding) {
             String es = minimizer.getString(expanding.getStates());
@@ -220,7 +223,7 @@ class MinimizeController {
             return false;
         }
         // Remove the children of this node.
-        MinimizeTreeNode[] children = killChildren(node);
+        List<MinimizeTreeNode> children = killChildren(node);
         // Can this even be split?
         if (!minimizer.isSplittable(node.getStates(), getAutomaton(), getTree())) {
             JOptionPane.showMessageDialog(view, CANT_SPLIT);
@@ -290,12 +293,12 @@ class MinimizeController {
             }
             ;
             // Do any of the other children already contain it?
-            TreeNode[] children = Trees.children(parent);
-            for (int i = 0; i < children.length; i++) {
-                MinimizeTreeNode child = (MinimizeTreeNode) children[i];
+            List<TreeNode> children = Trees.children(parent);
+            for (int i = 0; i < children.size(); i++) {
+                MinimizeTreeNode child = (MinimizeTreeNode) children.get(i);
                 if (child == node)
                     continue;
-                Set<State> c = new HashSet<State>(Arrays.asList(child.getStates()));
+                Set<State> c = new HashSet<State>(child.getStates());
                 if (c.contains(state)) {
                     JOptionPane.showMessageDialog(view,
                             "Another partition already contains state " + state.getID() + "!");
@@ -308,12 +311,12 @@ class MinimizeController {
         }
 
         // Add/remove the state to/from the list of states.
-        State[] states = node.getStates();
-        java.util.List<State> list = new LinkedList<State>(Arrays.asList(states));
+        List<State> states = node.getStates();
+        java.util.List<State> list = new LinkedList<State>(states);
         if (list.contains(state))
             list.remove(state);
         else list.add(state);
-        states = list
+        states = list;
         node.setUserObject(states);
         setSelectedStates(node);
         view.repaint();
@@ -331,9 +334,9 @@ class MinimizeController {
         // Remove any children that may exist.
         killChildren(node);
         // Get the states for the correct splittage.
-        List<State[]> groups = minimizer.splitOnTerminal(node.getStates(), node.getTerminal(),
+        List<List<State>> groups = minimizer.splitOnTerminal(node.getStates(), node.getTerminal(),
                 getAutomaton(), getTree());
-        Iterator<State[]> it = groups.iterator();
+        Iterator<List<State>> it = groups.iterator();
         while (it.hasNext())
             addChild(node, it.next());
         expanding = null;
@@ -395,8 +398,8 @@ class MinimizeController {
                     "We must finish expanding group " + minimizer.getString(expanding.getStates())
                             + "\nbefore we expand anything else.");
         }
-        TreeNode[] children = Trees.children(root);
-        if (children.length == 0) {
+        List<TreeNode> children = Trees.children(root);
+        if (children.size() == 0) {
             if (!minimizer.isSplittable(root.getStates(), getAutomaton(), getTree())) {
                 root.setTerminal("");
                 return;
@@ -406,8 +409,8 @@ class MinimizeController {
             split(root);
             children = Trees.children(root);
         }
-        for (int i = 0; i < children.length; i++)
-            splitSubtree((MinimizeTreeNode) children[i]);
+        for (int i = 0; i < children.size(); i++)
+            splitSubtree((MinimizeTreeNode) children.get(i));
     }
 
     /**
@@ -419,9 +422,9 @@ class MinimizeController {
      */
     private void setSelectedStates(MinimizeTreeNode node) {
         automatonDrawer.clearSelected();
-        State[] states = node.getStates();
-        for (int i = 0; i < states.length; i++)
-            automatonDrawer.addSelected(states[i]);
+        List<State> states = node.getStates();
+        for (int i = 0; i < states.size(); i++)
+            automatonDrawer.addSelected(states.get(i));
         treeDrawer.clearSelected();
         treeDrawer.setSelected(node, true);
         view.repaint();
@@ -435,11 +438,11 @@ class MinimizeController {
      * @return the array of children removed
      */
     private List<MinimizeTreeNode> killChildren(MinimizeTreeNode node) {
-        TreeNode[] children = Trees.children(node);
-        MinimizeTreeNode[] toReturn = new MinimizeTreeNode[children.length];
-        for (int i = 0; i < children.length; i++) {
-            toReturn[i] = (MinimizeTreeNode) children[i];
-            getTree().removeNodeFromParent(toReturn[i]);
+        List<TreeNode> children = Trees.children(node);
+        List<MinimizeTreeNode> toReturn = new ArrayList<>();
+        for (int i = 0; i < children.size(); i++) {
+            toReturn.add((MinimizeTreeNode) children.get(i));
+            getTree().removeNodeFromParent(toReturn.get(i));
         }
         return toReturn;
     }
@@ -478,12 +481,12 @@ class MinimizeController {
      *         not be created
      */
     public MinimizeTreeNode addChild(MinimizeTreeNode parent) {
-        if (parent.getStates().length <= parent.getChildCount()) {
+        if (parent.getStates().size() <= parent.getChildCount()) {
             JOptionPane.showMessageDialog(view,
                     "A group cannot have more partitions than elements!");
             return null;
         }
-        return addChild(parent, new State[0]);
+        return addChild(parent, new ArrayList<State>());
     }
 
     /**
@@ -491,15 +494,15 @@ class MinimizeController {
      *
      * @param parent
      *            the node to add a child to
-     * @param group
+     * @param list
      *            the group
      * @return the node that was created, or <CODE>null</CODE> if the node could
      *         not be created
      */
-    public MinimizeTreeNode addChild(MinimizeTreeNode parent, State[] group) {
+    public MinimizeTreeNode addChild(MinimizeTreeNode parent, List<State> list) {
         if (!canModifyChild(parent))
             return null;
-        MinimizeTreeNode node = new MinimizeTreeNode(group);
+        MinimizeTreeNode node = new MinimizeTreeNode(list);
         getTree().insertNodeInto(node, parent, parent.getChildCount());
         view.repaint();
         return node;
@@ -513,10 +516,10 @@ class MinimizeController {
      * @param children
      *            the child to add
      */
-    private void addChildren(MinimizeTreeNode parent, MinimizeTreeNode[] children) {
+    private void addChildren(MinimizeTreeNode parent, List<MinimizeTreeNode> children) {
         // Restore the children.
-        for (int i = 0; i < children.length; i++)
-            getTree().insertNodeInto(children[i], parent, parent.getChildCount());
+        for (int i = 0; i < children.size(); i++)
+            getTree().insertNodeInto(children.get(i), parent, parent.getChildCount());
     }
 
     /**
@@ -561,11 +564,11 @@ class MinimizeController {
      *         incorrect
      */
     public boolean check(MinimizeTreeNode node) {
-        MinimizeTreeNode[] children = killChildren(node);
+        List<MinimizeTreeNode> children = killChildren(node);
 
         // Take care of case where it's not splittable.
         if (!minimizer.isSplittable(node.getStates(), getAutomaton(), getTree())) {
-            if (node.getTerminal().equals("") && children.length == 0) {
+            if (node.getTerminal().equals("") && children.size() == 0) {
                 JOptionPane.showMessageDialog(view, "This group is correct!");
                 addChildren(node, children);
                 return true;
@@ -578,29 +581,29 @@ class MinimizeController {
 
         // If it is splittable, make sure no subpartitions are empty.
         HashSet<HashSet<State>> userPartitions = new HashSet<>();
-        for (int i = 0; i < children.length; i++) {
-            MinimizeTreeNode child = children[i];
-            if (child.getStates().length == 0) {
+        for (int i = 0; i < children.size(); i++) {
+            MinimizeTreeNode child = children.get(i);
+            if (child.getStates().size() == 0) {
                 addChildren(node, children);
                 JOptionPane.showMessageDialog(view, "One of the partitions is empty!");
                 return false;
             }
             // While we're at it...
-            userPartitions.add(new HashSet<>(Arrays.asList(child.getStates())));
+            userPartitions.add(new HashSet<>(child.getStates()));
         }
         // Check to make sure that the partitions are the same.
         // Remove any children that may exist.
         HashSet<HashSet<State>> realPartitions = new HashSet<>();
         // Remove the children so as not to confuse the minimizer.
         // killChildren(node);
-        List<State[]> groups = minimizer.splitOnTerminal(node.getStates(), node.getTerminal(),
+        List<List<State>> groups = minimizer.splitOnTerminal(node.getStates(), node.getTerminal(),
                 getAutomaton(), getTree());
 
         addChildren(node, children);
 
-        Iterator<State[]> it = groups.iterator();
+        Iterator<List<State>> it = groups.iterator();
         while (it.hasNext())
-            realPartitions.add(new HashSet<>(Arrays.asList(it.next())));
+            realPartitions.add(new HashSet<>(it.next()));
         if (!realPartitions.equals(userPartitions)) {
             JOptionPane.showMessageDialog(view, "The parititons are wrong!");
             return false;
@@ -673,7 +676,7 @@ class MinimizeController {
             return false;
         }
 
-        State[] group = minimizer.getDistinguishableGroup(getAutomaton(), getTree());
+        List<State> group = minimizer.getDistinguishableGroup(getAutomaton(), getTree());
         if (group == null) {
             /*
              * JOptionPane.showMessageDialog(view, "The minimize tree is

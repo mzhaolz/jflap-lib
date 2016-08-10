@@ -40,7 +40,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -255,9 +254,9 @@ public class UselessPane extends JPanel {
    */
   public Grammar getGrammar() {
     Grammar g = editingGrammarView.getGrammar(grammar.getClass());
-    Production p[] = g.getProductions();
-    Arrays.sort(p, new ProductionComparator(grammar));
-    if (p.length == 0 || !p[0].getLHS().equals(grammar.getStartVariable())) return null;
+    List<Production> p = g.getProductions();
+    p.sort(new ProductionComparator(grammar));
+    if (p.size() == 0 || !p.get(0).getLHS().equals(grammar.getStartVariable())) return null;
     Grammar g2 = null;
     try {
       g2 = g.getClass().newInstance();

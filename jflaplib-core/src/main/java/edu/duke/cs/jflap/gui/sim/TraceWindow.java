@@ -24,6 +24,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -114,23 +115,23 @@ public class TraceWindow extends JFrame {
                 list.add(icon);
                 last = last.getParent();
             }
-            icons = list
+            icons = list;
             setPreferredSize(new Dimension(width, height));
         }
 
         @Override
         public void paintComponent(Graphics g) {
             Rectangle visible = getVisibleRect();
-            int height = ARROW_LENGTH + icons[0].getIconHeight();
-            int max = icons.length - 1 - visible.y / height;
-            int min = icons.length - 1 - (visible.y + visible.height) / height;
+            int height = ARROW_LENGTH + icons.get(0).getIconHeight();
+            int max = icons.size() - 1 - visible.y / height;
+            int min = icons.size() - 1 - (visible.y + visible.height) / height;
             try {
                 min = Math.max(min, 0);
                 g = g.create();
-                g.translate(0, height * (icons.length - 1 - max));
+                g.translate(0, height * (icons.size() - 1 - max));
                 for (int i = max; i >= min; i--) {
                     drawArrow(g);
-                    drawIcon(g, icons[i]);
+                    drawIcon(g, icons.get(i));
                 }
                 g.dispose();
             } catch (Throwable e) {

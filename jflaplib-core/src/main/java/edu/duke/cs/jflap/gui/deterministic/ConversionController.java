@@ -33,7 +33,6 @@ import edu.duke.cs.jflap.gui.environment.FrameFactory;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -78,17 +77,17 @@ public class ConversionController {
 
     private void initializeGraph() {
         Map<State, Set<State>> stateToSet = new HashMap<State, Set<State>>(); // Different...
-        State[] s = answer.getStates();
-        Transition[] t = answer.getTransitions();
-        for (int i = 0; i < s.length; i++) {
+        List<State> s = answer.getStates();
+        List<Transition> t = answer.getTransitions();
+        for (int i = 0; i < s.size(); i++) {
             Set<State> fromNfa = new HashSet<State>(
-                    Arrays.asList(getStatesForString(s[i].getLabel(), nfa)));
-            stateToSet.put(s[i], fromNfa);
+                    getStatesForString(s.get(i).getLabel(), nfa));
+            stateToSet.put(s.get(i), fromNfa);
             // setToState.put(s[i], fromNfa);
-            graph.addVertex(fromNfa, s[i].getPoint());
+            graph.addVertex(fromNfa, s.get(i).getPoint());
         }
-        for (int i = 0; i < t.length; i++) {
-            graph.addEdge(stateToSet.get(t[i].getFromState()), stateToSet.get(t[i].getToState()));
+        for (int i = 0; i < t.size(); i++) {
+            graph.addEdge(stateToSet.get(t.get(i).getFromState()), stateToSet.get(t.get(i).getToState()));
         }
     }
 
@@ -114,7 +113,7 @@ public class ConversionController {
         while (tokenizer.hasMoreTokens())
             states.add(automaton.getStateWithID(Integer.parseInt(tokenizer.nextToken())));
         states.remove(null);
-        return states
+        return states;
     }
 
     /**
@@ -127,7 +126,7 @@ public class ConversionController {
      */
     private void registerState(State state) {
         Set<State> set = new HashSet<State>(
-                Arrays.asList(getStatesForString(state.getLabel(), nfa)));
+                getStatesForString(state.getLabel(), nfa));
         State inMap = setToState.get(set);
         EDebug.print(set);
         EDebug.print(inMap);
@@ -197,10 +196,10 @@ public class ConversionController {
             return;
         }
 
-        State[] states = getStatesForString(start.getLabel(), nfa);
-        State[] endStates = converter.getStatesOnTerminal(terminal, states, nfa);
+        List<State> states = getStatesForString(start.getLabel(), nfa);
+        List<State> endStates = converter.getStatesOnTerminal(terminal, states, nfa);
 
-        if (endStates.length == 0) {
+        if (endStates.size() == 0) {
             JOptionPane
                     .showMessageDialog(view,
                             "The group {" + start.getLabel() + "} does not expand on the terminal "
@@ -216,7 +215,7 @@ public class ConversionController {
                     "Which group of NFA states will that go to on " + terminal + "?");
         if (userEnd == null)
             return;
-        State[] userEndStates = endStates;
+        List<State> userEndStates = endStates;
         try {
             if (end == null)
                 userEndStates = getStatesForString(userEnd, nfa);
@@ -262,7 +261,7 @@ public class ConversionController {
     public void complete() {
         final LinkedList<State> stateQueue = new LinkedList<State>();
         // Add all states to the state queue.
-        stateQueue.addAll(Arrays.asList(dfa.getStates()));
+        stateQueue.addAll(dfa.getStates());
         // When a state is added to the DFA, make sure we know about it.
         AutomataStateListener listener = new AutomataStateListener() {
             @Override
@@ -288,8 +287,8 @@ public class ConversionController {
      * If it is, then the finished automaton is put in a new window.
      */
     public void done() {
-        int statesRemaining = answer.getStates().length - dfa.getStates().length,
-                transitionsRemaining = answer.getTransitions().length - dfa.getTransitions().length;
+        int statesRemaining = answer.getStates().size() - dfa.getStates().size(),
+                transitionsRemaining = answer.getTransitions().size() - dfa.getTransitions().size();
         if (statesRemaining + transitionsRemaining != 0) {
             String states = statesRemaining == 0 ? "All the states are there.\n"
                     : statesRemaining + " more state" + (statesRemaining == 1 ? "" : "s")

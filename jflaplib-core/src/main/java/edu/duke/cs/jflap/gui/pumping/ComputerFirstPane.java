@@ -21,6 +21,7 @@ import edu.duke.cs.jflap.pumping.PumpingLemma;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -100,7 +101,7 @@ public abstract class ComputerFirstPane extends PumpingLemmaInputPane {
   }
 
   @Override
-  public void setDecomposition(int[] decomposition) {
+  public void setDecomposition(List<Integer> decomposition) {
     myLemma.setDecomposition(decomposition);
     decompLabel.setText(myLemma.getDecompositionAsString());
   }

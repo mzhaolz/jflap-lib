@@ -24,7 +24,7 @@ import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.gui.GrowableTableModel;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +40,7 @@ import javax.swing.event.TableModelListener;
  *
  * @author Thomas Finley
  */
-public class InputTableModel extends GrowableTableModel<Object> {
+public class InputTableModel extends GrowableTableModel<String> {
     private static final long serialVersionUID = 69L;
 
     /**
@@ -81,10 +81,8 @@ public class InputTableModel extends GrowableTableModel<Object> {
      * Initializes the contents of a new array to be all blank strings.
      */
     @Override
-    protected Object[] initializeRow(int row) {
-        Object[] nr = super.initializeRow(row);
-        Arrays.fill(nr, "");
-        return nr;
+    protected List<String> initializeRow(int row) {
+        return Collections.nCopies(super.initializeRow(row).size(), "");
     }
 
     /**
@@ -146,7 +144,7 @@ public class InputTableModel extends GrowableTableModel<Object> {
                 begin = 1;
             }
             for (int c = 0; c < inputs[r].length; c++) {
-                inputs[r][c] = (String) getValueAt(r, c + begin);
+                inputs[r][c] = getValueAt(r, c + begin);
             }
         }
         return inputs;

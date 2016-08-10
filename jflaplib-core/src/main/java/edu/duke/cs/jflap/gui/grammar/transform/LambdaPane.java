@@ -31,6 +31,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
@@ -215,8 +217,8 @@ public class LambdaPane extends JPanel {
               // out of the funk.
               return;
             }
-            editingColumn[event.getColumn() >> 1] = true;
-            if (editingColumn[0] == true && editingColumn[1] == true) {
+            editingColumn.set(event.getColumn() >> 1, true);
+            if (editingColumn.get(0) && editingColumn.get(1)) {
               Production p = editingGrammarModel.getProduction(r);
               if (p == null) return;
               if (!controller.productionAdded(p, r)) {
@@ -378,7 +380,7 @@ public class LambdaPane extends JPanel {
   private int editingRow = -1;
 
   /** Which columsn of the editing row have been edited yet? */
-  private List<boolean editingColumn> = new boolean[2];
+  private List<Boolean> editingColumn = Collections.nCopies(2, false);
 
   /** The editing grammar table mode. */
   GrammarTableModel editingGrammarModel =
@@ -394,7 +396,8 @@ public class LambdaPane extends JPanel {
           if (editingRow == -1) {
             if (r == getRowCount() - 1) {
               editingRow = r;
-              editingColumn[0] = editingColumn[1] = false;
+              editingColumn.set(0, false);
+              editingColumn.set(1, false);
               return true;
             }
             return false;

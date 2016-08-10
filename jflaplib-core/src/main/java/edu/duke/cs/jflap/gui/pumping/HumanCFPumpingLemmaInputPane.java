@@ -18,7 +18,10 @@ package edu.duke.cs.jflap.gui.pumping;
 
 import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -189,11 +192,11 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
   }
 
   @Override
-  public void setDecomposition(int[] decomposition) {
-    int u = decomposition[0];
-    int v = decomposition[1];
-    int x = decomposition[2];
-    int y = decomposition[3];
+  public void setDecomposition(List<Integer> decomposition) {
+    int u = decomposition.get(0);
+    int v = decomposition.get(1);
+    int x = decomposition.get(2);
+    int y = decomposition.get(3);
 
     myUPanel.setVal(u);
     myVPanel.setVal(u + v);
@@ -209,14 +212,14 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
    */
   @Override
   protected void setI() {
-    int[] d =
+    List<Integer> d=
         Lists.newArrayList(
           myUPanel.getVal(),
           myVPanel.getVal() - myUPanel.getVal(),
           myXPanel.getVal() - myVPanel.getVal(),
           myYPanel.getVal() - myXPanel.getVal(),
           myLemma.getW().length() - myYPanel.getVal()
-        };
+        );
     myLemma.setDecomposition(d);
     myLemma.chooseI();
     if (myCases != null) {
@@ -240,7 +243,7 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getX(), "x");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getY(), "y");
     myCanvas.addText(((ContextFreePumpingLemma) myLemma).getZ(), "z");
-    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1, myLemma.getI(), 1});
+    myCanvas.moveText(Lists.newArrayList(0, 1, myLemma.getI(), 1, myLemma.getI(), 1));
     myStepAnimation.setEnabled(true);
     myStartAnimation.setEnabled(false);
     repaint();
@@ -285,8 +288,8 @@ public class HumanCFPumpingLemmaInputPane extends HumanFirstPane {
      *
      * Everything below has to be done in a specific order.
      */
-    int[] decomposition =
-        Lists.newArrayList(pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length()};
+    List<Integer> decomposition =
+        Lists.newArrayList(pl.getU().length(), pl.getV().length(), pl.getX().length(), pl.getY().length());
 
     /*
      * We need to call SliderPanel.setText and SliderPanel.setSliderMax

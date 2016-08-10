@@ -104,13 +104,12 @@ public class PDATransitionCreator extends TableTransitionCreator {
                 return NAME.get(c);
             }
 
-            List<String> s = ImmutableList.of( t.getInputToRead(), t.getStringToPop(),
-                            t.getStringToPush() );
+            List<String> s = ImmutableList.of(t.getInputToRead(), t.getStringToPop(),
+                    t.getStringToPush());
         };
     }
 
     private static final List<String> NAME = ImmutableList.of("Read", "Pop", "Push");
-
 
     /**
      * Modifies a transition according to what's in the table.
