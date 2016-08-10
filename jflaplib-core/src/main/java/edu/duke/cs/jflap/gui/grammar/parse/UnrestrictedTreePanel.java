@@ -22,6 +22,8 @@ import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.tree.DefaultNodeDrawer;
 import edu.duke.cs.jflap.gui.tree.TreePanel;
 
+import com.google.common.collect.Lists;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -62,13 +64,13 @@ public class UnrestrictedTreePanel extends TreePanel {
      */
     public UnrestrictedTreePanel(BruteParsePane pane) {
         super(new DefaultTreeModel(new DefaultMutableTreeNode("")));
-        this.brutePane = pane;
+        brutePane = pane;
     }
 
     public UnrestrictedTreePanel(BruteParsePane pane, HashMap<String, String> map) {
         super(new DefaultTreeModel(new DefaultMutableTreeNode("")));
-        this.brutePane = pane;
-        this.myVariableMap = map;
+        brutePane = pane;
+        myVariableMap = map;
     }
 
     /**
@@ -77,12 +79,14 @@ public class UnrestrictedTreePanel extends TreePanel {
     public String getTB() {
         StringBuffer total = new StringBuffer();
         for (int i = 0; i < top.length; i++) {
-            List<List<UnrestrictedTreeNode>> t = new LinkedList<List<UnrestrictedTreeNode>>();
-            List<List<UnrestrictedTreeNode>> b = new LinkedList<List<UnrestrictedTreeNode>>();
-            for (int j = 0; j < top[i].length; j++)
+            List<List<UnrestrictedTreeNode>> t = new LinkedList<>();
+            List<List<UnrestrictedTreeNode>> b = new LinkedList<>();
+            for (int j = 0; j < top[i].length; j++) {
                 t.add(Arrays.asList(top[i][j]));
-            for (int j = 0; j < bottom[i].length; j++)
+            }
+            for (int j = 0; j < bottom[i].length; j++) {
                 b.add(Arrays.asList(bottom[i][j]));
+            }
             total.append("T." + i + ": " + t + "\n");
             total.append("B." + i + ": " + b + "\n");
         }
@@ -90,54 +94,57 @@ public class UnrestrictedTreePanel extends TreePanel {
     }
 
     private List<UnrestrictedTreeNode> levelNodes(int level) {
-        List<UnrestrictedTreeNode> list = new ArrayList<UnrestrictedTreeNode>();
+        List<UnrestrictedTreeNode> list = new ArrayList<>();
         if (top[level] != null) {
-            for (int i = 0; i < top[level].length; i++)
-                for (int j = 0; j < top[level][i].length; j++)
+            for (int i = 0; i < top[level].length; i++) {
+                for (int j = 0; j < top[level][i].length; j++) {
                     list.add(top[level][i][j]);
+                }
+            }
         }
-        return list
+        return list;
     }
 
     private void bridgeTo(int level) {
-        UnrestrictedTreeNode[] prev = levelNodes(level - 1);
-        Production[] prods = solutionParseNodes[level].getProductions();
-        int[] prodStarts = solutionParseNodes[level].getSubstitutions();
+        List<UnrestrictedTreeNode> prev = levelNodes(level - 1);
+        List<Production> prods = solutionParseNodes[level].getProductions();
+        List<Integer> prodStarts = solutionParseNodes[level].getSubstitutions();
         int length = 0, prodNum = 0;
-        List<UnrestrictedTreeNode[]> bottomList = new LinkedList<UnrestrictedTreeNode[]>();
-        List<UnrestrictedTreeNode[]> topList = new LinkedList<UnrestrictedTreeNode[]>();
+        List<List<UnrestrictedTreeNode>> bottomList = new LinkedList<>();
+        List<List<UnrestrictedTreeNode>> topList = new LinkedList<>();
         UnrestrictedTreeNode[] U = new UnrestrictedTreeNode[0];
         UnrestrictedTreeNode[][] UU = new UnrestrictedTreeNode[0][0];
-        for (int i = 0; i < prev.length; i++) {
-            if (prodNum >= prods.length || length < prodStarts[prodNum]
-                    || prev[i].toString().equals("")) {
+        for (int i = 0; i < prev.size(); i++) {
+            if (prodNum >= prods.size() || length < prodStarts.get(prodNum)
+                    || prev.get(i).toString().equals("")) {
                 // Symbol doesn't change. We bring it down.
-                UnrestrictedTreeNode[] a = new UnrestrictedTreeNode[] { prev[i] };
+                List<UnrestrictedTreeNode> a = Lists.newArrayList(prev.get(i));
                 bottomList.add(a);
                 topList.add(a);
-                length += prev[i].length();
-                prev[i].lowest = level;
-            } else if (length == prodStarts[prodNum]) {
+                length += prev.get(i).length();
+                prev.get(i).lowest = level;
+            } else if (length == prodStarts.get(prodNum)) {
                 // Starting a production.
 
-                List<UnrestrictedTreeNode> currentBottom = new LinkedList<UnrestrictedTreeNode>();
-                List<UnrestrictedTreeNode> currentTop = new LinkedList<UnrestrictedTreeNode>();
-                String rhs = prods[prodNum].getRHS();
-                String lhs = prods[prodNum].getLHS();
-                while (length < prodStarts[prodNum] + lhs.length()) {
-                    currentBottom.add(prev[i]);
-                    prev[i].lowest = level - 1;
-                    length += prev[i].length();
+                List<UnrestrictedTreeNode> currentBottom = new LinkedList<>();
+                List<UnrestrictedTreeNode> currentTop = new LinkedList<>();
+                String rhs = prods.get(prodNum).getRHS();
+                String lhs = prods.get(prodNum).getLHS();
+                while (length < prodStarts.get(prodNum) + lhs.length()) {
+                    currentBottom.add(prev.get(i));
+                    prev.get(i).lowest = level - 1;
+                    length += prev.get(i).length();
                     i++;
                 }
-                UnrestrictedTreeNode[] b = currentBottom
+                List<UnrestrictedTreeNode> b = currentBottom;
                 i--;
                 for (int j = 0; j < rhs.length(); j++) {
                     UnrestrictedTreeNode node = new UnrestrictedTreeNode("" + rhs.charAt(j));
                     node.highest = node.lowest = level;
                     currentTop.add(node);
-                    if (j == rhs.length() - 1)
+                    if (j == rhs.length() - 1) {
                         nodeToParentGroup.put(node, b);
+                    }
                 }
 
                 if (rhs.length() == 0) {
@@ -147,12 +154,12 @@ public class UnrestrictedTreePanel extends TreePanel {
                     nodeToParentGroup.put(node, b);
                 }
                 bottomList.add(b);
-                topList.add(currentTop
+                topList.add(currentTop);
                 prodNum++;
             }
         }
-        bottom[level - 1] = bottomList
-        top[level] = topList
+        bottom[level - 1] = bottomList.toArray(new UnrestrictedTreeNode[][]);
+        top[level] = topList;
     }
 
     /**
@@ -167,8 +174,9 @@ public class UnrestrictedTreePanel extends TreePanel {
      */
     private boolean ends(int level, int group) {
         try {
-            if (level == bottom.length - 1)
+            if (level == bottom.length - 1) {
                 return true; // Everything ends at last.
+            }
             return !Arrays.equals(bottom[level][group], top[level + 1][group]);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalArgumentException(
@@ -187,8 +195,9 @@ public class UnrestrictedTreePanel extends TreePanel {
      * @return if a group starts on a particular level
      */
     private boolean begins(int level, int group) {
-        if (level == 0)
+        if (level == 0) {
             return true; // Everything starts at beginning.
+        }
         return ends(level - 1, group);
     }
 
@@ -204,8 +213,9 @@ public class UnrestrictedTreePanel extends TreePanel {
      *            the array of needs
      */
     private boolean assignWeights(int level, boolean[] need) {
-        if (!need[level])
+        if (!need[level]) {
             return false;
+        }
         need[level] = false;
         boolean changed = false;
         double total = 0.0;
@@ -213,34 +223,39 @@ public class UnrestrictedTreePanel extends TreePanel {
             UnrestrictedTreeNode[] s = bottom[level][i];
             UnrestrictedTreeNode[] c = top[level + 1][i];
             double cSum = 0.0, sSum = 0.0;
-            for (int j = 0; j < s.length; j++)
-                sSum += s[j].weight;
+            for (UnrestrictedTreeNode element : s) {
+                sSum += element.weight;
+            }
             if (!ends(level, i)) {
                 total += sSum;
                 continue;
             }
-            for (int j = 0; j < c.length; j++) {
-                cSum += c[j].weight;
+            for (UnrestrictedTreeNode element : c) {
+                cSum += element.weight;
             }
             Double TOTAL = new Double(total + Math.max(sSum, cSum) / 2.0);
-            for (int j = 0; j < c.length; j++) {
-                nodeToParentWeights.put(c[j], TOTAL);
+            for (UnrestrictedTreeNode element : c) {
+                nodeToParentWeights.put(element, TOTAL);
             }
             total += Math.max(sSum, cSum);
 
             if (cSum > sSum) {
                 double ratio = cSum / sSum;
-                for (int j = 0; j < s.length; j++)
+                for (int j = 0; j < s.length; j++) {
                     s[j].weight *= ratio;
-                if (level != 0)
+                }
+                if (level != 0) {
                     need[level - 1] = true;
+                }
                 changed = true;
             } else if (cSum < sSum) {
                 double ratio = sSum / cSum;
-                for (int j = 0; j < c.length; j++)
+                for (int j = 0; j < c.length; j++) {
                     c[j].weight *= ratio;
-                if (level != 0)
+                }
+                if (level != 0) {
                     need[level + 1] = true;
+                }
                 changed = true;
             }
         }
@@ -263,8 +278,9 @@ public class UnrestrictedTreePanel extends TreePanel {
 
         metaWidth = -1.0;
         solutionParseNodes = new ParseNode[answer.getLevel() + 1];
-        for (; answer != null; answer = (ParseNode) answer.getParent())
+        for (; answer != null; answer = (ParseNode) answer.getParent()) {
             solutionParseNodes[answer.getLevel()] = answer;
+        }
 
         top = new UnrestrictedTreeNode[solutionParseNodes.length][][];
         bottom = new UnrestrictedTreeNode[solutionParseNodes.length][][];
@@ -274,18 +290,21 @@ public class UnrestrictedTreePanel extends TreePanel {
         top[0][0][0] = new UnrestrictedTreeNode(solutionParseNodes[0].getDerivation());
         // Create the nodes.
 
-        for (int i = 1; i < top.length; i++)
+        for (int i = 1; i < top.length; i++) {
             bridgeTo(i);
+        }
         bottom[bottom.length - 1] = top[top.length - 1];
         // Assign the weights.
         boolean[] need = new boolean[top.length];
-        for (int i = 0; i < need.length; i++)
+        for (int i = 0; i < need.length; i++) {
             need[i] = true;
+        }
         boolean changed = true;
         for (int max = 0; changed && max < top.length * 2; max++) {
             changed = false;
-            for (int i = 0; i < top.length - 1; i++)
+            for (int i = 0; i < top.length - 1; i++) {
                 changed |= assignWeights(i, need);
+            }
         }
         level = group = 0;
         brutePane.derivationModel.setRowCount(0);
@@ -309,9 +328,9 @@ public class UnrestrictedTreePanel extends TreePanel {
         g.setColor(node.lowest == top.length - 1 ? LEAF : INNER);
         g.translate(p.getX(), p.getY());
 
-        if (myVariableMap == null)
+        if (myVariableMap == null) {
             nodeDrawer.draw(g, node);
-        else {
+        } else {
             if (myVariableMap.containsKey(node.toString())) {
                 node = new UnrestrictedTreeNode(myVariableMap.get(node.toString()));
                 nodeDrawer.draw(g, node, true);
@@ -335,19 +354,21 @@ public class UnrestrictedTreePanel extends TreePanel {
      *            the point to store the result in
      */
     protected Point2D getPoint(int row, double weight, Point2D p) {
-        if (p == null)
+        if (p == null) {
             p = new Point2D.Double();
+        }
         p.setLocation(realWidth * weight / metaWidth, realHeight * (row + 0.5) / metaHeight);
         return p;
     }
 
     protected void setMetaWidth() {
         for (int i = 0; i < top.length; i++) {
-            UnrestrictedTreeNode[] nodes = levelNodes(i);
+            List<UnrestrictedTreeNode> nodes = levelNodes(i);
             double total = 0.0;
             if (nodes != null) {
-                for (int j = 0; j < nodes.length; j++)
-                    total += nodes[j].weight;
+                for (UnrestrictedTreeNode node : nodes) {
+                    total += node.weight;
+                }
             }
             metaWidth = Math.max(total, metaWidth);
         }
@@ -364,11 +385,12 @@ public class UnrestrictedTreePanel extends TreePanel {
         Dimension d = getSize();
         realWidth = d.width;
         realHeight = d.height;
-        if (metaWidth == -1.0)
+        if (metaWidth == -1.0) {
             setMetaWidth();
+        }
         metaHeight = top.length;
         Point2D p = new Point2D.Double();
-        nodeToPoint = new HashMap<UnrestrictedTreeNode, Point2D>();
+        nodeToPoint = new HashMap<>();
         for (int l = 0; l <= level; l++) {
             double total = 0.0;
             UnrestrictedTreeNode[][] GG = l < level ? bottom[l] : top[l];
@@ -376,21 +398,23 @@ public class UnrestrictedTreePanel extends TreePanel {
                 UnrestrictedTreeNode[] G = GG[gr];
                 if (l <= level - 2 || (l == level - 1 && gr <= group)) {
                     // Want the node on the bottom level.
-                    for (int i = 0; i < G.length; i++) {
-                        if (l == G[i].lowest) {
+                    for (UnrestrictedTreeNode element : G) {
+                        if (l == element.lowest) {
                             // This group is drawn on the bottom.
                             // Draw the line.
-                            Point2D point = getPoint(G[i].lowest, total + G[i].weight / 2.0, null);
-                            getPoint(G[i].highest, total + G[i].weight / 2.0, p);
+                            Point2D point = getPoint(element.lowest, total + element.weight / 2.0,
+                                    null);
+                            getPoint(element.highest, total + element.weight / 2.0, p);
                             g.drawLine((int) point.getX(), (int) point.getY(), (int) p.getX(),
                                     (int) p.getY());
                             // Make the mapping.
-                            nodeToPoint.put(G[i], point);
+                            nodeToPoint.put(element, point);
                         }
-                        if (l == G[i].highest) {
+                        if (l == element.highest) {
                             // This group is just starting.
-                            Point2D point = getPoint(G[i].highest, total + G[i].weight / 2.0, null);
-                            Double D = nodeToParentWeights.get(G[i]);
+                            Point2D point = getPoint(element.highest, total + element.weight / 2.0,
+                                    null);
+                            Double D = nodeToParentWeights.get(element);
                             if (D != null) {
                                 double pweight = D.doubleValue();
                                 getPoint(l - 1, pweight, p);
@@ -398,10 +422,10 @@ public class UnrestrictedTreePanel extends TreePanel {
                                         (int) p.getY());
                             }
                             // Draw the brackets.
-                            UnrestrictedTreeNode[] parent = nodeToParentGroup.get(G[i]);
-                            if (parent != null && parent.length != 1) {
-                                Point2D alpha = nodeToPoint.get(parent[0]);
-                                Point2D beta = nodeToPoint.get(parent[parent.length - 1]);
+                            List<UnrestrictedTreeNode> parent = nodeToParentGroup.get(element);
+                            if (parent != null && parent.size() != 1) {
+                                Point2D alpha = nodeToPoint.get(parent.get(0));
+                                Point2D beta = nodeToPoint.get(parent.get(parent.size() - 1));
                                 g.setColor(BRACKET);
                                 int radius = (int) DefaultNodeDrawer.NODE_RADIUS;
                                 int ax = (int) (alpha.getX() - radius - 3);
@@ -416,17 +440,18 @@ public class UnrestrictedTreePanel extends TreePanel {
                                 g.setColor(Color.black);
                             }
                             // Make the map.
-                            nodeToPoint.put(G[i], point);
+                            nodeToPoint.put(element, point);
                         }
-                        total += G[i].weight;
+                        total += element.weight;
                     }
                 } else if (l <= level) {
                     // We're going to get the top level.
-                    for (int i = 0; i < G.length; i++) {
-                        if (l == G[i].highest) {
+                    for (UnrestrictedTreeNode element : G) {
+                        if (l == element.highest) {
                             // This node is just starting too.
-                            Point2D point = getPoint(G[i].highest, total + G[i].weight / 2.0, null);
-                            Double D = nodeToParentWeights.get(G[i]);
+                            Point2D point = getPoint(element.highest, total + element.weight / 2.0,
+                                    null);
+                            Double D = nodeToParentWeights.get(element);
                             if (D != null) {
                                 double pweight = D.doubleValue();
                                 getPoint(l - 1, pweight, p);
@@ -434,10 +459,10 @@ public class UnrestrictedTreePanel extends TreePanel {
                                         (int) p.getY());
                             }
                             // Draw the brackets.
-                            UnrestrictedTreeNode[] parent = nodeToParentGroup.get(G[i]);
-                            if (parent != null && parent.length != 1) {
-                                Point2D alpha = nodeToPoint.get(parent[0]);
-                                Point2D beta = nodeToPoint.get(parent[parent.length - 1]);
+                            List<UnrestrictedTreeNode> parent = nodeToParentGroup.get(element);
+                            if (parent != null && parent.size() != 1) {
+                                Point2D alpha = nodeToPoint.get(parent.get(0));
+                                Point2D beta = nodeToPoint.get(parent.get(parent.size() - 1));
                                 g.setColor(BRACKET);
                                 int radius = (int) DefaultNodeDrawer.NODE_RADIUS;
                                 int ax = (int) (alpha.getX() - radius - 3);
@@ -452,9 +477,9 @@ public class UnrestrictedTreePanel extends TreePanel {
                                 g.setColor(Color.black);
                             }
                             // Make the map.
-                            nodeToPoint.put(G[i], point);
+                            nodeToPoint.put(element, point);
                         }
-                        total += G[i].weight;
+                        total += element.weight;
                     }
                 } else {
                     System.err.println("Badness in the drawer!");
@@ -472,11 +497,11 @@ public class UnrestrictedTreePanel extends TreePanel {
 
     private String getDerivation(int level, int num) {
         StringBuffer b = new StringBuffer(solutionParseNodes[level - 1].getDerivation());
-        int[] subs = solutionParseNodes[level].getSubstitutions();
-        Production[] ps = solutionParseNodes[level].getProductions();
+        List<Integer> subs = solutionParseNodes[level].getSubstitutions();
+        List<Production> ps = solutionParseNodes[level].getProductions();
         do {
-            b.delete(subs[num], subs[num] + ps[num].getLHS().length());
-            b.insert(subs[num], ps[num].getRHS());
+            b.delete(subs.get(num), subs.get(num) + ps.get(num).getLHS().length());
+            b.insert(subs.get(num), ps.get(num).getRHS());
         } while (--num >= 0);
         return b.toString();
     }
@@ -485,15 +510,16 @@ public class UnrestrictedTreePanel extends TreePanel {
      * This method should be called to go to the next part.
      */
     public boolean next() {
-        Production p = null, ps[] = solutionParseNodes[level].getProductions();
+        Production p = null;
+        List<Production> ps = solutionParseNodes[level].getProductions();
         String derivation = null;
         production++;
-        if (production >= ps.length) {
+        if (production >= ps.size()) {
             production = 0;
-            p = solutionParseNodes[level + 1].getProductions()[0];
+            p = solutionParseNodes[level + 1].getProductions().get(0);
             derivation = getDerivation(level + 1, 0);
         } else {
-            p = ps[production];
+            p = ps.get(production);
             derivation = getDerivation(level, production);
         }
         if (myVariableMap != null) {
@@ -501,15 +527,19 @@ public class UnrestrictedTreePanel extends TreePanel {
             String[] rhs = derivation.split("");
             String new_lhs = "";
             String new_rhs = "";
-            for (int i = 0; i < lhs.length; i++) {
-                if (myVariableMap.containsKey(lhs[i])) {
-                    new_lhs = new_lhs + myVariableMap.get(lhs[i]);
-                } else new_lhs = new_lhs + lhs[i];
+            for (String lh : lhs) {
+                if (myVariableMap.containsKey(lh)) {
+                    new_lhs = new_lhs + myVariableMap.get(lh);
+                } else {
+                    new_lhs = new_lhs + lh;
+                }
             }
-            for (int i = 0; i < rhs.length; i++) {
-                if (myVariableMap.containsKey(rhs[i])) {
-                    new_rhs = new_rhs + myVariableMap.get(rhs[i]);
-                } else new_rhs = new_rhs + rhs[i];
+            for (String rh : rhs) {
+                if (myVariableMap.containsKey(rh)) {
+                    new_rhs = new_rhs + myVariableMap.get(rh);
+                } else {
+                    new_rhs = new_rhs + rh;
+                }
             }
             brutePane.derivationModel.addRow(new String[] { new_lhs + "", new_rhs });
         } else {
@@ -526,15 +556,17 @@ public class UnrestrictedTreePanel extends TreePanel {
                 group = top[level].length - 1;
                 break;
             }
-            if (level == top.length - 1 && group == top[level].length - 1)
+            if (level == top.length - 1 && group == top[level].length - 1) {
                 break;
+            }
         } while (!begins(level, group));
         String lhs = p.getRHS();
-        if (lhs.length() == 0)
+        if (lhs.length() == 0) {
             lhs = Universe.curProfile.getEmptyString();
+        }
         String text = "Derived " + lhs + " from " + p.getLHS() + ".";
         if (level == top.length - 1
-                && production == solutionParseNodes[level].getProductions().length - 1) {
+                && production == solutionParseNodes[level].getProductions().size() - 1) {
             text += "  Derivations complete.";
             brutePane.statusDisplay.setText(text);
             return true;
@@ -550,6 +582,7 @@ public class UnrestrictedTreePanel extends TreePanel {
      * @param gr
      *            the graphics object to draw on
      */
+    @Override
     public void paintComponent(Graphics gr) {
         // super.paintComponent(g);
         Graphics2D g = (Graphics2D) gr.create();
@@ -558,8 +591,9 @@ public class UnrestrictedTreePanel extends TreePanel {
         Dimension d = getSize();
         g.fillRect(0, 0, d.width, d.height);
         g.setColor(Color.black);
-        if (top != null)
+        if (top != null) {
             paintTree(g);
+        }
         g.dispose();
     }
 
@@ -576,10 +610,10 @@ public class UnrestrictedTreePanel extends TreePanel {
     protected UnrestrictedTreeNode[][][] bottom = null;
 
     /** The mapping of nodes to the center weight points of parent edges. */
-    protected Map<UnrestrictedTreeNode, Double> nodeToParentWeights = new HashMap<UnrestrictedTreeNode, Double>();
+    protected Map<UnrestrictedTreeNode, Double> nodeToParentWeights = new HashMap<>();
 
     /** The mapping of nodes to their parent group. */
-    protected Map<UnrestrictedTreeNode, UnrestrictedTreeNode[]> nodeToParentGroup = new HashMap<UnrestrictedTreeNode, UnrestrictedTreeNode[]>();
+    protected Map<UnrestrictedTreeNode, List<UnrestrictedTreeNode>> nodeToParentGroup = new HashMap<>();
 
     protected Map<UnrestrictedTreeNode, Point2D> nodeToPoint;
 

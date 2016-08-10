@@ -21,9 +21,12 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.gui.event.SelectionEvent;
 import edu.duke.cs.jflap.gui.event.SelectionListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,17 +59,26 @@ public class GrammarViewer extends JTable {
     setModel(new GrammarTableModel());
     this.grammar = grammar;
     // setLayout(new BorderLayout());
-    Production[] prods = grammar.getProductions();
-    data = new Object[prods.length][2];
+    List<Production> prods = grammar.getProductions();
+    data = new ArrayList<>();
     Object[] columnNames = {"Production", "Created"};
 
-    for (int i = 0; i < prods.length; i++) {
-      data[i][0] = prods[i];
-      data[i][1] = Boolean.FALSE;
-      productionToRow.put(prods[i], new Integer(i));
+    for (int i = 0; i < prods.size(); i++) {
+      List<Object> dat = new ArrayList<>();
+      dat.add(prods.get(i));
+      dat.add(Boolean.FALSE);
+      data.add(dat);
+      productionToRow.put(prods.get(i), new Integer(i));
     }
     DefaultTableModel model = (DefaultTableModel) getModel();
-    model.setDataVector(data, columnNames);
+    //TODO: wtf
+    Object[][] trueData = new Object[prods.size()][2];
+    for (int i = 0; i < prods.size(); ++i) {
+        for (int j = 0; j < 2; ++j) {
+            trueData[i][j] = data.get(i).get(j);
+        }
+    }
+    model.setDataVector(trueData, columnNames);
 
     // Set the listener to the selectedness.
     getSelectionModel().addListSelectionListener(listSelectListener);
@@ -122,8 +134,8 @@ public class GrammarViewer extends JTable {
   public List<Production> getSelected() {
     int[] rows = getSelectedRows();
     Production[] selected = new Production[rows.length];
-    for (int i = 0; i < rows.length; i++) selected[i] = (Production) data[rows[i]][0];
-    return selected;
+    for (int i = 0; i < rows.length; i++) selected[i] = (Production) data.get(rows[i]).get(0);
+    return Arrays.asList(selected);
   }
 
   /**
@@ -140,16 +152,15 @@ public class GrammarViewer extends JTable {
     Integer r = productionToRow.get(production);
     if (r == null) return;
     int row = r.intValue();
-    Boolean b = checked ? Boolean.TRUE : Boolean.FALSE;
-    data[row][1] = b;
-    ((DefaultTableModel) getModel()).setValueAt(b, row, 1);
+    data.get(row).set(1, checked);
+    ((DefaultTableModel) getModel()).setValueAt(checked, row, 1);
   }
 
   /** The grammar to display. */
   private Grammar grammar;
 
   /** The data of the table. */
-  private List<Object>[] data;
+  private List<List<Object>> data;
 
   /** The mapping of productions to a row (rows stored as Integer). */
   private Map<Production, Integer> productionToRow = new HashMap<>();

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This controls the conversion of a push down automaton to a context free
@@ -67,9 +68,8 @@ public class PDAConvertController extends ConvertController {
      * @return an array containing the productions that correspond to a
      *         particular state
      */
-    protected Production[] getProductions(State state) {
-
-        return new Production[0];
+    protected List<Production> getProductions(State state) {
+        return new ArrayList<>();
     }
 
     /**
@@ -81,8 +81,8 @@ public class PDAConvertController extends ConvertController {
      * @return an array containing the productions that correspond to a
      *         particular transition
      */
-    protected Production[] getProductions(Transition transition) {
-        return converter.createProductionsForTransition(transition, getAutomaton())
+    protected List<Production> getProductions(Transition transition) {
+        return converter.createProductionsForTransition(transition, getAutomaton());
                 
     }
 
@@ -95,9 +95,9 @@ public class PDAConvertController extends ConvertController {
      *             variable here
      */
     protected Grammar getGrammar() {
-        int oldNumProductions = getModel().getProductions().length;
+        int oldNumProductions = getModel().getProductions().size();
         converter.purgeProductions(getAutomaton(), getModel());
-        if (oldNumProductions != getModel().getProductions().length
+        if (oldNumProductions != getModel().getProductions().size()
                 && converter.numberVariables() > 26)
             throw new GrammarCreationException(
                     "Your list of rules has been trimmed, but there are still more variables than "
@@ -105,7 +105,7 @@ public class PDAConvertController extends ConvertController {
         else if (converter.numberVariables() > 26)
             throw new GrammarCreationException(
                     "There are more variables than can be uniquely represented.");
-        else if (oldNumProductions != getModel().getProductions().length)
+        else if (oldNumProductions != getModel().getProductions().size())
             javax.swing.JOptionPane.showMessageDialog(null, "Your list of rules has been trimmed.");
 
         int rows = getModel().getRowCount();

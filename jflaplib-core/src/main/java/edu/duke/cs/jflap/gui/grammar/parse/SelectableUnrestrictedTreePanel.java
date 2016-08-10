@@ -40,94 +40,102 @@ import javax.swing.tree.TreeNode;
  */
 public class SelectableUnrestrictedTreePanel extends UnrestrictedTreePanel {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-  private boolean myClicked = false;
-  private Point2D myClickedNodePoint;
-
-  /**
-   * Constructor for SelectableUnrestrictedTreePanel
-   *
-   * @param pane
-   *            pane that is going to contain this tree panel
-   */
-  public SelectableUnrestrictedTreePanel(BruteParsePane pane) {
-    super(pane);
-  }
-
-  /**
-   * Returns the node at a particular point.
-   *
-   * @param point
-   *            the point to check for nodeness
-   * @return the treenode at a particular point, or <CODE>null</CODE> if there
-   *         is no treenode at that point
-   */
-  public TreeNode nodeAtPoint(Point2D point) {
-    double x1 = point.getX();
-    double y1 = point.getY();
-    Iterator<Map.Entry<UnrestrictedTreeNode, Point2D>> it = nodeToPoint.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry<UnrestrictedTreeNode, Point2D> e = it.next();
-      Point2D tempPoint = e.getValue();
-      double x2 = tempPoint.getX();
-      double y2 = tempPoint.getY();
-      if (Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)
-          <= Math.pow(DefaultNodeDrawer.NODE_RADIUS, 2)) {
-        myClicked = true;
-        myClickedNodePoint = new Point2D.Double(x2, y2);
-        // repaint();
-        return e.getKey();
-      }
-    }
-    return null;
-  }
-
-  public Point2D getPointofSelectedNode() {
-    if (myClicked) return myClickedNodePoint;
-    return null;
-  }
-
-  /**
-   * Sets the answer to this tree panel.
-   *
-   * @param answer
-   *            the end result of a parse tree derivation, or
-   *            <CODE>null</CODE> if no answer should be displayed
-   */
-  public void setAnswer(ParseNode answer) {
-    if (answer == null) {
-      top = null;
-      return;
-    }
-    super.setAnswer(answer);
-    for (int i = 1; i < solutionParseNodes.length; i++) {
-      for (int j = 0; j < solutionParseNodes[i].getSubstitutions().length; j++) next();
-    }
-  }
-
-  public void paintNode(Graphics2D g, UnrestrictedTreeNode node, Point2D p) {
-    // System.out.println("node out : "+node.getText());
-
-    g.setColor(node.lowest == top.length - 1 ? LEAF : INNER);
-    if (node.getText().toUpperCase().equals(node.getText()) && !node.getText().equals(""))
-      g.setColor(INNER);
-
-    /*
-     * else { // System.out.println("node : "+node.getText()); //
-     * System.out.println("myPrev = "+myPrev); if (myPrev==false)
-     * g.setColor(INNER); }
-     * //System.out.println("node out : "+node.getText());
+    /**
      *
-     * if (node.getText().equals("(")) myPrev=false; if
-     * (node.getText().equals(")")) myPrev=true;
      */
-    g.translate(p.getX(), p.getY());
-    nodeDrawer.draw(g, node);
-    g.translate(-p.getX(), -p.getY());
-  }
+    private static final long serialVersionUID = 1L;
+    private boolean myClicked = false;
+    private Point2D myClickedNodePoint;
 
-  // private boolean myPrev=true;
+    /**
+     * Constructor for SelectableUnrestrictedTreePanel
+     *
+     * @param pane
+     *            pane that is going to contain this tree panel
+     */
+    public SelectableUnrestrictedTreePanel(BruteParsePane pane) {
+        super(pane);
+    }
+
+    /**
+     * Returns the node at a particular point.
+     *
+     * @param point
+     *            the point to check for nodeness
+     * @return the treenode at a particular point, or <CODE>null</CODE> if there
+     *         is no treenode at that point
+     */
+    @Override
+    public TreeNode nodeAtPoint(Point2D point) {
+        double x1 = point.getX();
+        double y1 = point.getY();
+        Iterator<Map.Entry<UnrestrictedTreeNode, Point2D>> it = nodeToPoint.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<UnrestrictedTreeNode, Point2D> e = it.next();
+            Point2D tempPoint = e.getValue();
+            double x2 = tempPoint.getX();
+            double y2 = tempPoint.getY();
+            if (Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2) <= Math
+                    .pow(DefaultNodeDrawer.NODE_RADIUS, 2)) {
+                myClicked = true;
+                myClickedNodePoint = new Point2D.Double(x2, y2);
+                // repaint();
+                return e.getKey();
+            }
+        }
+        return null;
+    }
+
+    public Point2D getPointofSelectedNode() {
+        if (myClicked) {
+            return myClickedNodePoint;
+        }
+        return null;
+    }
+
+    /**
+     * Sets the answer to this tree panel.
+     *
+     * @param answer
+     *            the end result of a parse tree derivation, or
+     *            <CODE>null</CODE> if no answer should be displayed
+     */
+    @Override
+    public void setAnswer(ParseNode answer) {
+        if (answer == null) {
+            top = null;
+            return;
+        }
+        super.setAnswer(answer);
+        for (int i = 1; i < solutionParseNodes.length; i++) {
+            for (int j = 0; j < solutionParseNodes[i].getSubstitutions().size(); j++) {
+                next();
+            }
+        }
+    }
+
+    @Override
+    public void paintNode(Graphics2D g, UnrestrictedTreeNode node, Point2D p) {
+        // System.out.println("node out : "+node.getText());
+
+        g.setColor(node.lowest == top.length - 1 ? LEAF : INNER);
+        if (node.getText().toUpperCase().equals(node.getText()) && !node.getText().equals("")) {
+            g.setColor(INNER);
+        }
+
+        /*
+         * else { // System.out.println("node : "+node.getText()); //
+         * System.out.println("myPrev = "+myPrev); if (myPrev==false)
+         * g.setColor(INNER); }
+         * //System.out.println("node out : "+node.getText());
+         *
+         * if (node.getText().equals("(")) myPrev=false; if
+         * (node.getText().equals(")")) myPrev=true;
+         */
+        g.translate(p.getX(), p.getY());
+        nodeDrawer.draw(g, node);
+        g.translate(-p.getX(), -p.getY());
+    }
+
+    // private boolean myPrev=true;
 }

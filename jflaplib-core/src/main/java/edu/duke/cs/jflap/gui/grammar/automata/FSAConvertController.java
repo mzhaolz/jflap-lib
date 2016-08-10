@@ -25,10 +25,13 @@ import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.reg.RegularGrammar;
 import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This controls the conversion of a finite state automaton to a regular
@@ -56,9 +59,9 @@ public class FSAConvertController extends ConvertController {
     converter.initializeConverter(automaton);
     fillMap();
     // Sets the labels.
-    State[] states = automaton.getStates();
-    for (int i = 0; i < states.length; i++)
-      states[i].setLabel(converter.variableForState(states[i]));
+    List<State> states = automaton.getStates();
+    for (int i = 0; i < states.size(); i++)
+      states.get(i).setLabel(converter.variableForState(states.get(i)));
   }
 
   /**
@@ -70,10 +73,9 @@ public class FSAConvertController extends ConvertController {
    * @return an array containing the productions that correspond to a
    *         particular state
    */
-  protected Production[] getProductions(State state) {
-    if (!getAutomaton().isFinalState(state)) return new Production[0];
-    Production[] p = {converter.getLambdaProductionForFinalState(getAutomaton(), state)};
-    return p;
+  protected List<Production> getProductions(State state) {
+    if (!getAutomaton().isFinalState(state)) return new ArrayList<>();
+    return Lists.newArrayList(converter.getLambdaProductionForFinalState(getAutomaton(), state));
   }
 
   /**
@@ -85,9 +87,8 @@ public class FSAConvertController extends ConvertController {
    * @return an array containing the productions that correspond to a
    *         particular transition
    */
-  protected Production[] getProductions(Transition transition) {
-    Production[] p = {converter.getProductionForTransition(transition)};
-    return p;
+  protected List<Production> getProductions(Transition transition) {
+    return Lists.newArrayList(converter.getProductionForTransition(transition));
   }
 
   /**

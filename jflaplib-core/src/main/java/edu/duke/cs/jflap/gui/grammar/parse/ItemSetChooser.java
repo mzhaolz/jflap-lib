@@ -77,6 +77,7 @@ public class ItemSetChooser {
              */
             private static final long serialVersionUID = 1L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 closure();
             }
@@ -87,6 +88,7 @@ public class ItemSetChooser {
              */
             private static final long serialVersionUID = 1L;
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 finish();
             }
@@ -98,11 +100,13 @@ public class ItemSetChooser {
      * This will add the closure of all selected items in choice to the choice.
      */
     private void closure() {
-        HashSet<Production> selected = new HashSet<Production>();
+        HashSet<Production> selected = new HashSet<>();
         GrammarTableModel model = choiceTable.getGrammarModel();
-        for (int i = 0; i < model.getRowCount() - 1; i++)
-            if (choiceTable.isRowSelected(i))
+        for (int i = 0; i < model.getRowCount() - 1; i++) {
+            if (choiceTable.isRowSelected(i)) {
                 selected.add(model.getProduction(i));
+            }
+        }
         if (selected.size() == 0) {
             JOptionPane.showMessageDialog(parent, "Select an item (or items) in the right table.",
                     "Nothing Selected", JOptionPane.ERROR_MESSAGE);
@@ -111,8 +115,9 @@ public class ItemSetChooser {
         Set<?> closureSet = Operations.closure(grammar, selected);
         closureSet.removeAll(alreadyChosen);
         Iterator<?> it = closureSet.iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             addItem((Production) it.next());
+        }
     }
 
     /**
@@ -127,8 +132,9 @@ public class ItemSetChooser {
         HashSet<?> toAdd = new HashSet<Object>(restricted);
         toAdd.removeAll(alreadyChosen);
         Iterator<?> it = toAdd.iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             addItem((Production) it.next());
+        }
     }
 
     /**
@@ -146,27 +152,29 @@ public class ItemSetChooser {
     public List<Production> getItemSet(Set<?> items, String message) {
         restricted = items;
         choiceTable.setModel(new ImmutableGrammarTableModel());
-        alreadyChosen = new HashSet<Production>();
+        alreadyChosen = new HashSet<>();
         while (true) {
             int choice = JOptionPane.showConfirmDialog(parent, panel, message,
                     JOptionPane.OK_CANCEL_OPTION);
-            if (choice == JOptionPane.CANCEL_OPTION)
+            if (choice == JOptionPane.CANCEL_OPTION) {
                 return null;
+            }
             // Get those selected.
-            List<Production> selected = new ArrayList<Production>();
+            List<Production> selected = new ArrayList<>();
             GrammarTableModel model = choiceTable.getGrammarModel();
-            for (int i = 0; i < model.getRowCount() - 1; i++)
+            for (int i = 0; i < model.getRowCount() - 1; i++) {
                 selected.add(model.getProduction(i));
+            }
             // Check if it's our target.
             if (items != null) {
-                Set<Production> selectedSet = new HashSet<Production>(selected);
+                Set<Production> selectedSet = new HashSet<>(selected);
                 if (!selectedSet.equals(items)) {
                     JOptionPane.showMessageDialog(parent, "Some items are missing!",
                             "Items Missing", JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
             }
-            return selected
+            return selected;
         }
     }
 
@@ -194,21 +202,24 @@ public class ItemSetChooser {
     private final GrammarTableListener GTListener = new GrammarTableListener();
 
     private class GrammarTableListener extends SuperMouseAdapter {
+        @Override
         public void mouseClicked(MouseEvent event) {
             GrammarTable gt = (GrammarTable) event.getSource();
             Point at = event.getPoint();
             int row = gt.rowAtPoint(at);
-            if (row == -1)
+            if (row == -1) {
                 return;
-            if (row == gt.getGrammarModel().getRowCount() - 1)
+            }
+            if (row == gt.getGrammarModel().getRowCount() - 1) {
                 return;
+            }
             Production p = gt.getGrammarModel().getProduction(row);
-            Production[] pItems = Operations.getItems(p);
+            List<Production> pItems = Operations.getItems(p);
             JPopupMenu menu = new JPopupMenu();
             ItemMenuListener itemListener = new ItemMenuListener(p);
-            for (int i = 0; i < pItems.length; i++) {
-                JMenuItem item = new JMenuItem(pItems[i].toString());
-                item.setActionCommand(pItems[i].getRHS());
+            for (Production pItem : pItems) {
+                JMenuItem item = new JMenuItem(pItem.toString());
+                item.setActionCommand(pItem.getRHS());
                 item.addActionListener(itemListener);
                 menu.add(item);
             }
@@ -221,6 +232,7 @@ public class ItemSetChooser {
             prod = p;
         }
 
+        @Override
         public void actionPerformed(ActionEvent event) {
             String rhs = event.getActionCommand();
             Production p = new Production(prod.getLHS(), rhs);

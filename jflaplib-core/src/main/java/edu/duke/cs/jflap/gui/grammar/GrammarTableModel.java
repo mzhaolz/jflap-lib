@@ -20,6 +20,8 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.gui.GrowableTableModel;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,9 +88,9 @@ public class GrammarTableModel extends GrowableTableModel<Object> {
    * @return the row where the data was added
    */
   public int addProduction(Production production, int row) {
-    Object[] o = initializeRow(row);
-    o[0] = production.getLHS();
-    o[2] = production.getRHS();
+    List<Object> o = initializeRow(row);
+    o.set(0, production.getLHS());
+    o.set(2, production.getRHS());
     insertRow(o, row);
     return row;
   }
@@ -157,9 +159,8 @@ public class GrammarTableModel extends GrowableTableModel<Object> {
    *            the row we're initializing, which is ignored
    * @return an array containing the column entries for this new row
    */
-  protected Object[] initializeRow(int row) {
-    Object[] newRow = {"", ARROW, ""};
-    return newRow;
+  protected List<Object> initializeRow(int row) {
+    return Lists.newArrayList("", ARROW, "");
   }
 
   /**
