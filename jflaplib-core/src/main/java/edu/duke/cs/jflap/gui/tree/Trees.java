@@ -87,11 +87,13 @@ public class Trees {
      */
     private static void width(TreeNode node, int depth, List<Integer> width) {
         width.set(++depth, width.get(depth) + 1);
-        if (node.isLeaf())
+        if (node.isLeaf()) {
             return;
+        }
         List<TreeNode> children = Trees.children(node);
-        for (int i = 0; i < children.size(); i++)
+        for (int i = 0; i < children.size(); i++) {
             width(children.get(i), depth, width);
+        }
     }
 
     /**
@@ -116,8 +118,9 @@ public class Trees {
     public static int depth(TreeNode node) {
         List<TreeNode> children = Trees.children(node);
         int max = -1;
-        for (int i = 0; i < children.size(); i++)
+        for (int i = 0; i < children.size(); i++) {
             max = Math.max(max, depth(children.get(i)));
+        }
         return max + 1;
     }
 
@@ -142,13 +145,15 @@ public class Trees {
      */
     public static List<TreeNode> leaves(TreeNode node) {
         List<TreeNode> children = Trees.children(node);
-        if (children.size() == 0)
+        if (children.size() == 0) {
             return Lists.newArrayList(node);
-        ArrayList<TreeNode> leaves = new ArrayList<TreeNode>();
+        }
+        ArrayList<TreeNode> leaves = new ArrayList<>();
         for (int i = 0; i < children.size(); i++) {
             List<TreeNode> subleaves = leaves(children.get(i));
-            for (int j = 0; j < subleaves.size(); j++)
+            for (int j = 0; j < subleaves.size(); j++) {
                 leaves.add(subleaves.get(j));
+            }
         }
         return leaves;
     }

@@ -70,27 +70,27 @@ public class B5W extends RegularPumpingLemma {
         w = "bbbbb" + pumpString("b", 2 * count) + pumpString("a", 3 * count);
     }
 
-  @Override
-  public void chooseDecomposition() {
-    int a, count;
-    count = 5;
-    a = 0;
-    // must be at least 3 a's for equality to work
-    while (a < 3) {
-      if (w.charAt(count) == 'a') {
-        a++;
+    @Override
+    public void chooseDecomposition() {
+        int a, count;
+        count = 5;
+        a = 0;
+        // must be at least 3 a's for equality to work
+        while (a < 3) {
+            if (w.charAt(count) == 'a') {
+                a++;
+            }
+            count++;
+        }
+        setDecomposition(Lists.newArrayList(Math.min(count - 5, m - 5), 5));
+
     }
-      count++;
+
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(6, 10);
+
     }
-    setDecomposition(Lists.newArrayList(Math.min(count - 5, m - 5), 5));
-
-  }
-
-  @Override
-  protected void setRange() {
-    myRange = Lists.newArrayList(6, 10);
-
-  }
 
     @Override
     public boolean isInLang(String s) {

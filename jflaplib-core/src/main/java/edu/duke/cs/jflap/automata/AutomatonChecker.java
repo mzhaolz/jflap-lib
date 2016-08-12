@@ -28,26 +28,27 @@ import java.util.List;
  * @author Ryan Cavalcante
  */
 public class AutomatonChecker {
-  /**
-   * Creates instance of <CODE>AutomatonChecker</CODE>.
-   */
-  public AutomatonChecker() {}
-
-  /**
-   * Returns true if <CODE>automaton</CODE> is a non-deterministic finite
-   * state automaton.
-   *
-   * @param automaton
-   *            the automaton.
-   * @return true if <CODE>automaton</CODE> is a non-deterministic finite
-   *         state automaton.
-   */
-  public boolean isNFA(Automaton automaton) {
-    if (!(automaton instanceof FiniteStateAutomaton)) {
-      return false;
+    /**
+     * Creates instance of <CODE>AutomatonChecker</CODE>.
+     */
+    public AutomatonChecker() {
     }
-    NondeterminismDetector nd = new FSANondeterminismDetector();
-    List<State> nondeterministicStates = nd.getNondeterministicStates(automaton);
-    return nondeterministicStates.size() > 0;
-  }
+
+    /**
+     * Returns true if <CODE>automaton</CODE> is a non-deterministic finite
+     * state automaton.
+     *
+     * @param automaton
+     *            the automaton.
+     * @return true if <CODE>automaton</CODE> is a non-deterministic finite
+     *         state automaton.
+     */
+    public boolean isNFA(Automaton automaton) {
+        if (!(automaton instanceof FiniteStateAutomaton)) {
+            return false;
+        }
+        NondeterminismDetector nd = new FSANondeterminismDetector();
+        List<State> nondeterministicStates = nd.getNondeterministicStates(automaton);
+        return nondeterministicStates.size() > 0;
+    }
 }

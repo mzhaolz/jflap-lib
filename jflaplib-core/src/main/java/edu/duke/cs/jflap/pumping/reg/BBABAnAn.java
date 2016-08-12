@@ -58,22 +58,22 @@ public class BBABAnAn extends RegularPumpingLemma {
         i = LemmaMath.flipCoin();
     }
 
-  @Override
-  public void chooseDecomposition() {
-    setDecomposition(Lists.newArrayList(1, 2));
+    @Override
+    public void chooseDecomposition() {
+        setDecomposition(Lists.newArrayList(1, 2));
 
-  }
+    }
 
     @Override
     protected void chooseW() {
         w = "bba" + pumpString("ba", m) + pumpString("a", m - 1);
     }
 
-  @Override
-  protected void setRange() {
-    myRange = Lists.newArrayList(5, 10);
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(5, 10);
 
-  }
+    }
 
     @Override
     public boolean isInLang(String s) {

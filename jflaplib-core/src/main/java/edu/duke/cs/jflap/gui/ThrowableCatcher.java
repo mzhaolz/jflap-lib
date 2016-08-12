@@ -41,48 +41,50 @@ import javax.swing.JTextArea;
  * @author Thomas Finley
  */
 public class ThrowableCatcher {
-  /**
-   * Handles an exception uncaught by our code.
-   *
-   * @param throwable
-   *            the throwable we are trying to catch
-   */
-  public void handle(Throwable throwable) {
-    String message = null;
-    String report = null;
-    try {
-      // Read the error message.
-      InputStream is = getClass().getResource(ERROR_LOCATION).openStream();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-      StringBuffer sb = new StringBuffer();
-      String nextLine = null;
-      while ((nextLine = reader.readLine()) != null) sb.append(nextLine);
-      message = sb.toString();
+    /**
+     * Handles an exception uncaught by our code.
+     *
+     * @param throwable
+     *            the throwable we are trying to catch
+     */
+    public void handle(Throwable throwable) {
+        String message = null;
+        String report = null;
+        try {
+            // Read the error message.
+            InputStream is = getClass().getResource(ERROR_LOCATION).openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuffer sb = new StringBuffer();
+            String nextLine = null;
+            while ((nextLine = reader.readLine()) != null) {
+                sb.append(nextLine);
+            }
+            message = sb.toString();
 
-      // Compose the report.
-      StringWriter w = new StringWriter();
-      PrintWriter writer = new PrintWriter(w);
-      writer.println("PROPERTIES");
-      System.getProperties().list(writer);
-      writer.println("TRACE");
-      throwable.printStackTrace(writer);
-      writer.flush();
-      w.flush();
-      report = w.toString();
-    } catch (Throwable e) {
-      System.err.println("Could not display AWT error message.");
-      throwable.printStackTrace(); // Not a total loss.
-      return;
+            // Compose the report.
+            StringWriter w = new StringWriter();
+            PrintWriter writer = new PrintWriter(w);
+            writer.println("PROPERTIES");
+            System.getProperties().list(writer);
+            writer.println("TRACE");
+            throwable.printStackTrace(writer);
+            writer.flush();
+            w.flush();
+            report = w.toString();
+        } catch (Throwable e) {
+            System.err.println("Could not display AWT error message.");
+            throwable.printStackTrace(); // Not a total loss.
+            return;
+        }
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JLabel(message), BorderLayout.NORTH);
+        JTextArea area = new JTextArea(report);
+        area.setEditable(false);
+        panel.add(new JScrollPane(area), BorderLayout.CENTER);
+        panel.setPreferredSize(new Dimension(400, 400));
+        JOptionPane.showMessageDialog(null, panel);
     }
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.add(new JLabel(message), BorderLayout.NORTH);
-    JTextArea area = new JTextArea(report);
-    area.setEditable(false);
-    panel.add(new JScrollPane(area), BorderLayout.CENTER);
-    panel.setPreferredSize(new Dimension(400, 400));
-    JOptionPane.showMessageDialog(null, panel);
-  }
 
-  /** The location of the uncaught error message. */
-  private static final String ERROR_LOCATION = "/DOCS/error.html";
+    /** The location of the uncaught error message. */
+    private static final String ERROR_LOCATION = "/DOCS/error.html";
 }

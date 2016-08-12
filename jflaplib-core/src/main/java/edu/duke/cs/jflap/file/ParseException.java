@@ -26,22 +26,22 @@ package edu.duke.cs.jflap.file;
  * @author Thomas Finley
  */
 public class ParseException extends RuntimeException {
-  private static final long serialVersionUID = 17L;
+    private static final long serialVersionUID = 17L;
 
-  /**
-   * Creates a generic parse exception.
-   */
-  public ParseException() {
-    super();
-  }
+    /**
+     * Creates a generic parse exception.
+     */
+    public ParseException() {
+        super();
+    }
 
-  /**
-   * Creates a parse exception with the given message.
-   *
-   * @param message
-   *            the exception message
-   */
-  public ParseException(String message) {
-    super(message);
-  }
+    /**
+     * Creates a parse exception with the given message.
+     *
+     * @param message
+     *            the exception message
+     */
+    public ParseException(String message) {
+        super(message);
+    }
 }

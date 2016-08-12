@@ -32,30 +32,31 @@ import java.util.List;
  * @author Ryan Cavalcante
  */
 public class FSAAlphabetRetriever extends AlphabetRetriever {
-  /**
-   * Creates an instance of <CODE>FSAAlphabetRetriever</CODE>.
-   */
-  public FSAAlphabetRetriever() {}
-
-  /**
-   * Returns the alphabet of <CODE>automaton</CODE> by analyzing all
-   * transitions and their labels.
-   *
-   * @param automaton
-   *            the automaton
-   * @return the alphabet, in a string[].
-   */
-  @Override
-  public List<String> getAlphabet(Automaton automaton) {
-    List<String> list = new ArrayList<>();
-    List<Transition> transitions = automaton.getTransitions();
-    for (int k = 0; k < transitions.size(); k++) {
-      FSATransition transition = (FSATransition) transitions.get(k);
-      String label = transition.getLabel();
-      if (!label.equals("") && !list.contains(label)) {
-        list.add(label);
-      }
+    /**
+     * Creates an instance of <CODE>FSAAlphabetRetriever</CODE>.
+     */
+    public FSAAlphabetRetriever() {
     }
-    return list;
-  }
+
+    /**
+     * Returns the alphabet of <CODE>automaton</CODE> by analyzing all
+     * transitions and their labels.
+     *
+     * @param automaton
+     *            the automaton
+     * @return the alphabet, in a string[].
+     */
+    @Override
+    public List<String> getAlphabet(Automaton automaton) {
+        List<String> list = new ArrayList<>();
+        List<Transition> transitions = automaton.getTransitions();
+        for (int k = 0; k < transitions.size(); k++) {
+            FSATransition transition = (FSATransition) transitions.get(k);
+            String label = transition.getLabel();
+            if (!label.equals("") && !list.contains(label)) {
+                list.add(label);
+            }
+        }
+        return list;
+    }
 }

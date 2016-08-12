@@ -55,8 +55,8 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     public LLParseTable(Grammar grammar) {
         variables = grammar.getVariables();
-        variables.sort((x,y) -> x.compareTo(y));
-        terminals.sort((x,y) -> x.compareTo(y));
+        variables.sort((x, y) -> x.compareTo(y));
+        terminals.sort((x, y) -> x.compareTo(y));
         terminals = grammar.getTerminals();
         entries = HashBasedTable.<Integer, Integer, SortedSet<String>>create();
         for (int i = 0; i < variables.size(); ++i) {
@@ -99,12 +99,15 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
     public boolean equals(Object object) {
         try {
             LLParseTable other = (LLParseTable) object;
-            if (!variables.equals(other.variables))
+            if (!variables.equals(other.variables)) {
                 return false;
-            if (!terminals.equals(other.terminals))
+            }
+            if (!terminals.equals(other.terminals)) {
                 return false;
-            if (!entries.equals(other.entries))
+            }
+            if (!entries.equals(other.entries)) {
                 return false;
+            }
             return true;
         } catch (ClassCastException e) {
             return false;
@@ -153,8 +156,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     public int getRow(String variable) {
         int row = Collections.binarySearch(variables, variable);
-        if (row < 0)
+        if (row < 0) {
             throw new IllegalArgumentException(variable + " is not a variable!");
+        }
         return row;
     }
 
@@ -167,10 +171,12 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     public int getColumn(String lookahead) {
         int column = terminals.size();
-        if (!lookahead.equals("$"))
-            column = Collections.binarySearch(terminals, lookahead); 
-        if (column < 0)
+        if (!lookahead.equals("$")) {
+            column = Collections.binarySearch(terminals, lookahead);
+        }
+        if (column < 0) {
             throw new IllegalArgumentException(lookahead + " is not a terminal!");
+        }
         return column + 1;
     }
 
@@ -189,15 +195,16 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      *             lookahead terminals
      */
     public List<List<String>> getDifferences(LLParseTable table) {
-        if (!variables.equals(table.variables)
-                || !terminals.equals(table.terminals))
+        if (!variables.equals(table.variables) || !terminals.equals(table.terminals)) {
             throw new IllegalArgumentException("Tables differ in variables or terminals.");
+        }
         List<List<String>> differences = new ArrayList<>();
         for (Cell<Integer, Integer, SortedSet<String>> c : entries.cellSet()) {
             if (!c.getValue().equals(table.entries.get(c.getRowKey(), c.getColumnKey()))) {
                 differences.add(Lists.newArrayList(variables.get(c.getRowKey()), "$"));
             } else {
-                differences.add(Lists.newArrayList(variables.get(c.getRowKey()), terminals.get(c.getColumnKey())));
+                differences.add(Lists.newArrayList(variables.get(c.getRowKey()),
+                        terminals.get(c.getColumnKey())));
             }
         }
         return differences;
@@ -340,10 +347,12 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     @Override
     public String getColumnName(int column) {
-        if (column == 0)
+        if (column == 0) {
             return " ";
-        if (column == terminals.size() + 1)
+        }
+        if (column == terminals.size() + 1) {
             return "$";
+        }
         return terminals.get(column - 1);
     }
 
@@ -359,8 +368,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
         boolean first = true;
         StringBuffer sb = new StringBuffer();
         while (it.hasNext()) {
-            if (!first)
+            if (!first) {
                 sb.append(" ");
+            }
             String s = it.next();
             sb.append(s.equals("") ? "!" : s);
             first = false;
@@ -383,8 +393,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
         StringTokenizer st = new StringTokenizer(string);
         while (st.hasMoreTokens()) {
             String s = st.nextToken();
-            if (s.equals("!"))
+            if (s.equals("!")) {
                 s = "";
+            }
             set.add(s);
         }
         return set.size();
@@ -403,8 +414,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     @Override
     public Object getValueAt(int row, int column) {
-        if (column == 0)
+        if (column == 0) {
             return variables.get(row);
+        }
         return spaceSet(entries.get(row, column - 1));
     }
 
@@ -430,8 +442,9 @@ public class LLParseTable extends AbstractTableModel implements Serializable, Cl
      */
     @Override
     public boolean isCellEditable(int row, int column) {
-        if (frozen)
+        if (frozen) {
             return false;
+        }
         return column != 0;
     }
 

@@ -68,6 +68,7 @@ public class PDAConvertController extends ConvertController {
      * @return an array containing the productions that correspond to a
      *         particular state
      */
+    @Override
     protected List<Production> getProductions(State state) {
         return new ArrayList<>();
     }
@@ -81,9 +82,10 @@ public class PDAConvertController extends ConvertController {
      * @return an array containing the productions that correspond to a
      *         particular transition
      */
+    @Override
     protected List<Production> getProductions(Transition transition) {
         return converter.createProductionsForTransition(transition, getAutomaton());
-                
+
     }
 
     /**
@@ -94,52 +96,61 @@ public class PDAConvertController extends ConvertController {
      *             if there are not enough variables to uniquely identify every
      *             variable here
      */
+    @Override
     protected Grammar getGrammar() {
         int oldNumProductions = getModel().getProductions().size();
         converter.purgeProductions(getAutomaton(), getModel());
         if (oldNumProductions != getModel().getProductions().size()
-                && converter.numberVariables() > 26)
+                && converter.numberVariables() > 26) {
             throw new GrammarCreationException(
                     "Your list of rules has been trimmed, but there are still more variables than "
                             + "can be uniquely represented.");
-        else if (converter.numberVariables() > 26)
+        } else if (converter.numberVariables() > 26) {
             throw new GrammarCreationException(
                     "There are more variables than can be uniquely represented.");
-        else if (oldNumProductions != getModel().getProductions().size())
+        } else if (oldNumProductions != getModel().getProductions().size()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Your list of rules has been trimmed.");
+        }
 
         int rows = getModel().getRowCount();
         ContextFreeGrammar grammar = new ContextFreeGrammar();
         grammar.setStartVariable("S");
-        ArrayList<Production> productions = new ArrayList<Production>();
+        ArrayList<Production> productions = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
             Production production = getModel().getProduction(i);
-            if (production == null)
+            if (production == null) {
                 continue;
+            }
             production = converter.getSimplifiedProduction(production);
             productions.add(production);
         }
 
         Collections.sort(productions, new Comparator<Object>() {
+            @Override
             public int compare(Object o1, Object o2) {
                 Production p1 = (Production) o1, p2 = (Production) o2;
                 if ("S".equals(p1.getLHS())) {
-                    if (p1.getLHS().equals(p2.getLHS()))
+                    if (p1.getLHS().equals(p2.getLHS())) {
                         return 0;
-                    else return -1;
+                    } else {
+                        return -1;
+                    }
                 }
-                if ("S".equals(p2.getLHS()))
+                if ("S".equals(p2.getLHS())) {
                     return 1;
+                }
                 return p2.getLHS().compareTo(p1.getRHS());
             }
 
+            @Override
             public boolean equals(Object o) {
                 return false;
             }
         });
         Iterator<Production> it = productions.iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             grammar.addProduction(it.next());
+        }
         return grammar;
     }
 

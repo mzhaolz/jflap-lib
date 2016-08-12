@@ -22,4 +22,5 @@ package edu.duke.cs.jflap.gui.environment.tag;
  *
  * @author Thomas Finley
  */
-public interface PermanentTag extends Tag {}
+public interface PermanentTag extends Tag {
+}

@@ -40,33 +40,33 @@ import java.util.ArrayList;
  *
  */
 public class RegPumpingLemmaChooser extends PumpingLemmaChooser {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Adds all the regular pumping lemmas.
-   *
-   */
-  public RegPumpingLemmaChooser() {
-    myList = new ArrayList<>();
+    /**
+     * Adds all the regular pumping lemmas.
+     *
+     */
+    public RegPumpingLemmaChooser() {
+        myList = new ArrayList<>();
 
-    // old languages
-    myList.add(new AnBn());
-    myList.add(new NaNb());
-    myList.add(new Palindrome());
-    myList.add(new ABnAk());
-    myList.add(new AnBkCnk());
-    myList.add(new AnBlAk());
-    myList.add(new AnEven());
+        // old languages
+        myList.add(new AnBn());
+        myList.add(new NaNb());
+        myList.add(new Palindrome());
+        myList.add(new ABnAk());
+        myList.add(new AnBkCnk());
+        myList.add(new AnBlAk());
+        myList.add(new AnEven());
 
-    // new languages (JFLAP 6.2)
-    myList.add(new AnBk());
-    myList.add(new BBABAnAn());
-    myList.add(new B5W());
-    myList.add(new B5Wmod());
-    myList.add(new BkABnBAn());
-    myList.add(new AB2n());
-  }
+        // new languages (JFLAP 6.2)
+        myList.add(new AnBk());
+        myList.add(new BBABAnAn());
+        myList.add(new B5W());
+        myList.add(new B5Wmod());
+        myList.add(new BkABnBAn());
+        myList.add(new AB2n());
+    }
 }

@@ -25,23 +25,23 @@ import edu.duke.cs.jflap.automata.Automaton;
  * @author Thomas Finley
  */
 public class FiniteStateAutomaton extends Automaton {
-  private static final long serialVersionUID = 300L;
+    private static final long serialVersionUID = 300L;
 
-  /**
-   * Creates a finite state automaton with no states and no transitions.
-   */
-  public FiniteStateAutomaton() {
-    super();
-  }
+    /**
+     * Creates a finite state automaton with no states and no transitions.
+     */
+    public FiniteStateAutomaton() {
+        super();
+    }
 
-  /**
-   * Returns the class of <CODE>Transition</CODE> this automaton must accept.
-   *
-   * @return the <CODE>Class</CODE> object for
-   *         <CODE>automata.fsa.FSATransition</CODE>
-   */
-  @Override
-  protected Class<? extends FSATransition> getTransitionClass() {
-    return edu.duke.cs.jflap.automata.fsa.FSATransition.class;
-  }
+    /**
+     * Returns the class of <CODE>Transition</CODE> this automaton must accept.
+     *
+     * @return the <CODE>Class</CODE> object for
+     *         <CODE>automata.fsa.FSATransition</CODE>
+     */
+    @Override
+    protected Class<? extends FSATransition> getTransitionClass() {
+        return edu.duke.cs.jflap.automata.fsa.FSATransition.class;
+    }
 }

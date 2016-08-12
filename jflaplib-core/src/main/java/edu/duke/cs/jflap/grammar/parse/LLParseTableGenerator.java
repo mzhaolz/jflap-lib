@@ -31,36 +31,44 @@ import java.util.Set;
  * @author Thomas Finley
  */
 public class LLParseTableGenerator {
-  /**
-   * Can't instantiate this bad boy sparky.
-   */
-  private LLParseTableGenerator() {}
-
-  /**
-   * Generates a parse table for a particular grammar.
-   *
-   * @param grammar
-   *            the grammar for which a complete parse table should be
-   *            generated
-   */
-  public static LLParseTable generate(Grammar grammar) {
-    LLParseTable table = new LLParseTable(grammar);
-    Map<String, Set<String>> first = Operations.first(grammar), follow = Operations.follow(grammar);
-    List<Production> productions = grammar.getProductions();
-    for (int i = 0; i < productions.size(); i++) {
-      String alpha = productions.get(i).getRHS();
-      String A = productions.get(i).getLHS();
-      Set<?> firsts = Operations.first(first, alpha);
-      Iterator<?> it = firsts.iterator();
-      while (it.hasNext()) {
-        String a = (String) it.next();
-        if (!a.equals("")) table.addEntry(A, a, alpha);
-      }
-      if (!firsts.contains("")) continue;
-      Set<?> follows = follow.get(A);
-      it = follows.iterator();
-      while (it.hasNext()) table.addEntry(A, (String) it.next(), alpha);
+    /**
+     * Can't instantiate this bad boy sparky.
+     */
+    private LLParseTableGenerator() {
     }
-    return table;
-  }
+
+    /**
+     * Generates a parse table for a particular grammar.
+     *
+     * @param grammar
+     *            the grammar for which a complete parse table should be
+     *            generated
+     */
+    public static LLParseTable generate(Grammar grammar) {
+        LLParseTable table = new LLParseTable(grammar);
+        Map<String, Set<String>> first = Operations.first(grammar),
+                follow = Operations.follow(grammar);
+        List<Production> productions = grammar.getProductions();
+        for (int i = 0; i < productions.size(); i++) {
+            String alpha = productions.get(i).getRHS();
+            String A = productions.get(i).getLHS();
+            Set<?> firsts = Operations.first(first, alpha);
+            Iterator<?> it = firsts.iterator();
+            while (it.hasNext()) {
+                String a = (String) it.next();
+                if (!a.equals("")) {
+                    table.addEntry(A, a, alpha);
+                }
+            }
+            if (!firsts.contains("")) {
+                continue;
+            }
+            Set<?> follows = follow.get(A);
+            it = follows.iterator();
+            while (it.hasNext()) {
+                table.addEntry(A, (String) it.next(), alpha);
+            }
+        }
+        return table;
+    }
 }

@@ -34,107 +34,112 @@ import javax.swing.tree.TreeNode;
  * @author Thomas Finley
  */
 public class SelectTreeDrawer extends DefaultTreeDrawer {
-  /**
-   * Instantiates a new <CODE>SelectTreeDrawer</CODE> with the default colors.
-   *
-   * @param tree
-   *            the model to draw
-   */
-  public SelectTreeDrawer(TreeModel tree) {
-    this(tree, NODE_COLOR, SELECTED_NODE_COLOR);
-  }
-
-  /**
-   * Instantiates a new <CODE>SelectTreeDrawer</CODE> with some deselected and
-   * selected colors.
-   *
-   * @param tree
-   *            the model to draw
-   * @param deselected
-   *            the deselected color
-   * @param selected
-   *            the selected color
-   */
-  public SelectTreeDrawer(TreeModel tree, Color deselected, Color selected) {
-    super(tree);
-    deselectedColor = deselected;
-    selectedColor = selected;
-  }
-
-  /**
-   * Determines if a node is selected.
-   *
-   * @param node
-   *            the node to check for selectedness
-   * @return <CODE>true</CODE> if the node is selected, <CODE>false</CODE>
-   *         otehrwise
-   */
-  public boolean isSelected(TreeNode node) {
-    return selectedNodes.containsKey(node);
-  }
-
-  /**
-   * Sets the selectedness of a node.
-   *
-   * @param node
-   *            the node to select or deselect
-   * @param select
-   *            if true, then select the node, otherwise deselect
-   */
-  public void setSelected(TreeNode node, boolean select) {
-    if (select) selectedNodes.put(node, null);
-    else selectedNodes.remove(node);
-  }
-
-  /**
-   * Returns an array containing the list of all selected nodes.
-   *
-   * @return an array containing the list of all selected nodes
-   */
-  public List<TreeNode> getSelected() {
-    Set<TreeNode> s = new HashSet<TreeNode>(selectedNodes.keySet());
-    Iterator<TreeNode> it = s.iterator();
-    while (it.hasNext()) {
-      TreeNode n = it.next();
-      if (n.getParent() == null && n != getModel().getRoot()) selectedNodes.remove(n);
+    /**
+     * Instantiates a new <CODE>SelectTreeDrawer</CODE> with the default colors.
+     *
+     * @param tree
+     *            the model to draw
+     */
+    public SelectTreeDrawer(TreeModel tree) {
+        this(tree, NODE_COLOR, SELECTED_NODE_COLOR);
     }
-    return Lists.newArrayList(selectedNodes.keySet());
-  }
 
-  /**
-   * Sets all nodes as deselected.
-   */
-  public void clearSelected() {
-    selectedNodes.clear();
-  }
+    /**
+     * Instantiates a new <CODE>SelectTreeDrawer</CODE> with some deselected and
+     * selected colors.
+     *
+     * @param tree
+     *            the model to draw
+     * @param deselected
+     *            the deselected color
+     * @param selected
+     *            the selected color
+     */
+    public SelectTreeDrawer(TreeModel tree, Color deselected, Color selected) {
+        super(tree);
+        deselectedColor = deselected;
+        selectedColor = selected;
+    }
 
-  /**
-   * This method returns the color for a particular node.
-   *
-   * @param node
-   *            the node to color
-   * @return the color for this node, which will be either the selected color
-   *         if the node is selected, otherwise the deselected color
-   */
-  @Override
-  protected Color getNodeColor(TreeNode node) {
-    return isSelected(node) ? selectedColor : deselectedColor;
-    // Color color = super.getNodeColor(node);
-    // return isSelected(node) ? color.darker() : color;
-  }
+    /**
+     * Determines if a node is selected.
+     *
+     * @param node
+     *            the node to check for selectedness
+     * @return <CODE>true</CODE> if the node is selected, <CODE>false</CODE>
+     *         otehrwise
+     */
+    public boolean isSelected(TreeNode node) {
+        return selectedNodes.containsKey(node);
+    }
 
-  /** The selected nodes, with keys as nodes. */
-  protected WeakHashMap<TreeNode, ?> selectedNodes = new WeakHashMap<TreeNode, Object>();
+    /**
+     * Sets the selectedness of a node.
+     *
+     * @param node
+     *            the node to select or deselect
+     * @param select
+     *            if true, then select the node, otherwise deselect
+     */
+    public void setSelected(TreeNode node, boolean select) {
+        if (select) {
+            selectedNodes.put(node, null);
+        } else {
+            selectedNodes.remove(node);
+        }
+    }
 
-  /** The deselected node color. */
-  protected Color deselectedColor = NODE_COLOR;
+    /**
+     * Returns an array containing the list of all selected nodes.
+     *
+     * @return an array containing the list of all selected nodes
+     */
+    public List<TreeNode> getSelected() {
+        Set<TreeNode> s = new HashSet<>(selectedNodes.keySet());
+        Iterator<TreeNode> it = s.iterator();
+        while (it.hasNext()) {
+            TreeNode n = it.next();
+            if (n.getParent() == null && n != getModel().getRoot()) {
+                selectedNodes.remove(n);
+            }
+        }
+        return Lists.newArrayList(selectedNodes.keySet());
+    }
 
-  /** The selected node color. */
-  protected Color selectedColor = SELECTED_NODE_COLOR;
+    /**
+     * Sets all nodes as deselected.
+     */
+    public void clearSelected() {
+        selectedNodes.clear();
+    }
 
-  /** The default deselected node color. */
-  public static final Color NODE_COLOR = Color.yellow;
+    /**
+     * This method returns the color for a particular node.
+     *
+     * @param node
+     *            the node to color
+     * @return the color for this node, which will be either the selected color
+     *         if the node is selected, otherwise the deselected color
+     */
+    @Override
+    protected Color getNodeColor(TreeNode node) {
+        return isSelected(node) ? selectedColor : deselectedColor;
+        // Color color = super.getNodeColor(node);
+        // return isSelected(node) ? color.darker() : color;
+    }
 
-  /** The default selected node color. */
-  public static final Color SELECTED_NODE_COLOR = NODE_COLOR.darker();
+    /** The selected nodes, with keys as nodes. */
+    protected WeakHashMap<TreeNode, ?> selectedNodes = new WeakHashMap<>();
+
+    /** The deselected node color. */
+    protected Color deselectedColor = NODE_COLOR;
+
+    /** The selected node color. */
+    protected Color selectedColor = SELECTED_NODE_COLOR;
+
+    /** The default deselected node color. */
+    public static final Color NODE_COLOR = Color.yellow;
+
+    /** The default selected node color. */
+    public static final Color SELECTED_NODE_COLOR = NODE_COLOR.darker();
 }

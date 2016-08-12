@@ -19,7 +19,6 @@ package edu.duke.cs.jflap.gui.deterministic;
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.automata.event.AutomataStateEvent;
 import edu.duke.cs.jflap.automata.event.AutomataStateListener;
 import edu.duke.cs.jflap.automata.fsa.FSATransition;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
@@ -76,24 +75,24 @@ public class ConversionController {
     }
 
     private void initializeGraph() {
-        Map<State, Set<State>> stateToSet = new HashMap<State, Set<State>>(); // Different...
+        Map<State, Set<State>> stateToSet = new HashMap<>(); // Different...
         List<State> s = answer.getStates();
         List<Transition> t = answer.getTransitions();
         for (int i = 0; i < s.size(); i++) {
-            Set<State> fromNfa = new HashSet<State>(
-                    getStatesForString(s.get(i).getLabel(), nfa));
+            Set<State> fromNfa = new HashSet<>(getStatesForString(s.get(i).getLabel(), nfa));
             stateToSet.put(s.get(i), fromNfa);
             // setToState.put(s[i], fromNfa);
             graph.addVertex(fromNfa, s.get(i).getPoint());
         }
         for (int i = 0; i < t.size(); i++) {
-            graph.addEdge(stateToSet.get(t.get(i).getFromState()), stateToSet.get(t.get(i).getToState()));
+            graph.addEdge(stateToSet.get(t.get(i).getFromState()),
+                    stateToSet.get(t.get(i).getToState()));
         }
     }
 
     public void performFirstLayout() {
         view.validate();
-        Set<Set<State>> isonodes = new HashSet<Set<State>>();
+        Set<Set<State>> isonodes = new HashSet<>();
         Set<State> initialSet = stateToSet.get(dfa.getInitialState());
         isonodes.add(initialSet);
         graph.addVertex(initialSet, new Point(0, 0));
@@ -109,9 +108,10 @@ public class ConversionController {
 
     private List<State> getStatesForString(String label, Automaton automaton) {
         StringTokenizer tokenizer = new StringTokenizer(label, " \t\n\r\f,q");
-        ArrayList<State> states = new ArrayList<State>();
-        while (tokenizer.hasMoreTokens())
+        ArrayList<State> states = new ArrayList<>();
+        while (tokenizer.hasMoreTokens()) {
             states.add(automaton.getStateWithID(Integer.parseInt(tokenizer.nextToken())));
+        }
         states.remove(null);
         return states;
     }
@@ -125,8 +125,7 @@ public class ConversionController {
      *             if the state registered conflicts with any existing
      */
     private void registerState(State state) {
-        Set<State> set = new HashSet<State>(
-                getStatesForString(state.getLabel(), nfa));
+        Set<State> set = new HashSet<>(getStatesForString(state.getLabel(), nfa));
         State inMap = setToState.get(set);
         EDebug.print(set);
         EDebug.print(inMap);
@@ -134,11 +133,13 @@ public class ConversionController {
 
         // EDebug.print(setToState.size());
         // EDebug.print(state.getLabel());
-        for (Object o : setToState.keySet())
+        for (Object o : setToState.keySet()) {
             EDebug.print(o.toString());
+        }
 
-        if (inMap != null && inMap != state)
+        if (inMap != null && inMap != state) {
             throw new IllegalArgumentException("This set is in the DFA!");
+        }
         setToState.put(set, state);
         stateToSet.put(state, set);
     }
@@ -154,7 +155,7 @@ public class ConversionController {
         List<?> createdStates = converter.expandState(state, nfa, dfa);
         // We want to lay out those states.
         // First, get the sets of states the new states represent.
-        Set<Set<State>> iso = new HashSet<Set<State>>(setToState.keySet());
+        Set<Set<State>> iso = new HashSet<>(setToState.keySet());
         Iterator<?> it = createdStates.iterator();
         while (it.hasNext()) {
             State dfaState = (State) it.next();
@@ -187,8 +188,9 @@ public class ConversionController {
     public void expandState(State start, Point point, State end) {
         // Ask the user for a terminal.
         String terminal = JOptionPane.showInputDialog(view, "Expand on what terminal?");
-        if (terminal == null)
+        if (terminal == null) {
             return;
+        }
 
         if (terminal.equals("")) {
             JOptionPane.showMessageDialog(view, "One can't have lambda in the DFA!",
@@ -210,15 +212,18 @@ public class ConversionController {
 
         // Ask the user for the states it should expand to.
         String userEnd = "";
-        if (end == null)
+        if (end == null) {
             userEnd = JOptionPane.showInputDialog(view,
                     "Which group of NFA states will that go to on " + terminal + "?");
-        if (userEnd == null)
+        }
+        if (userEnd == null) {
             return;
+        }
         List<State> userEndStates = endStates;
         try {
-            if (end == null)
+            if (end == null) {
                 userEndStates = getStatesForString(userEnd, nfa);
+            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(view, "The list of states is not formatted correctly!",
                     "Format error", JOptionPane.ERROR_MESSAGE);
@@ -232,8 +237,9 @@ public class ConversionController {
         }
 
         State end2 = converter.getStateForStates(userEndStates, dfa, nfa);
-        if (end == null)
+        if (end == null) {
             end = end2;
+        }
         if (end != end2) {
             // Group mismatch.
             JOptionPane.showMessageDialog(view,
@@ -259,24 +265,23 @@ public class ConversionController {
      * This method will expand all states in an automaton.
      */
     public void complete() {
-        final LinkedList<State> stateQueue = new LinkedList<State>();
+        final LinkedList<State> stateQueue = new LinkedList<>();
         // Add all states to the state queue.
         stateQueue.addAll(dfa.getStates());
         // When a state is added to the DFA, make sure we know about it.
-        AutomataStateListener listener = new AutomataStateListener() {
-            @Override
-            public void automataStateChange(AutomataStateEvent e) {
-                if (!e.isAdd())
-                    return;
-                // When the DFA gets a new state, add the state to
-                // the end of the queue.
-                stateQueue.addLast(e.getState());
+        AutomataStateListener listener = e -> {
+            if (!e.isAdd()) {
+                return;
             }
+            // When the DFA gets a new state, add the state to
+            // the end of the queue.
+            stateQueue.addLast(e.getState());
         };
         dfa.addStateListener(listener);
 
-        while (stateQueue.size() != 0)
+        while (stateQueue.size() != 0) {
             expandState(stateQueue.removeFirst());
+        }
 
         // Remove the state listener.
         dfa.removeStateListener(listener);
@@ -334,8 +339,8 @@ public class ConversionController {
      * Maps a set of NFA states to a DFA state. This structure is maintained in
      * part through the <CODE>registerState</CODE> method.
      */
-    private Map<Set<State>, State> setToState = new HashMap<Set<State>, State>();
+    private Map<Set<State>, State> setToState = new HashMap<>();
 
     /** Maps a state to a set of NFA states. */
-    private Map<State, Set<State>> stateToSet = new HashMap<State, Set<State>>();
+    private Map<State, Set<State>> stateToSet = new HashMap<>();
 }

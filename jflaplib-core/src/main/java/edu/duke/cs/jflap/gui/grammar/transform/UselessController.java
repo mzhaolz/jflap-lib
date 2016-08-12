@@ -18,8 +18,6 @@ package edu.duke.cs.jflap.gui.grammar.transform;
 
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.automata.event.AutomataTransitionEvent;
-import edu.duke.cs.jflap.automata.event.AutomataTransitionListener;
 import edu.duke.cs.jflap.automata.vdg.VariableDependencyGraph;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
@@ -59,8 +57,9 @@ public class UselessController {
      * This is called to move the lambda controller to the next step.
      */
     private void nextStep() {
-        if (step < FINISHED)
+        if (step < FINISHED) {
             step++;
+        }
         switch (step) {
             case DERIVE_TERMINALS: {
                 pane.mainLabel.setText("Select variables that derive terminals.");
@@ -88,33 +87,36 @@ public class UselessController {
                 // Make the VDG.
                 UselessProductionRemover.initializeVariableDependencyGraph(vdg, grammar);
                 List<State> s = vdg.getStates();
-                for (State si : s)
-                    if (terminalVariables.contains(si.getName()))
+                for (State si : s) {
+                    if (terminalVariables.contains(si.getName())) {
                         vdg.addFinalState(si);
+                    }
+                }
                 // Cache the transitions we have to add.
                 List<Production> p = grammar.getProductions();
                 List<String> variables = Lists.newArrayList(terminalVariables);
-                for (int i = 0; i < variables.size(); i++)
+                for (int i = 0; i < variables.size(); i++) {
                     for (int j = 0; j < variables.size(); j++) {
                         String v1 = variables.get(i), v2 = variables.get(j);
-                        if (i != j && UselessProductionRemover.isDependentOn(v1, v2, grammar))
+                        if (i != j && UselessProductionRemover.isDependentOn(v1, v2, grammar)) {
                             vdgTransitions.add(UselessProductionRemover.getTransition(v1, v2, vdg));
+                        }
                     }
+                }
                 // Set up the listener so we know when new actions get
                 // added to the VDG.
-                vdg.addTransitionListener(new AutomataTransitionListener() {
-                    public void automataTransitionChange(AutomataTransitionEvent e) {
-                        if (!e.isAdd())
-                            return;
-                        if (vdgTransitions.contains(e.getTransition())) {
-                            vdgTransitions.remove(e.getTransition());
-                            updateDisplay();
-                            return;
-                        }
-                        JOptionPane.showMessageDialog(pane, "Transition is not part of VDG.",
-                                "Bad Transition", JOptionPane.ERROR_MESSAGE);
-                        vdg.removeTransition(e.getTransition());
+                vdg.addTransitionListener(e -> {
+                    if (!e.isAdd()) {
+                        return;
                     }
+                    if (vdgTransitions.contains(e.getTransition())) {
+                        vdgTransitions.remove(e.getTransition());
+                        updateDisplay();
+                        return;
+                    }
+                    JOptionPane.showMessageDialog(pane, "Transition is not part of VDG.",
+                            "Bad Transition", JOptionPane.ERROR_MESSAGE);
+                    vdg.removeTransition(e.getTransition());
                 });
                 // Display only those productions with terminal deriving
                 // variables.
@@ -134,8 +136,9 @@ public class UselessController {
                 List<Production> p2 = g.getProductions();
                 p2 = Lists.newArrayList(new HashSet<>(p2));
                 for (int i = 0; i < p.size(); i++) {
-                    if (p2.contains(p.get(i)))
+                    if (p2.contains(p.get(i))) {
                         continue;
+                    }
                     uselessProductions.add(p.get(i));
                 }
                 // ////System.out.println("USEFUL PRODUCTIONS:
@@ -204,8 +207,9 @@ public class UselessController {
      * Does all steps.
      */
     public void doAll() {
-        while (step != FINISHED)
+        while (step != FINISHED) {
             doStep();
+        }
     }
 
     public Grammar getGrammar() {
@@ -221,15 +225,17 @@ public class UselessController {
             case VARAIBLE_GRAPH: {
                 int toAdd = vdgTransitions.size();
                 pane.detailLabel.setText(toAdd + " more transition(s) needed.");
-                if (toAdd == 0)
+                if (toAdd == 0) {
                     nextStep();
+                }
                 break;
             }
             case PRODUCTION_MODIFY: {
                 int toRemove = uselessProductions.size();
                 pane.detailLabel.setText(toRemove + " more remove(s) needed.");
-                if (toRemove == 0)
+                if (toRemove == 0) {
                     nextStep();
+                }
                 break;
             }
         }
@@ -263,8 +269,9 @@ public class UselessController {
                             + " more variable(s) needed.");
                     pane.terminalLabel.setText(
                             "Variables that predicate terminals: " + derivedTerminalVariables);
-                    if (derivedTerminalVariables.size() == terminalVariables.size())
+                    if (derivedTerminalVariables.size() == terminalVariables.size()) {
                         nextStep();
+                    }
                     return;
                 }
                 pane.detailLabel.setText(var + " does not predicate terminals!  "
@@ -302,20 +309,20 @@ public class UselessController {
     Set<String> terminalVariables;
 
     /** The set of variables discovered by the user that derive terminals. */
-    Set<String> derivedTerminalVariables = new TreeSet<String>();
+    Set<String> derivedTerminalVariables = new TreeSet<>();
 
     /** The variable dependency graph. */
     VariableDependencyGraph vdg = new VariableDependencyGraph();
 
     /** The set of transitions that should be added to the VDG. */
-    Set<Transition> vdgTransitions = new HashSet<Transition>();
+    Set<Transition> vdgTransitions = new HashSet<>();
 
     /**
      * The set of productions that should comprise the grammar, those that
      * currently do, and those that should be removed.
      */
-    Set<Production> currentProductions = new HashSet<Production>(),
-            uselessProductions = new HashSet<Production>();
+    Set<Production> currentProductions = new HashSet<>(),
+            uselessProductions = new HashSet<>();
 
     /** The current step. */
     int step = 0;

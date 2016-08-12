@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class OpenAction extends RestrictedAction {
     public OpenAction() {
         super("Open...", null);
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, MAIN_MENU_MASK));
-        this.fileChooser = Universe.CHOOSER;
+        fileChooser = Universe.CHOOSER;
         // this.fileChooser = new JFileChooser
         // (System.getProperties().getProperty("user.dir"));
     }
@@ -86,16 +87,16 @@ public class OpenAction extends RestrictedAction {
         fileChooser.setCurrentDirectory(tempFile);
         fileChooser.rescanCurrentDirectory();
         fileChooser.setMultiSelectionEnabled(true);
-        Codec[] codecs = null;
+        List<Decoder> codecs = null;
         codecs = makeFilters();
 
         // Open the dialog.
         int result = fileChooser.showOpenDialog(source);
-        if (result != JFileChooser.APPROVE_OPTION)
+        if (result != JFileChooser.APPROVE_OPTION) {
             return;
+        }
         File[] files = fileChooser.getSelectedFiles();
-        for (int k = 0; k < files.length; k++) {
-            File file = files[k];
+        for (File file : files) {
             if (!openOrRead) {
                 // Is this file already open?
                 if (Universe.frameForFile(file) != null) {
@@ -120,30 +121,31 @@ public class OpenAction extends RestrictedAction {
 
     public static java.io.Serializable readFileAndCodecs(File file) {
         OpenAction.setOpenOrRead(true);
-        Codec[] codecs = null;
+        List<Decoder> codecs = null;
         codecs = makeFilters();
         openFile(file, codecs);
         OpenAction.setOpenOrRead(false);
         return OpenAction.getLastObjectOpened();
     }
 
-    public static List<Codec> makeFilters() {
+    public static List<Decoder> makeFilters() {
         // Set up the file filters.
         Universe.CHOOSER.resetChoosableFileFilters();
-        List<?> decoders = Universe.CODEC_REGISTRY.getDecoders();
-        Iterator<?> it = decoders.iterator();
-        while (it.hasNext())
+        List<Decoder> decoders = Universe.CODEC_REGISTRY.getDecoders();
+        Iterator<Decoder> it = decoders.iterator();
+        while (it.hasNext()) {
             Universe.CHOOSER.addChoosableFileFilter((FileFilter) it.next());
+        }
         Universe.CHOOSER.setFileFilter(Universe.CHOOSER.getAcceptAllFileFilter());
 
         // Get the decoders.
-        Codec[] codecs = null;
+        List<Decoder> codecs = null;
         FileFilter filter = Universe.CHOOSER.getFileFilter();
         if (filter == Universe.CHOOSER.getAcceptAllFileFilter()) {
-            codecs = decoders
+            codecs = decoders;
         } else {
-            codecs = new Codec[1];
-            codecs[0] = (Codec) filter;
+            codecs = new ArrayList<>();
+            codecs.add((Codec) filter);
         }
 
         return codecs;
@@ -161,9 +163,9 @@ public class OpenAction extends RestrictedAction {
      */
     public static void openFile(File file, List<Decoder> codecs) {
         ParseException p = null;
-        for (int i = 0; i < codecs.length; i++) {
+        for (int i = 0; i < codecs.size(); i++) {
             try {
-                Serializable object = codecs[i].decode(file, null);
+                Serializable object = codecs.get(i).decode(file, null);
                 if (openOrRead && !(object instanceof TuringMachine)) {
                     JOptionPane.showMessageDialog(null,
                             "Only Turing Machine files can be added as building blocks.",
@@ -175,18 +177,20 @@ public class OpenAction extends RestrictedAction {
                 // Set the file on the thing.
                 if (!openOrRead) {
                     EnvironmentFrame ef = FrameFactory.createFrame(object);
-                    if (ef == null)
+                    if (ef == null) {
                         return;
+                    }
                     ef.getEnvironment().setFile(file);
-                    ef.getEnvironment().setEncoder(codecs[i].correspondingEncoder());
+                    ef.getEnvironment().setEncoder(codecs.get(i).correspondingEncoder());
                 }
                 return;
             } catch (ParseException e) {
                 p = e;
             }
         }
-        if (codecs.length != 1)
+        if (codecs.size() != 1) {
             p = new ParseException("No format could read the file!");
+        }
         throw p;
     }
 

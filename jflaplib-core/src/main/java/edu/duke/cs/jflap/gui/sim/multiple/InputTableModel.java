@@ -382,7 +382,7 @@ public class InputTableModel extends GrowableTableModel<String> {
      * The map of number of inputs (stored as integers) to input table models.
      */
     protected final static Map<Integer, InputTableModel> INPUTS_TO_MODELS = new HashMap<>();
-    
+
     /** The static table model listener for caching inputs. */
     protected final static TableModelListener LISTENER = event -> {
         InputTableModel model = (InputTableModel) event.getSource();
@@ -395,7 +395,6 @@ public class InputTableModel extends GrowableTableModel<String> {
     };
 
     public boolean isMultiple = false;
-
 
     /**
      * The map of row to the associated configuration. If this row does not have

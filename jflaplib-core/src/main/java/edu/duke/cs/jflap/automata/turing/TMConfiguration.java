@@ -30,147 +30,163 @@ import java.util.List;
  * @author Ryan Cavalcante
  */
 public class TMConfiguration extends Configuration implements Cloneable {
-  /**
-   * Instantiates a new TMConfiguration.
-   *
-   * @param state
-   *            the state the automaton is currently in
-   * @param parent
-   *            the immediate ancestor for this configuration
-   * @param tapes
-   *            the read/write tapes
-   */
-  public TMConfiguration(
-      State state, TMConfiguration parent, List<Tape> tapes, List<AcceptanceFilter> myFilters2) {
-    super(state, parent);
-    this.myTapes = tapes;
-    myFilters = myFilters2;
-  }
-
-  /**
-   * Returns the tapes.
-   *
-   * @return the tapes
-   */
-  public List<Tape> getTapes() {
-    return myTapes;
-  }
-
-  /**
-   * Returns a string representation of this object. This is the same as the
-   * string representation for a regular configuration object, with the
-   * additional fields tacked on.
-   *
-   * @see edu.duke.cs.jflap.automata.Configuration#toString
-   * @return a string representation of this object.
-   */
-  @Override
-  public String toString() {
-    StringBuffer sb = new StringBuffer(super.toString());
-    for (int i = 0; i < myTapes.size(); i++) {
-      sb.append(" TAPE ");
-      sb.append(i);
-      sb.append(": ");
-      sb.append(myTapes.get(i).toString());
+    /**
+     * Instantiates a new TMConfiguration.
+     *
+     * @param state
+     *            the state the automaton is currently in
+     * @param parent
+     *            the immediate ancestor for this configuration
+     * @param tapes
+     *            the read/write tapes
+     */
+    public TMConfiguration(State state,
+            TMConfiguration parent,
+            List<Tape> tapes,
+            List<AcceptanceFilter> myFilters2) {
+        super(state, parent);
+        myTapes = tapes;
+        myFilters = myFilters2;
     }
-    return sb.toString();
-  }
 
-  /**
-   * Returns <CODE>true</CODE> if this configuration is an accepting
-   * configuration, based on the chosen criteria. Currently, we look at accept
-   * by halting and accept by final state. //MERLIN MERLIN MERLIN MERLIN
-   * MERLIN//
-   *
-   * @return <CODE>true</CODE> if this configuration is accepting,
-   *         <CODE>false</CODE> otherwise
-   */
-  @Override
-  public boolean isAccept() {
-
-    for (int i = 0; i < myFilters.size(); i++) {
-      if (myFilters.get(i).accept(this)) return true;
+    /**
+     * Returns the tapes.
+     *
+     * @return the tapes
+     */
+    public List<Tape> getTapes() {
+        return myTapes;
     }
-    return false;
-  }
 
-  /*
-   * private boolean isFinalStateInAutomaton(Automaton auto, State state){
-   * State[] finals = auto.getFinalStates(); for(int m = 0; m < finals.length;
-   * m++){ if(finals[m]==state){ return true; } } return false; }
-   */
-
-  /**
-   * Compares two TM configurations for equality. Two configurations are equal
-   * if the tapes are equal, and if they arose from the same configuration and
-   * are at the same state.
-   *
-   * @param configuration
-   *            the configuration to test for equality
-   * @return <CODE>true</CODE> if the configurations are equal,
-   *         <CODE>false</CODE> if they are not
-   */
-  @Override
-  public boolean equals(Object configuration) {
-    if (configuration == this) return true;
-    try {
-      if (!super.equals(configuration)) return false;
-      List<Tape> tapes = ((TMConfiguration) configuration).myTapes;
-      if (tapes.size() != myTapes.size()) return false;
-      for (int i = 0; i < tapes.size(); i++) if (!tapes.get(i).equals(myTapes.get(i))) return false;
-      return true;
-    } catch (ClassCastException e) {
-      return false;
+    /**
+     * Returns a string representation of this object. This is the same as the
+     * string representation for a regular configuration object, with the
+     * additional fields tacked on.
+     *
+     * @see edu.duke.cs.jflap.automata.Configuration#toString
+     * @return a string representation of this object.
+     */
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer(super.toString());
+        for (int i = 0; i < myTapes.size(); i++) {
+            sb.append(" TAPE ");
+            sb.append(i);
+            sb.append(": ");
+            sb.append(myTapes.get(i).toString());
+        }
+        return sb.toString();
     }
-  }
 
-  /**
-   * Returns a hash code for this configuration.
-   *
-   * @return a hash code for this configuration
-   */
-  @Override
-  public int hashCode() {
-    int code = super.hashCode();
-    for (int i = 0; i < myTapes.size(); i++) code = code ^ myTapes.get(i).hashCode();
-    return code;
-  }
+    /**
+     * Returns <CODE>true</CODE> if this configuration is an accepting
+     * configuration, based on the chosen criteria. Currently, we look at accept
+     * by halting and accept by final state. //MERLIN MERLIN MERLIN MERLIN
+     * MERLIN//
+     *
+     * @return <CODE>true</CODE> if this configuration is accepting,
+     *         <CODE>false</CODE> otherwise
+     */
+    @Override
+    public boolean isAccept() {
 
-  /** The tapes. */
-  protected List<Tape> myTapes;
+        for (int i = 0; i < myFilters.size(); i++) {
+            if (myFilters.get(i).accept(this)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-  private List<AcceptanceFilter> myFilters; // constructed outside and passed in
-  // in the constructor. //Constructed
-  // once and passed to multiple people.
+    /*
+     * private boolean isFinalStateInAutomaton(Automaton auto, State state){
+     * State[] finals = auto.getFinalStates(); for(int m = 0; m < finals.length;
+     * m++){ if(finals[m]==state){ return true; } } return false; }
+     */
 
-  // MERLIN MERLIN MERLIN MERLIN MERLIN//
-  private boolean isHalted = false; // this is a special flag which is checked
-  // by the accept by halt. The first time
-  // that step-configuration method of
-  // TMSimulator cannot go forth, it will
-  // set this flag, and return the thing
-  // that it was handed. The second time, it
-  // will see this flag, and return an empty
-  // list to indicate failure, if the
-  // configuration was not previously
-  // accepted by the filter (that is, if the
-  // filter was not activated)
+    /**
+     * Compares two TM configurations for equality. Two configurations are equal
+     * if the tapes are equal, and if they arose from the same configuration and
+     * are at the same state.
+     *
+     * @param configuration
+     *            the configuration to test for equality
+     * @return <CODE>true</CODE> if the configurations are equal,
+     *         <CODE>false</CODE> if they are not
+     */
+    @Override
+    public boolean equals(Object configuration) {
+        if (configuration == this) {
+            return true;
+        }
+        try {
+            if (!super.equals(configuration)) {
+                return false;
+            }
+            List<Tape> tapes = ((TMConfiguration) configuration).myTapes;
+            if (tapes.size() != myTapes.size()) {
+                return false;
+            }
+            for (int i = 0; i < tapes.size(); i++) {
+                if (!tapes.get(i).equals(myTapes.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
 
-  public boolean isHalted() {
-    return isHalted;
-  }
+    /**
+     * Returns a hash code for this configuration.
+     *
+     * @return a hash code for this configuration
+     */
+    @Override
+    public int hashCode() {
+        int code = super.hashCode();
+        for (int i = 0; i < myTapes.size(); i++) {
+            code = code ^ myTapes.get(i).hashCode();
+        }
+        return code;
+    }
 
-  public void setHalted(boolean b) {
-    isHalted = b;
-  }
+    /** The tapes. */
+    protected List<Tape> myTapes;
 
-  @Override
-  public Object clone() {
-    TMConfiguration newConfig =
-        new TMConfiguration(
-            this.getCurrentState(), (TMConfiguration) this.getParent(), myTapes, myFilters);
-    newConfig.setFocused(this.getFocused());
-    newConfig.setHalted(this.isHalted());
-    return newConfig;
-  }
+    private List<AcceptanceFilter> myFilters; // constructed outside and passed
+                                              // in
+    // in the constructor. //Constructed
+    // once and passed to multiple people.
+
+    // MERLIN MERLIN MERLIN MERLIN MERLIN//
+    private boolean isHalted = false; // this is a special flag which is checked
+    // by the accept by halt. The first time
+    // that step-configuration method of
+    // TMSimulator cannot go forth, it will
+    // set this flag, and return the thing
+    // that it was handed. The second time, it
+    // will see this flag, and return an empty
+    // list to indicate failure, if the
+    // configuration was not previously
+    // accepted by the filter (that is, if the
+    // filter was not activated)
+
+    public boolean isHalted() {
+        return isHalted;
+    }
+
+    public void setHalted(boolean b) {
+        isHalted = b;
+    }
+
+    @Override
+    public Object clone() {
+        TMConfiguration newConfig = new TMConfiguration(getCurrentState(),
+                (TMConfiguration) getParent(), myTapes, myFilters);
+        newConfig.setFocused(getFocused());
+        newConfig.setHalted(isHalted());
+        return newConfig;
+    }
 }

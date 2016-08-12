@@ -22,21 +22,24 @@ import java.awt.event.ActionEvent;
 
 public class OpenURLAction extends RestrictedAction {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  public OpenURLAction() {
-    super("Open URL", null);
-  }
+    public OpenURLAction() {
+        super("Open URL", null);
+    }
 
-  @Override
-  public boolean isEnabled() {
-    if (Universe.CHOOSER == null) return true;
-    return false;
-  }
+    @Override
+    public boolean isEnabled() {
+        if (Universe.CHOOSER == null) {
+            return true;
+        }
+        return false;
+    }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    }
 }
