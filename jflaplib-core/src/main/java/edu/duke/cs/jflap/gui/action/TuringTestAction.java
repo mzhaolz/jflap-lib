@@ -29,23 +29,23 @@ import java.awt.event.KeyEvent;
  */
 public class TuringTestAction extends TestAction {
 
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiates a new <CODE>Turing Test Action</CODE>.
-   */
-  public TuringTestAction() {
-    // super("Test Turing Machines", null);
-    super("Test Turing Machines", KeyEvent.VK_T);
-  }
+    /**
+     * Instantiates a new <CODE>Turing Test Action</CODE>.
+     */
+    public TuringTestAction() {
+        // super("Test Turing Machines", null);
+        super("Test Turing Machines", KeyEvent.VK_T);
+    }
 
-  protected void displayMultipleRunPane(Environment env) {
-    MultipleOutputSimulateAction act =
-        new MultipleOutputSimulateAction((Automaton) myObjects.get(0), env);
-    act.performAction(env);
-    env.getTag(env.getActive());
-  }
+    protected void displayMultipleRunPane(Environment env) {
+        MultipleOutputSimulateAction act = new MultipleOutputSimulateAction(
+                (Automaton) myObjects.get(0), env);
+        act.performAction(env);
+        env.getTag(env.getActive());
+    }
 }

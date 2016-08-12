@@ -34,189 +34,185 @@ import javax.swing.tree.TreeNode;
  * @author Thomas Finley
  */
 class ControlPanel extends JToolBar {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1502736623241702582L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1502736623241702582L;
 
-  /**
-   * Instantiates a new <CODE>ControlPanel</CODE>.
-   *
-   * @param treeDrawer
-   *            the tree drawer to get selected nodes from
-   * @param controller
-   *            the minimize controller
-   */
-  public ControlPanel(SelectTreeDrawer treeDrawer, MinimizeController controller) {
-    super();
-    this.treeDrawer = treeDrawer;
-    this.controller = controller;
-    initView();
-  }
+    /**
+     * Instantiates a new <CODE>ControlPanel</CODE>.
+     *
+     * @param treeDrawer
+     *            the tree drawer to get selected nodes from
+     * @param controller
+     *            the minimize controller
+     */
+    public ControlPanel(SelectTreeDrawer treeDrawer, MinimizeController controller) {
+        super();
+        this.treeDrawer = treeDrawer;
+        this.controller = controller;
+        initView();
+    }
 
-  /**
-   * Returns the selected node in the tree drawer.
-   *
-   * @return the selected node, or <CODE>null</CODE> if no or multiple nodes
-   *         are selected
-   */
-  private MinimizeTreeNode getNode() {
-    List<TreeNode> selected = treeDrawer.getSelected();
-    if (selected.size() != 1) return null;
-    return (MinimizeTreeNode) selected.get(0);
-  }
+    /**
+     * Returns the selected node in the tree drawer.
+     *
+     * @return the selected node, or <CODE>null</CODE> if no or multiple nodes
+     *         are selected
+     */
+    private MinimizeTreeNode getNode() {
+        List<TreeNode> selected = treeDrawer.getSelected();
+        if (selected.size() != 1) {
+            return null;
+        }
+        return (MinimizeTreeNode) selected.get(0);
+    }
 
-  /**
-   * Initializes the components of the view.
-   */
-  private void initView() {
-    setTerminalAction =
-        new TooltipAction("Set Terminal", "Begins the split of a group on a terminal.") {
-          /**
-           *
-           */
-          private static final long serialVersionUID = -3445189389952982103L;
-
-          @Override
-          public void actionPerformed(ActionEvent event) {
-            MinimizeTreeNode node = getNode();
-            if (node == null) {
-              JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
-              return;
-            }
-            controller.splitOnTerminal(node);
-            controller.setEnabledness();
-          }
-        };
-    add(setTerminalAction);
-
-    autoPartitionAction =
-        new TooltipAction("Auto Partition", "Does the split of a group for you.") {
-          /**
-           *
-           */
-          private static final long serialVersionUID = 2396044313276565099L;
-
-          @Override
-          public void actionPerformed(ActionEvent event) {
-            MinimizeTreeNode node = getNode();
-            if (node == null) {
-              JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
-              return;
-            }
-            controller.splitWithoutInput(node);
-            controller.setEnabledness();
-          }
-        };
-    add(autoPartitionAction);
-
-    completeSubtreeAction =
-        new TooltipAction(
-            "Complete Subtree", "Does the split of this group and any subgroups for you.") {
-          /**
-           *
-           */
-          private static final long serialVersionUID = -8005109949177890385L;
-
-          @Override
-          public void actionPerformed(ActionEvent event) {
-            MinimizeTreeNode node = getNode();
-            if (node == null) {
-              JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
-              return;
-            }
-            controller.splitSubtree(node);
-            controller.setEnabledness();
-          }
-        };
-    add(completeSubtreeAction);
-
-    checkNodeAction =
-        new TooltipAction("Check Node", "Verifies that a split of a group is correct.") {
-          /**
-           *
-           */
-          private static final long serialVersionUID = 6094149826872361113L;
-
-          @Override
-          public void actionPerformed(ActionEvent event) {
-            controller.check();
-            controller.setEnabledness();
-          }
-        };
-    add(checkNodeAction);
-
-    addChildAction =
-        new TooltipAction("Add Child", "Adds a new partition a group being split.") {
-          /**
-           *
-           */
-          private static final long serialVersionUID = -1207792629025600376L;
-
-          @Override
-          public void actionPerformed(ActionEvent event) {
-            /*
-             * TreeNode[] selected = treeDrawer.getSelected(); for (int i=0;
-             * i<selected.length; i++)
-             * controller.addChild((MinimizeTreeNode)selected[i]);
+    /**
+     * Initializes the components of the view.
+     */
+    private void initView() {
+        setTerminalAction = new TooltipAction("Set Terminal",
+                "Begins the split of a group on a terminal.") {
+            /**
+             *
              */
-            controller.addChild();
-            controller.setEnabledness();
-          }
+            private static final long serialVersionUID = -3445189389952982103L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                MinimizeTreeNode node = getNode();
+                if (node == null) {
+                    JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
+                    return;
+                }
+                controller.splitOnTerminal(node);
+                controller.setEnabledness();
+            }
         };
-    add(addChildAction);
+        add(setTerminalAction);
 
-    removeAction =
-        new TooltipAction("Remove", "Removes a partition from a group being split.") {
-          /**
-           *
-           */
-          private static final long serialVersionUID = -2415907778321643162L;
+        autoPartitionAction = new TooltipAction("Auto Partition",
+                "Does the split of a group for you.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 2396044313276565099L;
 
-          @Override
-          public void actionPerformed(ActionEvent event) {
-            List<TreeNode> selected = treeDrawer.getSelected();
-            for (TreeNode seli : selected)
-              controller.removeNode((MinimizeTreeNode) seli);
-            controller.setEnabledness();
-          }
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                MinimizeTreeNode node = getNode();
+                if (node == null) {
+                    JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
+                    return;
+                }
+                controller.splitWithoutInput(node);
+                controller.setEnabledness();
+            }
         };
-    add(removeAction);
+        add(autoPartitionAction);
 
-    finishAction =
-        new TooltipAction("Finish", "If the tree is done, begins building the automaton.") {
-          /**
-           *
-           */
-          private static final long serialVersionUID = -732801539899143007L;
+        completeSubtreeAction = new TooltipAction("Complete Subtree",
+                "Does the split of this group and any subgroups for you.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = -8005109949177890385L;
 
-          @Override
-          public void actionPerformed(ActionEvent event) {
-            controller.finished();
-            controller.setEnabledness();
-          }
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                MinimizeTreeNode node = getNode();
+                if (node == null) {
+                    JOptionPane.showMessageDialog(ControlPanel.this, NODE_ERROR);
+                    return;
+                }
+                controller.splitSubtree(node);
+                controller.setEnabledness();
+            }
         };
-    add(finishAction);
-  }
+        add(completeSubtreeAction);
 
-  /** The tree drawer. */
-  private SelectTreeDrawer treeDrawer;
+        checkNodeAction = new TooltipAction("Check Node",
+                "Verifies that a split of a group is correct.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 6094149826872361113L;
 
-  /** The minimize controller to call methods on. */
-  private MinimizeController controller;
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                controller.check();
+                controller.setEnabledness();
+            }
+        };
+        add(checkNodeAction);
 
-  /**
-   * The message to display when there is more than one node or no nodes
-   * selected.
-   */
-  private static final String NODE_ERROR = "Exactly one node must be selected!";
+        addChildAction = new TooltipAction("Add Child",
+                "Adds a new partition a group being split.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = -1207792629025600376L;
 
-  TooltipAction
-      setTerminalAction,
-      autoPartitionAction,
-      completeSubtreeAction,
-      checkNodeAction,
-      addChildAction,
-      removeAction,
-      finishAction;
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                /*
+                 * TreeNode[] selected = treeDrawer.getSelected(); for (int i=0;
+                 * i<selected.length; i++)
+                 * controller.addChild((MinimizeTreeNode)selected[i]);
+                 */
+                controller.addChild();
+                controller.setEnabledness();
+            }
+        };
+        add(addChildAction);
+
+        removeAction = new TooltipAction("Remove",
+                "Removes a partition from a group being split.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = -2415907778321643162L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                List<TreeNode> selected = treeDrawer.getSelected();
+                for (TreeNode seli : selected) {
+                    controller.removeNode((MinimizeTreeNode) seli);
+                }
+                controller.setEnabledness();
+            }
+        };
+        add(removeAction);
+
+        finishAction = new TooltipAction("Finish",
+                "If the tree is done, begins building the automaton.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = -732801539899143007L;
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                controller.finished();
+                controller.setEnabledness();
+            }
+        };
+        add(finishAction);
+    }
+
+    /** The tree drawer. */
+    private SelectTreeDrawer treeDrawer;
+
+    /** The minimize controller to call methods on. */
+    private MinimizeController controller;
+
+    /**
+     * The message to display when there is more than one node or no nodes
+     * selected.
+     */
+    private static final String NODE_ERROR = "Exactly one node must be selected!";
+
+    TooltipAction setTerminalAction, autoPartitionAction, completeSubtreeAction, checkNodeAction,
+            addChildAction, removeAction, finishAction;
 }

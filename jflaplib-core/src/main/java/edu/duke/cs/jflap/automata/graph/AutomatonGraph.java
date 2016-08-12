@@ -35,28 +35,32 @@ import java.util.List;
  * @author Thomas Finley
  */
 public class AutomatonGraph extends Graph<State> {
-  /**
-   * Constructures a graph using an automaton.
-   *
-   * @param automaton
-   *            the automaton to build the graph from
-   */
-  public AutomatonGraph(Automaton automaton) {
-    super();
-    List<State> states = automaton.getStates();
-    List<Transition> transitions = automaton.getTransitions();
-    for (State state : states) addVertex(state, state.getPoint());
-    for (Transition trans : transitions) addEdge(trans.getFromState(), trans.getToState());
-  }
-
-  /**
-   * Moves the states of the underlying automaton to synchronize with the
-   * positions of the corresponding vertices in the graph.
-   */
-  public void moveAutomatonStates() {
-    for (State state : vertices()) {
-      Point2D point = pointForVertex(state);
-      state.setPoint(new Point((int) point.getX(), (int) point.getY()));
+    /**
+     * Constructures a graph using an automaton.
+     *
+     * @param automaton
+     *            the automaton to build the graph from
+     */
+    public AutomatonGraph(Automaton automaton) {
+        super();
+        List<State> states = automaton.getStates();
+        List<Transition> transitions = automaton.getTransitions();
+        for (State state : states) {
+            addVertex(state, state.getPoint());
+        }
+        for (Transition trans : transitions) {
+            addEdge(trans.getFromState(), trans.getToState());
+        }
     }
-  }
+
+    /**
+     * Moves the states of the underlying automaton to synchronize with the
+     * positions of the corresponding vertices in the graph.
+     */
+    public void moveAutomatonStates() {
+        for (State state : vertices()) {
+            Point2D point = pointForVertex(state);
+            state.setPoint(new Point((int) point.getX(), (int) point.getY()));
+        }
+    }
 }

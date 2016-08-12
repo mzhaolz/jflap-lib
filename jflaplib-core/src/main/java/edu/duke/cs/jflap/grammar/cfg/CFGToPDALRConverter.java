@@ -42,86 +42,87 @@ import java.util.List;
  * @author Ryan Cavalcante
  */
 public class CFGToPDALRConverter extends GrammarToAutomatonConverter {
-  /**
-   * Creates an instance of <CODE>CFGToPDALRConverter</CODE>.
-   */
-  public CFGToPDALRConverter() {}
-
-  /**
-   * Returns the reverse of <CODE>string</CODE> e.g. it would return "cba" for
-   * "abc".
-   *
-   * @param string
-   *            the string
-   * @return the reverse of <CODE>string</CODE>
-   */
-  private String getReverse(String string) {
-    StringBuffer buffer = new StringBuffer();
-    for (int k = string.length() - 1; k >= 0; k--) {
-      buffer.append(string.charAt(k));
+    /**
+     * Creates an instance of <CODE>CFGToPDALRConverter</CODE>.
+     */
+    public CFGToPDALRConverter() {
     }
-    return buffer.toString();
-  }
 
-  /**
-   * Returns the transition created by converting <CODE>production</CODE> to
-   * its equivalent transition.
-   *
-   * @param production
-   *            the production
-   * @return the equivalent transition.
-   */
-  @Override
-  public Transition getTransitionForProduction(Production production) {
-    String lhs = production.getLHS();
-    String rhs = production.getRHS();
-    String rrhs = getReverse(rhs);
-    Transition transition = new PDATransition(START_STATE, START_STATE, "", rrhs, lhs);
-    return transition;
-  }
-
-  /**
-   * Adds all states to <CODE>automaton</CODE> necessary for the conversion of
-   * <CODE>grammar</CODE> to its equivalent automaton. This creates three
-   * states--an initial state, an intermediate state, and a final state. It
-   * also adds transitions connecting the three states, and transitions for
-   * each terminal in <CODE>grammar</CODE>
-   *
-   * @param grammar
-   *            the grammar being converted.
-   * @param automaton
-   *            the automaton being created.
-   */
-  @Override
-  public void createStatesForConversion(Grammar grammar, Automaton automaton) {
-    initialize();
-    StatePlacer sp = new StatePlacer();
-
-    State initialState = automaton.createState(sp.getPointForState(automaton));
-    automaton.setInitialState(initialState);
-    START_STATE = initialState;
-
-    State intermediateState = automaton.createState(sp.getPointForState(automaton));
-
-    State finalState = automaton.createState(sp.getPointForState(automaton));
-    automaton.addFinalState(finalState);
-
-    String startVariable = grammar.getStartVariable();
-    PDATransition trans1 =
-        new PDATransition(initialState, intermediateState, "", startVariable, "");
-    automaton.addTransition(trans1);
-    PDATransition trans2 =
-        new PDATransition(intermediateState, finalState, "", BOTTOM_OF_STACK, "");
-    automaton.addTransition(trans2);
-
-    List<String> terminals = grammar.getTerminals();
-    for (int k = 0; k < terminals.size(); k++) {
-      PDATransition trans =
-          new PDATransition(initialState, initialState, terminals.get(k), "", terminals.get(k));
-      automaton.addTransition(trans);
+    /**
+     * Returns the reverse of <CODE>string</CODE> e.g. it would return "cba" for
+     * "abc".
+     *
+     * @param string
+     *            the string
+     * @return the reverse of <CODE>string</CODE>
+     */
+    private String getReverse(String string) {
+        StringBuffer buffer = new StringBuffer();
+        for (int k = string.length() - 1; k >= 0; k--) {
+            buffer.append(string.charAt(k));
+        }
+        return buffer.toString();
     }
-  }
 
-  /** The start state. */
-  protected State START_STATE;
+    /**
+     * Returns the transition created by converting <CODE>production</CODE> to
+     * its equivalent transition.
+     *
+     * @param production
+     *            the production
+     * @return the equivalent transition.
+     */
+    @Override
+    public Transition getTransitionForProduction(Production production) {
+        String lhs = production.getLHS();
+        String rhs = production.getRHS();
+        String rrhs = getReverse(rhs);
+        Transition transition = new PDATransition(START_STATE, START_STATE, "", rrhs, lhs);
+        return transition;
+    }
+
+    /**
+     * Adds all states to <CODE>automaton</CODE> necessary for the conversion of
+     * <CODE>grammar</CODE> to its equivalent automaton. This creates three
+     * states--an initial state, an intermediate state, and a final state. It
+     * also adds transitions connecting the three states, and transitions for
+     * each terminal in <CODE>grammar</CODE>
+     *
+     * @param grammar
+     *            the grammar being converted.
+     * @param automaton
+     *            the automaton being created.
+     */
+    @Override
+    public void createStatesForConversion(Grammar grammar, Automaton automaton) {
+        initialize();
+        StatePlacer sp = new StatePlacer();
+
+        State initialState = automaton.createState(sp.getPointForState(automaton));
+        automaton.setInitialState(initialState);
+        START_STATE = initialState;
+
+        State intermediateState = automaton.createState(sp.getPointForState(automaton));
+
+        State finalState = automaton.createState(sp.getPointForState(automaton));
+        automaton.addFinalState(finalState);
+
+        String startVariable = grammar.getStartVariable();
+        PDATransition trans1 = new PDATransition(initialState, intermediateState, "", startVariable,
+                "");
+        automaton.addTransition(trans1);
+        PDATransition trans2 = new PDATransition(intermediateState, finalState, "", BOTTOM_OF_STACK,
+                "");
+        automaton.addTransition(trans2);
+
+        List<String> terminals = grammar.getTerminals();
+        for (int k = 0; k < terminals.size(); k++) {
+            PDATransition trans = new PDATransition(initialState, initialState, terminals.get(k),
+                    "", terminals.get(k));
+            automaton.addTransition(trans);
+        }
+    }
+
+    /** The start state. */
+    protected State START_STATE;
 }

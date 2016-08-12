@@ -29,67 +29,67 @@ import java.util.Map;
  * @author Thomas Finley
  */
 public class LenoreSystemsCodec extends Codec {
-  /**
-   * Given a file, this will return an L-system associated with that file.
-   * This method should always return a structure, or throw a
-   * {@link ParseException} in the event of failure with a message detailing
-   * the nature of why the decoder failed.
-   *
-   * @param file
-   *            the file to decode into a structure
-   * @param parameters
-   *            this decoder ignores all parameters
-   * @return a JFLAP structure resulting from the interpretation of the
-   *         Lenore-Systems file
-   * @throws ParseException
-   *             if there was a problem reading the file
-   */
-  @Override
-  public <K, V> Serializable decode(File file, Map<K, V> parameters) {
-    throw new ParseException("This codec is not implemented yet.");
-  }
+    /**
+     * Given a file, this will return an L-system associated with that file.
+     * This method should always return a structure, or throw a
+     * {@link ParseException} in the event of failure with a message detailing
+     * the nature of why the decoder failed.
+     *
+     * @param file
+     *            the file to decode into a structure
+     * @param parameters
+     *            this decoder ignores all parameters
+     * @return a JFLAP structure resulting from the interpretation of the
+     *         Lenore-Systems file
+     * @throws ParseException
+     *             if there was a problem reading the file
+     */
+    @Override
+    public <K, V> Serializable decode(File file, Map<K, V> parameters) {
+        throw new ParseException("This codec is not implemented yet.");
+    }
 
-  /**
-   * This method does nothing at all.
-   *
-   * @param structure
-   *            the structure to encode
-   * @param file
-   *            the file to write to -- nothing is written, of course
-   * @param parameters
-   *            implementors have the option of accepting custom parameters in
-   *            the form of a map
-   * @return the file to which the structure was written
-   * @throws EncodeException
-   *             if there was a problem writing the file
-   */
-  @Override
-  public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
-    return file;
-  }
+    /**
+     * This method does nothing at all.
+     *
+     * @param structure
+     *            the structure to encode
+     * @param file
+     *            the file to write to -- nothing is written, of course
+     * @param parameters
+     *            implementors have the option of accepting custom parameters in
+     *            the form of a map
+     * @return the file to which the structure was written
+     * @throws EncodeException
+     *             if there was a problem writing the file
+     */
+    @Override
+    public <K, V> File encode(Serializable structure, File file, Map<K, V> parameters) {
+        return file;
+    }
 
-  /**
-   * This encoder can encode nothing.
-   *
-   * @param structure
-   *            the structure to check
-   * @return if the structure, perhaps with minor changes, could possibly be
-   *         written to a file
-   */
-  @Override
-  public boolean canEncode(Serializable structure) {
-    return false;
-  }
+    /**
+     * This encoder can encode nothing.
+     *
+     * @param structure
+     *            the structure to check
+     * @return if the structure, perhaps with minor changes, could possibly be
+     *         written to a file
+     */
+    @Override
+    public boolean canEncode(Serializable structure) {
+        return false;
+    }
 
-  /**
-   * Returns the description of this codec.
-   *
-   * @return the description of this codec
-   */
-  @Override
-  public String getDescription() {
-    return "Lenore-Systems File";
-  }
+    /**
+     * Returns the description of this codec.
+     *
+     * @return the description of this codec
+     */
+    @Override
+    public String getDescription() {
+        return "Lenore-Systems File";
+    }
 
-  /** The assignment of Lenore-Systems color names to L-systems names. */
+    /** The assignment of Lenore-Systems color names to L-systems names. */
 }

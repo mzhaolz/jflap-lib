@@ -261,7 +261,8 @@ public class CYKParsePane extends BruteParsePane {
         }
         deriv = deriv.substring(0, index) + myAnswers.get(myIndex).getRHS()
                 + deriv.substring(index + 1);
-        ParseNode pNode = new ParseNode(deriv, Lists.newArrayList(myAnswers.get(myIndex)), Lists.newArrayList(index));
+        ParseNode pNode = new ParseNode(deriv, Lists.newArrayList(myAnswers.get(myIndex)),
+                Lists.newArrayList(index));
         pNode = new ParseNode(pNode);
         node.add(pNode);
         myQueue.add(pNode);

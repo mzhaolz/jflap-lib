@@ -18,8 +18,6 @@ package edu.duke.cs.jflap.gui.grammar.transform;
 
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.automata.event.AutomataTransitionEvent;
-import edu.duke.cs.jflap.automata.event.AutomataTransitionListener;
 import edu.duke.cs.jflap.automata.vdg.VariableDependencyGraph;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
@@ -29,7 +27,6 @@ import edu.duke.cs.jflap.gui.grammar.GrammarTableModel;
 
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -59,8 +56,9 @@ public class UnitController {
      * This is called to move the lambda controller to the next step.
      */
     private void nextStep() {
-        if (step != FINISHED)
+        if (step != FINISHED) {
             step++;
+        }
         switch (step) {
             case VARAIBLE_GRAPH: {
                 pane.mainLabel.setText("Complete unit production visualization.");
@@ -70,25 +68,26 @@ public class UnitController {
                 UnitProductionRemover.initializeDependencyGraph(vdg, grammar);
                 // Cache the transitions we have to add.
                 List<Production> p = grammar.getProductions();
-                for (int i = 0; i < p.size(); i++)
-                    if (ProductionChecker.isUnitProduction(p.get(i)))
-                        vdgTransitions.add(
-                                UnitProductionRemover.getTransitionForUnitProduction(p.get(i), vdg));
+                for (int i = 0; i < p.size(); i++) {
+                    if (ProductionChecker.isUnitProduction(p.get(i))) {
+                        vdgTransitions.add(UnitProductionRemover
+                                .getTransitionForUnitProduction(p.get(i), vdg));
+                    }
+                }
                 // Set up the listener so we know when new actions get
                 // added to the VDG.
-                vdg.addTransitionListener(new AutomataTransitionListener() {
-                    public void automataTransitionChange(AutomataTransitionEvent e) {
-                        if (!e.isAdd())
-                            return;
-                        if (vdgTransitions.contains(e.getTransition())) {
-                            vdgTransitions.remove(e.getTransition());
-                            updateDisplay();
-                            return;
-                        }
-                        JOptionPane.showMessageDialog(pane, "Transition is not part of VDG.",
-                                "Bad Transition", JOptionPane.ERROR_MESSAGE);
-                        vdg.removeTransition(e.getTransition());
+                vdg.addTransitionListener(e -> {
+                    if (!e.isAdd()) {
+                        return;
                     }
+                    if (vdgTransitions.contains(e.getTransition())) {
+                        vdgTransitions.remove(e.getTransition());
+                        updateDisplay();
+                        return;
+                    }
+                    JOptionPane.showMessageDialog(pane, "Transition is not part of VDG.",
+                            "Bad Transition", JOptionPane.ERROR_MESSAGE);
+                    vdg.removeTransition(e.getTransition());
                 });
                 // Set the actions.
                 pane.deleteAction.setEnabled(false);
@@ -147,11 +146,12 @@ public class UnitController {
         // Which of the selected rows are selected unit productions?
         int[] selectedRows = pane.editingGrammarView.getSelectedRows();
         GrammarTableModel model = pane.editingGrammarModel;
-        Set<Production> selectedUnitProductions = new HashSet<Production>();
+        Set<Production> selectedUnitProductions = new HashSet<>();
         for (int i = selectedRows.length - 1; i >= 0; i--) {
             Production p = model.getProduction(selectedRows[i]);
-            if (!ProductionChecker.isUnitProduction(p))
+            if (!ProductionChecker.isUnitProduction(p)) {
                 continue;
+            }
             selectedUnitProductions.add(p);
             pane.editingGrammarModel.deleteRow(selectedRows[i]);
             unitProductions.remove(p);
@@ -160,30 +160,29 @@ public class UnitController {
 
         // Determine what productions need to be added as a result of
         // each selected unit production.
-        Set<Production> toAdd = new HashSet<Production>();
-        for (Iterator<Production> it = selectedUnitProductions.iterator(); it.hasNext();) {
-            // This will do each selected unit production.
-            Production unit = it.next();
-            for (Iterator<Production> dit = desiredProductions.iterator(); dit.hasNext();) {
-                // Determine if this desired production is good to go.
-                Production p = dit.next();
-                if (p.getLHS().equals(unit.getRHS()))
+        Set<Production> toAdd = new HashSet<>();
+        for (Production unit : selectedUnitProductions) {
+            for (Production p : desiredProductions) {
+                if (p.getLHS().equals(unit.getRHS())) {
                     toAdd.add(new Production(unit.getLHS(), p.getRHS()));
+                }
             }
         }
 
         // Add those productions!
-        for (Iterator<Production> it = toAdd.iterator(); it.hasNext();) {
-            Production p = it.next();
-            if (!currentProductions.add(p))
+        for (Production p : toAdd) {
+            if (!currentProductions.add(p)) {
                 continue;
+            }
             pane.editingGrammarModel.addProduction(p);
         }
         pane.editingActive = true;
 
-        if (currentProductions.equals(desiredProductions))
+        if (currentProductions.equals(desiredProductions)) {
             nextStep();
-        else updateDisplay();
+        } else {
+            updateDisplay();
+        }
     }
 
     /**
@@ -206,8 +205,9 @@ public class UnitController {
                 pane.editingActive = false;
                 Set<Production> p = desiredProductions;
                 for (Production pi : p) {
-                    if (!currentProductions.add(pi))
+                    if (!currentProductions.add(pi)) {
                         continue;
+                    }
                     pane.editingGrammarModel.addProduction(pi);
                 }
                 nextStep();
@@ -221,8 +221,9 @@ public class UnitController {
      * Does all steps.
      */
     public void doAll() {
-        while (step != FINISHED)
+        while (step != FINISHED) {
             doStep();
+        }
     }
 
     public Grammar getGrammar() {
@@ -238,8 +239,9 @@ public class UnitController {
             case VARAIBLE_GRAPH: {
                 int toAdd = vdgTransitions.size();
                 pane.detailLabel.setText(toAdd + " more transition(s) needed.");
-                if (toAdd == 0)
+                if (toAdd == 0) {
                     nextStep();
+                }
                 break;
             }
             case PRODUCTION_MODIFY: {
@@ -248,8 +250,9 @@ public class UnitController {
                 pane.detailLabel
                         .setText(toRemove + " more remove" + (toRemove == 1 ? "" : "s") + ", and "
                                 + toAdd + " more addition" + (toAdd == 1 ? "" : "s") + " needed.");
-                if (toAdd == 0 && toRemove == 0)
+                if (toAdd == 0 && toRemove == 0) {
                     nextStep();
+                }
                 break;
             }
         }
@@ -295,11 +298,14 @@ public class UnitController {
      */
     void stateClicked(State state, MouseEvent event) {
         if (event.isShiftDown()) {
-            if (state == null)
+            if (state == null) {
                 return;
-            if (pane.vdgDrawer.isSelected(state))
+            }
+            if (pane.vdgDrawer.isSelected(state)) {
                 pane.vdgDrawer.removeSelected(state);
-            else pane.vdgDrawer.addSelected(state);
+            } else {
+                pane.vdgDrawer.addSelected(state);
+            }
         } else {
             if (state == null) {
                 pane.vdgDrawer.clearSelected();
@@ -345,15 +351,15 @@ public class UnitController {
     VariableDependencyGraph vdg;
 
     /** The set of transitions that should be added to the VDG. */
-    Set<Transition> vdgTransitions = new HashSet<Transition>();
+    Set<Transition> vdgTransitions = new HashSet<>();
 
     /**
      * The set of productions that should comprise the grammar, those that
      * currently do, and those that should be removed.
      */
-    Set<Production> desiredProductions = new HashSet<Production>(),
-            currentProductions = new HashSet<Production>(),
-            unitProductions = new HashSet<Production>();
+    Set<Production> desiredProductions = new HashSet<>(),
+            currentProductions = new HashSet<>(),
+            unitProductions = new HashSet<>();
 
     /** The current step. */
     int step = 0;

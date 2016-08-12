@@ -31,36 +31,35 @@ import javax.swing.JOptionPane;
  * @author Thomas Finley
  */
 public class NewHelpAction extends HelpAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-
-  /**
-   * Instantiates an <CODE>EnvironmentHelpAction</CODE>.
-   */
-  public NewHelpAction() {}
-
-  /**
-   * Displays help according to the current display of the automaton.
-   *
-   * @param event
-   *            the action event
-   */
-  @Override
-  public void actionPerformed(ActionEvent event) {
-    /*
-     * Formerly the help page was shown, but for now, we just refer one to
-     * the tutorial.
+    /**
+     *
      */
-    // displayHelp(NewAction.class);
+    private static final long serialVersionUID = 1L;
 
-    // Temporary command
-    JOptionPane.showMessageDialog(
-        null,
-        "For help, feel free to access the JFLAP tutorial at\n"
-            + "                          www.jflap.org.",
-        "Help",
-        JOptionPane.PLAIN_MESSAGE);
-  }
+    /**
+     * Instantiates an <CODE>EnvironmentHelpAction</CODE>.
+     */
+    public NewHelpAction() {
+    }
+
+    /**
+     * Displays help according to the current display of the automaton.
+     *
+     * @param event
+     *            the action event
+     */
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        /*
+         * Formerly the help page was shown, but for now, we just refer one to
+         * the tutorial.
+         */
+        // displayHelp(NewAction.class);
+
+        // Temporary command
+        JOptionPane.showMessageDialog(null,
+                "For help, feel free to access the JFLAP tutorial at\n"
+                        + "                          www.jflap.org.",
+                "Help", JOptionPane.PLAIN_MESSAGE);
+    }
 }

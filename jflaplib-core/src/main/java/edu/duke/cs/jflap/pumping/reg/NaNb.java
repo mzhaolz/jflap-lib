@@ -60,22 +60,22 @@ public class NaNb extends RegularPumpingLemma {
         w = pumpString("a", getM()) + pumpString("b", getM() + 1);
     }
 
-  @Override
-  public void chooseDecomposition() {
-    setDecomposition(Lists.newArrayList(Math.min(m - 1, w.indexOf('b')), 1));
+    @Override
+    public void chooseDecomposition() {
+        setDecomposition(Lists.newArrayList(Math.min(m - 1, w.indexOf('b')), 1));
 
-  }
+    }
 
     @Override
     public void chooseI() {
         i = 2;
     }
 
-  @Override
-  protected void setRange() {
-    myRange = Lists.newArrayList(2, 17);
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(2, 17);
 
-  }
+    }
 
     @Override
     public boolean isInLang(String s) {

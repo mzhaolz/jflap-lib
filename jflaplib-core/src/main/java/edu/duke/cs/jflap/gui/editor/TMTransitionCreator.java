@@ -291,14 +291,14 @@ public class TMTransitionCreator extends TableTransitionCreator {
 
     /** The array of keystrokes for the direction field. */
     private static List<KeyStroke> STROKES;
-    
+
     static {
         STROKES = new ArrayList<>();
         for (int i = 0; i < STROKES.size(); i++) {
             STROKES.add(KeyStroke.getKeyStroke("shift " + DIRS.get(i)));
         }
     }
-    
+
     /** The action for the strokes for the direction field. */
     private static final Action CHANGE_ACTION = new AbstractAction() {
         /**

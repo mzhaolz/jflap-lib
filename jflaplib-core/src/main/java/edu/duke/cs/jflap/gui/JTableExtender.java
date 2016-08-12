@@ -23,26 +23,26 @@ import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
 public class JTableExtender extends JTable {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  public JTableExtender(TableModel model, MultipleSimulateAction mult) {
-    super(model);
-    myMultSimAct = mult;
-  }
+    public JTableExtender(TableModel model, MultipleSimulateAction mult) {
+        super(model);
+        myMultSimAct = mult;
+    }
 
-  public JTableExtender(TableModel model, BatchMultipleSimulateAction mult) {
-    super(model);
-    myMultSimAct = mult;
-  }
+    public JTableExtender(TableModel model, BatchMultipleSimulateAction mult) {
+        super(model);
+        myMultSimAct = mult;
+    }
 
-  @Override
-  public void changeSelection(int row, int column, boolean toggle, boolean extend) {
-    super.changeSelection(row, column, toggle, extend);
-    myMultSimAct.viewAutomaton(this);
-  }
+    @Override
+    public void changeSelection(int row, int column, boolean toggle, boolean extend) {
+        super.changeSelection(row, column, toggle, extend);
+        myMultSimAct.viewAutomaton(this);
+    }
 
-  private MultipleSimulateAction myMultSimAct;
+    private MultipleSimulateAction myMultSimAct;
 }

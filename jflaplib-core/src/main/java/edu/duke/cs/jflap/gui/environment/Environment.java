@@ -141,7 +141,7 @@ public abstract class Environment extends JPanel {
     }
 
     public void setMultipleObjects(List<Object> objects) {
-        this.myObjects = objects;
+        myObjects = objects;
     }
 
     /**
@@ -170,17 +170,12 @@ public abstract class Environment extends JPanel {
      * A helper function to set up the GUI components.
      */
     private void initView() {
-        this.setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
         tabbed = new JTabbedPane();
         super.add(tabbed, BorderLayout.CENTER);
         // So that when the user changes the view by clicking in the
         // tabbed pane, this knows about it.
-        tabbed.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent event) {
-                distributeChangeEvent();
-            }
-        });
+        tabbed.addChangeListener(event -> distributeChangeEvent());
     }
 
     /**
@@ -208,8 +203,9 @@ public abstract class Environment extends JPanel {
         // components in the event that such action is appropriate.
         if (tags instanceof edu.duke.cs.jflap.gui.environment.tag.CriticalTag) {
             criticalObjects++;
-            if (criticalObjects == 1)
+            if (criticalObjects == 1) {
                 setEnabledEditorTagged(false);
+            }
         }
 
         distributeChangeEvent();
@@ -238,8 +234,9 @@ public abstract class Environment extends JPanel {
     public void setEnabledEditorTagged(boolean enabled) {
         for (int i = 0; i < tabbed.getTabCount(); i++) {
             Component c = tabbed.getComponentAt(i);
-            if (componentTags.get(c) instanceof EditorTag)
+            if (componentTags.get(c) instanceof EditorTag) {
                 tabbed.setEnabledAt(i, enabled);
+            }
         }
     }
 
@@ -340,8 +337,9 @@ public abstract class Environment extends JPanel {
 
         ChangeEvent e = new ChangeEvent(this);
         Iterator<ChangeListener> it = (new HashSet<>(changeListeners)).iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             it.next().stateChanged(e);
+        }
     }
 
     /**
@@ -359,8 +357,9 @@ public abstract class Environment extends JPanel {
         // components in the event that such action is appropriate.
         if (tag instanceof edu.duke.cs.jflap.gui.environment.tag.CriticalTag) {
             criticalObjects--;
-            if (criticalObjects == 0)
+            if (criticalObjects == 0) {
                 setEnabledEditorTagged(true);
+            }
         }
 
         distributeChangeEvent();
@@ -386,8 +385,9 @@ public abstract class Environment extends JPanel {
     @Override
     public Component[] getComponents() {
         List<Component> comps = new ArrayList<>();
-        for (int i = 0; i < comps.size(); i++)
+        for (int i = 0; i < comps.size(); i++) {
             comps.add(tabbed.getComponentAt(i));
+        }
         return comps.toArray(new Component[0]);
     }
 
@@ -403,8 +403,9 @@ public abstract class Environment extends JPanel {
         List<Component> list = new ArrayList<>();
         for (int i = 0; i < tabbed.getTabCount(); i++) {
             Component c = tabbed.getComponentAt(i);
-            if (satisfier.satisfies(c, componentTags.get(c)))
+            if (satisfier.satisfies(c, componentTags.get(c))) {
                 list.add(c);
+            }
         }
         return list;
     }
@@ -423,8 +424,9 @@ public abstract class Environment extends JPanel {
     public boolean isPresent(Satisfier satisfier) {
         for (int i = 0; i < tabbed.getTabCount(); i++) {
             Component c = tabbed.getComponentAt(i);
-            if (satisfier.satisfies(c, componentTags.get(c)))
+            if (satisfier.satisfies(c, componentTags.get(c))) {
                 return true;
+            }
         }
         return false;
     }
@@ -462,9 +464,9 @@ public abstract class Environment extends JPanel {
 
     public void resizeSplit() {
         // super.setSize(width, height);
-        if (myObjects != null && this.tabbed != null) {
-            if (myObjects.size() > 0 && this.tabbed.getTabCount() == 1) {
-                Component cur = this.getActive();
+        if (myObjects != null && tabbed != null) {
+            if (myObjects.size() > 0 && tabbed.getTabCount() == 1) {
+                Component cur = getActive();
                 if (cur instanceof MultiplePane) {
                     MultiplePane mult = (MultiplePane) cur;
                     mult.mySplit.setDividerLocation(.5);

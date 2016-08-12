@@ -112,7 +112,6 @@ public class UnrestrictedTreePanel extends TreePanel {
         int length = 0, prodNum = 0;
         List<List<UnrestrictedTreeNode>> bottomList = new LinkedList<>();
         List<List<UnrestrictedTreeNode>> topList = new LinkedList<>();
-        UnrestrictedTreeNode[] U = new UnrestrictedTreeNode[0];
         UnrestrictedTreeNode[][] UU = new UnrestrictedTreeNode[0][0];
         for (int i = 0; i < prev.size(); i++) {
             if (prodNum >= prods.size() || length < prodStarts.get(prodNum)
@@ -158,8 +157,8 @@ public class UnrestrictedTreePanel extends TreePanel {
                 prodNum++;
             }
         }
-        bottom[level - 1] = bottomList.toArray(new UnrestrictedTreeNode[][]);
-        top[level] = topList;
+        bottom[level - 1] = bottomList.toArray(UU);
+        top[level] = topList.toArray(UU);
     }
 
     /**

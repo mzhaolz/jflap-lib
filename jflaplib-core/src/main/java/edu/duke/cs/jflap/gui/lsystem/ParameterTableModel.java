@@ -31,85 +31,87 @@ import java.util.TreeMap;
  * @author Thomas Finley
  */
 public class ParameterTableModel extends GrowableTableModel<String> {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1656054894151911750L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1656054894151911750L;
 
-  /**
-   * Constructs an empty parameter table model.
-   */
-  public ParameterTableModel() {
-    super(2);
-  }
-
-  /**
-   * Constructs a parameter table model out of the map.
-   *
-   * @param parameters
-   *            the mapping of parameter names to parameter objects
-   */
-  public ParameterTableModel(Map<String, String> parameters) {
-    this();
-    Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
-    int i = 0;
-    while (it.hasNext()) {
-      Map.Entry<String, String> entry = it.next();
-      setValueAt(entry.getKey(), i, 0);
-      setValueAt(entry.getValue(), i, 1);
-      i++;
+    /**
+     * Constructs an empty parameter table model.
+     */
+    public ParameterTableModel() {
+        super(2);
     }
-  }
 
-  /**
-   * Initializes a row. In this object, a row is two empty strings.
-   *
-   * @return an array with two empty strings
-   */
-  @Override
-  public List<String> initializeRow(int row) {
-    return Lists.newArrayList("", "");
-  }
-
-  /**
-   * Returns the mapping of names of parameters.
-   *
-   * @return the mapping from parameter names to parameters (i.e., map of
-   *         contents of the left column to contents of the right column)
-   */
-  public Map<String, String> getParameters() {
-    TreeMap<String, String> map = new TreeMap<>();
-    for (int i = 0; i < getRowCount() - 1; i++) {
-      String o = getValueAt(i, 0);
-      if (o.equals("")) continue;
-      map.put(o, getValueAt(i, 1));
+    /**
+     * Constructs a parameter table model out of the map.
+     *
+     * @param parameters
+     *            the mapping of parameter names to parameter objects
+     */
+    public ParameterTableModel(Map<String, String> parameters) {
+        this();
+        Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            setValueAt(entry.getKey(), i, 0);
+            setValueAt(entry.getValue(), i, 1);
+            i++;
+        }
     }
-    return map;
-  }
 
-  /**
-   * Values in the table are editable.
-   *
-   * @param row
-   *            the row index
-   * @param column
-   *            the column index
-   * @return <CODE>true</CODE> always
-   */
-  @Override
-  public boolean isCellEditable(int row, int column) {
-    return true;
-  }
+    /**
+     * Initializes a row. In this object, a row is two empty strings.
+     *
+     * @return an array with two empty strings
+     */
+    @Override
+    public List<String> initializeRow(int row) {
+        return Lists.newArrayList("", "");
+    }
 
-  /**
-   * Returns the column name.
-   *
-   * @param column
-   *            the index of the column
-   * @return the name of a particular column
-   */
-  @Override
-  public String getColumnName(int column) {
-    return column == 0 ? "Name" : "Parameter";
-  }
+    /**
+     * Returns the mapping of names of parameters.
+     *
+     * @return the mapping from parameter names to parameters (i.e., map of
+     *         contents of the left column to contents of the right column)
+     */
+    public Map<String, String> getParameters() {
+        TreeMap<String, String> map = new TreeMap<>();
+        for (int i = 0; i < getRowCount() - 1; i++) {
+            String o = getValueAt(i, 0);
+            if (o.equals("")) {
+                continue;
+            }
+            map.put(o, getValueAt(i, 1));
+        }
+        return map;
+    }
+
+    /**
+     * Values in the table are editable.
+     *
+     * @param row
+     *            the row index
+     * @param column
+     *            the column index
+     * @return <CODE>true</CODE> always
+     */
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return true;
+    }
+
+    /**
+     * Returns the column name.
+     *
+     * @param column
+     *            the index of the column
+     * @return the name of a particular column
+     */
+    @Override
+    public String getColumnName(int column) {
+        return column == 0 ? "Name" : "Parameter";
+    }
 }

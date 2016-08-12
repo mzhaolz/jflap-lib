@@ -245,8 +245,8 @@ public class UserControlParsePane extends BruteParsePane {
         treePanel.setAnswer(previous);
         treePanel.repaint();
         if (previous.getProductions().size() > 0) {
-            statusDisplay.setText("Derived current Strings using " + previous.getProductions().get(0)
-                    + " production");
+            statusDisplay.setText("Derived current Strings using "
+                    + previous.getProductions().get(0) + " production");
         } else {
             statusDisplay.setText("");
         }
@@ -317,7 +317,8 @@ public class UserControlParsePane extends BruteParsePane {
                     return false;
                 } else {
                     String temp = "";
-                    List<Integer> tempIndices = Arrays.stream(myStringJList.getSelectedIndices()).boxed().collect(Collectors.toList());
+                    List<Integer> tempIndices = Arrays.stream(myStringJList.getSelectedIndices())
+                            .boxed().collect(Collectors.toList());
                     int tempCount = 0;
                     for (int tempIndice : tempIndices) {
                         if (myJListModel.getElementAt(tempIndice).equals(lhs)) {
@@ -393,8 +394,8 @@ public class UserControlParsePane extends BruteParsePane {
         treePanel.setAnswer(answer);
         treePanel.repaint();
         if (answer.getProductions().size() > 0) {
-            statusDisplay.setText(
-                    "Derived current Strings using " + answer.getProductions().get(0) + " production");
+            statusDisplay.setText("Derived current Strings using " + answer.getProductions().get(0)
+                    + " production");
         } else {
             statusDisplay.setText("");
         }

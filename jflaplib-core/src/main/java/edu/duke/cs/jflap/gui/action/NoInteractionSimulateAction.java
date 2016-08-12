@@ -115,7 +115,7 @@ public class NoInteractionSimulateAction extends SimulateAction {
      */
     @Override
     public void handleInteraction(Automaton automaton, AutomatonSimulator simulator,
-            Configuration[] configs, Object initialInput) {
+            List<Configuration> configs, Object initialInput) {
         JFrame frame = Universe.frameForEnvironment(environment);
         // How many configurations have we had?
         int numberGenerated = 0;
@@ -123,27 +123,30 @@ public class NoInteractionSimulateAction extends SimulateAction {
         int warningGenerated = WARNING_STEP;
         // How many have accepted?
         int numberAccepted = 0;
-        while (configs.length > 0) {
-            numberGenerated += configs.length;
+        while (configs.size() > 0) {
+            numberGenerated += configs.size();
             // Make sure we should continue.
             if (numberGenerated >= warningGenerated) {
-                if (!confirmContinue(numberGenerated, frame))
+                if (!confirmContinue(numberGenerated, frame)) {
                     return;
-                while (numberGenerated >= warningGenerated)
+                }
+                while (numberGenerated >= warningGenerated) {
                     warningGenerated *= 2;
+                }
             }
             // Get the next batch of configurations.
             List<Configuration> next = new ArrayList<>();
-            for (int i = 0; i < configs.length; i++) {
-                if (configs[i].isAccept()) {
+            for (int i = 0; i < configs.size(); i++) {
+                if (configs.get(i).isAccept()) {
                     numberAccepted++;
-                    if (!reportConfiguration(configs[i], frame))
+                    if (!reportConfiguration(configs.get(i), frame)) {
                         return;
+                    }
                 } else {
-                    next.addAll(simulator.stepConfiguration(configs[i]));
+                    next.addAll(simulator.stepConfiguration(configs.get(i)));
                 }
             }
-            configs = next
+            configs = next;
         }
         if (numberAccepted == 0) {
             JOptionPane.showMessageDialog(frame, "The input was rejected.");

@@ -27,7 +27,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -46,7 +45,6 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 /**
@@ -139,8 +137,7 @@ public class LSystemInputPane extends JPanel {
         scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         /*
-         * final JComboBox box = new JComboBox ((String[])
-         * Renderer.ASSIGN_WORDS
+         * final JComboBox box = new JComboBox ((String[]) Renderer.ASSIGN_WORDS
          * box.setLightWeightPopupEnabled(false);
          * scroller.setCorner(JScrollPane.UPPER_RIGHT_CORNER, box);
          * box.addItemListener(new ItemListener() { public void
@@ -150,12 +147,7 @@ public class LSystemInputPane extends JPanel {
          */
 
         final JPopupMenu menu = new JPopupMenu();
-        ActionListener listener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setEditing(e.getActionCommand());
-            }
-        };
+        ActionListener listener = e -> setEditing(e.getActionCommand());
         Set<String> words = Renderer.ASSIGN_WORDS;
         for (String s : words) {
             menu.add(s).addActionListener(listener);
@@ -190,12 +182,7 @@ public class LSystemInputPane extends JPanel {
                 fireLSystemInputEvent();
             }
         });
-        TableModelListener tml = new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                fireLSystemInputEvent();
-            }
-        };
+        TableModelListener tml = e -> fireLSystemInputEvent();
         parameterModel.addTableModelListener(tml);
         productionInputPane.getTable().getModel().addTableModelListener(tml);
     }
@@ -209,8 +196,9 @@ public class LSystemInputPane extends JPanel {
      */
     public static String listAsString(java.util.List<?> list) {
         Iterator<?> it = list.iterator();
-        if (!it.hasNext())
+        if (!it.hasNext()) {
             return "";
+        }
         StringBuffer sb = new StringBuffer();
         sb.append(it.next());
         while (it.hasNext()) {
@@ -227,16 +215,19 @@ public class LSystemInputPane extends JPanel {
      */
     public LSystem getLSystem() {
         // Make sure we're not editing anything.
-        if (productionInputPane.getTable().getCellEditor() != null)
+        if (productionInputPane.getTable().getCellEditor() != null) {
             productionInputPane.getTable().getCellEditor().stopCellEditing();
-        if (parameterTable.getCellEditor() != null)
+        }
+        if (parameterTable.getCellEditor() != null) {
             parameterTable.getCellEditor().stopCellEditing();
+        }
         // Do we already have a cached copy?
         try {
-            if (cachedSystem == null)
+            if (cachedSystem == null) {
                 cachedSystem = new LSystem(axiomField.getText(),
                         productionInputPane.getGrammar(UnboundGrammar.class),
                         parameterModel.getParameters());
+            }
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "L-System Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -270,8 +261,9 @@ public class LSystemInputPane extends JPanel {
     protected void fireLSystemInputEvent() {
         cachedSystem = null;
         Iterator<LSystemInputListener> it = lSystemInputListeners.iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             (it.next()).lSystemChanged(reusedEvent);
+        }
     }
 
     /**
@@ -284,11 +276,14 @@ public class LSystemInputPane extends JPanel {
      */
     private void setEditing(String item) {
         int i;
-        for (i = 0; i < parameterModel.getRowCount(); i++)
-            if (parameterModel.getValueAt(i, 0).equals(item))
+        for (i = 0; i < parameterModel.getRowCount(); i++) {
+            if (parameterModel.getValueAt(i, 0).equals(item)) {
                 break;
-        if (i == parameterModel.getRowCount()) // We need to create it.
+            }
+        }
+        if (i == parameterModel.getRowCount()) {
             parameterModel.setValueAt(item, --i, 0);
+        }
         int column = parameterTable.convertColumnIndexToView(1);
         parameterTable.editCellAt(i, column);
         parameterTable.requestFocus();
@@ -310,7 +305,7 @@ public class LSystemInputPane extends JPanel {
     private HighlightTable parameterTable;
 
     /** The set of input listeners. */
-    private Set<LSystemInputListener> lSystemInputListeners = new HashSet<LSystemInputListener>();
+    private Set<LSystemInputListener> lSystemInputListeners = new HashSet<>();
 
     /** The event reused in firing off the notifications. */
     private LSystemInputEvent reusedEvent = new LSystemInputEvent(this);

@@ -71,8 +71,9 @@ public class Universe {
         Environment env = frame.getEnvironment();
         environmentToFrame.put(env, frame);
         File file = env.getFile();
-        if (file != null)
+        if (file != null) {
             fileToFrame.put(getPath(file), frame);
+        }
         // Adds the listener that changes this object in the event
         // that the file of an environment changes.
         env.addFileChangeListener(FILE_LISTENER);
@@ -97,8 +98,9 @@ public class Universe {
         environmentToFrame.remove(frame.getEnvironment());
 
         // If there are no other frames open, prompt for newness.
-        if (numberOfFrames() == 0)
+        if (numberOfFrames() == 0) {
             edu.duke.cs.jflap.gui.action.NewAction.showNew();
+        }
     }
 
     /**
@@ -110,8 +112,9 @@ public class Universe {
      *         <CODE>null</CODE> if there is no frame associated with this file
      */
     public static EnvironmentFrame frameForFile(File file) {
-        if (file == null)
+        if (file == null) {
             return null;
+        }
         return fileToFrame.get(getPath(file));
     }
 
@@ -152,7 +155,7 @@ public class Universe {
     private static Map<Environment, EnvironmentFrame> environmentToFrame = new HashMap<>();
 
     /** The mapping of files to frames. */
-    private static Map<String, EnvironmentFrame> fileToFrame = new HashMap<String, EnvironmentFrame>();
+    private static Map<String, EnvironmentFrame> fileToFrame = new HashMap<>();
 
     /** The universal JFileChooser. */
     public static JFileChooser CHOOSER = null;
@@ -167,20 +170,19 @@ public class Universe {
      * This is the file listener that should be added to the environments when
      * their frames are created to ensure that no file is opened twice.
      */
-    private static FileChangeListener FILE_LISTENER = new FileChangeListener() {
-        @Override
-        public void fileChanged(FileChangeEvent e) {
-            // We must update the index.
-            File oldFile = e.getOldFile();
-            EnvironmentFrame frame = frameForEnvironment((Environment) e.getSource());
-            if (oldFile != null)
-                fileToFrame.remove(getPath(oldFile));
-            Environment env = (Environment) e.getSource();
-            File newFile = env.getFile();
-            if (newFile == null)
-                return;
-            fileToFrame.put(getPath(newFile), frame);
+    private static FileChangeListener FILE_LISTENER = e -> {
+        // We must update the index.
+        File oldFile = e.getOldFile();
+        EnvironmentFrame frame = frameForEnvironment((Environment) e.getSource());
+        if (oldFile != null) {
+            fileToFrame.remove(getPath(oldFile));
         }
+        Environment env = (Environment) e.getSource();
+        File newFile = env.getFile();
+        if (newFile == null) {
+            return;
+        }
+        fileToFrame.put(getPath(newFile), frame);
     };
 
     /** The registry of codecs universally used for saving. */

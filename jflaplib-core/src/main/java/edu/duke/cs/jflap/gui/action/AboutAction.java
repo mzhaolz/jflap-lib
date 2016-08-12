@@ -27,25 +27,25 @@ import java.awt.event.ActionEvent;
  * @author Thomas Finley
  */
 public class AboutAction extends RestrictedAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiates a new <CODE>AboutAction</CODE>.
-   */
-  public AboutAction() {
-    super("About...", null);
-  }
+    /**
+     * Instantiates a new <CODE>AboutAction</CODE>.
+     */
+    public AboutAction() {
+        super("About...", null);
+    }
 
-  /**
-   * Shows the about box.
-   */
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    BOX.displayBox();
-  }
+    /**
+     * Shows the about box.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        BOX.displayBox();
+    }
 
-  private static final AboutBox BOX = new AboutBox();
+    private static final AboutBox BOX = new AboutBox();
 }

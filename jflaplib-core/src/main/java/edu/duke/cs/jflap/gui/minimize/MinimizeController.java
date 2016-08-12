@@ -69,11 +69,13 @@ class MinimizeController {
      *            the corresponding mouse event
      */
     public void stateDown(State state, MouseEvent event) {
-        if (state == null)
+        if (state == null) {
             return;
+        }
         List<TreeNode> selected = treeDrawer.getSelected();
-        if (selected.size() != 1)
+        if (selected.size() != 1) {
             return;
+        }
         toggleState((MinimizeTreeNode) selected.get(0), state);
     }
 
@@ -86,8 +88,9 @@ class MinimizeController {
      *            the corresponding mouse event
      */
     public void nodeClicked(MinimizeTreeNode node, MouseEvent event) {
-        if (event.isPopupTrigger())
+        if (event.isPopupTrigger()) {
             return;
+        }
         // if (menu.isVisible()) return;
         if (node == null) {
             automatonDrawer.clearSelected();
@@ -146,8 +149,9 @@ class MinimizeController {
             cp.addChildAction.setEnabled(true);
             cp.addChildAction.setTip("Add another partition to " + es + ".");
         }
-        if (selected.size() != 1)
+        if (selected.size() != 1) {
             return;
+        }
         // Do items related to beginning an expansion.
         MinimizeTreeNode node = (MinimizeTreeNode) selected.get(0);
 
@@ -214,8 +218,9 @@ class MinimizeController {
      *         <CODE>false</CODE> otherwise
      */
     public boolean splitOnTerminal(MinimizeTreeNode node) {
-        if (!canExpand(node))
+        if (!canExpand(node)) {
             return false;
+        }
 
         // Is this the root?
         if (node.getParent() == null) {
@@ -265,8 +270,9 @@ class MinimizeController {
      *            the corresponding mouse event
      */
     public void nodeDown(MinimizeTreeNode node, MouseEvent event) {
-        if (node == null)
+        if (node == null) {
             return;
+        }
     }
 
     /**
@@ -278,8 +284,9 @@ class MinimizeController {
      *            the state to add or remove
      */
     public void toggleState(MinimizeTreeNode node, State state) {
-        if (!canModifyChild((MinimizeTreeNode) node.getParent()))
+        if (!canModifyChild((MinimizeTreeNode) node.getParent())) {
             return;
+        }
 
         try {
             MinimizeTreeNode parent = (MinimizeTreeNode) node.getParent();
@@ -296,9 +303,10 @@ class MinimizeController {
             List<TreeNode> children = Trees.children(parent);
             for (int i = 0; i < children.size(); i++) {
                 MinimizeTreeNode child = (MinimizeTreeNode) children.get(i);
-                if (child == node)
+                if (child == node) {
                     continue;
-                Set<State> c = new HashSet<State>(child.getStates());
+                }
+                Set<State> c = new HashSet<>(child.getStates());
                 if (c.contains(state)) {
                     JOptionPane.showMessageDialog(view,
                             "Another partition already contains state " + state.getID() + "!");
@@ -312,10 +320,12 @@ class MinimizeController {
 
         // Add/remove the state to/from the list of states.
         List<State> states = node.getStates();
-        java.util.List<State> list = new LinkedList<State>(states);
-        if (list.contains(state))
+        java.util.List<State> list = new LinkedList<>(states);
+        if (list.contains(state)) {
             list.remove(state);
-        else list.add(state);
+        } else {
+            list.add(state);
+        }
         states = list;
         node.setUserObject(states);
         setSelectedStates(node);
@@ -337,8 +347,9 @@ class MinimizeController {
         List<List<State>> groups = minimizer.splitOnTerminal(node.getStates(), node.getTerminal(),
                 getAutomaton(), getTree());
         Iterator<List<State>> it = groups.iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             addChild(node, it.next());
+        }
         expanding = null;
     }
 
@@ -350,16 +361,18 @@ class MinimizeController {
      *            the node to split
      */
     public void splitWithInput(MinimizeTreeNode node) {
-        if (!canExpand(node))
+        if (!canExpand(node)) {
             return;
+        }
         if (node.getTerminal().equals("")) {
             if (!minimizer.isSplittable(node.getStates(), getAutomaton(), getTree())) {
                 JOptionPane.showMessageDialog(view, CANT_SPLIT);
                 return;
             }
             // We need to get a terminal for this node!
-            if (!splitOnTerminal(node))
+            if (!splitOnTerminal(node)) {
                 return;
+            }
         }
         split(node);
     }
@@ -372,8 +385,9 @@ class MinimizeController {
      *            the node to split
      */
     public void splitWithoutInput(MinimizeTreeNode node) {
-        if (!canExpand(node))
+        if (!canExpand(node)) {
             return;
+        }
         if (node.getTerminal().equals("")) {
             if (!minimizer.isSplittable(node.getStates(), getAutomaton(), getTree())) {
                 JOptionPane.showMessageDialog(view, CANT_SPLIT);
@@ -409,8 +423,9 @@ class MinimizeController {
             split(root);
             children = Trees.children(root);
         }
-        for (int i = 0; i < children.size(); i++)
+        for (int i = 0; i < children.size(); i++) {
             splitSubtree((MinimizeTreeNode) children.get(i));
+        }
     }
 
     /**
@@ -423,8 +438,9 @@ class MinimizeController {
     private void setSelectedStates(MinimizeTreeNode node) {
         automatonDrawer.clearSelected();
         List<State> states = node.getStates();
-        for (int i = 0; i < states.size(); i++)
+        for (int i = 0; i < states.size(); i++) {
             automatonDrawer.addSelected(states.get(i));
+        }
         treeDrawer.clearSelected();
         treeDrawer.setSelected(node, true);
         view.repaint();
@@ -500,8 +516,9 @@ class MinimizeController {
      *         not be created
      */
     public MinimizeTreeNode addChild(MinimizeTreeNode parent, List<State> list) {
-        if (!canModifyChild(parent))
+        if (!canModifyChild(parent)) {
             return null;
+        }
         MinimizeTreeNode node = new MinimizeTreeNode(list);
         getTree().insertNodeInto(node, parent, parent.getChildCount());
         view.repaint();
@@ -518,8 +535,9 @@ class MinimizeController {
      */
     private void addChildren(MinimizeTreeNode parent, List<MinimizeTreeNode> children) {
         // Restore the children.
-        for (int i = 0; i < children.size(); i++)
+        for (int i = 0; i < children.size(); i++) {
             getTree().insertNodeInto(children.get(i), parent, parent.getChildCount());
+        }
     }
 
     /**
@@ -534,8 +552,9 @@ class MinimizeController {
             JOptionPane.showMessageDialog(view, "One can't remove the root!");
             return;
         }
-        if (!canModifyChild(parent))
+        if (!canModifyChild(parent)) {
             return;
+        }
         getTree().removeNodeFromParent(node);
         view.repaint();
     }
@@ -544,8 +563,9 @@ class MinimizeController {
      * Checks a node, which is by default the expanding group.
      */
     public boolean check() {
-        if (expanding == null)
+        if (expanding == null) {
             return false;
+        }
         return check(expanding);
     }
 
@@ -602,8 +622,9 @@ class MinimizeController {
         addChildren(node, children);
 
         Iterator<List<State>> it = groups.iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             realPartitions.add(new HashSet<>(it.next()));
+        }
         if (!realPartitions.equals(userPartitions)) {
             JOptionPane.showMessageDialog(view, "The parititons are wrong!");
             return false;
@@ -626,8 +647,9 @@ class MinimizeController {
             JOptionPane.showMessageDialog(view, "This group has already been expanded.");
             return false;
         }
-        if (expanding == null || expanding == node)
+        if (expanding == null || expanding == node) {
             return true;
+        }
         JOptionPane.showMessageDialog(view, "We're already expanding the group "
                 + minimizer.getString(expanding.getStates()) + "!");
         return false;
@@ -647,8 +669,9 @@ class MinimizeController {
      *         <CODE>false</CODE> if they should not be
      */
     private boolean canModifyChild(MinimizeTreeNode parent) {
-        if (expanding == parent && parent != null)
+        if (expanding == parent && parent != null) {
             return true;
+        }
         if (parent == null) {
             JOptionPane.showMessageDialog(view, "The root cannot be changed!");
             return false;

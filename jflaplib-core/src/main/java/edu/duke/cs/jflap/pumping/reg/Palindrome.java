@@ -28,62 +28,71 @@ import com.google.common.collect.Lists;
  * @author Jinghui Lim & Chris Morgan
  */
 public class Palindrome extends RegularPumpingLemma {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 6526761464406572765L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6526761464406572765L;
 
-  @Override
-  public String getTitle() {
-    return "w w^R : w element_of {ab}*";
-  }
+    @Override
+    public String getTitle() {
+        return "w w^R : w element_of {ab}*";
+    }
 
-  @Override
-  public String getHTMLTitle() {
-    return "<i>ww<sup>R</sup></i> : <i>w</i> " + ELEMENT_OF + " " + AB_STAR;
-  }
+    @Override
+    public String getHTMLTitle() {
+        return "<i>ww<sup>R</sup></i> : <i>w</i> " + ELEMENT_OF + " " + AB_STAR;
+    }
 
-  @Override
-  public void setDescription() {
-    partitionIsValid = false;
-    explanation =
-        "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>bb"
-            + "a<sup><i>m</i></sup>\".  The <i>y</i> value thus would be a multiple of \"a\" in 'w' and not in "
-            + "'w<sup>R</sup>'.  If <i>i</i> = 0, then the total string becomes at most \"a<sup><i>m</i>-1</sup>bb"
-            + "a<sup><i>m</i></sup>\", which is not in the language.  Thus, the language is not regular.";
-  }
+    @Override
+    public void setDescription() {
+        partitionIsValid = false;
+        explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>bb"
+                + "a<sup><i>m</i></sup>\".  The <i>y</i> value thus would be a multiple of \"a\" in 'w' and not in "
+                + "'w<sup>R</sup>'.  If <i>i</i> = 0, then the total string becomes at most \"a<sup><i>m</i>-1</sup>bb"
+                + "a<sup><i>m</i></sup>\", which is not in the language.  Thus, the language is not regular.";
+    }
 
-  @Override
-  protected void chooseW() {
-    w = pumpString("a", m) + "bb" + pumpString("a", m);
-  }
+    @Override
+    protected void chooseW() {
+        w = pumpString("a", m) + "bb" + pumpString("a", m);
+    }
 
-  @Override
-  public void chooseDecomposition() {
-    setDecomposition(Lists.newArrayList(Math.min(w.length() / 2 - 1, m - 2), 2));
-  }
+    @Override
+    public void chooseDecomposition() {
+        setDecomposition(Lists.newArrayList(Math.min(w.length() / 2 - 1, m - 2), 2));
+    }
 
-  @Override
-  public void chooseI() {
-    i = LemmaMath.flipCoin();
-  }
+    @Override
+    public void chooseI() {
+        i = LemmaMath.flipCoin();
+    }
 
-  @Override
-  protected void setRange() {
-    myRange = Lists.newArrayList(2, 10);
-  }
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(2, 10);
+    }
 
-  @Override
-  public boolean isInLang(String s) {
-    int size = s.length();
-    if (size == 0) return true;
-    if (size % 2 == 1) return false;
-    int halfSize = size / 2; // works for odd or even lengths
-    char[] list = new char[] {'a', 'b'};
+    @Override
+    public boolean isInLang(String s) {
+        int size = s.length();
+        if (size == 0) {
+            return true;
+        }
+        if (size % 2 == 1) {
+            return false;
+        }
+        int halfSize = size / 2; // works for odd or even lengths
+        char[] list = new char[] { 'a', 'b' };
 
-    if (LemmaMath.otherCharactersFound(s, list)) return false;
-    for (int i = 0; i <= halfSize; i++) if (s.charAt(i) != s.charAt(size - i - 1)) return false;
-    return true;
-  }
+        if (LemmaMath.otherCharactersFound(s, list)) {
+            return false;
+        }
+        for (int i = 0; i <= halfSize; i++) {
+            if (s.charAt(i) != s.charAt(size - i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

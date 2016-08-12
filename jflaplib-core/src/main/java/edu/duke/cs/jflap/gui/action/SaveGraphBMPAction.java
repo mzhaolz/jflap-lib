@@ -33,53 +33,53 @@ import javax.swing.filechooser.FileFilter;
  * @author Jonathan Su, Henry Qin
  */
 public class SaveGraphBMPAction extends RestrictedAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-  /** The environment that this save action gets it's object from. */
-  protected Environment environment;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    /** The environment that this save action gets it's object from. */
+    protected Environment environment;
 
-  protected JMenu myMenu;
+    protected JMenu myMenu;
 
-  /**
-   * Instantiates a new <CODE>SaveGraphBMPAction</CODE>.
-   *
-   * @param environment
-   *            the environment that holds the action
-   * @param menu
-   *            the JMenu where the action is contained
-   */
-  public SaveGraphBMPAction(Environment environment, JMenu menu) {
-    super("Save Graph as BMP", null);
-    this.environment = environment;
-    this.myMenu = menu;
-  }
+    /**
+     * Instantiates a new <CODE>SaveGraphBMPAction</CODE>.
+     *
+     * @param environment
+     *            the environment that holds the action
+     * @param menu
+     *            the JMenu where the action is contained
+     */
+    public SaveGraphBMPAction(Environment environment, JMenu menu) {
+        super("Save Graph as BMP", null);
+        this.environment = environment;
+        myMenu = menu;
+    }
 
-  /**
-   * Displays JFileChooser for location to save the graph canvas as bmp image.
-   *
-   * @param arg0
-   *            the action event
-   */
-  @Override
-  public void actionPerformed(ActionEvent arg0) {
-    Component apane = environment.tabbed.getSelectedComponent();
+    /**
+     * Displays JFileChooser for location to save the graph canvas as bmp image.
+     *
+     * @param arg0
+     *            the action event
+     */
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        Component apane = environment.tabbed.getSelectedComponent();
 
-    JComponent c = (JComponent) environment.getActive();
+        JComponent c = (JComponent) environment.getActive();
 
-    SaveGraphUtility.saveGraph(apane, c, "BMP files", "bmp");
-  }
+        SaveGraphUtility.saveGraph(apane, c, "BMP files", "bmp");
+    }
 }
 
 class BMPFileFilter extends FileFilter {
-  @Override
-  public boolean accept(File f) {
-    return f.getName().endsWith(".bmp");
-  }
+    @Override
+    public boolean accept(File f) {
+        return f.getName().endsWith(".bmp");
+    }
 
-  @Override
-  public String getDescription() {
-    return ".bmp";
-  }
+    @Override
+    public String getDescription() {
+        return ".bmp";
+    }
 }

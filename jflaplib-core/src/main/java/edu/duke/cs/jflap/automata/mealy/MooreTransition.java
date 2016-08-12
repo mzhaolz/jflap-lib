@@ -30,95 +30,98 @@ import edu.duke.cs.jflap.gui.environment.Universe;
  *
  */
 public class MooreTransition extends MealyTransition {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 5185452526813901295L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5185452526813901295L;
 
-  /**
-   * Instantiates a new <code>MooreTransition</code> object and changes the
-   * output of the state <code>to</code> to <code>output</code>.
-   *
-   * @see #MooreTransition(State, State, String)
-   * @param from
-   *            the state this transition comes from
-   * @param to
-   *            the state this transition goes to
-   * @param label
-   *            the label for this transition that the input string in the
-   *            machine should match before moving through this transition
-   * @param output
-   *            the output this transition's to state produces
-   */
-  public MooreTransition(State from, State to, String label, String output) {
-    super(from, to, label, output);
-    setOutput(output);
-  }
+    /**
+     * Instantiates a new <code>MooreTransition</code> object and changes the
+     * output of the state <code>to</code> to <code>output</code>.
+     *
+     * @see #MooreTransition(State, State, String)
+     * @param from
+     *            the state this transition comes from
+     * @param to
+     *            the state this transition goes to
+     * @param label
+     *            the label for this transition that the input string in the
+     *            machine should match before moving through this transition
+     * @param output
+     *            the output this transition's to state produces
+     */
+    public MooreTransition(State from, State to, String label, String output) {
+        super(from, to, label, output);
+        setOutput(output);
+    }
 
-  /**
-   * Instantiates a new <code>MooreTransition</code> object without changing
-   * the output of the transition's to state.
-   *
-   * @see #MooreTransition(State, State, String, String)
-   * @param from
-   *            the state this transition comes from
-   * @param to
-   *            the state this transition goes to
-   * @param label
-   *            the label for this transition that the input string in the
-   *            machine should match before moving through this transition
-   */
-  public MooreTransition(State from, State to, String label) {
-    this(from, to, label, ((MooreMachine) (to.getAutomaton())).getOutput(to));
-  }
+    /**
+     * Instantiates a new <code>MooreTransition</code> object without changing
+     * the output of the transition's to state.
+     *
+     * @see #MooreTransition(State, State, String, String)
+     * @param from
+     *            the state this transition comes from
+     * @param to
+     *            the state this transition goes to
+     * @param label
+     *            the label for this transition that the input string in the
+     *            machine should match before moving through this transition
+     */
+    public MooreTransition(State from, State to, String label) {
+        this(from, to, label, ((MooreMachine) (to.getAutomaton())).getOutput(to));
+    }
 
-  /**
-   * Produces a copy of this transition with new from and to states.
-   *
-   * @param from
-   *            the new from state
-   * @param to
-   *            the new to state
-   * @return a copy of this transition with new states
-   */
-  @Override
-  public Transition copy(State from, State to) {
-    return new MooreTransition(from, to, getLabel(), getOutput());
-  }
+    /**
+     * Produces a copy of this transition with new from and to states.
+     *
+     * @param from
+     *            the new from state
+     * @param to
+     *            the new to state
+     * @return a copy of this transition with new states
+     */
+    @Override
+    public Transition copy(State from, State to) {
+        return new MooreTransition(from, to, getLabel(), getOutput());
+    }
 
-  /**
-   * Gets the output for this transition or its "to" state by calling
-   * {@link MooreMachine#getOutput(State)}.
-   *
-   * @see MooreMachine#getOutput(State)
-   */
-  @Override
-  public String getOutput() {
-    return ((MooreMachine) (to.getAutomaton())).getOutput(to);
-  }
+    /**
+     * Gets the output for this transition or its "to" state by calling
+     * {@link MooreMachine#getOutput(State)}.
+     *
+     * @see MooreMachine#getOutput(State)
+     */
+    @Override
+    public String getOutput() {
+        return ((MooreMachine) (to.getAutomaton())).getOutput(to);
+    }
 
-  /**
-   * Sets the output for this transition, and its "to" state, by calling
-   * {@link MooreMachine#setOutput(State, String)}.
-   *
-   * @see MooreMachine#setOutput(State, String)
-   * @param output
-   *            the new output for this transition
-   */
-  @Override
-  protected void setOutput(String output) {
-    ((MooreMachine) to.getAutomaton()).setOutput(to, output);
-  }
+    /**
+     * Sets the output for this transition, and its "to" state, by calling
+     * {@link MooreMachine#setOutput(State, String)}.
+     *
+     * @see MooreMachine#setOutput(State, String)
+     * @param output
+     *            the new output for this transition
+     */
+    @Override
+    protected void setOutput(String output) {
+        ((MooreMachine) to.getAutomaton()).setOutput(to, output);
+    }
 
-  /**
-   * Returns a string description of this transition. This consists of the
-   * label. The output of the transition is shown in the state.
-   *
-   * @return the description of this transition
-   */
-  @Override
-  public String getDescription() {
-    if (getLabel() == null || getLabel().length() == 0) return Universe.curProfile.getEmptyString();
-    else return getLabel();
-  }
+    /**
+     * Returns a string description of this transition. This consists of the
+     * label. The output of the transition is shown in the state.
+     *
+     * @return the description of this transition
+     */
+    @Override
+    public String getDescription() {
+        if (getLabel() == null || getLabel().length() == 0) {
+            return Universe.curProfile.getEmptyString();
+        } else {
+            return getLabel();
+        }
+    }
 }

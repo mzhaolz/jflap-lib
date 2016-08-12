@@ -38,8 +38,6 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 /**
  * The <CODE>ConvertController</CODE> abstract class handles the operation to
@@ -63,16 +61,12 @@ public abstract class ConvertController {
      * @see #fillMap
      */
     public ConvertController(ConvertPane pane, SelectionDrawer drawer, Automaton automaton) {
-        this.convertPane = pane;
+        convertPane = pane;
         this.automaton = automaton;
-        this.table = pane.getTable();
+        table = pane.getTable();
         this.drawer = drawer;
 
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                changeSelection();
-            }
-        });
+        table.getSelectionModel().addListSelectionListener(e -> changeSelection());
     }
 
     /**
@@ -88,15 +82,19 @@ public abstract class ConvertController {
             return;
         }
         for (; min <= max; min++) {
-            if (!model.isSelectedIndex(min))
+            if (!model.isSelectedIndex(min)) {
                 continue;
+            }
             Production p = table.getGrammarModel().getProduction(min);
             Object o = productionToObject.get(p);
-            if (o == null)
+            if (o == null) {
                 continue;
-            if (o instanceof State)
+            }
+            if (o instanceof State) {
                 drawer.addSelected((State) o);
-            else drawer.addSelected((Transition) o);
+            } else {
+                drawer.addSelected((Transition) o);
+            }
         }
         convertPane.getAutomatonPane().repaint();
     }
@@ -109,21 +107,25 @@ public abstract class ConvertController {
         List<State> states = automaton.getStates();
         for (State si : states) {
             List<Production> prods = getProductions(si);
-            if (prods.size() == 0)
+            if (prods.size() == 0) {
                 continue;
+            }
             objectToProduction.put(si, prods);
-            for (int j = 0; j < prods.size(); j++)
+            for (int j = 0; j < prods.size(); j++) {
                 productionToObject.put(prods.get(j), si);
+            }
         }
         // Now let's get the other cannon!
         List<Transition> transitions = automaton.getTransitions();
         for (Transition transi : transitions) {
             List<Production> prods = getProductions(transi);
-            if (prods.size() == 0)
+            if (prods.size() == 0) {
                 continue;
+            }
             objectToProduction.put(transi, prods);
-            for (int j = 0; j < prods.size(); j++)
+            for (int j = 0; j < prods.size(); j++) {
                 productionToObject.put(prods.get(j), transi);
+            }
         }
     }
 
@@ -135,8 +137,9 @@ public abstract class ConvertController {
      */
     private void addProductions(Collection<Production> productions) {
         Iterator<Production> it = productions.iterator();
-        if (!it.hasNext())
+        if (!it.hasNext()) {
             return;
+        }
         GrammarTableModel model = table.getGrammarModel();
         int min = 1000000000, max = 0;
         while (it.hasNext()) {
@@ -189,8 +192,9 @@ public abstract class ConvertController {
         while (it.hasNext()) {
             Map.Entry<Serializable, List<Production>> entry = it.next();
             Serializable key = entry.getKey();
-            if (alreadyDone.contains(key))
+            if (alreadyDone.contains(key)) {
                 continue;
+            }
             List<Production> p = objectToProduction.get(key);
             addProductions(p);
             alreadyDone.add(entry.getKey());
@@ -206,11 +210,11 @@ public abstract class ConvertController {
      * @return the number of objects revealed
      */
     public int revealAllProductions() {
-        Set<Serializable> remaining = new HashSet<Serializable>(objectToProduction.keySet());
+        Set<Serializable> remaining = new HashSet<>(objectToProduction.keySet());
         remaining.removeAll(alreadyDone);
         int number = remaining.size();
         Iterator<Serializable> it = remaining.iterator();
-        Collection<Production> ps = new ArrayList<Production>();
+        Collection<Production> ps = new ArrayList<>();
         while (it.hasNext()) {
             List<Production> p = objectToProduction.get(it.next());
             ps.addAll(p);
@@ -227,15 +231,18 @@ public abstract class ConvertController {
      * @return an array of the objects which as yet have not been transformed
      */
     public List<Serializable> highlightUntransformed() {
-        HashSet<Serializable> unselectedSet = new HashSet<Serializable>(
+        HashSet<Serializable> unselectedSet = new HashSet<>(
                 objectToProduction.keySet());
         unselectedSet.removeAll(alreadyDone);
         List<Serializable> unselected = new ArrayList<>(unselectedSet);
         drawer.clearSelected();
-        for (Serializable s : unselected)
-            if (s instanceof State)
+        for (Serializable s : unselected) {
+            if (s instanceof State) {
                 drawer.addSelected((State) s);
-            else drawer.addSelected((Transition) s);
+            } else {
+                drawer.addSelected((Transition) s);
+            }
+        }
         convertPane.getAutomatonPane().repaint();
         return unselected;
     }
@@ -336,10 +343,10 @@ public abstract class ConvertController {
      * The mapping of productions to whatever object they correspond to, which
      * will be either a state or a transition.
      */
-    protected HashMap<Production, Serializable> productionToObject = new HashMap<Production, Serializable>();
+    protected HashMap<Production, Serializable> productionToObject = new HashMap<>();
 
     /** Which objects have already been added? */
-    protected HashSet<Object> alreadyDone = new HashSet<Object>();
+    protected HashSet<Object> alreadyDone = new HashSet<>();
 
     /**
      * The convert pane that holds the automaton pane and the grammar table.

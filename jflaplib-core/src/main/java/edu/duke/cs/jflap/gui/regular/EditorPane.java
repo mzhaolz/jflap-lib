@@ -20,8 +20,6 @@ import edu.duke.cs.jflap.regular.RegularExpression;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 
@@ -38,72 +36,67 @@ import javax.swing.event.DocumentListener;
  * @author Thomas Finley
  */
 public class EditorPane extends JPanel {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiates a new editor pane for a given regular expression.
-   *
-   * @param expression
-   *            the regular expression
-   */
-  public EditorPane(RegularExpression expression) {
-    // super(new BorderLayout());
-    this.expression = expression;
-    field.setText(expression.asString());
-    field.addActionListener(
-        new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            updateExpression();
-          }
+    /**
+     * Instantiates a new editor pane for a given regular expression.
+     *
+     * @param expression
+     *            the regular expression
+     */
+    public EditorPane(RegularExpression expression) {
+        // super(new BorderLayout());
+        this.expression = expression;
+        field.setText(expression.asString());
+        field.addActionListener(event -> updateExpression());
+        field.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateExpression();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateExpression();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateExpression();
+            }
         });
-    field
-        .getDocument()
-        .addDocumentListener(
-            new DocumentListener() {
-              public void insertUpdate(DocumentEvent e) {
-                updateExpression();
-              }
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1.0;
+        c.gridwidth = GridBagConstraints.REMAINDER;
 
-              public void removeUpdate(DocumentEvent e) {
-                updateExpression();
-              }
+        add(new JLabel("Edit the regular expression below:"), c);
+        add(field, c);
+    }
 
-              public void changedUpdate(DocumentEvent e) {
-                updateExpression();
-              }
-            });
-    setLayout(new GridBagLayout());
-    GridBagConstraints c = new GridBagConstraints();
-    c.fill = GridBagConstraints.BOTH;
-    c.weightx = 1.0;
-    c.gridwidth = GridBagConstraints.REMAINDER;
+    /**
+     * This is called when the regular expression should be updated to accord
+     * with the field.
+     */
+    private void updateExpression() {
+        expression.change(ref);
+    }
 
-    add(new JLabel("Edit the regular expression below:"), c);
-    add(field, c);
-  }
+    /** The regular expression. */
+    private RegularExpression expression;
 
-  /**
-   * This is called when the regular expression should be updated to accord
-   * with the field.
-   */
-  private void updateExpression() {
-    expression.change(ref);
-  }
+    /** The field where the expression is displayed and edited. */
+    private JTextField field = new JTextField("");
 
-  /** The regular expression. */
-  private RegularExpression expression;
-
-  /** The field where the expression is displayed and edited. */
-  private JTextField field = new JTextField("");
-
-  /** The reference object. */
-  private Reference<?> ref =
-      new WeakReference<Object>(null) {
+    /** The reference object. */
+    private Reference<?> ref = new WeakReference<Object>(null) {
+        @Override
         public Object get() {
-          return field.getText();
+            return field.getText();
         }
-      };
+    };
 }

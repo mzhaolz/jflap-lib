@@ -17,7 +17,7 @@
 package edu.duke.cs.jflap.automata.turing;
 
 public interface AcceptanceFilter {
-  boolean accept(TMConfiguration tmc);
+    boolean accept(TMConfiguration tmc);
 
-  String getName();
+    String getName();
 }

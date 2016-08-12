@@ -33,49 +33,46 @@ import javax.swing.KeyStroke;
  * @author Thomas Finley
  */
 public class LSystemDisplay extends LSystemAction {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * Instantiates a new <CODE>BruteParseAction</CODE>.
-   *
-   * @param environment
-   *            the grammar environment
-   */
-  public LSystemDisplay(LSystemEnvironment environment) {
-    super(environment, "Render System", null);
-    putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_D, MAIN_MENU_MASK));
-  }
-
-  /**
-   * Performs the action.
-   */
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    LSystem lsystem = getEnvironment().getLSystem();
-
-    if (lsystem.getAxiom().size() == 0) {
-      JOptionPane.showMessageDialog(
-          getEnvironment(),
-          "The axiom must have one or more symbols.",
-          "Nonempty Axiom Required",
-          JOptionPane.ERROR_MESSAGE);
-      return;
+    /**
+     * Instantiates a new <CODE>BruteParseAction</CODE>.
+     *
+     * @param environment
+     *            the grammar environment
+     */
+    public LSystemDisplay(LSystemEnvironment environment) {
+        super(environment, "Render System", null);
+        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_D, MAIN_MENU_MASK));
     }
 
-    try {
-      DisplayPane pane = new DisplayPane(lsystem);
-      getEnvironment().add(pane, "L-S Render", new CriticalTag() {});
-      getEnvironment().setActive(pane);
-    } catch (NoClassDefFoundError ex) {
-      JOptionPane.showMessageDialog(
-          getEnvironment(),
-          "Sorry, but this uses features requiring Java 1.4 or later!",
-          "JVM too primitive",
-          JOptionPane.ERROR_MESSAGE);
-      return;
+    /**
+     * Performs the action.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        LSystem lsystem = getEnvironment().getLSystem();
+
+        if (lsystem.getAxiom().size() == 0) {
+            JOptionPane.showMessageDialog(getEnvironment(),
+                    "The axiom must have one or more symbols.", "Nonempty Axiom Required",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            DisplayPane pane = new DisplayPane(lsystem);
+            getEnvironment().add(pane, "L-S Render", new CriticalTag() {
+            });
+            getEnvironment().setActive(pane);
+        } catch (NoClassDefFoundError ex) {
+            JOptionPane.showMessageDialog(getEnvironment(),
+                    "Sorry, but this uses features requiring Java 1.4 or later!",
+                    "JVM too primitive", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
     }
-  }
 }

@@ -73,19 +73,19 @@ public class B5Wmod extends RegularPumpingLemma {
         }
     }
 
-  @Override
-  public void chooseDecomposition() {
-    // first three values of 'w' in the equation fit the equation no matter
-    // what.
-    setDecomposition(Lists.newArrayList(5, 3));
+    @Override
+    public void chooseDecomposition() {
+        // first three values of 'w' in the equation fit the equation no matter
+        // what.
+        setDecomposition(Lists.newArrayList(5, 3));
 
-  }
+    }
 
-  @Override
-  protected void setRange() {
-    myRange = Lists.newArrayList(8, 20);
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(8, 20);
 
-  }
+    }
 
     @Override
     public boolean isInLang(String s) {

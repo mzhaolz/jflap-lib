@@ -33,40 +33,44 @@ import java.awt.event.MouseEvent;
  * @author Thomas Finley
  */
 public class RegularToAutomatonTransitionTool extends TransitionTool {
-  /**
-   * Instantiates a new transition tool.
-   *
-   * @param view
-   *            the view where the automaton is drawn
-   * @param drawer
-   *            the object that draws the automaton
-   * @param controller
-   *            the RE to FSA controller object
-   */
-  public RegularToAutomatonTransitionTool(
-      AutomatonPane view, AutomatonDrawer drawer, REToFSAController controller) {
-    super(view, drawer);
-    this.controller = controller;
-  }
-
-  /**
-   * When we release the mouse, a transition from the start state to this
-   * released state must be formed.
-   *
-   * @param event
-   *            the mouse event
-   */
-  public void mouseReleased(MouseEvent event) {
-    // Did we even start at a state?
-    if (first == null) return;
-    State state = getDrawer().stateAtPoint(event.getPoint());
-    if (state != null) {
-      controller.transitionCreate(first, state);
+    /**
+     * Instantiates a new transition tool.
+     *
+     * @param view
+     *            the view where the automaton is drawn
+     * @param drawer
+     *            the object that draws the automaton
+     * @param controller
+     *            the RE to FSA controller object
+     */
+    public RegularToAutomatonTransitionTool(AutomatonPane view,
+            AutomatonDrawer drawer,
+            REToFSAController controller) {
+        super(view, drawer);
+        this.controller = controller;
     }
-    first = null;
-    getView().repaint();
-  }
 
-  /** The regular conversion controller. */
-  private REToFSAController controller;
+    /**
+     * When we release the mouse, a transition from the start state to this
+     * released state must be formed.
+     *
+     * @param event
+     *            the mouse event
+     */
+    @Override
+    public void mouseReleased(MouseEvent event) {
+        // Did we even start at a state?
+        if (first == null) {
+            return;
+        }
+        State state = getDrawer().stateAtPoint(event.getPoint());
+        if (state != null) {
+            controller.transitionCreate(first, state);
+        }
+        first = null;
+        getView().repaint();
+    }
+
+    /** The regular conversion controller. */
+    private REToFSAController controller;
 }

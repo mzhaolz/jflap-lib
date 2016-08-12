@@ -65,10 +65,10 @@ public class ABnAk extends RegularPumpingLemma {
         w = pumpString("ab", m + 1) + pumpString("a", m);
     }
 
-  @Override
-  public void chooseDecomposition() {
-    setDecomposition(Lists.newArrayList(0, 2));
-  }
+    @Override
+    public void chooseDecomposition() {
+        setDecomposition(Lists.newArrayList(0, 2));
+    }
 
     @Override
     public void chooseI() {

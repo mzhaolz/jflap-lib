@@ -63,8 +63,9 @@ public class Operations {
      *         for this grammar
      */
     public static Map<String, Set<String>> first(Grammar grammar) {
-        if (CACHED_FIRST.containsKey(grammar))
+        if (CACHED_FIRST.containsKey(grammar)) {
             return CACHED_FIRST.get(grammar);
+        }
         Map<String, Set<String>> first = new HashMap<>();
         // Put the terminals in the map.
         List<String> terminals = grammar.getTerminals();
@@ -89,8 +90,9 @@ public class Operations {
                 String variable = productions.get(i).getLHS();
                 String rhs = productions.get(i).getRHS();
                 Set<String> firstRhs = first(first, rhs);
-                if (setForKey(first, variable).addAll(firstRhs))
+                if (setForKey(first, variable).addAll(firstRhs)) {
                     hasChanged = true;
+                }
             }
         }
         CACHED_FIRST.put(grammar, Collections.unmodifiableMap(first));
@@ -109,8 +111,9 @@ public class Operations {
      */
     public static Set<String> first(Map<String, Set<String>> firstSets, String sequence) {
         Set<String> first = new HashSet<>();
-        if (sequence.equals(""))
+        if (sequence.equals("")) {
             first.add("");
+        }
         for (int j = 0; j < sequence.length(); j++) {
             Set<String> s = setForKey(firstSets, sequence.substring(j, j + 1));
             if (!s.contains("")) {
@@ -120,11 +123,13 @@ public class Operations {
                 break;
             }
             // Does contain lambda. Damn it.
-            if (j != sequence.length() - 1)
+            if (j != sequence.length() - 1) {
                 s.remove("");
+            }
             first.addAll(s);
-            if (j != sequence.length() - 1)
+            if (j != sequence.length() - 1) {
                 s.add("");
+            }
         }
         return first;
     }
@@ -138,19 +143,22 @@ public class Operations {
      * @return the map of non-terminals to the follow sets
      */
     public static Map<String, Set<String>> follow(Grammar grammar) {
-        if (CACHED_FOLLOW.containsKey(grammar))
+        if (CACHED_FOLLOW.containsKey(grammar)) {
             return CACHED_FOLLOW.get(grammar);
+        }
         Map<String, Set<String>> follow = new HashMap<>();
         // Add the mapping from the initial variable to the end of
         // string character.
-        Set<String> initialSet = new HashSet<String>();
+        Set<String> initialSet = new HashSet<>();
         initialSet.add("$");
         follow.put(grammar.getStartVariable(), initialSet);
         // Make every follow mapping empty for now.
         List<String> variables = grammar.getVariables();
-        for (int i = 0; i < variables.size(); i++)
-            if (!variables.get(i).equals(grammar.getStartVariable()))
+        for (int i = 0; i < variables.size(); i++) {
+            if (!variables.get(i).equals(grammar.getStartVariable())) {
                 follow.put(variables.get(i), new HashSet<>());
+            }
+        }
         // Get the first sets.
         Map<String, Set<String>> firstSets = first(grammar);
         // Iterate repeatedly over the productions until we're
@@ -164,20 +172,23 @@ public class Operations {
                 String rhs = productions.get(i).getRHS();
                 for (int j = 0; j < rhs.length(); j++) {
                     String rhsVariable = rhs.substring(j, j + 1);
-                    if (!grammar.isVariable(rhsVariable))
+                    if (!grammar.isVariable(rhsVariable)) {
                         continue;
+                    }
                     Set<String> firstFollowing = first(firstSets, rhs.substring(j + 1));
                     // Is lambda in that following the variable? For
                     // A->aBb where lambda is in FIRST(b), everything
                     // in FOLLOW(A) is in FOLLOW(B).
                     if (firstFollowing.remove("")) {
-                        if (setForKey(follow, rhsVariable).addAll(setForKey(follow, variable)))
+                        if (setForKey(follow, rhsVariable).addAll(setForKey(follow, variable))) {
                             hasChanged = true;
+                        }
                     }
                     // For A->aBb, everything in FIRST(b) except
                     // lambda is put in FOLLOW(B).
-                    if (setForKey(follow, rhsVariable).addAll(firstFollowing))
+                    if (setForKey(follow, rhsVariable).addAll(firstFollowing)) {
                         hasChanged = true;
+                    }
                 }
             }
         }
@@ -205,8 +216,9 @@ public class Operations {
         List<Production> productions = grammar.getProductions();
         for (int i = 0; i < productions.size(); i++) {
             String variable = productions.get(i).getLHS();
-            if (!varToProd.containsKey(variable))
+            if (!varToProd.containsKey(variable)) {
                 varToProd.put(variable, new ArrayList<>());
+            }
             varToProd.get(variable).add(productions.get(i));
         }
         List<String> variables = grammar.getVariables();
@@ -227,15 +239,20 @@ public class Operations {
                     String beta = productions.get(k).getRHS();
                     Set<String> betaFirst = first(first, beta);
                     // Condition 1 & 2
-                    if (betaFirst.removeAll(alphaFirst))
+                    if (betaFirst.removeAll(alphaFirst)) {
                         return false;
+                    }
                     // Condition 3
-                    if (betaFirst.contains(""))
-                        if (alphaFirst.removeAll(followVar))
+                    if (betaFirst.contains("")) {
+                        if (alphaFirst.removeAll(followVar)) {
                             return false;
-                    if (alphaFirst.contains(""))
-                        if (betaFirst.removeAll(followVar))
+                        }
+                    }
+                    if (alphaFirst.contains("")) {
+                        if (betaFirst.removeAll(followVar)) {
                             return false;
+                        }
+                    }
                 }
             }
         }
@@ -261,8 +278,9 @@ public class Operations {
             return null;
         }
         startProduction.setLHS(start + "'");
-        for (int i = 0; i < prods.size(); i++)
+        for (int i = 0; i < prods.size(); i++) {
             g.addProduction(prods.get(i));
+        }
         return g;
     }
 
@@ -289,8 +307,9 @@ public class Operations {
                 // Find what's on this production.
                 int p = item.getRHS().indexOf(ITEM_POSITION);
                 p++; // We want what's after this.
-                if (p == item.getRHS().length())
+                if (p == item.getRHS().length()) {
                     continue;
+                }
                 // We want all productions with this variable.
                 String var = item.getRHS().substring(p, p + 1);
                 Set<Production> ps = vp.get(var);
@@ -303,8 +322,9 @@ public class Operations {
                     currentStep.add(new Production(var, ITEM_POSITION + cp.getRHS()));
                 }
             }
-            if (!items.addAll(currentStep))
+            if (!items.addAll(currentStep)) {
                 return items;
+            }
             closure = currentStep;
         }
     }
@@ -327,12 +347,14 @@ public class Operations {
             Production item = it.next();
             int p = item.getRHS().indexOf(ITEM_POSITION);
             p++; // We want what's after this.
-            if (p == item.getRHS().length())
+            if (p == item.getRHS().length()) {
                 continue;
+            }
             // We want all productions with this variable.
             String var = item.getRHS().substring(p, p + 1);
-            if (!var.equals(symbol))
+            if (!var.equals(symbol)) {
                 continue;
+            }
 
             String newRhs = item.getRHS().substring(0, p - 1) + item.getRHS().substring(p, p + 1)
                     + ITEM_POSITION + item.getRHS().substring(p + 1, item.getRHS().length());
@@ -350,14 +372,16 @@ public class Operations {
      * @return the map of variables to productions
      */
     public static Map<String, Set<Production>> getVariableProductionMap(Grammar grammar) {
-        if (CACHED_VPMAP.containsKey(grammar))
+        if (CACHED_VPMAP.containsKey(grammar)) {
             return Collections.unmodifiableMap(CACHED_VPMAP.get(grammar));
+        }
         Map<String, Set<Production>> vp = new HashMap<>();
         CACHED_VPMAP.put(grammar, vp);
         List<Production> p = grammar.getProductions();
         for (int i = 0; i < p.size(); i++) {
-            if (!vp.containsKey(p.get(i).getLHS()))
+            if (!vp.containsKey(p.get(i).getLHS())) {
                 vp.put(p.get(i).getLHS(), new HashSet<Production>());
+            }
             vp.get(p.get(i).getLHS()).add(p.get(i));
         }
         return getVariableProductionMap(grammar);
@@ -399,8 +423,9 @@ public class Operations {
         while (it.hasNext()) {
             Production item = it.next();
             int position = item.getRHS().indexOf(ITEM_POSITION) + 1;
-            if (position == item.getRHS().length())
+            if (position == item.getRHS().length()) {
                 continue;
+            }
             symbols.add(item.getRHS().substring(position, position + 1));
         }
         return Lists.newArrayList(symbols);
