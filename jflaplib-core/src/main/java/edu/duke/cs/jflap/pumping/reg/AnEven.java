@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.pumping.reg;
 
-import com.google.common.collect.Lists;
-
 import edu.duke.cs.jflap.pumping.LemmaMath;
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
+
+import com.google.common.collect.Lists;
 
 /**
  * The regular pumping lemma for <i>L</i> = {<i>a<sup>n</sup></i> : <i>n</i> is
@@ -28,71 +28,71 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  * @author Jinghui Lim & Chris Morgan
  */
 public class AnEven extends RegularPumpingLemma {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 6813155572111784226L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6813155572111784226L;
 
-	@Override
-	public void chooseDecomposition() {
-		setDecomposition(Lists.newArrayList(0, 2));
-	}
+    @Override
+    public String getTitle() {
+        return "a^n : n is even";
+    }
 
-	@Override
-	public void chooseI() {
-		i = LemmaMath.flipCoin();
-	}
+    @Override
+    public String getHTMLTitle() {
+        return "<i>a<sup>n</sup></i> : <i>n</i> is even";
+    }
 
-	@Override
-	protected void chooseW() {
-		if (getM() % 2 == 0) {
-			w = pumpString("a", getM());
-		} else {
-			w = pumpString("a", getM() + 1);
-		}
-	}
+    @Override
+    public void setDescription() {
+        partitionIsValid = true;
+        explanation = "Because this is a regular language, a valid decomposition exists.  If <i>m</i> "
+                + GREATER_OR_EQ + " 2, " + "the <i>y</i> value \"aa\" will always pump the string.";
+    }
 
-	@Override
-	public String getHTMLTitle() {
-		return "<i>a<sup>n</sup></i> : <i>n</i> is even";
-	}
+    @Override
+    protected void chooseW() {
+        if (getM() % 2 == 0) {
+            w = pumpString("a", getM());
+        } else {
+            w = pumpString("a", getM() + 1);
+        }
+    }
 
-	@Override
-	public String getTitle() {
-		return "a^n : n is even";
-	}
+    @Override
+    public void chooseI() {
+        i = LemmaMath.flipCoin();
+    }
 
-	/**
-	 * Checks if the pumped string is in the language.
-	 *
-	 * @return <code>true</code> if it is, <code>false</code> otherwise
-	 */
-	@Override
-	public boolean isInLang(final String s) {
-		String temp;
-		final char[] list = new char[] { 'a' };
-		if (LemmaMath.otherCharactersFound(s, list)) {
-			return false;
-		}
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(2, 18);
+    }
 
-		if (s.length() == 0) {
-			temp = createPumpedString();
-		} else {
-			temp = s;
-		}
-		return temp.length() % 2 == 0;
-	}
+    @Override
+    public void chooseDecomposition() {
+        setDecomposition(Lists.newArrayList(0, 2));
+    }
 
-	@Override
-	public void setDescription() {
-		partitionIsValid = true;
-		explanation = "Because this is a regular language, a valid decomposition exists.  If <i>m</i> " + GREATER_OR_EQ
-				+ " 2, " + "the <i>y</i> value \"aa\" will always pump the string.";
-	}
+    /**
+     * Checks if the pumped string is in the language.
+     *
+     * @return <code>true</code> if it is, <code>false</code> otherwise
+     */
+    @Override
+    public boolean isInLang(String s) {
+        String temp;
+        char[] list = new char[] { 'a' };
+        if (LemmaMath.otherCharactersFound(s, list)) {
+            return false;
+        }
 
-	@Override
-	protected void setRange() {
-		myRange = Lists.newArrayList(2, 18);
-	}
+        if (s.length() == 0) {
+            temp = createPumpedString();
+        } else {
+            temp = s;
+        }
+        return temp.length() % 2 == 0;
+    }
 
 }

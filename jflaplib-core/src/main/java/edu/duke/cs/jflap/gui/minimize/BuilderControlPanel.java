@@ -16,12 +16,12 @@
 
 package edu.duke.cs.jflap.gui.minimize;
 
+import edu.duke.cs.jflap.gui.TooltipAction;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-
-import edu.duke.cs.jflap.gui.TooltipAction;
 
 /**
  * This control panel is a set of GUI elements that, when invoked, call methods
@@ -30,64 +30,64 @@ import edu.duke.cs.jflap.gui.TooltipAction;
  * @author Thomas Finley
  */
 class BuilderControlPanel extends JToolBar {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Initializes the GUI elements in the indicated toolbar.
-	 *
-	 * @param toolbar
-	 *            the tool bar
-	 * @param controller
-	 *            the controller for the building of the automaton
-	 */
-	public static void initView(final JToolBar toolbar, final BuilderController controller) {
-		toolbar.add(new JButton(new TooltipAction("Hint", "Adds one transition.") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+    /**
+     * Instantiates a new <CODE>BuilderControlPanel</CODE>.
+     *
+     * @param controller
+     *            the builder controller to call methods of
+     */
+    public BuilderControlPanel(BuilderController controller) {
+        initView(this, controller);
+    }
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.hint();
-			}
-		}));
+    /**
+     * Initializes the GUI elements in the indicated toolbar.
+     *
+     * @param toolbar
+     *            the tool bar
+     * @param controller
+     *            the controller for the building of the automaton
+     */
+    public static void initView(JToolBar toolbar, final BuilderController controller) {
+        toolbar.add(new JButton(new TooltipAction("Hint", "Adds one transition.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-		toolbar.add(new JButton(new TooltipAction("Complete", "Adds all transitions.") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.hint();
+            }
+        }));
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.complete();
-			}
-		}));
+        toolbar.add(new JButton(new TooltipAction("Complete", "Adds all transitions.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-		toolbar.add(new JButton(new TooltipAction("Done?", "Checks if the automaton is done.") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.complete();
+            }
+        }));
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.done();
-			}
-		}));
-	}
+        toolbar.add(new JButton(new TooltipAction("Done?", "Checks if the automaton is done.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-	/**
-	 * Instantiates a new <CODE>BuilderControlPanel</CODE>.
-	 *
-	 * @param controller
-	 *            the builder controller to call methods of
-	 */
-	public BuilderControlPanel(final BuilderController controller) {
-		initView(this, controller);
-	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.done();
+            }
+        }));
+    }
 }

@@ -16,15 +16,15 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import edu.duke.cs.jflap.automata.Automaton;
+import edu.duke.cs.jflap.automata.turing.TuringMachine;
+import edu.duke.cs.jflap.gui.environment.Universe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.duke.cs.jflap.automata.Automaton;
-import edu.duke.cs.jflap.automata.turing.TuringMachine;
-import edu.duke.cs.jflap.gui.environment.Universe;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * This class will store the states between actions, that we may undo them.
@@ -38,134 +38,133 @@ import edu.duke.cs.jflap.gui.environment.Universe;
  *
  */
 public class UndoKeeper {
-	private final Logger logger = LoggerFactory.getLogger(UndoKeeper.class);
+    private final Logger logger = LoggerFactory.getLogger(UndoKeeper.class);
 
-	private final Automaton myMaster;
+    private Automaton myMaster;
 
-	private final Deque<Automaton> myDeck;
-	private final Deque<Automaton> myBackDeck;
+    private Deque<Automaton> myDeck;
+    private Deque<Automaton> myBackDeck;
 
-	// private final int DEFAULT_NUM = 50;
+    // private final int DEFAULT_NUM = 50;
 
-	private int numUndo;
+    private int numUndo;
 
-	public boolean sensitive = false;
+    public UndoKeeper(Automaton master) {
+        myMaster = master;
+        myDeck = new LinkedList<>();
+        myBackDeck = new LinkedList<>();
+        numUndo = Universe.curProfile.undo_num;
+    }
 
-	private boolean wait = false;
+    public void setNumUndo(int nn) {
+        numUndo = nn;
+    }
 
-	public UndoKeeper(final Automaton master) {
-		myMaster = master;
-		myDeck = new LinkedList<>();
-		myBackDeck = new LinkedList<>();
-		numUndo = Universe.curProfile.undo_num;
-	}
+    public boolean sensitive = false;
+    private boolean wait = false;
 
-	public void redo() {
-		// EDebug.print("I am mucking with that data structure.");
-		if (myBackDeck.size() == 0) {
-			return;
-		}
-		// EDebug.print("Back deck is not empty.");
-		//
-		myDeck.push(myMaster.clone()); // push on head
+    public void setWait() {
+        wait = true;
+    }
 
-		if (myMaster instanceof TuringMachine) {
-			TuringMachine.become((TuringMachine) myMaster, (TuringMachine) myBackDeck.pop()); // casting
-		} else {
-			Automaton.become(myMaster, myBackDeck.pop());
-		}
+    public void saveStatus() {
+        // EDebug.print("I have been called upon");
+        if (wait) {
+            wait = false;
+            return;
+        }
 
-		myMaster.getEnvironmentFrame().repaint();
-	}
+        // EDebug.print("\nFirst place");
+        // for (int i = 0; i < myDeck.size(); i++)
+        // EDebug.print(((LinkedList)myDeck).get(i).hashCode());
 
-	/* Undo */
-	public void restoreStatus() {
-		// EDebug.print("I am mucking with that data structure.");
-		if (myDeck.size() == 0) {
-			return;
-		}
+        // if (myDeck.size() > 0)
+        // EDebug.print("The top of deck hash is " + myDeck.peek().hashCode());
 
-		Automaton p = null;
-		while (myDeck.size() > 0 && (p = myDeck.pop()).hashCode() == myMaster.hashCode()) {
-			;
-		}
+        myDeck.push((Automaton) myMaster.clone()); // push on head
 
-		// EDebug.print("Master's hash is " + myMaster.hashCode());
-		// EDebug.print("Top hash is " + p.hashCode());
+        // EDebug.print("The master that is getting pushed on has hascode = " +
+        // myMaster.hashCode());
 
-		if (myDeck.size() == 0 && p.hashCode() == myMaster.hashCode()) {
-			return;
-		}
+        logger.debug("saveStatus()");
 
-		sensitive = true;
-		myBackDeck.push(myMaster.clone());
+        // EDebug.print("Second place");
+        // for (int i = 0; i < myDeck.size(); i++)
+        // EDebug.print(((LinkedList)myDeck).get(i).hashCode());
+        //
+        // EDebug.print("\n");
 
-		if (myMaster instanceof TuringMachine) {
-			TuringMachine.become((TuringMachine) myMaster, (TuringMachine) p);
-		} else {
-			Automaton.become(myMaster, p); // pop off head
-		}
+        if (myDeck.size() >= 2) {
+            Automaton first = myDeck.pop();
+            Automaton second = myDeck.pop();
+            // EDebug.print("The first is " + first.hashCode() + "While the
+            // second is " + second.hashCode());
+            if (first.hashCode() == second.hashCode()) {
+                myDeck.push(first);
+            } else {
+                myDeck.push(second);
+                myDeck.push(first);
+                myBackDeck.clear();
+            }
+        }
 
-		sensitive = false;
-		myMaster.getEnvironmentFrame().repaint();
-	}
+        // EDebug.print("Third place");
+        // for (int i = 0; i < myDeck.size(); i++)
+        // EDebug.print(((LinkedList)myDeck).get(i).hashCode());
+        // EDebug.print(myDeck.size());
 
-	public void saveStatus() {
-		// EDebug.print("I have been called upon");
-		if (wait) {
-			wait = false;
-			return;
-		}
+        while (myDeck.size() > numUndo) {
+            myDeck.removeLast();
+        }
+    }
 
-		// EDebug.print("\nFirst place");
-		// for (int i = 0; i < myDeck.size(); i++)
-		// EDebug.print(((LinkedList)myDeck).get(i).hashCode());
+    /* Undo */
+    public void restoreStatus() {
+        // EDebug.print("I am mucking with that data structure.");
+        if (myDeck.size() == 0) {
+            return;
+        }
 
-		// if (myDeck.size() > 0)
-		// EDebug.print("The top of deck hash is " + myDeck.peek().hashCode());
+        Automaton p = null;
+        while (myDeck.size() > 0 && (p = myDeck.pop()).hashCode() == myMaster.hashCode()) {
+            ;
+        }
 
-		myDeck.push(myMaster.clone()); // push on head
+        // EDebug.print("Master's hash is " + myMaster.hashCode());
+        // EDebug.print("Top hash is " + p.hashCode());
 
-		// EDebug.print("The master that is getting pushed on has hascode = " +
-		// myMaster.hashCode());
+        if (myDeck.size() == 0 && p.hashCode() == myMaster.hashCode()) {
+            return;
+        }
 
-		logger.debug("saveStatus()");
+        sensitive = true;
+        myBackDeck.push((Automaton) myMaster.clone());
 
-		// EDebug.print("Second place");
-		// for (int i = 0; i < myDeck.size(); i++)
-		// EDebug.print(((LinkedList)myDeck).get(i).hashCode());
-		//
-		// EDebug.print("\n");
+        if (myMaster instanceof TuringMachine) {
+            TuringMachine.become((TuringMachine) myMaster, (TuringMachine) p);
+        } else {
+            Automaton.become(myMaster, p); // pop off head
+        }
 
-		if (myDeck.size() >= 2) {
-			final Automaton first = myDeck.pop();
-			final Automaton second = myDeck.pop();
-			// EDebug.print("The first is " + first.hashCode() + "While the
-			// second is " + second.hashCode());
-			if (first.hashCode() == second.hashCode()) {
-				myDeck.push(first);
-			} else {
-				myDeck.push(second);
-				myDeck.push(first);
-				myBackDeck.clear();
-			}
-		}
+        sensitive = false;
+        myMaster.getEnvironmentFrame().repaint();
+    }
 
-		// EDebug.print("Third place");
-		// for (int i = 0; i < myDeck.size(); i++)
-		// EDebug.print(((LinkedList)myDeck).get(i).hashCode());
-		// EDebug.print(myDeck.size());
+    public void redo() {
+        // EDebug.print("I am mucking with that data structure.");
+        if (myBackDeck.size() == 0) {
+            return;
+        }
+        // EDebug.print("Back deck is not empty.");
+        //
+        myDeck.push((Automaton) myMaster.clone()); // push on head
 
-		while (myDeck.size() > numUndo) {
-			myDeck.removeLast();
-		}
-	}
+        if (myMaster instanceof TuringMachine) {
+            TuringMachine.become((TuringMachine) myMaster, (TuringMachine) myBackDeck.pop()); // casting
+        } else {
+            Automaton.become(myMaster, myBackDeck.pop());
+        }
 
-	public void setNumUndo(final int nn) {
-		numUndo = nn;
-	}
-
-	public void setWait() {
-		wait = true;
-	}
+        myMaster.getEnvironmentFrame().repaint();
+    }
 }

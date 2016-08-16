@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.pumping.reg;
 
-import com.google.common.collect.Lists;
-
 import edu.duke.cs.jflap.pumping.LemmaMath;
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
+
+import com.google.common.collect.Lists;
 
 /**
  * The regular pumping lemma for <i>L</i> =
@@ -29,73 +29,73 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  */
 public class BBABAnAn extends RegularPumpingLemma {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 4681597859261204781L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4681597859261204781L;
 
-	@Override
-	public void chooseDecomposition() {
-		setDecomposition(Lists.newArrayList(1, 2));
+    @Override
+    public String getHTMLTitle() {
+        return "<i>bba(ba)<sup>n</sup>a<sup>n-1</sup></i>";
+    }
 
-	}
+    @Override
+    public String getTitle() {
+        return "bba(ba)^n a^(n-1)";
+    }
 
-	@Override
-	public void chooseI() {
-		i = LemmaMath.flipCoin();
-	}
+    @Override
+    public void setDescription() {
+        partitionIsValid = false;
+        explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"bba(ba)<sup><i>m</i></sup>"
+                + "a<sup><i>m</i>-1</sup>\".  No possible <i>y</i> value among the \"bba(ba)<sup><i>m</i></sup>\" "
+                + "segment is possible to pump, meaning any possible generated string is not in the language.  "
+                + "Thus, the language is not regular.";
+    }
 
-	@Override
-	protected void chooseW() {
-		w = "bba" + pumpString("ba", m) + pumpString("a", m - 1);
-	}
+    @Override
+    public void chooseI() {
+        i = LemmaMath.flipCoin();
+    }
 
-	@Override
-	public String getHTMLTitle() {
-		return "<i>bba(ba)<sup>n</sup>a<sup>n-1</sup></i>";
-	}
+    @Override
+    public void chooseDecomposition() {
+        setDecomposition(Lists.newArrayList(1, 2));
 
-	@Override
-	public String getTitle() {
-		return "bba(ba)^n a^(n-1)";
-	}
+    }
 
-	@Override
-	public boolean isInLang(final String s) {
-		if (!s.startsWith("bba")) {
-			return false;
-		}
+    @Override
+    protected void chooseW() {
+        w = "bba" + pumpString("ba", m) + pumpString("a", m - 1);
+    }
 
-		String temp = s.substring(3);
-		int n = 0;
-		while (temp.startsWith("ba")) {
-			temp = temp.substring(2);
-			n++;
-		}
-		while (temp.startsWith("a")) {
-			temp = temp.substring(1);
-			n--;
-		}
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(5, 10);
 
-		if (n == 1 && temp.length() == 0) {
-			return true;
-		}
-		return false;
-	}
+    }
 
-	@Override
-	public void setDescription() {
-		partitionIsValid = false;
-		explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"bba(ba)<sup><i>m</i></sup>"
-				+ "a<sup><i>m</i>-1</sup>\".  No possible <i>y</i> value among the \"bba(ba)<sup><i>m</i></sup>\" "
-				+ "segment is possible to pump, meaning any possible generated string is not in the language.  "
-				+ "Thus, the language is not regular.";
-	}
+    @Override
+    public boolean isInLang(String s) {
+        if (!s.startsWith("bba")) {
+            return false;
+        }
 
-	@Override
-	protected void setRange() {
-		myRange = Lists.newArrayList(5, 10);
+        String temp = s.substring(3);
+        int n = 0;
+        while (temp.startsWith("ba")) {
+            temp = temp.substring(2);
+            n++;
+        }
+        while (temp.startsWith("a")) {
+            temp = temp.substring(1);
+            n--;
+        }
 
-	}
+        if (n == 1 && temp.length() == 0) {
+            return true;
+        }
+        return false;
+    }
 
 }

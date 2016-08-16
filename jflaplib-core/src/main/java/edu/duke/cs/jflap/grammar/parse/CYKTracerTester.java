@@ -16,14 +16,14 @@
 
 package edu.duke.cs.jflap.grammar.parse;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar;
+
+import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test Suite for CYK Tracer
@@ -33,37 +33,38 @@ import edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar;
  */
 public class CYKTracerTester {
 
-	public static void main(final String[] args) {
-		final Grammar g = new ContextFreeGrammar();
-		/*
-		 * p[0]=new Production("S","bAC"); p[1]=new Production("A","C");
-		 * p[2]=new Production("A","a"); p[3]=new Production("B","bAE");
-		 * p[4]=new Production("C","cC"); p[5]=new Production("C","B"); p[6]=new
-		 * Production("C",""); p[7]=new Production("E","cE"); p[8]=new
-		 * Production("D","dFA"); p[9]=new Production("F","e");
-		 */
-		final List<Production> p = Lists.newArrayList(new Production("S", "aSb"), new Production("S", "bB"),
-				new Production("B", "bbB"), new Production("B", ""), new Production("S", "SS"));
+    public static void main(String[] args) {
+        Grammar g = new ContextFreeGrammar();
+        /*
+         * p[0]=new Production("S","bAC"); p[1]=new Production("A","C");
+         * p[2]=new Production("A","a"); p[3]=new Production("B","bAE");
+         * p[4]=new Production("C","cC"); p[5]=new Production("C","B"); p[6]=new
+         * Production("C",""); p[7]=new Production("E","cE"); p[8]=new
+         * Production("D","dFA"); p[9]=new Production("F","e");
+         */
+        List<Production> p = Lists.newArrayList(new Production("S", "aSb"),
+                new Production("S", "bB"), new Production("B", "bbB"), new Production("B", ""),
+                new Production("S", "SS"));
 
-		g.addProductions(p);
+        g.addProductions(p);
 
-		final ArrayList<Production> result = new ArrayList<>();
-		result.add(new Production("S", "AD"));
-		result.add(new Production("A", "a"));
-		result.add(new Production("D", "SC"));
-		result.add(new Production("S", "CS"));
-		result.add(new Production("C", "b"));
-		result.add(new Production("S", "SS"));
-		result.add(new Production("S", "b"));
-		result.add(new Production("S", "b"));
-		result.add(new Production("C", "b"));
+        ArrayList<Production> result = new ArrayList<>();
+        result.add(new Production("S", "AD"));
+        result.add(new Production("A", "a"));
+        result.add(new Production("D", "SC"));
+        result.add(new Production("S", "CS"));
+        result.add(new Production("C", "b"));
+        result.add(new Production("S", "SS"));
+        result.add(new Production("S", "b"));
+        result.add(new Production("S", "b"));
+        result.add(new Production("C", "b"));
 
-		/*
-		 * result.add(new Production("D","c")); result.add(new
-		 * Production("C","c"));
-		 */
+        /*
+         * result.add(new Production("D","c")); result.add(new
+         * Production("C","c"));
+         */
 
-		final CYKTracer ct = new CYKTracer(g, result);
-		ct.traceBack();
-	}
+        CYKTracer ct = new CYKTracer(g, result);
+        ct.traceBack();
+    }
 }

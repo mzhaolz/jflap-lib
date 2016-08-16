@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.pumping.cf;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
 import edu.duke.cs.jflap.pumping.Case;
 import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
 import edu.duke.cs.jflap.pumping.LemmaMath;
+
+import com.google.common.collect.Lists;
+
+import java.util.List;
 
 /**
  * The context-free pumping lemma for <i>L</i> =
@@ -33,315 +33,320 @@ import edu.duke.cs.jflap.pumping.LemmaMath;
  *
  */
 public class AnBjAnBj extends ContextFreePumpingLemma {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 8053241957316656330L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8053241957316656330L;
 
-	@Override
-	protected void addCases() {
-		/*
-		 * v is string of a's and y is string of a's
-		 */
-		myAllCases.add(new Case() {
-			@Override
-			public String description() {
-				return "v is a string of \"a\"s and y is a string of \"a\"s";
-			}
+    @Override
+    public String getTitle() {
+        return "a^n b^j a^n b^j : n >= 0, j >= 0";
+    }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(0, 1, 0, 1);
-			}
+    @Override
+    public String getHTMLTitle() {
+        return "<i>a<sup>n</sup>b<sup>j</sup>a<sup>n</sup>b<sup>j</sup></i> : <i>n</i> "
+                + GREATER_OR_EQ + " 0, <i>j</i> " + GREATER_OR_EQ + " 0";
+    }
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") > -1 && v.indexOf("b") == -1 && y.indexOf("a") > -1 && y.indexOf("b") == -1) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is string of a's and y is string of a's followed by b's
-		 */
-		myAllCases.add(new Case() {
+    @Override
+    public void setDescription() {
+        partitionIsValid = false;
+        explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
+                + "b<sup><i>m</i></sup>a<sup><i>m</i></sup>b<sup><i>m</i></sup>\".  To be in the language with "
+                + "this example, <i>v</i> & <i>y</i> together cannot possess identical letters that are from separate "
+                + "blocks of alike letters (ex: <i>v</i> has \"b\"s from the first set of \"b\"s, "
+                + "while <i>y</i> has \"b\"s from the second set of \"b\"s).  Because of this, any increase or decrease "
+                + "in \"a\"s or \"b\"s will not be matched by any change in the other blocks of similar letters, "
+                + "resulting in an inequality that prevents the decomposition from working.  Thus, this language is "
+                + "not context-free.";
+    }
 
-			@Override
-			public String description() {
-				return "v is a string of \"a\"s and y is a string of \"a\"s followed by \"b\"s";
-			}
+    @Override
+    protected void chooseW() {
+        w = pumpString("a", getM()) + pumpString("b", getM()) + pumpString("a", getM())
+                + pumpString("b", getM());
+    }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(1, 1, 0, m - 1);
-			}
+    @Override
+    public void chooseDecomposition() {
+        int step = w.length() / 2 - 1;
+        if (step > m - 2) {
+            step = m - 2;
+        }
+        if (w.indexOf('a') > -1) {
+            setDecomposition(Lists.newArrayList(0, 1, step, 1));
+        } else {
+            setDecomposition(Lists.newArrayList(w.indexOf('b'), 1, step, 1));
+        }
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") > -1 && v.indexOf("b") == -1 && y.indexOf("a") > -1 && y.indexOf("b") > -1
-						&& y.indexOf("a") < y.indexOf("b")) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is string of a's and y is string of b's
-		 */
-		myAllCases.add(new Case() {
-			@Override
-			public String description() {
-				return "v is a string of \"a\"s and y is a string of \"b\"s";
-			}
+    }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(m - 1, 1, 0, 1);
-			}
+    @Override
+    public void chooseI() {
+        i = 0;
+    }
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") > -1 && v.indexOf("b") == -1 && y.indexOf("a") == -1 && y.indexOf("b") > -1) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is string of a's followed by b's and y is string of b's
-		 */
-		myAllCases.add(new Case() {
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(3, 5);
 
-			@Override
-			public String description() {
-				return "v is a string of \"a\"s followed by \"b\"s and y is a string of \"b\"s";
-			}
+    }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(m - 1, 2, 0, 1);
-			}
+    @Override
+    protected void addCases() {
+        /*
+         * v is string of a's and y is string of a's
+         */
+        myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") > -1 && v.indexOf("b") == -1 && y.indexOf("a") > -1
+                        && y.indexOf("b") == -1) {
+                    return true;
+                }
+                return false;
+            }
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") > -1 && v.indexOf("b") > -1 && v.indexOf("a") < v.indexOf("b")
-						&& y.indexOf("a") == -1 && y.indexOf("b") > -1) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is a string of b's and y is a string of b's
-		 */
-		myAllCases.add(new Case() {
-			@Override
-			public String description() {
-				return "v is a string of \"b\"s and y is a string of \"b\"s";
-			}
+            @Override
+            public String description() {
+                return "v is a string of \"a\"s and y is a string of \"a\"s";
+            }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(m, 1, 0, 1);
-			}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(0, 1, 0, 1);
+            }
+        });
+        /*
+         * v is string of a's and y is string of a's followed by b's
+         */
+        myAllCases.add(new Case() {
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") == -1 && v.indexOf("b") > -1 && y.indexOf("a") == -1 && y.indexOf("b") > -1) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is a string of b's and y is a string of b's followed by a's
-		 */
-		myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") > -1 && v.indexOf("b") == -1 && y.indexOf("a") > -1
+                        && y.indexOf("b") > -1 && y.indexOf("a") < y.indexOf("b")) {
+                    return true;
+                }
+                return false;
+            }
 
-			@Override
-			public String description() {
-				return "v is a string of \"b\"s and y is a string of \"b\"s followed by \"a\"s";
-			}
+            @Override
+            public String description() {
+                return "v is a string of \"a\"s and y is a string of \"a\"s followed by \"b\"s";
+            }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(2 * m - 2, 1, 0, 2);
-			}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(1, 1, 0, m - 1);
+            }
+        });
+        /*
+         * v is string of a's and y is string of b's
+         */
+        myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") > -1 && v.indexOf("b") == -1 && y.indexOf("a") == -1
+                        && y.indexOf("b") > -1) {
+                    return true;
+                }
+                return false;
+            }
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") == -1 && v.indexOf("b") > -1 && y.indexOf("a") > -1 && y.indexOf("b") > -1
-						&& y.indexOf("a") > y.indexOf("b")) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is a string of b's and y is a string of a's
-		 */
-		myAllCases.add(new Case() {
-			@Override
-			public String description() {
-				return "v is a string of \"b\"s and y is a string of \"a\"s";
-			}
+            @Override
+            public String description() {
+                return "v is a string of \"a\"s and y is a string of \"b\"s";
+            }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(2 * m - 1, 1, 0, 1);
-			}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(m - 1, 1, 0, 1);
+            }
+        });
+        /*
+         * v is string of a's followed by b's and y is string of b's
+         */
+        myAllCases.add(new Case() {
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") == -1 && v.indexOf("b") > -1 && y.indexOf("a") > -1 && y.indexOf("b") == -1) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is a string of b'a followed by a's and y is a string of a's
-		 */
-		myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") > -1 && v.indexOf("b") > -1 && v.indexOf("a") < v.indexOf("b")
+                        && y.indexOf("a") == -1 && y.indexOf("b") > -1) {
+                    return true;
+                }
+                return false;
+            }
 
-			@Override
-			public String description() {
-				return "v is a string of \"b\"s followed by \"a\"s and y is a string of \"a\"s";
-			}
+            @Override
+            public String description() {
+                return "v is a string of \"a\"s followed by \"b\"s and y is a string of \"b\"s";
+            }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(2 * m - 1, 2, 0, 1);
-			}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(m - 1, 2, 0, 1);
+            }
+        });
+        /*
+         * v is a string of b's and y is a string of b's
+         */
+        myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") == -1 && v.indexOf("b") > -1 && y.indexOf("a") == -1
+                        && y.indexOf("b") > -1) {
+                    return true;
+                }
+                return false;
+            }
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.indexOf("a") > -1 && v.indexOf("b") > -1 && v.indexOf("a") > v.indexOf("b") && y.indexOf("a") > -1
-						&& y.indexOf("b") > -1) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is an empty string and y is a non-empty string
-		 */
-		myAllCases.add(new Case() {
-			@Override
-			public String description() {
-				return "v is an empty string and y is a non-empty string";
-			}
+            @Override
+            public String description() {
+                return "v is a string of \"b\"s and y is a string of \"b\"s";
+            }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(2 * m, 0, 1, 1);
-			}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(m, 1, 0, 1);
+            }
+        });
+        /*
+         * v is a string of b's and y is a string of b's followed by a's
+         */
+        myAllCases.add(new Case() {
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.length() == 0 && y.length() > 0) {
-					return true;
-				}
-				return false;
-			}
-		});
-		/*
-		 * v is a non-empty string and y is an empty string
-		 */
-		myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") == -1 && v.indexOf("b") > -1 && y.indexOf("a") > -1
+                        && y.indexOf("b") > -1 && y.indexOf("a") > y.indexOf("b")) {
+                    return true;
+                }
+                return false;
+            }
 
-			@Override
-			public String description() {
-				return "v is a non-empty string and y is an empty string";
-			}
+            @Override
+            public String description() {
+                return "v is a string of \"b\"s and y is a string of \"b\"s followed by \"a\"s";
+            }
 
-			@Override
-			public List<Integer> getPreset() {
-				return Lists.newArrayList(2 * m, 1, 0, 0);
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(2 * m - 2, 1, 0, 2);
+            }
+        });
+        /*
+         * v is a string of b's and y is a string of a's
+         */
+        myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") == -1 && v.indexOf("b") > -1 && y.indexOf("a") > -1
+                        && y.indexOf("b") == -1) {
+                    return true;
+                }
+                return false;
+            }
 
-			}
+            @Override
+            public String description() {
+                return "v is a string of \"b\"s and y is a string of \"a\"s";
+            }
 
-			@Override
-			public boolean isCase(final String v, final String y) {
-				if (v.length() > 0 && y.length() == 0) {
-					return true;
-				}
-				return false;
-			}
-		});
-	}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(2 * m - 1, 1, 0, 1);
+            }
+        });
+        /*
+         * v is a string of b'a followed by a's and y is a string of a's
+         */
+        myAllCases.add(new Case() {
 
-	@Override
-	public void chooseDecomposition() {
-		int step = w.length() / 2 - 1;
-		if (step > m - 2) {
-			step = m - 2;
-		}
-		if (w.indexOf('a') > -1) {
-			setDecomposition(Lists.newArrayList(0, 1, step, 1));
-		} else {
-			setDecomposition(Lists.newArrayList(w.indexOf('b'), 1, step, 1));
-		}
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.indexOf("a") > -1 && v.indexOf("b") > -1 && v.indexOf("a") > v.indexOf("b")
+                        && y.indexOf("a") > -1 && y.indexOf("b") > -1) {
+                    return true;
+                }
+                return false;
+            }
 
-	}
+            @Override
+            public String description() {
+                return "v is a string of \"b\"s followed by \"a\"s and y is a string of \"a\"s";
+            }
 
-	@Override
-	public void chooseI() {
-		i = 0;
-	}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(2 * m - 1, 2, 0, 1);
+            }
+        });
+        /*
+         * v is an empty string and y is a non-empty string
+         */
+        myAllCases.add(new Case() {
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.length() == 0 && y.length() > 0) {
+                    return true;
+                }
+                return false;
+            }
 
-	@Override
-	protected void chooseW() {
-		w = pumpString("a", getM()) + pumpString("b", getM()) + pumpString("a", getM()) + pumpString("b", getM());
-	}
+            @Override
+            public String description() {
+                return "v is an empty string and y is a non-empty string";
+            }
 
-	@Override
-	public String getHTMLTitle() {
-		return "<i>a<sup>n</sup>b<sup>j</sup>a<sup>n</sup>b<sup>j</sup></i> : <i>n</i> " + GREATER_OR_EQ
-				+ " 0, <i>j</i> " + GREATER_OR_EQ + " 0";
-	}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(2 * m, 0, 1, 1);
+            }
+        });
+        /*
+         * v is a non-empty string and y is an empty string
+         */
+        myAllCases.add(new Case() {
 
-	@Override
-	public String getTitle() {
-		return "a^n b^j a^n b^j : n >= 0, j >= 0";
-	}
+            @Override
+            public boolean isCase(String v, String y) {
+                if (v.length() > 0 && y.length() == 0) {
+                    return true;
+                }
+                return false;
+            }
 
-	@Override
-	public boolean isInLang(final String s) {
-		String first, last;
-		final int halfSize = s.length() / 2;
-		first = s.substring(0, halfSize);
-		last = s.substring(halfSize);
-		if (!first.equals(last)) {
-			return false;
-		}
+            @Override
+            public String description() {
+                return "v is a non-empty string and y is an empty string";
+            }
 
-		final char[] list = new char[] { 'a', 'b' };
-		if (LemmaMath.isMixture(first, list) || LemmaMath.isMixture(last, list)) {
-			return false;
-		}
+            @Override
+            public List<Integer> getPreset() {
+                return Lists.newArrayList(2 * m, 1, 0, 0);
 
-		return true;
-	}
+            }
+        });
+    }
 
-	@Override
-	public void setDescription() {
-		partitionIsValid = false;
-		explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
-				+ "b<sup><i>m</i></sup>a<sup><i>m</i></sup>b<sup><i>m</i></sup>\".  To be in the language with "
-				+ "this example, <i>v</i> & <i>y</i> together cannot possess identical letters that are from separate "
-				+ "blocks of alike letters (ex: <i>v</i> has \"b\"s from the first set of \"b\"s, "
-				+ "while <i>y</i> has \"b\"s from the second set of \"b\"s).  Because of this, any increase or decrease "
-				+ "in \"a\"s or \"b\"s will not be matched by any change in the other blocks of similar letters, "
-				+ "resulting in an inequality that prevents the decomposition from working.  Thus, this language is "
-				+ "not context-free.";
-	}
+    @Override
+    public boolean isInLang(String s) {
+        String first, last;
+        int halfSize = s.length() / 2;
+        first = s.substring(0, halfSize);
+        last = s.substring(halfSize);
+        if (!first.equals(last)) {
+            return false;
+        }
 
-	@Override
-	protected void setRange() {
-		myRange = Lists.newArrayList(3, 5);
+        char[] list = new char[] { 'a', 'b' };
+        if (LemmaMath.isMixture(first, list) || LemmaMath.isMixture(last, list)) {
+            return false;
+        }
 
-	}
+        return true;
+    }
 
 }

@@ -16,6 +16,11 @@
 
 package edu.duke.cs.jflap.gui.grammar.transform;
 
+import edu.duke.cs.jflap.grammar.Grammar;
+import edu.duke.cs.jflap.grammar.LambdaProductionRemover;
+import edu.duke.cs.jflap.grammar.Production;
+import edu.duke.cs.jflap.gui.grammar.GrammarTableModel;
+
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,286 +31,290 @@ import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 
-import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.grammar.LambdaProductionRemover;
-import edu.duke.cs.jflap.grammar.Production;
-import edu.duke.cs.jflap.gui.grammar.GrammarTableModel;
-
 /**
  * This is the controller for the lambda panel.
  *
  * @author Thomas Finley
  */
 public class LambdaController {
-	/** The steps available. */
-	static final int VARAIBLE_SELECT = 1, PRODUCTION_MODIFY = 2, FINISHED = 3;
+    /**
+     * This instantiates a new lambda controller.
+     *
+     * @param pane
+     *            the lambda panel
+     * @param grammar
+     *            the grammar to produce
+     */
+    public LambdaController(LambdaPane pane, Grammar grammar) {
+        this.pane = pane;
+        this.grammar = grammar;
+        nextStep();
+    }
 
-	/** The lambda pane. */
-	LambdaPane pane;
+    /**
+     * This is called to move the lambda controller to the next step.
+     */
+    private void nextStep() {
+        if (step != FINISHED) {
+            step++;
+        }
+        switch (step) {
+            case VARAIBLE_SELECT:
+                pane.mainLabel.setText("Select variables that derive lambda.");
+                pane.detailLabel.setText("Click productions; the LHS variable will be added.");
+                lambdaVariables = LambdaProductionRemover.getCompleteLambdaSet(grammar);
+                derivedLambdaVariables = new TreeSet<>();
+                pane.deleteAction.setEnabled(false);
+                pane.completeSelectedAction.setEnabled(false);
 
-	/** The grammar being converted. */
-	Grammar grammar;
+                pane.doStepAction.setEnabled(true);
+                pane.doAllAction.setEnabled(true);
+                pane.proceedAction.setEnabled(false);
+                pane.exportAction.setEnabled(false);
+                break;
+            case PRODUCTION_MODIFY:
+                pane.updateDeleteEnabledness();
+                pane.updateCompleteSelectedEnabledness();
+                pane.mainLabel.setText("Modify the grammar to remove lambdas.");
+                List<Production> p = grammar.getProductions();
+                for (Production pi : p) {
+                    pane.editingGrammarModel.addProduction(pi);
+                    currentProductions.add(pi);
+                    if (pi.getRHS().length() == 0) {
+                        lambdaProductions.add(pi);
+                        continue;
+                    }
+                    List<Production> p2 = LambdaProductionRemover
+                            .getProductionsToAddForProduction(pi, lambdaVariables);
+                    desiredProductions.add(pi);
+                    productionsToExpansion.put(pi, p2);
+                    p2.forEach(prod -> desiredProductions.add(prod));
+                }
+                pane.editingActive = true;
+                updateDisplay();
+                break;
+            case FINISHED:
+                pane.deleteAction.setEnabled(false);
+                pane.completeSelectedAction.setEnabled(false);
+                pane.mainLabel.setText("Lambda removal complete.");
+                pane.detailLabel.setText("\"Proceed\" or \"Export\" available.");
 
-	/** The set of variables that derive lambda, and those discovered. */
-	Set<String> lambdaVariables, derivedLambdaVariables;
+                pane.doStepAction.setEnabled(false);
+                pane.doAllAction.setEnabled(false);
+                pane.proceedAction.setEnabled(true);
+                pane.exportAction.setEnabled(true);
+                break;
+        }
+    }
 
-	/**
-	 * The set of productions that should comprise the grammar, those that
-	 * currently do, and those that should be removed.
-	 */
-	Set<Production> desiredProductions = new HashSet<>(), currentProductions = new HashSet<>(),
-			lambdaProductions = new HashSet<>();
+    public Map<Production, List<Production>> getExpansionMap() {
+        return productionsToExpansion;
+    }
 
-	/**
-	 * The mapping of productions to those elements they are supposed to add.
-	 */
-	Map<Production, List<Production>> productionsToExpansion = new HashMap<>();
+    /**
+     * Does the expansion of the production in the given row of the left grammar
+     * panel.
+     *
+     * @param row
+     *            the row of the production to expand
+     */
+    public void expandRowProduction(int row) {
+        Production p = pane.grammarTable.getGrammarModel().getProduction(row);
+        List<Production> ps = productionsToExpansion.get(p);
+        if (ps == null) {
+            return;
+        }
+        pane.editingActive = false;
+        for (Production psi : ps) {
+            if (!currentProductions.contains(psi) && desiredProductions.contains(psi)) {
+                pane.editingGrammarModel.addProduction(psi);
+                currentProductions.add(psi);
+            }
+            productionsToExpansion.remove(p); // May as well...
+        }
+        pane.editingActive = true;
+        updateDisplay();
+    }
 
-	/** The current step. */
-	int step = 0;
+    /**
+     * Does the current step.
+     */
+    public void doStep() {
+        switch (step) {
+            case VARAIBLE_SELECT:
+                derivedLambdaVariables = lambdaVariables;
+                pane.lambdaDerivingLabel
+                        .setText("Set that derives lambda: " + derivedLambdaVariables);
+                nextStep();
+                break;
+            case PRODUCTION_MODIFY:
+                for (int i = pane.editingGrammarModel.getRowCount() - 2; i >= 0; i--) {
+                    Production p = pane.editingGrammarModel.getProduction(i);
+                    if (lambdaProductions.contains(p)) {
+                        pane.editingGrammarModel.deleteRow(i);
+                        lambdaProductions.remove(p);
+                    }
+                }
+                GrammarTableModel m = pane.grammarTable.getGrammarModel();
+                for (int i = 0; i < m.getRowCount() - 1; i++) {
+                    expandRowProduction(i);
+                }
+                nextStep();
+                break;
+            case FINISHED:
+                break;
+        }
+    }
 
-	/**
-	 * This instantiates a new lambda controller.
-	 *
-	 * @param pane
-	 *            the lambda panel
-	 * @param grammar
-	 *            the grammar to produce
-	 */
-	public LambdaController(final LambdaPane pane, final Grammar grammar) {
-		this.pane = pane;
-		this.grammar = grammar;
-		nextStep();
-	}
+    /**
+     * Does all steps.
+     */
+    public void doAll() {
+        while (step != FINISHED) {
+            doStep();
+        }
+    }
 
-	/**
-	 * Does all steps.
-	 */
-	public void doAll() {
-		while (step != FINISHED) {
-			doStep();
-		}
-	}
+    public Grammar getGrammar() {
+        return pane.getGrammar();
+    }
 
-	/**
-	 * Does the current step.
-	 */
-	public void doStep() {
-		switch (step) {
-		case VARAIBLE_SELECT:
-			derivedLambdaVariables = lambdaVariables;
-			pane.lambdaDerivingLabel.setText("Set that derives lambda: " + derivedLambdaVariables);
-			nextStep();
-			break;
-		case PRODUCTION_MODIFY:
-			for (int i = pane.editingGrammarModel.getRowCount() - 2; i >= 0; i--) {
-				final Production p = pane.editingGrammarModel.getProduction(i);
-				if (lambdaProductions.contains(p)) {
-					pane.editingGrammarModel.deleteRow(i);
-					lambdaProductions.remove(p);
-				}
-			}
-			final GrammarTableModel m = pane.grammarTable.getGrammarModel();
-			for (int i = 0; i < m.getRowCount() - 1; i++) {
-				expandRowProduction(i);
-			}
-			nextStep();
-			break;
-		case FINISHED:
-			break;
-		}
-	}
+    public Set<Production> getLambdaSet() {
+        return lambdaProductions;
+    }
 
-	/**
-	 * Does the expansion of the production in the given row of the left grammar
-	 * panel.
-	 *
-	 * @param row
-	 *            the row of the production to expand
-	 */
-	public void expandRowProduction(final int row) {
-		final Production p = pane.grammarTable.getGrammarModel().getProduction(row);
-		final List<Production> ps = productionsToExpansion.get(p);
-		if (ps == null) {
-			return;
-		}
-		pane.editingActive = false;
-		for (final Production psi : ps) {
-			if (!currentProductions.contains(psi) && desiredProductions.contains(psi)) {
-				pane.editingGrammarModel.addProduction(psi);
-				currentProductions.add(psi);
-			}
-			productionsToExpansion.remove(p); // May as well...
-		}
-		pane.editingActive = true;
-		updateDisplay();
-	}
+    /**
+     * Updates the detail display to show how many more removes, and additions
+     * are needed in the grammar modification step.
+     */
+    void updateDisplay() {
+        int toRemove = lambdaProductions.size();
+        int toAdd = desiredProductions.size() - currentProductions.size()
+                + lambdaProductions.size();
+        pane.detailLabel
+                .setText(toRemove + " more remove(s), and " + toAdd + " more addition(s) needed.");
+        if (toAdd == 0 && toRemove == 0) {
+            nextStep();
+        }
+    }
 
-	public Map<Production, List<Production>> getExpansionMap() {
-		return productionsToExpansion;
-	}
+    /**
+     * When a production is clicked in the grammar table, this method is told
+     * about it.
+     *
+     * @param production
+     *            the production clicked in the table
+     * @param event
+     *            the mouse event that was the clicked
+     */
+    void productionClicked(Production production, MouseEvent event) {
+        switch (step) {
+            case VARAIBLE_SELECT:
+                String var = production.getLHS();
+                if (derivedLambdaVariables.contains(var)) {
+                    // Already here!
+                    pane.detailLabel.setText(var + " already selected!  "
+                            + (lambdaVariables.size() - derivedLambdaVariables.size())
+                            + " more variable(s) needed.");
+                    return;
+                }
+                if (lambdaVariables.contains(var)) {
+                    // Not here, but should be added!
+                    derivedLambdaVariables.add(var);
+                    pane.detailLabel.setText(var + " added!  "
+                            + (lambdaVariables.size() - derivedLambdaVariables.size())
+                            + " more variable(s) needed.");
+                    pane.lambdaDerivingLabel
+                            .setText("Set that derives lambda: " + derivedLambdaVariables);
+                    if (derivedLambdaVariables.size() == lambdaVariables.size()) {
+                        nextStep();
+                    }
+                    return;
+                }
+                pane.detailLabel.setText(var + " does not derive lambda!  "
+                        + (lambdaVariables.size() - derivedLambdaVariables.size())
+                        + " more variable(s) needed.");
+                break;
+            case PRODUCTION_MODIFY:
+                break;
+            default:
+                break;
+        }
+    }
 
-	public Grammar getGrammar() {
-		return pane.getGrammar();
-	}
+    /**
+     * When a production is added manually by the user, this is told about it.
+     *
+     * @param production
+     *            the production added
+     * @param row
+     *            the row that was added
+     * @return if this production should be accepted
+     */
+    boolean productionAdded(Production production, int row) {
+        if (currentProductions.contains(production)) {
+            // We already have it.
+            JOptionPane.showMessageDialog(pane, "This production is already in the grammar.",
+                    "Production Already Here", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!desiredProductions.contains(production)) {
+            // We don't have it, and don't want it!
+            JOptionPane.showMessageDialog(pane,
+                    "This production is not part of the reformed grammar.",
+                    "Production Not Desired", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        // We want it. We want it so bad.
+        currentProductions.add(production);
+        updateDisplay();
+        return true;
+    }
 
-	public Set<Production> getLambdaSet() {
-		return lambdaProductions;
-	}
+    /**
+     * When a production is chosen to be removed, this is told about it. This
+     * happens before the deletion occurs.
+     *
+     * @param production
+     *            the production chosen to be removed
+     * @param row
+     *            the row for this production
+     * @return if this production should be deleted
+     */
+    boolean productionDeleted(Production production, int row) {
+        if (!lambdaProductions.contains(production)) {
+            return false;
+        }
+        lambdaProductions.remove(production);
+        currentProductions.remove(production);
+        return true;
+    }
 
-	/**
-	 * This is called to move the lambda controller to the next step.
-	 */
-	private void nextStep() {
-		if (step != FINISHED) {
-			step++;
-		}
-		switch (step) {
-		case VARAIBLE_SELECT:
-			pane.mainLabel.setText("Select variables that derive lambda.");
-			pane.detailLabel.setText("Click productions; the LHS variable will be added.");
-			lambdaVariables = LambdaProductionRemover.getCompleteLambdaSet(grammar);
-			derivedLambdaVariables = new TreeSet<>();
-			pane.deleteAction.setEnabled(false);
-			pane.completeSelectedAction.setEnabled(false);
+    /** The lambda pane. */
+    LambdaPane pane;
 
-			pane.doStepAction.setEnabled(true);
-			pane.doAllAction.setEnabled(true);
-			pane.proceedAction.setEnabled(false);
-			pane.exportAction.setEnabled(false);
-			break;
-		case PRODUCTION_MODIFY:
-			pane.updateDeleteEnabledness();
-			pane.updateCompleteSelectedEnabledness();
-			pane.mainLabel.setText("Modify the grammar to remove lambdas.");
-			final List<Production> p = grammar.getProductions();
-			for (final Production pi : p) {
-				pane.editingGrammarModel.addProduction(pi);
-				currentProductions.add(pi);
-				if (pi.getRHS().length() == 0) {
-					lambdaProductions.add(pi);
-					continue;
-				}
-				final List<Production> p2 = LambdaProductionRemover.getProductionsToAddForProduction(pi,
-						lambdaVariables);
-				desiredProductions.add(pi);
-				productionsToExpansion.put(pi, p2);
-				p2.forEach(prod -> desiredProductions.add(prod));
-			}
-			pane.editingActive = true;
-			updateDisplay();
-			break;
-		case FINISHED:
-			pane.deleteAction.setEnabled(false);
-			pane.completeSelectedAction.setEnabled(false);
-			pane.mainLabel.setText("Lambda removal complete.");
-			pane.detailLabel.setText("\"Proceed\" or \"Export\" available.");
+    /** The grammar being converted. */
+    Grammar grammar;
 
-			pane.doStepAction.setEnabled(false);
-			pane.doAllAction.setEnabled(false);
-			pane.proceedAction.setEnabled(true);
-			pane.exportAction.setEnabled(true);
-			break;
-		}
-	}
+    /** The set of variables that derive lambda, and those discovered. */
+    Set<String> lambdaVariables, derivedLambdaVariables;
 
-	/**
-	 * When a production is added manually by the user, this is told about it.
-	 *
-	 * @param production
-	 *            the production added
-	 * @param row
-	 *            the row that was added
-	 * @return if this production should be accepted
-	 */
-	boolean productionAdded(final Production production, final int row) {
-		if (currentProductions.contains(production)) {
-			// We already have it.
-			JOptionPane.showMessageDialog(pane, "This production is already in the grammar.", "Production Already Here",
-					JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		if (!desiredProductions.contains(production)) {
-			// We don't have it, and don't want it!
-			JOptionPane.showMessageDialog(pane, "This production is not part of the reformed grammar.",
-					"Production Not Desired", JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
-		// We want it. We want it so bad.
-		currentProductions.add(production);
-		updateDisplay();
-		return true;
-	}
+    /**
+     * The set of productions that should comprise the grammar, those that
+     * currently do, and those that should be removed.
+     */
+    Set<Production> desiredProductions = new HashSet<>(),
+            currentProductions = new HashSet<>(),
+            lambdaProductions = new HashSet<>();
 
-	/**
-	 * When a production is clicked in the grammar table, this method is told
-	 * about it.
-	 *
-	 * @param production
-	 *            the production clicked in the table
-	 * @param event
-	 *            the mouse event that was the clicked
-	 */
-	void productionClicked(final Production production, final MouseEvent event) {
-		switch (step) {
-		case VARAIBLE_SELECT:
-			final String var = production.getLHS();
-			if (derivedLambdaVariables.contains(var)) {
-				// Already here!
-				pane.detailLabel.setText(var + " already selected!  "
-						+ (lambdaVariables.size() - derivedLambdaVariables.size()) + " more variable(s) needed.");
-				return;
-			}
-			if (lambdaVariables.contains(var)) {
-				// Not here, but should be added!
-				derivedLambdaVariables.add(var);
-				pane.detailLabel.setText(var + " added!  " + (lambdaVariables.size() - derivedLambdaVariables.size())
-						+ " more variable(s) needed.");
-				pane.lambdaDerivingLabel.setText("Set that derives lambda: " + derivedLambdaVariables);
-				if (derivedLambdaVariables.size() == lambdaVariables.size()) {
-					nextStep();
-				}
-				return;
-			}
-			pane.detailLabel.setText(var + " does not derive lambda!  "
-					+ (lambdaVariables.size() - derivedLambdaVariables.size()) + " more variable(s) needed.");
-			break;
-		case PRODUCTION_MODIFY:
-			break;
-		default:
-			break;
-		}
-	}
+    /**
+     * The mapping of productions to those elements they are supposed to add.
+     */
+    Map<Production, List<Production>> productionsToExpansion = new HashMap<>();
 
-	/**
-	 * When a production is chosen to be removed, this is told about it. This
-	 * happens before the deletion occurs.
-	 *
-	 * @param production
-	 *            the production chosen to be removed
-	 * @param row
-	 *            the row for this production
-	 * @return if this production should be deleted
-	 */
-	boolean productionDeleted(final Production production, final int row) {
-		if (!lambdaProductions.contains(production)) {
-			return false;
-		}
-		lambdaProductions.remove(production);
-		currentProductions.remove(production);
-		return true;
-	}
+    /** The current step. */
+    int step = 0;
 
-	/**
-	 * Updates the detail display to show how many more removes, and additions
-	 * are needed in the grammar modification step.
-	 */
-	void updateDisplay() {
-		final int toRemove = lambdaProductions.size();
-		final int toAdd = desiredProductions.size() - currentProductions.size() + lambdaProductions.size();
-		pane.detailLabel.setText(toRemove + " more remove(s), and " + toAdd + " more addition(s) needed.");
-		if (toAdd == 0 && toRemove == 0) {
-			nextStep();
-		}
-	}
+    /** The steps available. */
+    static final int VARAIBLE_SELECT = 1, PRODUCTION_MODIFY = 2, FINISHED = 3;
 }

@@ -27,61 +27,61 @@ import edu.duke.cs.jflap.automata.Transition;
  * @author Thomas Finley
  */
 public class TMNondeterminismDetector extends NondeterminismDetector {
-	/**
-	 * Creates an instance of a <CODE>TMNondeterminismDetector</CODE>.
-	 */
-	public TMNondeterminismDetector() {
-	}
+    /**
+     * Creates an instance of a <CODE>TMNondeterminismDetector</CODE>.
+     */
+    public TMNondeterminismDetector() {
+    }
 
-	/**
-	 * Returns true if the transitions introduce nondeterminism (e.g. the input
-	 * to read from tapes one and two portions of the transition labels are
-	 * identical).
-	 *
-	 * @param t1
-	 *            a transition
-	 * @param t2
-	 *            a transition
-	 * @return true if the transitions introduce nondeterminism
-	 */
-	@Override
-	public boolean areNondeterministic(final Transition t1, final Transition t2) {
-		final TMTransition transition1 = (TMTransition) t1;
-		final TMTransition transition2 = (TMTransition) t2;
-		for (int i = 0; i < transition1.tapes(); i++) {
-			final String read1 = transition1.getRead(i);
-			final String read2 = transition2.getRead(i);
-			if (read1.equals(read2)) {
-				return true;
-			}
-			if (read1.equals("~") || read2.equals("~")) {
-				return true;
-			}
-			String wordOne = read2;
-			String wordTwo = read1;
-			if (read1.startsWith("!")) {
-				wordOne = read1;
-				wordTwo = read2;
-			}
-			String firstWordsLetter = "";
+    /**
+     * Returns true if the transitions introduce nondeterminism (e.g. the input
+     * to read from tapes one and two portions of the transition labels are
+     * identical).
+     *
+     * @param t1
+     *            a transition
+     * @param t2
+     *            a transition
+     * @return true if the transitions introduce nondeterminism
+     */
+    @Override
+    public boolean areNondeterministic(Transition t1, Transition t2) {
+        TMTransition transition1 = (TMTransition) t1;
+        TMTransition transition2 = (TMTransition) t2;
+        for (int i = 0; i < transition1.tapes(); i++) {
+            String read1 = transition1.getRead(i);
+            String read2 = transition2.getRead(i);
+            if (read1.equals(read2)) {
+                return true;
+            }
+            if (read1.equals("~") || read2.equals("~")) {
+                return true;
+            }
+            String wordOne = read2;
+            String wordTwo = read1;
+            if (read1.startsWith("!")) {
+                wordOne = read1;
+                wordTwo = read2;
+            }
+            String firstWordsLetter = "";
 
-			if (wordOne.startsWith("!")) {
-				if (wordTwo.startsWith("!")) {
-					return true;
-				}
-				for (int k = 0; k < wordTwo.length(); k++) {
-					firstWordsLetter = wordTwo.substring(k, k + 1);
-					if (firstWordsLetter.equals(",")) {
-						continue;
-					}
-					for (int m = 0; m < wordOne.length(); m++) {
-						if (wordOne.indexOf(firstWordsLetter) == -1) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
+            if (wordOne.startsWith("!")) {
+                if (wordTwo.startsWith("!")) {
+                    return true;
+                }
+                for (int k = 0; k < wordTwo.length(); k++) {
+                    firstWordsLetter = wordTwo.substring(k, k + 1);
+                    if (firstWordsLetter.equals(",")) {
+                        continue;
+                    }
+                    for (int m = 0; m < wordOne.length(); m++) {
+                        if (wordOne.indexOf(firstWordsLetter) == -1) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

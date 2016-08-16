@@ -16,9 +16,9 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import java.awt.event.ActionEvent;
-
 import edu.duke.cs.jflap.gui.AboutBox;
+
+import java.awt.event.ActionEvent;
 
 /**
  * This action will display a small about box that lists the tool version
@@ -27,25 +27,25 @@ import edu.duke.cs.jflap.gui.AboutBox;
  * @author Thomas Finley
  */
 public class AboutAction extends RestrictedAction {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	private static final AboutBox BOX = new AboutBox();
+    /**
+     * Instantiates a new <CODE>AboutAction</CODE>.
+     */
+    public AboutAction() {
+        super("About...", null);
+    }
 
-	/**
-	 * Instantiates a new <CODE>AboutAction</CODE>.
-	 */
-	public AboutAction() {
-		super("About...", null);
-	}
+    /**
+     * Shows the about box.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        BOX.displayBox();
+    }
 
-	/**
-	 * Shows the about box.
-	 */
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-		BOX.displayBox();
-	}
+    private static final AboutBox BOX = new AboutBox();
 }

@@ -38,91 +38,93 @@ import javax.swing.border.EmptyBorder;
  * @author Thomas Finley
  */
 public class AboutBox extends JWindow {
-	/**
-	 * This listens for clicks on the box. When it receives them, the box is
-	 * dismissed.
-	 */
-	private class BoxDismisser extends MouseAdapter {
-		@Override
-		public void mouseClicked(final MouseEvent e) {
-			dismissBox();
-		}
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1931685156030518714L;
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1931685156030518714L;
+    /**
+     * Instantiates a new <TT>AboutBox</TT>.
+     *
+     * @param owner
+     *            the owner of this about box
+     */
+    public AboutBox(Frame owner) {
+        super(owner);
+        getContentPane().setLayout(new OverlayLayout(getContentPane()));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        panel.setBorder(new EmptyBorder(3, 3, 3, 3));
+        JPanel fullPanel = new JPanel(new BorderLayout());
+        fullPanel.setOpaque(false);
+        panel.add(fullPanel, BorderLayout.SOUTH);
+        getContentPane().add(panel);
+        getContentPane().add(new ImageDisplayComponent(IMAGE));
+        addMouseListener(new BoxDismisser());
+    }
 
-	/** A simple object to get the class off for resource reading. */
-	private static Object OBJECT = new Object();
+    /**
+     * Instantiates a new <TT>AboutBox</TT> with no specified owner.
+     */
+    public AboutBox() {
+        this((Frame) null);
+    }
 
-	/** The image to display in the about box. */
-	private static Image IMAGE = null;
+    /**
+     * Displays this about box, and plays the clip.
+     */
+    public void displayBox() {
+        pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension boxSize = getPreferredSize();
+        setLocation((screenSize.width - boxSize.width) >> 1,
+                (screenSize.height - boxSize.height) >> 1);
+        toFront();
+        setVisible(true);
+    }
 
-	/** The version string. */
-	public static final String VERSION = "6.4";
+    /**
+     * Dismisses this about box, and stops the clip.
+     */
+    public void dismissBox() {
+        dispose();
+        // CLIP.stop();
+    }
 
-	static {
-		try {
-			IMAGE = Toolkit.getDefaultToolkit().getImage(OBJECT.getClass().getResource("/MEDIA/about.png"));
-		} catch (final NullPointerException e) {
+    /**
+     * This listens for clicks on the box. When it receives them, the box is
+     * dismissed.
+     */
+    private class BoxDismisser extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            dismissBox();
+        }
+    }
 
-		}
-	}
+    /** A simple object to get the class off for resource reading. */
+    private static Object OBJECT = new Object();
 
-	/**
-	 * Some simple test code for the about box.
-	 */
-	public static void main(final String args[]) {
-		final AboutBox box = new AboutBox();
-		box.displayBox();
-	}
+    /** The image to display in the about box. */
+    private static Image IMAGE = null;
 
-	/**
-	 * Instantiates a new <TT>AboutBox</TT> with no specified owner.
-	 */
-	public AboutBox() {
-		this((Frame) null);
-	}
+    /** The version string. */
+    public static final String VERSION = "6.4";
 
-	/**
-	 * Instantiates a new <TT>AboutBox</TT>.
-	 *
-	 * @param owner
-	 *            the owner of this about box
-	 */
-	public AboutBox(final Frame owner) {
-		super(owner);
-		getContentPane().setLayout(new OverlayLayout(getContentPane()));
-		final JPanel panel = new JPanel(new BorderLayout());
-		panel.setOpaque(false);
-		panel.setBorder(new EmptyBorder(3, 3, 3, 3));
-		final JPanel fullPanel = new JPanel(new BorderLayout());
-		fullPanel.setOpaque(false);
-		panel.add(fullPanel, BorderLayout.SOUTH);
-		getContentPane().add(panel);
-		getContentPane().add(new ImageDisplayComponent(IMAGE));
-		addMouseListener(new BoxDismisser());
-	}
+    /**
+     * Some simple test code for the about box.
+     */
+    public static void main(String args[]) {
+        AboutBox box = new AboutBox();
+        box.displayBox();
+    }
 
-	/**
-	 * Dismisses this about box, and stops the clip.
-	 */
-	public void dismissBox() {
-		dispose();
-		// CLIP.stop();
-	}
+    static {
+        try {
+            IMAGE = Toolkit.getDefaultToolkit()
+                    .getImage(OBJECT.getClass().getResource("/MEDIA/about.png"));
+        } catch (NullPointerException e) {
 
-	/**
-	 * Displays this about box, and plays the clip.
-	 */
-	public void displayBox() {
-		pack();
-		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		final Dimension boxSize = getPreferredSize();
-		setLocation((screenSize.width - boxSize.width) >> 1, (screenSize.height - boxSize.height) >> 1);
-		toFront();
-		setVisible(true);
-	}
+        }
+    }
 }

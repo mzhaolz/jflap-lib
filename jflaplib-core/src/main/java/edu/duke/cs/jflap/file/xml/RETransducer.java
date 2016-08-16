@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.file.xml;
 
-import java.util.Map;
+import edu.duke.cs.jflap.file.ParseException;
+import edu.duke.cs.jflap.regular.RegularExpression;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import edu.duke.cs.jflap.file.ParseException;
-import edu.duke.cs.jflap.regular.RegularExpression;
+import java.util.Map;
 
 /**
  * This transducer is the codec for
@@ -31,61 +31,62 @@ import edu.duke.cs.jflap.regular.RegularExpression;
  * @author Thomas Finley
  */
 public class RETransducer extends AbstractTransducer {
-	/** The tag name for the regular expression itself. */
-	public static final String EXPRESSION_NAME = "expression";
+    /**
+     * Returns the type this transducer recognizes, "re".
+     *
+     * @return the string "re"
+     */
+    @Override
+    public String getType() {
+        return "re";
+    }
 
-	/** The comment for the list of productions. */
-	private static final String COMMENT_EXPRESSION = "The regular expression.";
+    /**
+     * Given a document, this will return the corresponding regular expression
+     * encoded in the DOM document.
+     *
+     * @param document
+     *            the DOM document to convert
+     * @return the {@link edu.duke.cs.jflap.regular.RegularExpression} instance
+     */
+    @Override
+    public java.io.Serializable fromDOM(Document document) {
+        Map<?, ?> e2t = elementsToText(document.getDocumentElement());
+        String expression = (String) e2t.get(EXPRESSION_NAME);
+        if (expression == null) {
+            if (e2t.containsKey(EXPRESSION_NAME)) {
+                throw new ParseException(
+                        "Regular expression structure has no " + EXPRESSION_NAME + " tag!");
+            } else {
+                expression = "";
+            }
+        }
+        return new RegularExpression(expression);
+    }
 
-	/**
-	 * Given a document, this will return the corresponding regular expression
-	 * encoded in the DOM document.
-	 *
-	 * @param document
-	 *            the DOM document to convert
-	 * @return the {@link edu.duke.cs.jflap.regular.RegularExpression} instance
-	 */
-	@Override
-	public java.io.Serializable fromDOM(final Document document) {
-		final Map<?, ?> e2t = elementsToText(document.getDocumentElement());
-		String expression = (String) e2t.get(EXPRESSION_NAME);
-		if (expression == null) {
-			if (e2t.containsKey(EXPRESSION_NAME)) {
-				throw new ParseException("Regular expression structure has no " + EXPRESSION_NAME + " tag!");
-			} else {
-				expression = "";
-			}
-		}
-		return new RegularExpression(expression);
-	}
+    /**
+     * Given a JFLAP regular expression, this will return the corresponding DOM
+     * encoding of the structure.
+     *
+     * @param structure
+     *            the regular expression to encode
+     * @return a DOM document instance
+     */
+    @Override
+    public Document toDOM(java.io.Serializable structure) {
+        RegularExpression re = (RegularExpression) structure;
+        Document doc = newEmptyDocument();
+        Element se = doc.getDocumentElement();
+        // Add the regular expression tag.
+        se.appendChild(createComment(doc, COMMENT_EXPRESSION));
+        se.appendChild(createElement(doc, EXPRESSION_NAME, null, re.asString()));
+        // Return the completed document.
+        return doc;
+    }
 
-	/**
-	 * Returns the type this transducer recognizes, "re".
-	 *
-	 * @return the string "re"
-	 */
-	@Override
-	public String getType() {
-		return "re";
-	}
+    /** The tag name for the regular expression itself. */
+    public static final String EXPRESSION_NAME = "expression";
 
-	/**
-	 * Given a JFLAP regular expression, this will return the corresponding DOM
-	 * encoding of the structure.
-	 *
-	 * @param structure
-	 *            the regular expression to encode
-	 * @return a DOM document instance
-	 */
-	@Override
-	public Document toDOM(final java.io.Serializable structure) {
-		final RegularExpression re = (RegularExpression) structure;
-		final Document doc = newEmptyDocument();
-		final Element se = doc.getDocumentElement();
-		// Add the regular expression tag.
-		se.appendChild(createComment(doc, COMMENT_EXPRESSION));
-		se.appendChild(createElement(doc, EXPRESSION_NAME, null, re.asString()));
-		// Return the completed document.
-		return doc;
-	}
+    /** The comment for the list of productions. */
+    private static final String COMMENT_EXPRESSION = "The regular expression.";
 }

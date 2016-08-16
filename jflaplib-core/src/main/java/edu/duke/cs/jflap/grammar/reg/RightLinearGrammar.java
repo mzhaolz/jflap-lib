@@ -26,24 +26,24 @@ import edu.duke.cs.jflap.grammar.ProductionChecker;
  * @author Thomas Finley
  */
 public class RightLinearGrammar extends RegularGrammar {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -382389939198490632L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -382389939198490632L;
 
-	/**
-	 * The production checker makes sure that the production added is a proper
-	 * right linear production.
-	 *
-	 * @param production
-	 *            the production to check
-	 * @throws IllegalArgumentException
-	 *             if the production is not a right linear production
-	 */
-	@Override
-	public void checkProduction(final Production production) {
-		if (!ProductionChecker.isRightLinear(production)) {
-			throw new IllegalArgumentException("The production is not right linear.");
-		}
-	}
+    /**
+     * The production checker makes sure that the production added is a proper
+     * right linear production.
+     *
+     * @param production
+     *            the production to check
+     * @throws IllegalArgumentException
+     *             if the production is not a right linear production
+     */
+    @Override
+    public void checkProduction(Production production) {
+        if (!ProductionChecker.isRightLinear(production)) {
+            throw new IllegalArgumentException("The production is not right linear.");
+        }
+    }
 }

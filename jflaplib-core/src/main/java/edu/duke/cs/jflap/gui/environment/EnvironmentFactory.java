@@ -16,10 +16,6 @@
 
 package edu.duke.cs.jflap.gui.environment;
 
-import java.io.Serializable;
-
-import javax.swing.JOptionPane;
-
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.mealy.MealyMachine;
 import edu.duke.cs.jflap.automata.mealy.MooreMachine;
@@ -48,6 +44,10 @@ import edu.duke.cs.jflap.pumping.PumpingLemma;
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
 import edu.duke.cs.jflap.regular.RegularExpression;
 
+import java.io.Serializable;
+
+import javax.swing.JOptionPane;
+
 /**
  * The <CODE>EnvironmentFactory</CODE> creates environments for some predefined
  * types of objects with an editing pane already added. For situations where a
@@ -59,152 +59,153 @@ import edu.duke.cs.jflap.regular.RegularExpression;
  * @author Thomas Finley
  */
 public class EnvironmentFactory {
-	/**
-	 * A class for an editor, which in most applications one will want both
-	 * permanent and marked as an editor.
-	 */
-	public static class EditorPermanentTag implements EditorTag, PermanentTag {
-	}
+    /**
+     * Returns a new environment with an editor pane.
+     *
+     * @param object
+     *            the object that this environment will edit
+     * @return a new environment for the passed in object, ready to be edited,
+     *         or <CODE>null</CODE> if no environment could be defined for this
+     *         object
+     */
+    public static Environment getEnvironment(Serializable object) {
 
-	/** An instance of such an editor permanent tag. */
-	private static final Tag EDITOR_PERMANENT_TAG = new EditorPermanentTag();;
+        /*
+         * For loading regular pumping lemmas.
+         */
+        if (object instanceof RegularPumpingLemma) {
+            RegPumpingLemmaChooser plc = new RegPumpingLemmaChooser();
+            Environment env = new PumpingLemmaEnvironment(plc);
+            PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
+            env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
+            RegularPumpingLemma pl = (RegularPumpingLemma) object;
+            PumpingLemmaInputPane inputPane;
+            if (pl.getFirstPlayer().equals(PumpingLemma.COMPUTER)) {
+                inputPane = new CompRegPumpingLemmaInputPane(pl);
+            } else {
+                inputPane = new HumanRegPumpingLemmaInputPane(pl);
+            }
+            inputPane.update();
+            plc.replace(pl);
+            env.add(inputPane, "Pumping Lemma", new CriticalTag() {
+            });
+            env.setActive(inputPane);
+            return env;
+        }
+        /*
+         * For loading context-free pumping lemmas.
+         */
+        if (object instanceof ContextFreePumpingLemma) {
+            CFPumpingLemmaChooser plc = new CFPumpingLemmaChooser();
+            Environment env = new PumpingLemmaEnvironment(plc);
+            PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
+            env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
+            ContextFreePumpingLemma pl = (ContextFreePumpingLemma) object;
+            PumpingLemmaInputPane inputPane;
+            if (pl.getFirstPlayer().equals(PumpingLemma.COMPUTER)) {
+                inputPane = new CompCFPumpingLemmaInputPane(pl);
+            } else {
+                inputPane = new HumanCFPumpingLemmaInputPane(pl);
+            }
+            inputPane.update();
+            plc.replace(pl);
+            env.add(inputPane, "Pumping Lemma", new CriticalTag() {
+            });
+            env.setActive(inputPane);
+            return env;
+        }
+        /*
+         * For starting new regular pumping lemmas.
+         */
+        if (object instanceof RegPumpingLemmaChooser) {
+            RegPumpingLemmaChooser plc = (RegPumpingLemmaChooser) object;
+            Environment env = new PumpingLemmaEnvironment(plc);
+            PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
+            env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
+            return env;
+        }
+        /*
+         * For starting context-free pumping lemmas.
+         */
+        if (object instanceof CFPumpingLemmaChooser) {
+            CFPumpingLemmaChooser plc = (CFPumpingLemmaChooser) object;
+            Environment env = new PumpingLemmaEnvironment(plc);
+            PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
+            env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
+            return env;
+        }
+        if (object instanceof MooreMachine) {
+            Automaton aut = (Automaton) object;
+            Environment env = new AutomatonEnvironment(aut);
+            EditorPane editor = new EditorPane(aut, new MooreToolBox());
+            env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
+            return env;
+        }
+        if (object instanceof MealyMachine) {
+            Automaton aut = (Automaton) object;
+            Environment env = new AutomatonEnvironment(aut);
+            EditorPane editor = new EditorPane(aut, new MealyToolBox());
+            env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
+            return env;
+        }
 
-	/** The name for editor panes. */
-	private static final String EDITOR_NAME = "Editor";
+        if (object instanceof Automaton) {
+            Automaton aut = (Automaton) object;
+            Environment env = new AutomatonEnvironment(aut);
+            EditorPane editor = new EditorPane(aut);
+            env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
+            return env;
+        } else if (object instanceof Grammar) {
+            if (object instanceof ConvertedUnrestrictedGrammar) {
+                ConvertedUnrestrictedGrammar grammar = (ConvertedUnrestrictedGrammar) object;
 
-	/**
-	 * Returns a new environment with an editor pane.
-	 *
-	 * @param object
-	 *            the object that this environment will edit
-	 * @return a new environment for the passed in object, ready to be edited,
-	 *         or <CODE>null</CODE> if no environment could be defined for this
-	 *         object
-	 */
-	public static Environment getEnvironment(final Serializable object) {
+                GrammarInputPane input = new GrammarInputPane(grammar);
 
-		/*
-		 * For loading regular pumping lemmas.
-		 */
-		if (object instanceof RegularPumpingLemma) {
-			final RegPumpingLemmaChooser plc = new RegPumpingLemmaChooser();
-			final Environment env = new PumpingLemmaEnvironment(plc);
-			final PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
-			env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
-			final RegularPumpingLemma pl = (RegularPumpingLemma) object;
-			PumpingLemmaInputPane inputPane;
-			if (pl.getFirstPlayer().equals(PumpingLemma.COMPUTER)) {
-				inputPane = new CompRegPumpingLemmaInputPane(pl);
-			} else {
-				inputPane = new HumanRegPumpingLemmaInputPane(pl);
-			}
-			inputPane.update();
-			plc.replace(pl);
-			env.add(inputPane, "Pumping Lemma", new CriticalTag() {
-			});
-			env.setActive(inputPane);
-			return env;
-		}
-		/*
-		 * For loading context-free pumping lemmas.
-		 */
-		if (object instanceof ContextFreePumpingLemma) {
-			final CFPumpingLemmaChooser plc = new CFPumpingLemmaChooser();
-			final Environment env = new PumpingLemmaEnvironment(plc);
-			final PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
-			env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
-			final ContextFreePumpingLemma pl = (ContextFreePumpingLemma) object;
-			PumpingLemmaInputPane inputPane;
-			if (pl.getFirstPlayer().equals(PumpingLemma.COMPUTER)) {
-				inputPane = new CompCFPumpingLemmaInputPane(pl);
-			} else {
-				inputPane = new HumanCFPumpingLemmaInputPane(pl);
-			}
-			inputPane.update();
-			plc.replace(pl);
-			env.add(inputPane, "Pumping Lemma", new CriticalTag() {
-			});
-			env.setActive(inputPane);
-			return env;
-		}
-		/*
-		 * For starting new regular pumping lemmas.
-		 */
-		if (object instanceof RegPumpingLemmaChooser) {
-			final RegPumpingLemmaChooser plc = (RegPumpingLemmaChooser) object;
-			final Environment env = new PumpingLemmaEnvironment(plc);
-			final PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
-			env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
-			return env;
-		}
-		/*
-		 * For starting context-free pumping lemmas.
-		 */
-		if (object instanceof CFPumpingLemmaChooser) {
-			final CFPumpingLemmaChooser plc = (CFPumpingLemmaChooser) object;
-			final Environment env = new PumpingLemmaEnvironment(plc);
-			final PumpingLemmaChooserPane pane = new PumpingLemmaChooserPane(plc, env);
-			env.add(pane, "Select a Pumping Lemma", EDITOR_PERMANENT_TAG);
-			return env;
-		}
-		if (object instanceof MooreMachine) {
-			final Automaton aut = (Automaton) object;
-			final Environment env = new AutomatonEnvironment(aut);
-			final EditorPane editor = new EditorPane(aut, new MooreToolBox());
-			env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
-			return env;
-		}
-		if (object instanceof MealyMachine) {
-			final Automaton aut = (Automaton) object;
-			final Environment env = new AutomatonEnvironment(aut);
-			final EditorPane editor = new EditorPane(aut, new MealyToolBox());
-			env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
-			return env;
-		}
+                Environment env = new GrammarEnvironment(input);
+                // Set up the pane for the input pane.
 
-		if (object instanceof Automaton) {
-			final Automaton aut = (Automaton) object;
-			final Environment env = new AutomatonEnvironment(aut);
-			final EditorPane editor = new EditorPane(aut);
-			env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
-			return env;
-		} else if (object instanceof Grammar) {
-			if (object instanceof ConvertedUnrestrictedGrammar) {
-				final ConvertedUnrestrictedGrammar grammar = (ConvertedUnrestrictedGrammar) object;
+                env.add(input, EDITOR_NAME, EDITOR_PERMANENT_TAG);
+                return env;
 
-				final GrammarInputPane input = new GrammarInputPane(grammar);
+            } else {
+                Grammar grammar = (Grammar) object;
+                GrammarInputPane input = new GrammarInputPane(grammar);
+                Environment env = new GrammarEnvironment(input);
+                // Set up the pane for the input pane.
+                env.add(input, EDITOR_NAME, EDITOR_PERMANENT_TAG);
+                return env;
+            }
+        } else if (object instanceof RegularExpression) {
+            RegularExpression re = (RegularExpression) object;
+            edu.duke.cs.jflap.gui.regular.EditorPane editor = new edu.duke.cs.jflap.gui.regular.EditorPane(
+                    re);
+            Environment env = new RegularEnvironment(re);
+            env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
+            return env;
+        } else if (object instanceof LSystem) {
+            LSystem lsystem = (LSystem) object;
+            LSystemInputPane lsinput = new LSystemInputPane(lsystem);
+            Environment env = new LSystemEnvironment(lsinput);
+            env.add(lsinput, EDITOR_NAME, EDITOR_PERMANENT_TAG);
+            return env;
+        } else {
+            JOptionPane.showMessageDialog(null, "Unknown type " + object.getClass() + " read!",
+                    "Bad Type", JOptionPane.ERROR_MESSAGE);
+            // Nothing else yet.
+            return null;
+        }
+    }
 
-				final Environment env = new GrammarEnvironment(input);
-				// Set up the pane for the input pane.
+    /**
+     * A class for an editor, which in most applications one will want both
+     * permanent and marked as an editor.
+     */
+    public static class EditorPermanentTag implements EditorTag, PermanentTag {
+    };
 
-				env.add(input, EDITOR_NAME, EDITOR_PERMANENT_TAG);
-				return env;
+    /** An instance of such an editor permanent tag. */
+    private static final Tag EDITOR_PERMANENT_TAG = new EditorPermanentTag();
 
-			} else {
-				final Grammar grammar = (Grammar) object;
-				final GrammarInputPane input = new GrammarInputPane(grammar);
-				final Environment env = new GrammarEnvironment(input);
-				// Set up the pane for the input pane.
-				env.add(input, EDITOR_NAME, EDITOR_PERMANENT_TAG);
-				return env;
-			}
-		} else if (object instanceof RegularExpression) {
-			final RegularExpression re = (RegularExpression) object;
-			final edu.duke.cs.jflap.gui.regular.EditorPane editor = new edu.duke.cs.jflap.gui.regular.EditorPane(re);
-			final Environment env = new RegularEnvironment(re);
-			env.add(editor, EDITOR_NAME, EDITOR_PERMANENT_TAG);
-			return env;
-		} else if (object instanceof LSystem) {
-			final LSystem lsystem = (LSystem) object;
-			final LSystemInputPane lsinput = new LSystemInputPane(lsystem);
-			final Environment env = new LSystemEnvironment(lsinput);
-			env.add(lsinput, EDITOR_NAME, EDITOR_PERMANENT_TAG);
-			return env;
-		} else {
-			JOptionPane.showMessageDialog(null, "Unknown type " + object.getClass() + " read!", "Bad Type",
-					JOptionPane.ERROR_MESSAGE);
-			// Nothing else yet.
-			return null;
-		}
-	}
+    /** The name for editor panes. */
+    private static final String EDITOR_NAME = "Editor";
 }

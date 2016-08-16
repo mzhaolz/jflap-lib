@@ -16,33 +16,33 @@
 
 package edu.duke.cs.jflap.gui;
 
-import javax.swing.JTable;
-import javax.swing.table.TableModel;
-
 import edu.duke.cs.jflap.gui.action.BatchMultipleSimulateAction;
 import edu.duke.cs.jflap.gui.action.MultipleSimulateAction;
 
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
+
 public class JTableExtender extends JTable {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	private final MultipleSimulateAction myMultSimAct;
+    public JTableExtender(TableModel model, MultipleSimulateAction mult) {
+        super(model);
+        myMultSimAct = mult;
+    }
 
-	public JTableExtender(final TableModel model, final BatchMultipleSimulateAction mult) {
-		super(model);
-		myMultSimAct = mult;
-	}
+    public JTableExtender(TableModel model, BatchMultipleSimulateAction mult) {
+        super(model);
+        myMultSimAct = mult;
+    }
 
-	public JTableExtender(final TableModel model, final MultipleSimulateAction mult) {
-		super(model);
-		myMultSimAct = mult;
-	}
+    @Override
+    public void changeSelection(int row, int column, boolean toggle, boolean extend) {
+        super.changeSelection(row, column, toggle, extend);
+        myMultSimAct.viewAutomaton(this);
+    }
 
-	@Override
-	public void changeSelection(final int row, final int column, final boolean toggle, final boolean extend) {
-		super.changeSelection(row, column, toggle, extend);
-		myMultSimAct.viewAutomaton(this);
-	}
+    private MultipleSimulateAction myMultSimAct;
 }

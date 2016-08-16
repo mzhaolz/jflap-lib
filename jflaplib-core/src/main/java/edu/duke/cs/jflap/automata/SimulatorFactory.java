@@ -23,27 +23,27 @@ package edu.duke.cs.jflap.automata;
  * @author Thomas Finley
  */
 public class SimulatorFactory {
-	/**
-	 * Returns the automaton simulator for this type of automaton.
-	 *
-	 * @param automaton
-	 *            the automaton to get the simulator for
-	 * @return the appropriate automaton simulator for this automaton, or
-	 *         <CODE>null</CODE> if there is no automaton simulator known for
-	 *         this type of automaton
-	 */
-	public static AutomatonSimulator getSimulator(final Automaton automaton) {
-		if (automaton instanceof edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton) {
-			return new edu.duke.cs.jflap.automata.fsa.FSAStepWithClosureSimulator(automaton);
-		} else if (automaton instanceof edu.duke.cs.jflap.automata.pda.PushdownAutomaton) {
-			return new edu.duke.cs.jflap.automata.pda.PDAStepWithClosureSimulator(automaton);
-		} else if (automaton instanceof edu.duke.cs.jflap.automata.turing.TuringMachine) {
-			return new edu.duke.cs.jflap.automata.turing.TMSimulator(automaton);
-		} else if (automaton instanceof edu.duke.cs.jflap.automata.mealy.MooreMachine) {
-			return new edu.duke.cs.jflap.automata.mealy.MooreStepByStateSimulator(automaton);
-		} else if (automaton instanceof edu.duke.cs.jflap.automata.mealy.MealyMachine) {
-			return new edu.duke.cs.jflap.automata.mealy.MealyStepByStateSimulator(automaton);
-		}
-		return null;
-	}
+    /**
+     * Returns the automaton simulator for this type of automaton.
+     *
+     * @param automaton
+     *            the automaton to get the simulator for
+     * @return the appropriate automaton simulator for this automaton, or
+     *         <CODE>null</CODE> if there is no automaton simulator known for
+     *         this type of automaton
+     */
+    public static AutomatonSimulator getSimulator(Automaton automaton) {
+        if (automaton instanceof edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton) {
+            return new edu.duke.cs.jflap.automata.fsa.FSAStepWithClosureSimulator(automaton);
+        } else if (automaton instanceof edu.duke.cs.jflap.automata.pda.PushdownAutomaton) {
+            return new edu.duke.cs.jflap.automata.pda.PDAStepWithClosureSimulator(automaton);
+        } else if (automaton instanceof edu.duke.cs.jflap.automata.turing.TuringMachine) {
+            return new edu.duke.cs.jflap.automata.turing.TMSimulator(automaton);
+        } else if (automaton instanceof edu.duke.cs.jflap.automata.mealy.MooreMachine) {
+            return new edu.duke.cs.jflap.automata.mealy.MooreStepByStateSimulator(automaton);
+        } else if (automaton instanceof edu.duke.cs.jflap.automata.mealy.MealyMachine) {
+            return new edu.duke.cs.jflap.automata.mealy.MealyStepByStateSimulator(automaton);
+        }
+        return null;
+    }
 }

@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.gui.lsystem;
 
+import edu.duke.cs.jflap.gui.transform.Matrix;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -34,8 +36,6 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import edu.duke.cs.jflap.gui.transform.Matrix;
-
 /**
  * A <CODE>Renderer</CODE> object allows a client to create an image of a string
  * of symbols generated, presumably, from an <CODE>LSystem</CODE>.
@@ -49,651 +49,661 @@ import edu.duke.cs.jflap.gui.transform.Matrix;
  * @author Thomas Finley
  */
 public class Renderer {
-	/**
-	 * This handles change of the angle increment.
-	 */
-	private class AngleIncrementHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			currentTurtle.setAngleChange(Double.parseDouble(symbol));
-		}
-	}
+    /**
+     * Instantiates a renderer object.
+     */
+    public Renderer() {
+        // Set up all them gosh durned command handlers.
+        handlers.put("g", new MoveHandler(true, true));
+        handlers.put("f", new MoveHandler(false, true));
+        handlers.put("+", new TurnHandler(true));
+        handlers.put("-", new TurnHandler(false));
+        handlers.put("&", new PitchHandler(true));
+        handlers.put("^", new PitchHandler(false));
+        handlers.put("/", new RollHandler(true));
+        handlers.put("*", new RollHandler(false));
+        handlers.put("[", new PushTurtleHandler());
+        handlers.put("]", new PopTurtleHandler());
+        handlers.put("!", new WidthChangeHandler(true));
+        handlers.put("~", new WidthChangeHandler(false));
+        handlers.put("{", new BeginPolygonHandler());
+        handlers.put("}", new ClosePolygonHandler());
+        handlers.put("%", new ReverseHandler());
+        handlers.put("#", new HueChangeHandler(false, true));
+        handlers.put("@", new HueChangeHandler(false, false));
+        handlers.put("##", new HueChangeHandler(true, true));
+        handlers.put("@@", new HueChangeHandler(true, false));
 
-	/**
-	 * This handler begins a polygon.
-	 */
-	private class BeginPolygonHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			if (!areDrawing || polygon != null) {
-				return; // Hrm.
-			}
-			capLinePath();
-			polygon = new GeneralPath();
-			polygon.moveTo((float) currentTurtle.position.getX(), (float) currentTurtle.position.getY());
-		}
-	}
+        // Not to mention the fucking assignment handlers... Jesus Christ.
+        handlers.put("color", new DrawColorHandler());
+        handlers.put("polygonColor", new PolygonColorHandler());
+        CommandHandler angleIncrement = new AngleIncrementHandler();
+        handlers.put("angle", angleIncrement);
+        handlers.put("angleIncrement", angleIncrement);
+        handlers.put("lineWidth", new LineWidthHandler());
+        handlers.put("lineIncrement", new LineWidthIncrementHandler());
+        handlers.put("distance", new DistanceHandler());
+        handlers.put("hueChange", new HueAngleIncrementHandler());
+    }
 
-	/**
-	 * This handler closes a polygon.
-	 */
-	private class ClosePolygonHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			if (!areDrawing) {
-				return;
-			}
-			capLinePath();
-			polygon.closePath();
-			g.setColor(currentTurtle.polygonColor);
-			g.fill(polygon);
-			polygon = null;
-			g.setColor(currentTurtle.color);
-		}
-	}
+    /**
+     * Returns the command handler for a symbol.
+     *
+     * @param symbol
+     *            the symbol
+     * @return the command handler for that symbol, or <CODE>null</CODE> if no
+     *         handler exists
+     */
+    public Renderer.CommandHandler getHandler(String symbol) {
+        if (handlers.containsKey(symbol)) {
+            return handlers.get(symbol);
+        }
+        return null;
+    }
 
-	/**
-	 * This is a command handler. This is the object that responds to the
-	 * command. This class is meant to alter the state of the
-	 * <CODE>Renderer</CODE> object, so it is not a static class.
-	 */
-	protected class CommandHandler {
-		/**
-		 * Handles the command.
-		 *
-		 * @param symbol
-		 *            an optional argument to the handler, but may be
-		 *            <CODE>null</CODE>
-		 */
-		public void handle(final String symbol) {
-			// This does nothing, since the default behavior is to
-			// just ignore commands. Subclasses will do something,
-			// presumably.
-		}
-	}
+    /**
+     * Returns the progress in the current rendering.
+     *
+     * @return the number of symbols processed, the max value of which is twice
+     *         the number of symbols passed into the <CODE>render</CODE> method
+     */
+    public int getDoneSymbols() {
+        return completedSymbols;
+    }
 
-	/**
-	 * This handles change of individual line lengths.
-	 */
-	private class DistanceHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			currentTurtle.distance = Double.parseDouble(symbol);
-		}
-	}
+    /**
+     * Does an assignment from a key to a value, calling the handler as well as
+     * setting the value in the turtle.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value, possibly a mathematical expression
+     */
+    public void assign(String key, String value) {
+        try {
+            try {
+                if (!NONASSIGN_WORDS.contains(key)) {
+                    currentTurtle.assign(key, value);
+                    value = currentTurtle.get(key).toString();
+                }
+            } catch (Throwable e) {
 
-	/**
-	 * This handles change of the draw color.
-	 */
-	private class DrawColorHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			if (!areDrawing) {
-				return;
-			}
-			capLinePath();
-			currentTurtle.setColor(symbol);
-			g.setColor(currentTurtle.getColor());
-		}
-	}
+            }
+            Renderer.CommandHandler handler = getHandler(key);
+            handler.handle(value);
+        } catch (Throwable e) {
 
-	/**
-	 * This handles change of the hue angle increment.
-	 */
-	private class HueAngleIncrementHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			currentTurtle.setHueChange(Double.parseDouble(symbol));
-		}
-	}
+        }
+    }
 
-	/**
-	 * This handles changing the hue angle.
-	 */
-	private class HueChangeHandler extends CommandHandler {
-		private final boolean add, polygon;
+    /**
+     * Given a list of symbols and a dictionary of parameters, this will render
+     * a representation of those symbols to either a graphics, or a returned
+     * image.
+     *
+     * @param symbols
+     *            a list of symbols
+     * @param parameters
+     *            the parameters
+     * @param matrix
+     *            the initial transform matrix for the turtle, or if
+     *            <CODE>null</CODE> it is assumed to be the identity matrix
+     * @param graphics
+     *            If we want to render to a graphics, pass this in and the
+     *            L-system will be drawn in the graphic's clip bounds, or pass
+     *            in <CODE>null</CODE> to have this function return an image.
+     *            This graphics should have a clip area set!
+     * @param origin
+     *            stores in the passed in point the location where the turtle
+     *            started
+     * @return an image of a rendering of these symbols, or <CODE>null</CODE> if
+     *         there was a passed in graphics object
+     * @throws IllegalArgumentException
+     *             if there is a passed in graphics object and its clip area is
+     *             not set
+     */
+    public Image render(List<?> symbols, Map<String, String> parameters, Matrix matrix,
+            Graphics2D graphics, Point2D origin) {
+        BufferedImage image = null;
+        Rectangle2D bounds = new Rectangle2D.Double();
+        if (graphics != null && graphics.getClip() == null) {
+            throw new IllegalArgumentException("Graphics needs a non-null clip!");
+        }
+        if (matrix == null) {
+            matrix = new Matrix();
+        }
+        completedSymbols = 0;
+        isActive = true;
+        for (int i = 0; i < 2; i++) {
+            areDrawing = i == 1;
+            // Set up the initial conditions.
+            turtleStack.clear();
+            currentTurtle = new Turtle();
+            currentTurtle.matrix = matrix;
+            currentTurtle = new Turtle(currentTurtle);
+            // Set up the graphics object.
+            if (!areDrawing || graphics == null) {
+                image = new BufferedImage((int) bounds.getWidth() + 10,
+                        (int) bounds.getHeight() + 10, BufferedImage.TYPE_INT_ARGB);
+                g = image.createGraphics();
+                if (areDrawing) {
+                    g.translate(-bounds.getX() + 5.0, -bounds.getY() + 5.0);
+                    origin.setLocation(5.0 - bounds.getX(), 5.0 - bounds.getY());
+                    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
+                }
+            } else {
+                image = null;
+                g = (Graphics2D) graphics.create();
+                Rectangle2D newBounds = new Rectangle2D.Double(bounds.getX() - 5.0,
+                        bounds.getY() - 5.0, bounds.getWidth() + 10.0, bounds.getHeight() + 10.0);
+                Rectangle2D ourBounds = g.getClipBounds();
+                double aRatio = newBounds.getWidth() / newBounds.getHeight();
+                double vRatio = ourBounds.getWidth() / ourBounds.getHeight();
+                if (aRatio > vRatio) {
+                    // The L-system is wider than the clip bounds.
+                    double targetHeight = newBounds.getWidth() / vRatio;
+                    targetHeight -= newBounds.getHeight();
+                    // Must extend by targetHeight.
+                    newBounds.setRect(newBounds.getX(), newBounds.getY() - targetHeight / 2.0,
+                            newBounds.getWidth(), newBounds.getHeight() + targetHeight);
+                } else {
+                    // The L-system is taller than the clip bounds.
+                    double targetWidth = newBounds.getHeight() * vRatio;
+                    targetWidth -= newBounds.getWidth();
+                    // Extend by targetWidth.
+                    newBounds.setRect(newBounds.getX() - targetWidth / 2.0, newBounds.getY(),
+                            newBounds.getWidth() + targetWidth, newBounds.getHeight());
+                }
+                double scale = ourBounds.getWidth() / newBounds.getWidth();
+                g.scale(scale, scale);
+                g.translate(ourBounds.getX() - newBounds.getX(),
+                        ourBounds.getY() - newBounds.getY());
+                origin.setLocation(ourBounds.getX() - newBounds.getX(),
+                        ourBounds.getY() - newBounds.getY());
+            }
+            // Do the initial parameters.
+            Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, String> entry = it.next();
+                try {
+                    assign(entry.getKey(), entry.getValue());
+                } catch (Throwable e) {
+                    // We have an error in the handler!
+                }
+            }
+            // Set the initial drawing state.
+            g.setColor(currentTurtle.getColor());
+            capLinePath();
+            // Repeatedly read symbols, and call the appropriate
+            // command handler.
+            // TODO: Holy shit, it's on their head if this works.
+            Iterator<?> itt = symbols.iterator();
+            while (it.hasNext()) {
+                completedSymbols++;
+                String symbol = (String) itt.next();
+                Renderer.CommandHandler handler = getHandler(symbol);
+                if (handler != null) {
+                    try {
+                        handler.handle(null);
+                    } catch (Throwable e) {
+                        // We have an error!
+                    }
+                    continue;
+                }
+                // OKAY, perhaps this is an assignment?
+                int equalsPosition = symbol.indexOf('=');
+                if (equalsPosition != -1) {
+                    String key = symbol.substring(0, equalsPosition);
+                    String value = symbol.substring(equalsPosition + 1);
+                    // Get the assignment.
+                    assign(key, value);
+                }
+                // Well, let's go on. Perhaps this is a symbol with
+                // an argument.
+                int leftParenPosition = symbol.indexOf('('),
+                        rightParenPosition = symbol.lastIndexOf(')');
+                if (leftParenPosition != -1 && rightParenPosition != -1
+                        && leftParenPosition < rightParenPosition) {
+                    String key = symbol.substring(0, leftParenPosition);
+                    String value = symbol.substring(leftParenPosition + 1, rightParenPosition);
+                    handler = getHandler(key);
+                    try {
+                        handler.handle(value);
+                    } catch (Throwable e) {
+                        // Another error. Whew.
+                    }
+                    continue;
+                }
+            }
+            capLinePath();
+            g.dispose();
+            // We pop all the turtle stacks to make sure the bounds
+            // are okay...
+            while (!turtleStack.isEmpty()) {
+                popTurtleStack();
+            }
+            bounds = currentTurtle.getBounds();
+        }
+        isActive = false;
+        areDrawing = false;
+        return image;
+    }
 
-		public HueChangeHandler(final boolean polygon, final boolean add) {
-			this.polygon = polygon;
-			this.add = add;
-		}
+    public boolean isActive() {
+        return isActive;
+    }
 
-		@Override
-		public final void handle(final String symbol) {
-			if (!areDrawing) {
-				return;
-			}
-			capLinePath();
-			if (symbol == null) {
-				if (polygon) {
-					currentTurtle.changePolygonHue(add);
-				} else {
-					currentTurtle.changeHue(add);
-				}
-			} else {
-				double d = currentTurtle.valueOf(symbol).doubleValue();
-				d = add ? d : -d;
-				if (polygon) {
-					currentTurtle.changePolygonHue(d);
-				} else {
-					currentTurtle.changeHue(d);
-				}
-			}
-			g.setColor(currentTurtle.getColor());
-		}
-	}
+    /**
+     * This will pop the turtle stack.
+     */
+    private void popTurtleStack() {
+        try {
+            Turtle lt = turtleStack.pop();
+            lt.updateBounds(currentTurtle);
+            currentTurtle = lt;
+            g.setColor(currentTurtle.getColor());
+            g.setStroke(currentTurtle.getStroke());
+        } catch (EmptyStackException e) {
+            // We just ignore it.
+        }
+    }
 
-	/**
-	 * This handles change of the line width.
-	 */
-	private class LineWidthHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			if (!areDrawing) {
-				return;
-			}
-			capLinePath();
-			currentTurtle.setLineWidth(Double.parseDouble(symbol));
-			g.setStroke(currentTurtle.getStroke());
-		}
-	}
+    /**
+     *
+     */
+    private final void capLinePath() {
+        g.draw(linePath); // Dump the path to the graphics...
+        linePath.reset(); // Clear the path...
+        linePath.moveTo((float) currentTurtle.position.getX(),
+                (float) currentTurtle.position.getY());
+        // We've started anew!
+    }
 
-	/**
-	 * This handles change of the line width increment.
-	 */
-	private class LineWidthIncrementHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			currentTurtle.setLineIncrement(Double.parseDouble(symbol));
-		}
-	}
+    /** The command handler maps from symbols to the appropriate handler. */
+    private Map<String, CommandHandler> handlers = new HashMap<>();
 
-	/**
-	 * This handles moving the cursor.
-	 */
-	private class MoveHandler extends CommandHandler {
-		private final boolean pendown;
+    /**
+     * <CODE>true</CODE> if we are actually drawing, elsewise we're in the phase
+     * where we're still trying to discover the bounds (in which case actually
+     * drawing isn't strictly required).
+     */
+    private boolean areDrawing = false;
 
-		private final boolean forward;
+    private boolean isActive = false;
 
-		public MoveHandler(final boolean pendown, final boolean forward) {
-			this.pendown = pendown;
-			this.forward = forward;
-		}
+    /** The stack of turtles. */
+    private Stack<Turtle> turtleStack = new Stack<>();
 
-		@Override
-		public final void handle(final String symbol) {
-			// Evaluate if necessary.
-			if (symbol == null) {
-				currentTurtle.go(forward);
-			} else {
-				final double d = currentTurtle.valueOf(symbol).doubleValue();
-				currentTurtle.go(forward ? d : -d);
-			}
+    /** The current turtle. */
+    private Turtle currentTurtle;
 
-			if (!areDrawing) {
-				return;
-			}
-			if (pendown) {
-				if (polygon == null) {
-					// We're not adding to the polygon!
-					linePath.lineTo((float) currentTurtle.position.getX(), (float) currentTurtle.position.getY());
-				} else {
-					// We are adding to the polygon!
-					polygon.lineTo((float) currentTurtle.position.getX(), (float) currentTurtle.position.getY());
-				}
-			} else {
-				linePath.moveTo((float) currentTurtle.position.getX(), (float) currentTurtle.position.getY());
-			}
-		}
-	}
+    /** The current graphics object. */
+    private Graphics2D g;
 
-	/**
-	 * This handles pitching.
-	 */
-	private class PitchHandler extends CommandHandler {
-		private final boolean down;
+    /** The polygon. Null if no polygon is being drawn right now. */
+    private GeneralPath polygon = null;
 
-		public PitchHandler(final boolean down) {
-			this.down = down;
-		}
+    /** Lines paths. */
+    private GeneralPath linePath = new GeneralPath();
 
-		@Override
-		public final void handle(final String symbol) {
-			if (symbol == null) {
-				currentTurtle.pitch(down);
-			} else {
-				final double d = currentTurtle.valueOf(symbol).doubleValue();
-				currentTurtle.pitch(down ? d : -d);
-			}
-		}
-	}
+    /** The number of symbols completed sofar. */
+    private int completedSymbols;
 
-	/**
-	 * This handles change of the polygon color.
-	 */
-	private class PolygonColorHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			if (!areDrawing) {
-				return;
-			}
-			currentTurtle.setPolygonColor(symbol);
-		}
-	}
+    /** The set of words that can be assigned to. */
+    public static Set<String> ASSIGN_WORDS;
 
-	/**
-	 * This handles popping the turtle stack.
-	 */
-	private class PopTurtleHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			capLinePath();
-			popTurtleStack();
-			capLinePath();
-		}
-	}
+    /** The set of words that cannot be assigned a numerical value. */
+    public static Set<String> NONASSIGN_WORDS;
 
-	/**
-	 * This handles pushing on the turtle stack.
-	 */
-	private class PushTurtleHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			turtleStack.push((Turtle) currentTurtle.clone());
-		}
-	}
+    static {
+        Set<String> s = new TreeSet<>();
+        s.add("color");
+        s.add("polygonColor");
+        NONASSIGN_WORDS = Collections.unmodifiableSet(new HashSet<>(s));
+        s.add("angle");
+        s.add("lineWidth");
+        s.add("lineIncrement");
+        s.add("distance");
+        s.add("hueChange");
+        ASSIGN_WORDS = Collections.unmodifiableSet(s);
+    }
 
-	/**
-	 * The reverse handler.
-	 */
-	private class ReverseHandler extends CommandHandler {
-		@Override
-		public final void handle(final String symbol) {
-			currentTurtle.turn(180.0);
-		}
-	}
+    // / THE COMMAND HANDLERS!
 
-	/**
-	 * This handles rolling.
-	 */
-	private class RollHandler extends CommandHandler {
-		private final boolean right;
+    /**
+     * This is a command handler. This is the object that responds to the
+     * command. This class is meant to alter the state of the
+     * <CODE>Renderer</CODE> object, so it is not a static class.
+     */
+    protected class CommandHandler {
+        /**
+         * Handles the command.
+         *
+         * @param symbol
+         *            an optional argument to the handler, but may be
+         *            <CODE>null</CODE>
+         */
+        public void handle(String symbol) {
+            // This does nothing, since the default behavior is to
+            // just ignore commands. Subclasses will do something,
+            // presumably.
+        }
+    }
 
-		public RollHandler(final boolean right) {
-			this.right = right;
-		}
+    /**
+     * This handles moving the cursor.
+     */
+    private class MoveHandler extends CommandHandler {
+        public MoveHandler(boolean pendown, boolean forward) {
+            this.pendown = pendown;
+            this.forward = forward;
+        }
 
-		@Override
-		public final void handle(final String symbol) {
-			if (symbol == null) {
-				currentTurtle.roll(right);
-			} else {
-				final double d = currentTurtle.valueOf(symbol).doubleValue();
-				currentTurtle.roll(right ? -d : d);
-			}
-		}
-	}
+        @Override
+        public final void handle(String symbol) {
+            // Evaluate if necessary.
+            if (symbol == null) {
+                currentTurtle.go(forward);
+            } else {
+                double d = currentTurtle.valueOf(symbol).doubleValue();
+                currentTurtle.go(forward ? d : -d);
+            }
 
-	/**
-	 * This handles turning.
-	 */
-	private class TurnHandler extends CommandHandler {
-		private final boolean clockwise;
+            if (!areDrawing) {
+                return;
+            }
+            if (pendown) {
+                if (polygon == null) {
+                    // We're not adding to the polygon!
+                    linePath.lineTo((float) currentTurtle.position.getX(),
+                            (float) currentTurtle.position.getY());
+                } else {
+                    // We are adding to the polygon!
+                    polygon.lineTo((float) currentTurtle.position.getX(),
+                            (float) currentTurtle.position.getY());
+                }
+            } else {
+                linePath.moveTo((float) currentTurtle.position.getX(),
+                        (float) currentTurtle.position.getY());
+            }
+        }
 
-		public TurnHandler(final boolean clockwise) {
-			this.clockwise = clockwise;
-		}
+        private boolean pendown;
 
-		@Override
-		public final void handle(final String symbol) {
-			// Evaluate if necessary.
-			if (symbol == null) {
-				currentTurtle.turn(clockwise);
-			} else {
-				final double d = currentTurtle.valueOf(symbol).doubleValue();
-				currentTurtle.turn(clockwise ? -d : d);
-			}
-		}
-	}
+        private boolean forward;
+    }
 
-	/**
-	 * This handles changing the width of lines.
-	 */
-	private class WidthChangeHandler extends CommandHandler {
-		private final boolean increment;
+    /**
+     * This handles turning.
+     */
+    private class TurnHandler extends CommandHandler {
+        public TurnHandler(boolean clockwise) {
+            this.clockwise = clockwise;
+        }
 
-		public WidthChangeHandler(final boolean increment) {
-			this.increment = increment;
-		}
+        @Override
+        public final void handle(String symbol) {
+            // Evaluate if necessary.
+            if (symbol == null) {
+                currentTurtle.turn(clockwise);
+            } else {
+                double d = currentTurtle.valueOf(symbol).doubleValue();
+                currentTurtle.turn(clockwise ? -d : d);
+            }
+        }
 
-		@Override
-		public final void handle(final String symbol) {
-			capLinePath();
-			if (symbol == null) {
-				currentTurtle.changeLineWidth(increment);
-			} else {
-				final double d = currentTurtle.valueOf(symbol).doubleValue();
-				currentTurtle.changeLineWidth(increment ? d : -d);
-			}
-			g.setStroke(currentTurtle.getStroke());
-		}
-	}
+        private boolean clockwise;
+    }
 
-	/** The set of words that can be assigned to. */
-	public static Set<String> ASSIGN_WORDS;
+    /**
+     * This handles pitching.
+     */
+    private class PitchHandler extends CommandHandler {
+        public PitchHandler(boolean down) {
+            this.down = down;
+        }
 
-	// / THE COMMAND HANDLERS!
+        @Override
+        public final void handle(String symbol) {
+            if (symbol == null) {
+                currentTurtle.pitch(down);
+            } else {
+                double d = currentTurtle.valueOf(symbol).doubleValue();
+                currentTurtle.pitch(down ? d : -d);
+            }
+        }
 
-	/** The set of words that cannot be assigned a numerical value. */
-	public static Set<String> NONASSIGN_WORDS;
+        private boolean down;
+    }
 
-	static {
-		final Set<String> s = new TreeSet<>();
-		s.add("color");
-		s.add("polygonColor");
-		NONASSIGN_WORDS = Collections.unmodifiableSet(new HashSet<>(s));
-		s.add("angle");
-		s.add("lineWidth");
-		s.add("lineIncrement");
-		s.add("distance");
-		s.add("hueChange");
-		ASSIGN_WORDS = Collections.unmodifiableSet(s);
-	}
+    /**
+     * This handles rolling.
+     */
+    private class RollHandler extends CommandHandler {
+        public RollHandler(boolean right) {
+            this.right = right;
+        }
 
-	/** The command handler maps from symbols to the appropriate handler. */
-	private final Map<String, CommandHandler> handlers = new HashMap<>();
+        @Override
+        public final void handle(String symbol) {
+            if (symbol == null) {
+                currentTurtle.roll(right);
+            } else {
+                double d = currentTurtle.valueOf(symbol).doubleValue();
+                currentTurtle.roll(right ? -d : d);
+            }
+        }
 
-	/**
-	 * <CODE>true</CODE> if we are actually drawing, elsewise we're in the phase
-	 * where we're still trying to discover the bounds (in which case actually
-	 * drawing isn't strictly required).
-	 */
-	private boolean areDrawing = false;
+        private boolean right;
+    }
 
-	private boolean isActive = false;
+    /**
+     * This handles pushing on the turtle stack.
+     */
+    private class PushTurtleHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            turtleStack.push((Turtle) currentTurtle.clone());
+        }
+    }
 
-	/** The stack of turtles. */
-	private final Stack<Turtle> turtleStack = new Stack<>();
+    /**
+     * This handles popping the turtle stack.
+     */
+    private class PopTurtleHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            capLinePath();
+            popTurtleStack();
+            capLinePath();
+        }
+    }
 
-	/** The current turtle. */
-	private Turtle currentTurtle;
+    /**
+     * This handles changing the width of lines.
+     */
+    private class WidthChangeHandler extends CommandHandler {
+        public WidthChangeHandler(boolean increment) {
+            this.increment = increment;
+        }
 
-	/** The current graphics object. */
-	private Graphics2D g;
+        @Override
+        public final void handle(String symbol) {
+            capLinePath();
+            if (symbol == null) {
+                currentTurtle.changeLineWidth(increment);
+            } else {
+                double d = currentTurtle.valueOf(symbol).doubleValue();
+                currentTurtle.changeLineWidth(increment ? d : -d);
+            }
+            g.setStroke(currentTurtle.getStroke());
+        }
 
-	/** The polygon. Null if no polygon is being drawn right now. */
-	private GeneralPath polygon = null;
+        private boolean increment;
+    }
 
-	/** Lines paths. */
-	private final GeneralPath linePath = new GeneralPath();
+    /**
+     * This handles change of the draw color.
+     */
+    private class DrawColorHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            if (!areDrawing) {
+                return;
+            }
+            capLinePath();
+            currentTurtle.setColor(symbol);
+            g.setColor(currentTurtle.getColor());
+        }
+    }
 
-	/** The number of symbols completed sofar. */
-	private int completedSymbols;
+    /**
+     * This handles change of the polygon color.
+     */
+    private class PolygonColorHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            if (!areDrawing) {
+                return;
+            }
+            currentTurtle.setPolygonColor(symbol);
+        }
+    }
 
-	/**
-	 * Instantiates a renderer object.
-	 */
-	public Renderer() {
-		// Set up all them gosh durned command handlers.
-		handlers.put("g", new MoveHandler(true, true));
-		handlers.put("f", new MoveHandler(false, true));
-		handlers.put("+", new TurnHandler(true));
-		handlers.put("-", new TurnHandler(false));
-		handlers.put("&", new PitchHandler(true));
-		handlers.put("^", new PitchHandler(false));
-		handlers.put("/", new RollHandler(true));
-		handlers.put("*", new RollHandler(false));
-		handlers.put("[", new PushTurtleHandler());
-		handlers.put("]", new PopTurtleHandler());
-		handlers.put("!", new WidthChangeHandler(true));
-		handlers.put("~", new WidthChangeHandler(false));
-		handlers.put("{", new BeginPolygonHandler());
-		handlers.put("}", new ClosePolygonHandler());
-		handlers.put("%", new ReverseHandler());
-		handlers.put("#", new HueChangeHandler(false, true));
-		handlers.put("@", new HueChangeHandler(false, false));
-		handlers.put("##", new HueChangeHandler(true, true));
-		handlers.put("@@", new HueChangeHandler(true, false));
+    /**
+     * This handles change of the angle increment.
+     */
+    private class AngleIncrementHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            currentTurtle.setAngleChange(Double.parseDouble(symbol));
+        }
+    }
 
-		// Not to mention the fucking assignment handlers... Jesus Christ.
-		handlers.put("color", new DrawColorHandler());
-		handlers.put("polygonColor", new PolygonColorHandler());
-		final CommandHandler angleIncrement = new AngleIncrementHandler();
-		handlers.put("angle", angleIncrement);
-		handlers.put("angleIncrement", angleIncrement);
-		handlers.put("lineWidth", new LineWidthHandler());
-		handlers.put("lineIncrement", new LineWidthIncrementHandler());
-		handlers.put("distance", new DistanceHandler());
-		handlers.put("hueChange", new HueAngleIncrementHandler());
-	}
+    /**
+     * This handles change of the line width.
+     */
+    private class LineWidthHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            if (!areDrawing) {
+                return;
+            }
+            capLinePath();
+            currentTurtle.setLineWidth(Double.parseDouble(symbol));
+            g.setStroke(currentTurtle.getStroke());
+        }
+    }
 
-	/**
-	 * Does an assignment from a key to a value, calling the handler as well as
-	 * setting the value in the turtle.
-	 *
-	 * @param key
-	 *            the key
-	 * @param value
-	 *            the value, possibly a mathematical expression
-	 */
-	public void assign(final String key, String value) {
-		try {
-			try {
-				if (!NONASSIGN_WORDS.contains(key)) {
-					currentTurtle.assign(key, value);
-					value = currentTurtle.get(key).toString();
-				}
-			} catch (final Throwable e) {
+    /**
+     * This handles change of the line width increment.
+     */
+    private class LineWidthIncrementHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            currentTurtle.setLineIncrement(Double.parseDouble(symbol));
+        }
+    }
 
-			}
-			final Renderer.CommandHandler handler = getHandler(key);
-			handler.handle(value);
-		} catch (final Throwable e) {
+    /**
+     * This handles change of individual line lengths.
+     */
+    private class DistanceHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            currentTurtle.distance = Double.parseDouble(symbol);
+        }
+    }
 
-		}
-	}
+    /**
+     * This handler begins a polygon.
+     */
+    private class BeginPolygonHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            if (!areDrawing || polygon != null) {
+                return; // Hrm.
+            }
+            capLinePath();
+            polygon = new GeneralPath();
+            polygon.moveTo((float) currentTurtle.position.getX(),
+                    (float) currentTurtle.position.getY());
+        }
+    }
 
-	/**
-	 *
-	 */
-	private final void capLinePath() {
-		g.draw(linePath); // Dump the path to the graphics...
-		linePath.reset(); // Clear the path...
-		linePath.moveTo((float) currentTurtle.position.getX(), (float) currentTurtle.position.getY());
-		// We've started anew!
-	}
+    /**
+     * This handler closes a polygon.
+     */
+    private class ClosePolygonHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            if (!areDrawing) {
+                return;
+            }
+            capLinePath();
+            polygon.closePath();
+            g.setColor(currentTurtle.polygonColor);
+            g.fill(polygon);
+            polygon = null;
+            g.setColor(currentTurtle.color);
+        }
+    }
 
-	/**
-	 * Returns the progress in the current rendering.
-	 *
-	 * @return the number of symbols processed, the max value of which is twice
-	 *         the number of symbols passed into the <CODE>render</CODE> method
-	 */
-	public int getDoneSymbols() {
-		return completedSymbols;
-	}
+    /**
+     * The reverse handler.
+     */
+    private class ReverseHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            currentTurtle.turn(180.0);
+        }
+    }
 
-	/**
-	 * Returns the command handler for a symbol.
-	 *
-	 * @param symbol
-	 *            the symbol
-	 * @return the command handler for that symbol, or <CODE>null</CODE> if no
-	 *         handler exists
-	 */
-	public Renderer.CommandHandler getHandler(final String symbol) {
-		if (handlers.containsKey(symbol)) {
-			return handlers.get(symbol);
-		}
-		return null;
-	}
+    /**
+     * This handles change of the hue angle increment.
+     */
+    private class HueAngleIncrementHandler extends CommandHandler {
+        @Override
+        public final void handle(String symbol) {
+            currentTurtle.setHueChange(Double.parseDouble(symbol));
+        }
+    }
 
-	public boolean isActive() {
-		return isActive;
-	}
+    /**
+     * This handles changing the hue angle.
+     */
+    private class HueChangeHandler extends CommandHandler {
+        public HueChangeHandler(boolean polygon, boolean add) {
+            this.polygon = polygon;
+            this.add = add;
+        }
 
-	/**
-	 * This will pop the turtle stack.
-	 */
-	private void popTurtleStack() {
-		try {
-			final Turtle lt = turtleStack.pop();
-			lt.updateBounds(currentTurtle);
-			currentTurtle = lt;
-			g.setColor(currentTurtle.getColor());
-			g.setStroke(currentTurtle.getStroke());
-		} catch (final EmptyStackException e) {
-			// We just ignore it.
-		}
-	}
+        @Override
+        public final void handle(String symbol) {
+            if (!areDrawing) {
+                return;
+            }
+            capLinePath();
+            if (symbol == null) {
+                if (polygon) {
+                    currentTurtle.changePolygonHue(add);
+                } else {
+                    currentTurtle.changeHue(add);
+                }
+            } else {
+                double d = currentTurtle.valueOf(symbol).doubleValue();
+                d = add ? d : -d;
+                if (polygon) {
+                    currentTurtle.changePolygonHue(d);
+                } else {
+                    currentTurtle.changeHue(d);
+                }
+            }
+            g.setColor(currentTurtle.getColor());
+        }
 
-	/**
-	 * Given a list of symbols and a dictionary of parameters, this will render
-	 * a representation of those symbols to either a graphics, or a returned
-	 * image.
-	 *
-	 * @param symbols
-	 *            a list of symbols
-	 * @param parameters
-	 *            the parameters
-	 * @param matrix
-	 *            the initial transform matrix for the turtle, or if
-	 *            <CODE>null</CODE> it is assumed to be the identity matrix
-	 * @param graphics
-	 *            If we want to render to a graphics, pass this in and the
-	 *            L-system will be drawn in the graphic's clip bounds, or pass
-	 *            in <CODE>null</CODE> to have this function return an image.
-	 *            This graphics should have a clip area set!
-	 * @param origin
-	 *            stores in the passed in point the location where the turtle
-	 *            started
-	 * @return an image of a rendering of these symbols, or <CODE>null</CODE> if
-	 *         there was a passed in graphics object
-	 * @throws IllegalArgumentException
-	 *             if there is a passed in graphics object and its clip area is
-	 *             not set
-	 */
-	public Image render(final List<?> symbols, final Map<String, String> parameters, Matrix matrix,
-			final Graphics2D graphics, final Point2D origin) {
-		BufferedImage image = null;
-		Rectangle2D bounds = new Rectangle2D.Double();
-		if (graphics != null && graphics.getClip() == null) {
-			throw new IllegalArgumentException("Graphics needs a non-null clip!");
-		}
-		if (matrix == null) {
-			matrix = new Matrix();
-		}
-		completedSymbols = 0;
-		isActive = true;
-		for (int i = 0; i < 2; i++) {
-			areDrawing = i == 1;
-			// Set up the initial conditions.
-			turtleStack.clear();
-			currentTurtle = new Turtle();
-			currentTurtle.matrix = matrix;
-			currentTurtle = new Turtle(currentTurtle);
-			// Set up the graphics object.
-			if (!areDrawing || graphics == null) {
-				image = new BufferedImage((int) bounds.getWidth() + 10, (int) bounds.getHeight() + 10,
-						BufferedImage.TYPE_INT_ARGB);
-				g = image.createGraphics();
-				if (areDrawing) {
-					g.translate(-bounds.getX() + 5.0, -bounds.getY() + 5.0);
-					origin.setLocation(5.0 - bounds.getX(), 5.0 - bounds.getY());
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				}
-			} else {
-				image = null;
-				g = (Graphics2D) graphics.create();
-				final Rectangle2D newBounds = new Rectangle2D.Double(bounds.getX() - 5.0, bounds.getY() - 5.0,
-						bounds.getWidth() + 10.0, bounds.getHeight() + 10.0);
-				final Rectangle2D ourBounds = g.getClipBounds();
-				final double aRatio = newBounds.getWidth() / newBounds.getHeight();
-				final double vRatio = ourBounds.getWidth() / ourBounds.getHeight();
-				if (aRatio > vRatio) {
-					// The L-system is wider than the clip bounds.
-					double targetHeight = newBounds.getWidth() / vRatio;
-					targetHeight -= newBounds.getHeight();
-					// Must extend by targetHeight.
-					newBounds.setRect(newBounds.getX(), newBounds.getY() - targetHeight / 2.0, newBounds.getWidth(),
-							newBounds.getHeight() + targetHeight);
-				} else {
-					// The L-system is taller than the clip bounds.
-					double targetWidth = newBounds.getHeight() * vRatio;
-					targetWidth -= newBounds.getWidth();
-					// Extend by targetWidth.
-					newBounds.setRect(newBounds.getX() - targetWidth / 2.0, newBounds.getY(),
-							newBounds.getWidth() + targetWidth, newBounds.getHeight());
-				}
-				final double scale = ourBounds.getWidth() / newBounds.getWidth();
-				g.scale(scale, scale);
-				g.translate(ourBounds.getX() - newBounds.getX(), ourBounds.getY() - newBounds.getY());
-				origin.setLocation(ourBounds.getX() - newBounds.getX(), ourBounds.getY() - newBounds.getY());
-			}
-			// Do the initial parameters.
-			final Iterator<Map.Entry<String, String>> it = parameters.entrySet().iterator();
-			while (it.hasNext()) {
-				final Map.Entry<String, String> entry = it.next();
-				try {
-					assign(entry.getKey(), entry.getValue());
-				} catch (final Throwable e) {
-					// We have an error in the handler!
-				}
-			}
-			// Set the initial drawing state.
-			g.setColor(currentTurtle.getColor());
-			capLinePath();
-			// Repeatedly read symbols, and call the appropriate
-			// command handler.
-			// TODO: Holy shit, it's on their head if this works.
-			final Iterator<?> itt = symbols.iterator();
-			while (it.hasNext()) {
-				completedSymbols++;
-				final String symbol = (String) itt.next();
-				Renderer.CommandHandler handler = getHandler(symbol);
-				if (handler != null) {
-					try {
-						handler.handle(null);
-					} catch (final Throwable e) {
-						// We have an error!
-					}
-					continue;
-				}
-				// OKAY, perhaps this is an assignment?
-				final int equalsPosition = symbol.indexOf('=');
-				if (equalsPosition != -1) {
-					final String key = symbol.substring(0, equalsPosition);
-					final String value = symbol.substring(equalsPosition + 1);
-					// Get the assignment.
-					assign(key, value);
-				}
-				// Well, let's go on. Perhaps this is a symbol with
-				// an argument.
-				final int leftParenPosition = symbol.indexOf('('), rightParenPosition = symbol.lastIndexOf(')');
-				if (leftParenPosition != -1 && rightParenPosition != -1 && leftParenPosition < rightParenPosition) {
-					final String key = symbol.substring(0, leftParenPosition);
-					final String value = symbol.substring(leftParenPosition + 1, rightParenPosition);
-					handler = getHandler(key);
-					try {
-						handler.handle(value);
-					} catch (final Throwable e) {
-						// Another error. Whew.
-					}
-					continue;
-				}
-			}
-			capLinePath();
-			g.dispose();
-			// We pop all the turtle stacks to make sure the bounds
-			// are okay...
-			while (!turtleStack.isEmpty()) {
-				popTurtleStack();
-			}
-			bounds = currentTurtle.getBounds();
-		}
-		isActive = false;
-		areDrawing = false;
-		return image;
-	}
+        private boolean add, polygon;
+    }
 }

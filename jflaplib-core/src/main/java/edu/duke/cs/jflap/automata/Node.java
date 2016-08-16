@@ -26,136 +26,136 @@ package edu.duke.cs.jflap.automata;
  * @author Ryan Cavalcante
  */
 public class Node {
-	/** String for white. */
-	protected static final String WHITE = "white";
+    /**
+     * Creates a Node object with no state and no color.
+     */
+    public Node() {
+        myState = null;
+        myColor = "";
+    }
 
-	/** String for grey. */
-	protected static final String GREY = "grey";
+    /**
+     * Creates a Node object with <CODE>state</CODE> and no color.
+     *
+     * @param state
+     *            the state contained by the Node object
+     */
+    public Node(State state) {
+        myState = state;
+        myColor = "";
+    }
 
-	/** String for black. */
-	protected static final String BLACK = "black";
+    /**
+     * Creates a Node object with <CODE>state</CODE> and <CODE>color</CODE>.
+     *
+     * @param state
+     *            the state contained by the Node object
+     * @param color
+     *            the color of the node.
+     */
+    public Node(State state, String color) {
+        myState = state;
+        myColor = color;
+    }
 
-	/** Color of node. */
-	protected String myColor;
+    /**
+     * Returns the state contained by the Node object.
+     *
+     * @return the state contained by the Node object.
+     */
+    public State getState() {
+        return myState;
+    }
 
-	/** State of node. */
-	protected State myState;
+    /**
+     * Returns the color of the Node object.
+     *
+     * @return the color of the Node object.
+     */
+    public String getColor() {
+        return myColor;
+    }
 
-	/**
-	 * Creates a Node object with no state and no color.
-	 */
-	public Node() {
-		myState = null;
-		myColor = "";
-	}
+    /**
+     * Colors the node white.
+     */
+    public void colorWhite() {
+        myColor = WHITE;
+    }
 
-	/**
-	 * Creates a Node object with <CODE>state</CODE> and no color.
-	 *
-	 * @param state
-	 *            the state contained by the Node object
-	 */
-	public Node(final State state) {
-		myState = state;
-		myColor = "";
-	}
+    /**
+     * Colors the Node grey.
+     */
+    public void colorGrey() {
+        myColor = GREY;
+    }
 
-	/**
-	 * Creates a Node object with <CODE>state</CODE> and <CODE>color</CODE>.
-	 *
-	 * @param state
-	 *            the state contained by the Node object
-	 * @param color
-	 *            the color of the node.
-	 */
-	public Node(final State state, final String color) {
-		myState = state;
-		myColor = color;
-	}
+    /**
+     * Colors the Node black.
+     */
+    public void colorBlack() {
+        myColor = BLACK;
+    }
 
-	/**
-	 * Colors the Node black.
-	 */
-	public void colorBlack() {
-		myColor = BLACK;
-	}
+    /**
+     * Returns true if the Node is white.
+     *
+     * @return true if the Node is white.
+     */
+    public boolean isWhite() {
+        if (myColor.equals(WHITE)) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Colors the Node grey.
-	 */
-	public void colorGrey() {
-		myColor = GREY;
-	}
+    /**
+     * Returns true if the Node is grey.
+     *
+     * @return true if the Node is grey.
+     */
+    public boolean isGrey() {
+        if (myColor.equals(GREY)) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Colors the node white.
-	 */
-	public void colorWhite() {
-		myColor = WHITE;
-	}
+    /**
+     * Returns true if the Node is black.
+     *
+     * @return true if the Node is black.
+     */
+    public boolean isBlack() {
+        if (myColor.equals(BLACK)) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * Returns the color of the Node object.
-	 *
-	 * @return the color of the Node object.
-	 */
-	public String getColor() {
-		return myColor;
-	}
+    /**
+     * Returns a string representation of the Node object, returning a string
+     * representation of its state and color.
+     *
+     * @return a string representation of the Node object.
+     */
+    @Override
+    public String toString() {
+        return "STATE: " + myState.toString() + " COLOR: " + myColor;
+    }
 
-	/**
-	 * Returns the state contained by the Node object.
-	 *
-	 * @return the state contained by the Node object.
-	 */
-	public State getState() {
-		return myState;
-	}
+    /** Color of node. */
+    protected String myColor;
 
-	/**
-	 * Returns true if the Node is black.
-	 *
-	 * @return true if the Node is black.
-	 */
-	public boolean isBlack() {
-		if (myColor.equals(BLACK)) {
-			return true;
-		}
-		return false;
-	}
+    /** State of node. */
+    protected State myState;
 
-	/**
-	 * Returns true if the Node is grey.
-	 *
-	 * @return true if the Node is grey.
-	 */
-	public boolean isGrey() {
-		if (myColor.equals(GREY)) {
-			return true;
-		}
-		return false;
-	}
+    /** String for white. */
+    protected static final String WHITE = "white";
 
-	/**
-	 * Returns true if the Node is white.
-	 *
-	 * @return true if the Node is white.
-	 */
-	public boolean isWhite() {
-		if (myColor.equals(WHITE)) {
-			return true;
-		}
-		return false;
-	}
+    /** String for grey. */
+    protected static final String GREY = "grey";
 
-	/**
-	 * Returns a string representation of the Node object, returning a string
-	 * representation of its state and color.
-	 *
-	 * @return a string representation of the Node object.
-	 */
-	@Override
-	public String toString() {
-		return "STATE: " + myState.toString() + " COLOR: " + myColor;
-	}
+    /** String for black. */
+    protected static final String BLACK = "black";
 }

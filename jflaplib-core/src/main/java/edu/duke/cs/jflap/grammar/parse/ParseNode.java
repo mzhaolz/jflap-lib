@@ -18,12 +18,12 @@ package edu.duke.cs.jflap.grammar.parse;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import edu.duke.cs.jflap.grammar.Production;
+
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-
-import edu.duke.cs.jflap.grammar.Production;
 
 /**
  * A parse node is used as an aide for brute force parsing. It contains a
@@ -40,98 +40,99 @@ import edu.duke.cs.jflap.grammar.Production;
  * @author Thomas Finley
  */
 public class ParseNode extends DefaultMutableTreeNode {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 2188813856397032225L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 2188813856397032225L;
 
-	/** The current string derivation. */
-	private final String derivation;
+    /**
+     * Instantiates a new parse node.
+     *
+     * @param derivation
+     *            the derivation of this rule
+     * @param productions2
+     *            the productions that led to this derivation
+     * @param subs2
+     *            the positions in the parent string derivation that the
+     *            productions were substituted in to achieve this derivation
+     */
+    public ParseNode(String derivation, List<Production> productions2, List<Integer> subs2) {
+        this.derivation = derivation;
+        checkArgument(productions2.size() != subs2.size(),
+                "Production and subsitutions sizes must match.");
 
-	/** The grammar rules used to achieve this derivation. */
-	private final List<Production> productions;
+        productions = productions2;
+        subs = subs2;
+    }
 
-	/** The positions at which substitutions were attempted. */
-	private final List<Integer> subs;
+    /**
+     * Instantiates a parse node based on an existing node.
+     *
+     * @param node
+     *            the parse node to copy
+     */
+    public ParseNode(ParseNode node) {
+        this(node.derivation, node.productions, node.subs);
+    }
 
-	/**
-	 * Instantiates a parse node based on an existing node.
-	 *
-	 * @param node
-	 *            the parse node to copy
-	 */
-	public ParseNode(final ParseNode node) {
-		this(node.derivation, node.productions, node.subs);
-	}
+    /**
+     * Returns the derivation string.
+     *
+     * @return the derivation string
+     */
+    public String getDerivation() {
+        return derivation;
+    }
 
-	/**
-	 * Instantiates a new parse node.
-	 *
-	 * @param derivation
-	 *            the derivation of this rule
-	 * @param productions2
-	 *            the productions that led to this derivation
-	 * @param subs2
-	 *            the positions in the parent string derivation that the
-	 *            productions were substituted in to achieve this derivation
-	 */
-	public ParseNode(final String derivation, final List<Production> productions2, final List<Integer> subs2) {
-		this.derivation = derivation;
-		checkArgument(productions2.size() == subs2.size(), "Production and subsitutions sizes must match.");
+    /**
+     * Returns the productions array for this node. For performance reasons this
+     * array could not be copied, and so must not be modified.
+     *
+     * @return the productions that were substituted in to achieve the
+     *         derivation
+     */
+    public List<Production> getProductions() {
+        return productions;
+    }
 
-		productions = productions2;
-		subs = subs2;
-	}
+    /**
+     * Returns the substitution positions. For performance reasons this array
+     * could not be copied, and so must not be modified.
+     *
+     * @return the positions for the substitutions of the productions in the
+     *         parent derivation that led to this current derivation
+     */
+    public List<Integer> getSubstitutions() {
+        return subs;
+    }
 
-	/**
-	 * Returns the derivation string.
-	 *
-	 * @return the derivation string
-	 */
-	public String getDerivation() {
-		return derivation;
-	}
+    /**
+     * Returns a string representation of those object.
+     *
+     * @return a string representation of those object
+     */
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer(derivation);
+        sb.append(", ");
+        sb.append(Arrays.asList(productions) + ", ");
+        sb.append('[');
+        for (int j = 0; j < subs.size(); j++) {
+            if (j != 0) {
+                sb.append(", ");
+            }
+            sb.append(subs.get(j));
+        }
+        sb.append(']');
+        return sb.toString();
+    }
 
-	/**
-	 * Returns the productions array for this node. For performance reasons this
-	 * array could not be copied, and so must not be modified.
-	 *
-	 * @return the productions that were substituted in to achieve the
-	 *         derivation
-	 */
-	public List<Production> getProductions() {
-		return productions;
-	}
+    /** The current string derivation. */
+    private String derivation;
 
-	/**
-	 * Returns the substitution positions. For performance reasons this array
-	 * could not be copied, and so must not be modified.
-	 *
-	 * @return the positions for the substitutions of the productions in the
-	 *         parent derivation that led to this current derivation
-	 */
-	public List<Integer> getSubstitutions() {
-		return subs;
-	}
+    /** The grammar rules used to achieve this derivation. */
+    private List<Production> productions;
 
-	/**
-	 * Returns a string representation of those object.
-	 *
-	 * @return a string representation of those object
-	 */
-	@Override
-	public String toString() {
-		final StringBuffer sb = new StringBuffer(derivation);
-		sb.append(", ");
-		sb.append(Arrays.asList(productions) + ", ");
-		sb.append('[');
-		for (int j = 0; j < subs.size(); j++) {
-			if (j != 0) {
-				sb.append(", ");
-			}
-			sb.append(subs.get(j));
-		}
-		sb.append(']');
-		return sb.toString();
-	}
+    /** The positions at which substitutions were attempted. */
+    private List<Integer> subs;
 }

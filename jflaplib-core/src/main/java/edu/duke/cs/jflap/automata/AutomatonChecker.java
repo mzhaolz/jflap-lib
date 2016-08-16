@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.automata;
 
-import java.util.List;
-
 import edu.duke.cs.jflap.automata.fsa.FSANondeterminismDetector;
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
+
+import java.util.List;
 
 /**
  * The Automaton checker can be used to determine certain properties about
@@ -28,27 +28,27 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  * @author Ryan Cavalcante
  */
 public class AutomatonChecker {
-	/**
-	 * Creates instance of <CODE>AutomatonChecker</CODE>.
-	 */
-	public AutomatonChecker() {
-	}
+    /**
+     * Creates instance of <CODE>AutomatonChecker</CODE>.
+     */
+    public AutomatonChecker() {
+    }
 
-	/**
-	 * Returns true if <CODE>automaton</CODE> is a non-deterministic finite
-	 * state automaton.
-	 *
-	 * @param automaton
-	 *            the automaton.
-	 * @return true if <CODE>automaton</CODE> is a non-deterministic finite
-	 *         state automaton.
-	 */
-	public boolean isNFA(final Automaton automaton) {
-		if (!(automaton instanceof FiniteStateAutomaton)) {
-			return false;
-		}
-		final NondeterminismDetector nd = new FSANondeterminismDetector();
-		final List<State> nondeterministicStates = nd.getNondeterministicStates(automaton);
-		return nondeterministicStates.size() > 0;
-	}
+    /**
+     * Returns true if <CODE>automaton</CODE> is a non-deterministic finite
+     * state automaton.
+     *
+     * @param automaton
+     *            the automaton.
+     * @return true if <CODE>automaton</CODE> is a non-deterministic finite
+     *         state automaton.
+     */
+    public boolean isNFA(Automaton automaton) {
+        if (!(automaton instanceof FiniteStateAutomaton)) {
+            return false;
+        }
+        NondeterminismDetector nd = new FSANondeterminismDetector();
+        List<State> nondeterministicStates = nd.getNondeterministicStates(automaton);
+        return nondeterministicStates.size() > 0;
+    }
 }

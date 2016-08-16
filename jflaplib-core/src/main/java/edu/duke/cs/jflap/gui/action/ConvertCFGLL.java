@@ -16,12 +16,6 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
 import edu.duke.cs.jflap.automata.graph.AutomatonGraph;
@@ -36,6 +30,12 @@ import edu.duke.cs.jflap.gui.environment.Universe;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.convert.ConvertPane;
 
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
 /**
  * This is the action that initiates the conversion of a context free grammar to
  * a PDA using LL conversion.
@@ -43,60 +43,61 @@ import edu.duke.cs.jflap.gui.grammar.convert.ConvertPane;
  * @author Thomas Finley
  */
 public class ConvertCFGLL extends GrammarAction {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/** The grammar environment. */
-	private final GrammarEnvironment environment;
+    /**
+     * Instantiates a new <CODE>ConvertCFGLL</CODE> action.
+     *
+     * @param environment
+     *            the grammar environment
+     */
+    public ConvertCFGLL(GrammarEnvironment environment) {
+        super("Convert CFG to PDA (LL)", null);
+        this.environment = environment;
+    }
 
-	/**
-	 * Instantiates a new <CODE>ConvertCFGLL</CODE> action.
-	 *
-	 * @param environment
-	 *            the grammar environment
-	 */
-	public ConvertCFGLL(final GrammarEnvironment environment) {
-		super("Convert CFG to PDA (LL)", null);
-		this.environment = environment;
-	}
+    /**
+     * Performs the action.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Grammar grammar = environment.getGrammar();
+        if (grammar == null) {
+            return;
+        }
+        if (grammar.getProductions().size() == 0) {
+            JOptionPane.showMessageDialog(Universe.frameForEnvironment(environment),
+                    "The grammar should exist.");
+            return;
+        }
+        // Create the initial automaton.
+        PushdownAutomaton pda = new PushdownAutomaton();
+        CFGToPDALLConverter convert = new CFGToPDALLConverter();
+        convert.createStatesForConversion(grammar, pda);
+        // Create the map of productions to transitions.
+        HashMap<Production, Transition> ptot = new HashMap<>();
+        List<Production> prods = grammar.getProductions();
+        for (int i = 0; i < prods.size(); i++) {
+            ptot.put(prods.get(i), convert.getTransitionForProduction(prods.get(i)));
+        }
+        // Add the view to the environment.
+        final ConvertPane cp = new ConvertPane(grammar, pda, ptot, environment);
+        environment.add(cp, "Convert to PDA (LL)", new CriticalTag() {
+        });
 
-	/**
-	 * Performs the action.
-	 */
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-		final Grammar grammar = environment.getGrammar();
-		if (grammar == null) {
-			return;
-		}
-		if (grammar.getProductions().size() == 0) {
-			JOptionPane.showMessageDialog(Universe.frameForEnvironment(environment), "The grammar should exist.");
-			return;
-		}
-		// Create the initial automaton.
-		final PushdownAutomaton pda = new PushdownAutomaton();
-		final CFGToPDALLConverter convert = new CFGToPDALLConverter();
-		convert.createStatesForConversion(grammar, pda);
-		// Create the map of productions to transitions.
-		final HashMap<Production, Transition> ptot = new HashMap<>();
-		final List<Production> prods = grammar.getProductions();
-		for (int i = 0; i < prods.size(); i++) {
-			ptot.put(prods.get(i), convert.getTransitionForProduction(prods.get(i)));
-		}
-		// Add the view to the environment.
-		final ConvertPane cp = new ConvertPane(grammar, pda, ptot, environment);
-		environment.add(cp, "Convert to PDA (LL)", new CriticalTag() {
-		});
+        // Do the layout of the states.
+        AutomatonGraph graph = new AutomatonGraph(pda);
+        LayoutAlgorithm<State> layout = new GEMLayoutAlgorithm<>();
+        layout.layout(graph, null);
+        graph.moveAutomatonStates();
+        environment.setActive(cp);
+        environment.validate();
+        cp.getEditorPane().getAutomatonPane().fitToBounds(20);
+    }
 
-		// Do the layout of the states.
-		final AutomatonGraph graph = new AutomatonGraph(pda);
-		final LayoutAlgorithm<State> layout = new GEMLayoutAlgorithm<>();
-		layout.layout(graph, null);
-		graph.moveAutomatonStates();
-		environment.setActive(cp);
-		environment.validate();
-		cp.getEditorPane().getAutomatonPane().fitToBounds(20);
-	}
+    /** The grammar environment. */
+    private GrammarEnvironment environment;
 }
