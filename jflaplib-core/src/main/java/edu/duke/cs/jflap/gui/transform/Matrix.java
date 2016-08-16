@@ -16,12 +16,12 @@
 
 package edu.duke.cs.jflap.gui.transform;
 
-import com.google.common.collect.Lists;
-
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 /**
  * This is an affine transform matrix rather like the
@@ -31,307 +31,296 @@ import java.util.List;
  * @author Thomas Finley
  */
 public class Matrix implements Cloneable, Serializable {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new identity matrix.
-     */
-    public Matrix() {
-        this(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-    }
+	/** The old angles for each of the cached turn matrices. */
+	private static double XAXIS_ANGLE = Double.NaN, YAXIS_ANGLE = Double.NaN, ZAXIS_ANGLE = Double.NaN;
 
-    /**
-     * Instantiates a new matrix with the given entries. Twelve entries are
-     * given as parameters, as if reading the entries of the matrix off from
-     * left to right, and then from top to bottom.
-     */
-    public Matrix(double a11,
-            double a12,
-            double a13,
-            double a14,
-            double a21,
-            double a22,
-            double a23,
-            double a24,
-            double a31,
-            double a32,
-            double a33,
-            double a34) {
-        entry = new double[][] { { a11, a12, a13, a14 }, { a21, a22, a23, a24 },
-                        { a31, a32, a33, a34 }, { 0.0, 0.0, 0.0, 1.0 } };
-    }
+	/** The cached matrices for turning. */
+	private static Matrix XAXIS_TURN, YAXIS_TURN, ZAXIS_TURN;
 
-    /**
-     * Instantiates a copy of the passed in matrix.
-     *
-     * @param m
-     *            the matrix to copy
-     */
-    public Matrix(Matrix m) {
-        this(m.entry[0][0], m.entry[0][1], m.entry[0][2], m.entry[0][3], m.entry[1][0],
-                m.entry[1][1], m.entry[1][2], m.entry[1][3], m.entry[2][0], m.entry[2][1],
-                m.entry[2][2], m.entry[2][3]);
-    }
+	/** The old distances for each of the cache translation matrices. */
+	private static double[] DIRS = new double[] { 0.0, 0.0, 0.0 };
 
-    /**
-     * Returns a copy of this object.
-     *
-     * @return a copy of this matrix
-     */
-    @Override
-    public Object clone() {
-        return new Matrix(this);
-    }
+	/** The old translation matrix. */
+	private static final Matrix TRANSLATE = new Matrix();
 
-    /**
-     * Returns the entry at the given entry.
-     *
-     * @param row
-     *            the row index, must be 0 through 3
-     * @param column
-     *            the column index, must be 0 through 3
-     * @return the entry at the given row and column
-     */
-    public final double valueAt(int row, int column) {
-        return entry[row][column];
-    }
+	/**
+	 * The old matrix used for computing inversions back to user space...
+	 */
+	private static final Matrix INVERSE = new Matrix();
 
-    /**
-     * Given another matrix, this will premultiply that matrix times this
-     * matrix, and store the result in this matrix. If <I>A</I> is this matrix
-     * and <I>B</I> is the matrix passed in as a parameter, then this is similar
-     * to <I>A = BA</I>.
-     *
-     * @param matrix
-     *            the matrix to premultiply
-     */
-    public final void premultiply(Matrix matrix) {
-        entry2[3][0] = entry[3][1] = entry[3][2] = 0.0;
-        entry2[3][3] = 1.0;
+	/**
+	 * Used for the origin methods, so new arrays needn't constantly be
+	 * allocated.
+	 */
+	private static final List<Double> ORIGIN_REUSE = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                entry2[i][j] = 0.0;
-                for (int k = 0; k < 4; k++) {
-                    entry2[i][j] += matrix.entry[i][k] * entry[k][j];
-                }
-            }
-        }
-        // Swap!
-        double[][] oldentry = entry;
-        entry = entry2;
-        entry2 = oldentry;
-    }
+	public static final String arrayString(final double[] d) {
+		return "( " + d[0] + ", " + d[1] + ", " + d[2] + " )";
+	}
 
-    /**
-     * Given another matrix, this will premultiply that matrix times this
-     * matrix, and store the result in this matrix. If <I>B</I> is this matrix
-     * and <I>A</I> is the matrix passed in as a parameter, then this is similar
-     * to <I>B = BA</I>.
-     *
-     * @param matrix
-     *            the matrix to premultiply
-     */
-    public final void postmultiply(Matrix matrix) {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                entry2[i][j] = 0.0;
-                for (int k = 0; k < 4; k++) {
-                    entry2[i][j] += entry[i][k] * matrix.entry[k][j];
-                }
-            }
-        }
-        // Swap!
-        double[][] oldentry = entry;
-        entry = entry2;
-        entry2 = oldentry;
-    }
+	/**
+	 * The entries, where the first index in the array is the row, and the
+	 * second index is the column.
+	 */
+	public double[][] entry;
 
-    /**
-     * Turns the current matrix about the X-axis.
-     *
-     * @param angle
-     *            the angle to turn
-     */
-    public final void pitch(double angle) {
-        if (XAXIS_ANGLE == -angle) {
-            XAXIS_ANGLE = angle;
-            XAXIS_TURN.entry[1][2] = -XAXIS_TURN.entry[1][2];
-            XAXIS_TURN.entry[2][1] = -XAXIS_TURN.entry[2][1];
-        } else if (XAXIS_ANGLE != angle) {
-            // Cache it!
-            XAXIS_ANGLE = angle;
-            angle = Math.toRadians(angle);
-            double c = Math.cos(angle), s = Math.sin(angle);
-            XAXIS_TURN = new Matrix(1.0, 0.0, 0.0, 0.0, 0.0, c, -s, 0.0, 0.0, s, c, 0.0);
-        }
-        premultiply(XAXIS_TURN);
-    }
+	/** The backup entries. */
+	private double[][] entry2 = new double[4][4];
 
-    /**
-     * Turns the current matrix about the Y-axis.
-     *
-     * @param angle
-     *            the angle to turn
-     */
-    public final void roll(double angle) {
-        if (YAXIS_ANGLE == -angle) {
-            YAXIS_ANGLE = angle;
-            YAXIS_TURN.entry[0][2] = -YAXIS_TURN.entry[0][2];
-            YAXIS_TURN.entry[2][0] = -YAXIS_TURN.entry[2][0];
-        } else if (YAXIS_ANGLE != angle) {
-            // Cache it!
-            YAXIS_ANGLE = angle;
-            angle = Math.toRadians(angle);
-            double c = Math.cos(angle), s = Math.sin(angle);
-            YAXIS_TURN = new Matrix(c, 0.0, s, 0.0, 0.0, 1.0, 0.0, 0.0, -s, 0.0, c, 0.0);
-        }
-        premultiply(YAXIS_TURN);
-    }
+	/**
+	 * Instantiates a new identity matrix.
+	 */
+	public Matrix() {
+		this(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	}
 
-    /**
-     * Turns the current matrix about the Z-axis.
-     *
-     * @param angle
-     *            the angle to turn
-     */
-    public final void yaw(double angle) {
-        if (ZAXIS_ANGLE == -angle) {
-            ZAXIS_ANGLE = angle;
-            ZAXIS_TURN.entry[0][1] = -ZAXIS_TURN.entry[0][1];
-            ZAXIS_TURN.entry[1][0] = -ZAXIS_TURN.entry[1][0];
-        } else if (ZAXIS_ANGLE != angle) {
-            // Cache it!
-            ZAXIS_ANGLE = angle;
-            angle = Math.toRadians(angle);
-            double c = Math.cos(angle), s = Math.sin(angle);
-            ZAXIS_TURN = new Matrix(c, -s, 0.0, 0.0, s, c, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-        }
-        premultiply(ZAXIS_TURN);
-    }
+	/**
+	 * Instantiates a new matrix with the given entries. Twelve entries are
+	 * given as parameters, as if reading the entries of the matrix off from
+	 * left to right, and then from top to bottom.
+	 */
+	public Matrix(final double a11, final double a12, final double a13, final double a14, final double a21,
+			final double a22, final double a23, final double a24, final double a31, final double a32, final double a33,
+			final double a34) {
+		entry = new double[][] { { a11, a12, a13, a14 }, { a21, a22, a23, a24 }, { a31, a32, a33, a34 },
+				{ 0.0, 0.0, 0.0, 1.0 } };
+	}
 
-    /**
-     * Translates the current matrix
-     */
-    public final void translate(double x, double y, double z) {
-        if (DIRS[0] != x || DIRS[1] != y || DIRS[2] != z) {
-            // Cache it!
-            DIRS[0] = TRANSLATE.entry[0][3] = x;
-            DIRS[1] = TRANSLATE.entry[1][3] = y;
-            DIRS[2] = TRANSLATE.entry[2][3] = z;
-        }
-        premultiply(TRANSLATE);
-    }
+	/**
+	 * Instantiates a copy of the passed in matrix.
+	 *
+	 * @param m
+	 *            the matrix to copy
+	 */
+	public Matrix(final Matrix m) {
+		this(m.entry[0][0], m.entry[0][1], m.entry[0][2], m.entry[0][3], m.entry[1][0], m.entry[1][1], m.entry[1][2],
+				m.entry[1][3], m.entry[2][0], m.entry[2][1], m.entry[2][2], m.entry[2][3]);
+	}
 
-    /**
-     * Returns the point (the x and y coordinates) of the transformed origin.
-     *
-     * @param point
-     *            the point to store the location in
-     * @return either the point passed in or, if that point was null, a newly
-     *         allocated point
-     */
-    public final Point2D origin(Point2D point) {
-        if (point == null) {
-            point = new Point2D.Double();
-        }
-        origin(ORIGIN_REUSE);
-        point.setLocation(ORIGIN_REUSE.get(0), ORIGIN_REUSE.get(1));
-        return point;
-    }
+	/**
+	 * Returns a copy of this object.
+	 *
+	 * @return a copy of this matrix
+	 */
+	@Override
+	public Object clone() {
+		return new Matrix(this);
+	}
 
-    /**
-     * Returns the x, y, and z coordinates of the transformed origin.
-     *
-     * @param array
-     *            the array of three entries which will hold, in order, the
-     *            <I>x</I>, <I>y</I>, and <I>z</I> coordinates, or null if you
-     *            wish a newly allocated array
-     * @return the array
-     */
-    public final List<Double> origin(List<Double> array) {
-        if (array == null) {
-            array = new ArrayList<>();
-        }
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                INVERSE.entry[i][j] = entry[j][i];
-            }
-        }
-        premultiply(INVERSE);
-        for (int i = 0; i < 3; i++) {
-            array.add(entry[i][3]);
-        }
-        // Swap it back!
-        double[][] old = entry;
-        entry = entry2;
-        entry2 = old;
-        // Yay.
-        return Lists.newArrayList(array);
-    }
+	/**
+	 * Returns the x, y, and z coordinates of the transformed origin.
+	 *
+	 * @param array
+	 *            the array of three entries which will hold, in order, the
+	 *            <I>x</I>, <I>y</I>, and <I>z</I> coordinates, or null if you
+	 *            wish a newly allocated array
+	 * @return the array
+	 */
+	public final List<Double> origin(List<Double> array) {
+		if (array == null) {
+			array = new ArrayList<>();
+		}
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				INVERSE.entry[i][j] = entry[j][i];
+			}
+		}
+		premultiply(INVERSE);
+		for (int i = 0; i < 3; i++) {
+			array.add(entry[i][3]);
+		}
+		// Swap it back!
+		final double[][] old = entry;
+		entry = entry2;
+		entry2 = old;
+		// Yay.
+		return Lists.newArrayList(array);
+	}
 
-    /**
-     * Returns a string representation of this matrix.
-     *
-     * @return a string representation of this matrix
-     */
-    @Override
-    public final String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append('(');
-        for (int i = 0; i < 4; i++) {
-            if (i != 0) {
-                sb.append(";  ");
-            }
-            for (int j = 0; j < 4; j++) {
-                if (j != 0) {
-                    sb.append(',');
-                }
-                sb.append(' ');
-                sb.append(entry[i][j]);
-            }
-        }
-        sb.append(" )");
-        return sb.toString();
-    }
+	/**
+	 * Returns the point (the x and y coordinates) of the transformed origin.
+	 *
+	 * @param point
+	 *            the point to store the location in
+	 * @return either the point passed in or, if that point was null, a newly
+	 *         allocated point
+	 */
+	public final Point2D origin(Point2D point) {
+		if (point == null) {
+			point = new Point2D.Double();
+		}
+		origin(ORIGIN_REUSE);
+		point.setLocation(ORIGIN_REUSE.get(0), ORIGIN_REUSE.get(1));
+		return point;
+	}
 
-    /**
-     * The entries, where the first index in the array is the row, and the
-     * second index is the column.
-     */
-    public double[][] entry;
+	/**
+	 * Turns the current matrix about the X-axis.
+	 *
+	 * @param angle
+	 *            the angle to turn
+	 */
+	public final void pitch(double angle) {
+		if (XAXIS_ANGLE == -angle) {
+			XAXIS_ANGLE = angle;
+			XAXIS_TURN.entry[1][2] = -XAXIS_TURN.entry[1][2];
+			XAXIS_TURN.entry[2][1] = -XAXIS_TURN.entry[2][1];
+		} else if (XAXIS_ANGLE != angle) {
+			// Cache it!
+			XAXIS_ANGLE = angle;
+			angle = Math.toRadians(angle);
+			final double c = Math.cos(angle), s = Math.sin(angle);
+			XAXIS_TURN = new Matrix(1.0, 0.0, 0.0, 0.0, 0.0, c, -s, 0.0, 0.0, s, c, 0.0);
+		}
+		premultiply(XAXIS_TURN);
+	}
 
-    /** The backup entries. */
-    private double[][] entry2 = new double[4][4];
+	/**
+	 * Given another matrix, this will premultiply that matrix times this
+	 * matrix, and store the result in this matrix. If <I>B</I> is this matrix
+	 * and <I>A</I> is the matrix passed in as a parameter, then this is similar
+	 * to <I>B = BA</I>.
+	 *
+	 * @param matrix
+	 *            the matrix to premultiply
+	 */
+	public final void postmultiply(final Matrix matrix) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				entry2[i][j] = 0.0;
+				for (int k = 0; k < 4; k++) {
+					entry2[i][j] += entry[i][k] * matrix.entry[k][j];
+				}
+			}
+		}
+		// Swap!
+		final double[][] oldentry = entry;
+		entry = entry2;
+		entry2 = oldentry;
+	}
 
-    /** The old angles for each of the cached turn matrices. */
-    private static double XAXIS_ANGLE = Double.NaN, YAXIS_ANGLE = Double.NaN,
-            ZAXIS_ANGLE = Double.NaN;
+	/**
+	 * Given another matrix, this will premultiply that matrix times this
+	 * matrix, and store the result in this matrix. If <I>A</I> is this matrix
+	 * and <I>B</I> is the matrix passed in as a parameter, then this is similar
+	 * to <I>A = BA</I>.
+	 *
+	 * @param matrix
+	 *            the matrix to premultiply
+	 */
+	public final void premultiply(final Matrix matrix) {
+		entry2[3][0] = entry[3][1] = entry[3][2] = 0.0;
+		entry2[3][3] = 1.0;
 
-    /** The cached matrices for turning. */
-    private static Matrix XAXIS_TURN, YAXIS_TURN, ZAXIS_TURN;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 4; j++) {
+				entry2[i][j] = 0.0;
+				for (int k = 0; k < 4; k++) {
+					entry2[i][j] += matrix.entry[i][k] * entry[k][j];
+				}
+			}
+		}
+		// Swap!
+		final double[][] oldentry = entry;
+		entry = entry2;
+		entry2 = oldentry;
+	}
 
-    /** The old distances for each of the cache translation matrices. */
-    private static double[] DIRS = new double[] { 0.0, 0.0, 0.0 };
+	/**
+	 * Turns the current matrix about the Y-axis.
+	 *
+	 * @param angle
+	 *            the angle to turn
+	 */
+	public final void roll(double angle) {
+		if (YAXIS_ANGLE == -angle) {
+			YAXIS_ANGLE = angle;
+			YAXIS_TURN.entry[0][2] = -YAXIS_TURN.entry[0][2];
+			YAXIS_TURN.entry[2][0] = -YAXIS_TURN.entry[2][0];
+		} else if (YAXIS_ANGLE != angle) {
+			// Cache it!
+			YAXIS_ANGLE = angle;
+			angle = Math.toRadians(angle);
+			final double c = Math.cos(angle), s = Math.sin(angle);
+			YAXIS_TURN = new Matrix(c, 0.0, s, 0.0, 0.0, 1.0, 0.0, 0.0, -s, 0.0, c, 0.0);
+		}
+		premultiply(YAXIS_TURN);
+	}
 
-    /** The old translation matrix. */
-    private static final Matrix TRANSLATE = new Matrix();
+	/**
+	 * Returns a string representation of this matrix.
+	 *
+	 * @return a string representation of this matrix
+	 */
+	@Override
+	public final String toString() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append('(');
+		for (int i = 0; i < 4; i++) {
+			if (i != 0) {
+				sb.append(";  ");
+			}
+			for (int j = 0; j < 4; j++) {
+				if (j != 0) {
+					sb.append(',');
+				}
+				sb.append(' ');
+				sb.append(entry[i][j]);
+			}
+		}
+		sb.append(" )");
+		return sb.toString();
+	}
 
-    /**
-     * The old matrix used for computing inversions back to user space...
-     */
-    private static final Matrix INVERSE = new Matrix();
+	/**
+	 * Translates the current matrix
+	 */
+	public final void translate(final double x, final double y, final double z) {
+		if (DIRS[0] != x || DIRS[1] != y || DIRS[2] != z) {
+			// Cache it!
+			DIRS[0] = TRANSLATE.entry[0][3] = x;
+			DIRS[1] = TRANSLATE.entry[1][3] = y;
+			DIRS[2] = TRANSLATE.entry[2][3] = z;
+		}
+		premultiply(TRANSLATE);
+	}
 
-    /**
-     * Used for the origin methods, so new arrays needn't constantly be
-     * allocated.
-     */
-    private static final List<Double> ORIGIN_REUSE = new ArrayList<>();
+	/**
+	 * Returns the entry at the given entry.
+	 *
+	 * @param row
+	 *            the row index, must be 0 through 3
+	 * @param column
+	 *            the column index, must be 0 through 3
+	 * @return the entry at the given row and column
+	 */
+	public final double valueAt(final int row, final int column) {
+		return entry[row][column];
+	}
 
-    public static final String arrayString(double[] d) {
-        return "( " + d[0] + ", " + d[1] + ", " + d[2] + " )";
-    }
+	/**
+	 * Turns the current matrix about the Z-axis.
+	 *
+	 * @param angle
+	 *            the angle to turn
+	 */
+	public final void yaw(double angle) {
+		if (ZAXIS_ANGLE == -angle) {
+			ZAXIS_ANGLE = angle;
+			ZAXIS_TURN.entry[0][1] = -ZAXIS_TURN.entry[0][1];
+			ZAXIS_TURN.entry[1][0] = -ZAXIS_TURN.entry[1][0];
+		} else if (ZAXIS_ANGLE != angle) {
+			// Cache it!
+			ZAXIS_ANGLE = angle;
+			angle = Math.toRadians(angle);
+			final double c = Math.cos(angle), s = Math.sin(angle);
+			ZAXIS_TURN = new Matrix(c, -s, 0.0, 0.0, s, c, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+		}
+		premultiply(ZAXIS_TURN);
+	}
 }

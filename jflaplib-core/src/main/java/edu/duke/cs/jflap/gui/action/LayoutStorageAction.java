@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import java.awt.event.ActionEvent;
+
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.graph.AutomatonGraph;
-
-import java.awt.event.ActionEvent;
 
 /**
  * Action that allows for the current automaton layout to be saved and possibly
@@ -30,64 +30,64 @@ import java.awt.event.ActionEvent;
  * @author Chris Morgan
  */
 public class LayoutStorageAction extends AutomatonAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-    /**
-     * The automaton whose layout will be saved and possibly restored.
-     */
-    private Automaton automaton;
-    /**
-     * The saved automaton graph, in which the points used to restore the layout
-     * are kept.
-     */
-    private AutomatonGraph graph;
-    /**
-     * Action that when invoked restores the automaton to the points stored in
-     * the graph.
-     */
-    private AutomatonAction restoreAction;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * The automaton whose layout will be saved and possibly restored.
+	 */
+	private final Automaton automaton;
+	/**
+	 * The saved automaton graph, in which the points used to restore the layout
+	 * are kept.
+	 */
+	private AutomatonGraph graph;
+	/**
+	 * Action that when invoked restores the automaton to the points stored in
+	 * the graph.
+	 */
+	private final AutomatonAction restoreAction;
 
-    /**
-     * Constructor.
-     *
-     * @param saveString
-     *            the title of this action.
-     * @param restoreString
-     *            the title of the action that restores the saved layout.
-     * @param automaton
-     *            the automaton whose layout will be saved or restored.
-     */
-    public LayoutStorageAction(String saveString, String restoreString, Automaton a) {
-        super(saveString, null);
-        automaton = a;
-        restoreAction = new AutomatonAction(restoreString, null) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+	/**
+	 * Constructor.
+	 *
+	 * @param saveString
+	 *            the title of this action.
+	 * @param restoreString
+	 *            the title of the action that restores the saved layout.
+	 * @param automaton
+	 *            the automaton whose layout will be saved or restored.
+	 */
+	public LayoutStorageAction(final String saveString, final String restoreString, final Automaton a) {
+		super(saveString, null);
+		automaton = a;
+		restoreAction = new AutomatonAction(restoreString, null) {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 1L;
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                graph.moveAutomatonStates();
-            }
-        };
-        restoreAction.setEnabled(false);
-    }
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				graph.moveAutomatonStates();
+			}
+		};
+		restoreAction.setEnabled(false);
+	}
 
-    /**
-     * Fetches the action used to restore the saved layout.
-     *
-     * @return the action used to restore the saved layout.
-     */
-    public AutomatonAction getRestoreAction() {
-        return restoreAction;
-    }
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		graph = new AutomatonGraph(automaton);
+		restoreAction.setEnabled(true);
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        graph = new AutomatonGraph(automaton);
-        restoreAction.setEnabled(true);
-    }
+	/**
+	 * Fetches the action used to restore the saved layout.
+	 *
+	 * @return the action used to restore the saved layout.
+	 */
+	public AutomatonAction getRestoreAction() {
+		return restoreAction;
+	}
 }

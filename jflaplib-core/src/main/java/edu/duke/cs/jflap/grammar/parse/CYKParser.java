@@ -16,19 +16,19 @@
 
 package edu.duke.cs.jflap.grammar.parse;
 
-import edu.duke.cs.jflap.grammar.CNFConverter;
-import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.grammar.LambdaProductionRemover;
-import edu.duke.cs.jflap.grammar.Production;
-import edu.duke.cs.jflap.grammar.UnitProductionRemover;
-import edu.duke.cs.jflap.grammar.UselessProductionRemover;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
+import edu.duke.cs.jflap.grammar.CNFConverter;
+import edu.duke.cs.jflap.grammar.Grammar;
+import edu.duke.cs.jflap.grammar.LambdaProductionRemover;
+import edu.duke.cs.jflap.grammar.Production;
+import edu.duke.cs.jflap.grammar.UnitProductionRemover;
+import edu.duke.cs.jflap.grammar.UselessProductionRemover;
 
 /**
  * CYK Parser It parses grammar that is in CNF form and returns whether the
@@ -39,283 +39,283 @@ import java.util.List;
  */
 public class CYKParser {
 
-    /** Production array that will contain all the productions of grammar */
-    private List<Production> myProductions;
+	/** Start variable of the grammar */
+	private static String START_VARIABLE;
 
-    /** Start variable of the grammar */
-    private static String START_VARIABLE;
+	private static Grammar convert(Grammar grammar) {
+		if (grammar.isConverted()) {
+			return grammar;
+		}
 
-    /** Length of the input String */
-    private int myTargetLength;
+		grammar = UselessProductionRemover.getUselessProductionlessGrammar(grammar);
+		grammar = LambdaProductionRemover.getLambdaProductionlessGrammar(grammar);
+		grammar = UnitProductionRemover.getUnitProductionlessGrammar(grammar);
+		return CNFConverter.convert(grammar);
+	}
 
-    /** Productions that leads to the answer */
-    private ArrayList<Production> myAnswerProductions;
+	/**
+	 * Thread safe, hopefully.
+	 */
+	public static boolean convertAndSolve(Grammar grammar, final String target) {
+		// may not be thread safe
+		grammar = convert(grammar);
+		// CYKParser doesn't handle empty string.
+		if (target.equals("")) {
+			return BruteParser.get(grammar, target).start();
+		}
+		// lots of repeated work to construct a new CYKParser for the same
+		// grammars
+		return new CYKParser(grammar).solve(target);
+	}
 
-    /** Map to store the result of subparts */
-    private HashMap<String, HashSet<String>> myMap;
+	/** Production array that will contain all the productions of grammar */
+	private final List<Production> myProductions;
 
-    /** Input string that CYK is trying to parse */
-    private String myTarget;
+	/** Length of the input String */
+	private int myTargetLength;
 
-    private OrderCorrectly myOrderComparator;
+	/** Productions that leads to the answer */
+	private ArrayList<Production> myAnswerProductions;
 
-    /**
-     * Constructor for CYK Parser
-     *
-     * @param grammar
-     *            Grammar that is going to be used in CYK Parsing (It has to be
-     *            in CNF Form)
-     */
-    public CYKParser(Grammar grammar) {
-        myProductions = grammar.getProductions();
-        START_VARIABLE = grammar.getStartVariable();
-    }
+	/** Map to store the result of subparts */
+	private HashMap<String, HashSet<String>> myMap;
 
-    /**
-     * Check whether the grammar accepts the string or not using DP
-     */
-    public boolean solve(String target) {
-        myMap = new HashMap<>();
-        int targetLength = target.length();
-        myTargetLength = targetLength;
-        myTarget = target;
+	/** Input string that CYK is trying to parse */
+	private String myTarget;
 
-        if (target.equals("")) {
-            return false;
-        }
+	private OrderCorrectly myOrderComparator;
 
-        for (int i = 0; i < targetLength; i++) {
-            String a = target.substring(i, i + 1);
-            HashSet<String> temp = new HashSet<>();
-            int count = 0;
+	/**
+	 * Constructor for CYK Parser
+	 *
+	 * @param grammar
+	 *            Grammar that is going to be used in CYK Parsing (It has to be
+	 *            in CNF Form)
+	 */
+	public CYKParser(final Grammar grammar) {
+		myProductions = grammar.getProductions();
+		START_VARIABLE = grammar.getStartVariable();
+	}
 
-            for (int j = 0; j < myProductions.size(); j++) {
-                if (myProductions.get(j).getRHS().equals(a)) {
-                    count++;
-                    temp.add(myProductions.get(j).getLHS());
-                }
-            }
-            String key = i + "," + i;
-            myMap.put(key, temp);
-            if (count == 0) {
-                return false;
-            }
-            count = 0;
-        }
-        // System.out.println(myMap);
+	/**
+	 * Helper method of solve method that checks the surrounding production
+	 *
+	 * @param x
+	 * @param y
+	 */
+	private void checkProductions(final int x, final int y) {
+		final HashSet<String> tempSet = new HashSet<>();
 
-        int increment = 1;
-        for (int i = 0; i < targetLength; i++) {
-            for (int j = 0; j < targetLength; j++) {
-                if (targetLength <= j + increment) {
-                    break;
-                }
-                int k = j + increment;
-                checkProductions(j, k);
+		for (int i = 0; i < myProductions.size(); i++) {
+			for (int k = x; k < y; k++) {
+				final String key1 = x + "," + k;
+				final String key2 = (k + 1) + "," + y;
+				for (final String A : myMap.get(key1)) {
+					for (final String B : myMap.get(key2)) {
+						final String target = A + B;
+						if (myProductions.get(i).getRHS().equals(target)) {
+							final HashSet<String> temp2Set = new HashSet<>();
+							tempSet.add(myProductions.get(i).getLHS());
+							temp2Set.add("0" + A + "/" + key1);
+							temp2Set.add("1" + B + "/" + key2);
 
-                // System.out.print(myMap.get(j+","+k));
-            }
-            // System.out.println();
-            increment++;
-        }
+							final String tempKey = x + "," + y + myProductions.get(i).getLHS();
+							if (myMap.get(tempKey) != null) {
+								temp2Set.addAll(myMap.get(tempKey));
+							}
 
-        if (increment == 2) {
-            return myMap.get("0," + (targetLength - 1)).contains(START_VARIABLE);
-        }
+							myMap.put(tempKey, temp2Set);
+						}
+					}
+				}
+			}
+		}
+		final String key = x + "," + y;
+		myMap.put(key, tempSet);
+	}
 
-        if (myMap.get("0," + (targetLength - 1)).contains(START_VARIABLE)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Helper method of getTrace method which recursively backtracks how Parser
+	 * achieved the target String
+	 *
+	 * @param variable
+	 *            Variable that we are chekcing
+	 * @param location
+	 *            Location of the variable
+	 */
+	private void getMoreProductions(final String variable, final String location) {
+		// //System.out.println("WHOLE MAP = "+myMap);
+		if (myMap.get(location + variable) == null) {
+			// //System.out.println("Location inside = "+location);
+			// //System.out.println("Variable inside = "+variable);
+			final int loc = Integer.parseInt(location.substring(0, location.indexOf(",")));
+			myAnswerProductions.add(new Production(variable, myTarget.substring(loc, loc + 1)));
+			return;
+		}
 
-    /**
-     * Thread safe, hopefully.
-     */
-    public static boolean convertAndSolve(Grammar grammar, String target) {
-        // may not be thread safe
-        grammar = convert(grammar);
-        // CYKParser doesn't handle empty string.
-        if (target.equals("")) {
-            return BruteParser.get(grammar, target).start();
-        }
-        // lots of repeated work to construct a new CYKParser for the same
-        // grammars
-        return new CYKParser(grammar).solve(target);
-    }
+		/*
+		 * //System.out.println("Map = "+myMap.get(location+variable));
+		 * //System.out.println("Location = "+location);
+		 * //System.out.println("Variable = "+variable);
+		 */
 
-    private static Grammar convert(Grammar grammar) {
-        if (grammar.isConverted()) {
-            return grammar;
-        }
+		final ArrayList<String> optionsA = new ArrayList<>();
+		final ArrayList<String> optionsB = new ArrayList<>();
 
-        grammar = UselessProductionRemover.getUselessProductionlessGrammar(grammar);
-        grammar = LambdaProductionRemover.getLambdaProductionlessGrammar(grammar);
-        grammar = UnitProductionRemover.getUnitProductionlessGrammar(grammar);
-        return CNFConverter.convert(grammar);
-    }
+		final List<String> A = new ArrayList<>(Collections.nCopies(2, null));
+		final List<String> B = new ArrayList<>(Collections.nCopies(2, null));
+		for (final String var : myMap.get(location + variable)) {
+			if (var.startsWith("0")) {
+				optionsA.add(var);
+			} else {
+				optionsB.add(var);
+			}
+		}
+		Collections.sort(optionsA, myOrderComparator);
+		Collections.sort(optionsB, myOrderComparator);
 
-    /**
-     * Helper method of solve method that checks the surrounding production
-     *
-     * @param x
-     * @param y
-     */
-    private void checkProductions(int x, int y) {
-        HashSet<String> tempSet = new HashSet<>();
+		// //System.out.println("AAA = "+optionsA);
+		// //System.out.println("BBB = "+optionsB);
 
-        for (int i = 0; i < myProductions.size(); i++) {
-            for (int k = x; k < y; k++) {
-                String key1 = x + "," + k;
-                String key2 = (k + 1) + "," + y;
-                for (String A : myMap.get(key1)) {
-                    for (String B : myMap.get(key2)) {
-                        String target = A + B;
-                        if (myProductions.get(i).getRHS().equals(target)) {
-                            HashSet<String> temp2Set = new HashSet<>();
-                            tempSet.add(myProductions.get(i).getLHS());
-                            temp2Set.add("0" + A + "/" + key1);
-                            temp2Set.add("1" + B + "/" + key2);
+		boolean isDone = false;
+		for (int i = 0; i < optionsA.size(); i++) {
+			int index = optionsA.get(i).indexOf("/");
+			final String a = optionsA.get(i).substring(1, index);
+			final String locA = optionsA.get(i).substring(index + 1);
 
-                            String tempKey = x + "," + y + myProductions.get(i).getLHS();
-                            if (myMap.get(tempKey) != null) {
-                                temp2Set.addAll(myMap.get(tempKey));
-                            }
+			for (int j = 0; j < optionsB.size(); j++) {
+				index = optionsB.get(i).indexOf("/");
+				final String b = optionsB.get(i).substring(1, index);
+				final String locB = optionsB.get(i).substring(index + 1);
 
-                            myMap.put(tempKey, temp2Set);
-                        }
-                    }
-                }
-            }
-        }
-        String key = x + "," + y;
-        myMap.put(key, tempSet);
-    }
+				final Production p = new Production(variable, a + b);
+				for (int k = 0; k < myProductions.size(); k++) {
+					if (myProductions.get(k).getLHS().equals(p.getLHS())
+							&& myProductions.get(k).getRHS().equals(p.getRHS())) {
+						A.set(0, a);
+						A.set(1, locA);
+						B.set(0, b);
+						B.set(1, locB);
+						isDone = true;
+						break;
+					}
+				}
+				if (isDone) {
+					break;
+				}
+			}
+			if (isDone) {
+				break;
+			}
+		}
 
-    /**
-     * Method for getting the trace of how the parser achieved the target String
-     *
-     * @return ArrayList of Productions that was applied to attain target String
-     */
-    public ArrayList<Production> getTrace() {
-        myAnswerProductions = new ArrayList<>();
-        myOrderComparator = new OrderCorrectly();
+		// //System.out.println("Selected = "+A.get(0)+" at "+A.get(1));
+		// //System.out.println("Selected = "+B.get(0)+" at "+B.get(1));
 
-        // System.out.println("WHOLE MAP = "+myMap);
+		myAnswerProductions.add(new Production(variable, A.get(0) + B.get(0)));
+		getMoreProductions(A.get(0), A.get(1));
+		getMoreProductions(B.get(0), B.get(1));
+	}
 
-        getMoreProductions(START_VARIABLE, "0," + (myTargetLength - 1));
+	/**
+	 * Method for getting the trace of how the parser achieved the target String
+	 *
+	 * @return ArrayList of Productions that was applied to attain target String
+	 */
+	public ArrayList<Production> getTrace() {
+		myAnswerProductions = new ArrayList<>();
+		myOrderComparator = new OrderCorrectly();
 
-        // System.out.println(myAnswerProductions);
+		// System.out.println("WHOLE MAP = "+myMap);
 
-        return myAnswerProductions;
-    }
+		getMoreProductions(START_VARIABLE, "0," + (myTargetLength - 1));
 
-    /**
-     * Helper method of getTrace method which recursively backtracks how Parser
-     * achieved the target String
-     *
-     * @param variable
-     *            Variable that we are chekcing
-     * @param location
-     *            Location of the variable
-     */
-    private void getMoreProductions(String variable, String location) {
-        // //System.out.println("WHOLE MAP = "+myMap);
-        if (myMap.get(location + variable) == null) {
-            // //System.out.println("Location inside = "+location);
-            // //System.out.println("Variable inside = "+variable);
-            int loc = Integer.parseInt(location.substring(0, location.indexOf(",")));
-            myAnswerProductions.add(new Production(variable, myTarget.substring(loc, loc + 1)));
-            return;
-        }
+		// System.out.println(myAnswerProductions);
 
-        /*
-         * //System.out.println("Map = "+myMap.get(location+variable));
-         * //System.out.println("Location = "+location);
-         * //System.out.println("Variable = "+variable);
-         */
+		return myAnswerProductions;
+	}
 
-        ArrayList<String> optionsA = new ArrayList<>();
-        ArrayList<String> optionsB = new ArrayList<>();
+	/**
+	 * Check whether the grammar accepts the string or not using DP
+	 */
+	public boolean solve(final String target) {
+		myMap = new HashMap<>();
+		final int targetLength = target.length();
+		myTargetLength = targetLength;
+		myTarget = target;
 
-        List<String> A = Collections.nCopies(2, null);
-        List<String> B = Collections.nCopies(2, null);
-        for (String var : myMap.get(location + variable)) {
-            if (var.startsWith("0")) {
-                optionsA.add(var);
-            } else {
-                optionsB.add(var);
-            }
-        }
-        Collections.sort(optionsA, myOrderComparator);
-        Collections.sort(optionsB, myOrderComparator);
+		if (target.equals("")) {
+			return false;
+		}
 
-        // //System.out.println("AAA = "+optionsA);
-        // //System.out.println("BBB = "+optionsB);
+		for (int i = 0; i < targetLength; i++) {
+			final String a = target.substring(i, i + 1);
+			final HashSet<String> temp = new HashSet<>();
+			int count = 0;
 
-        boolean isDone = false;
-        for (int i = 0; i < optionsA.size(); i++) {
-            int index = optionsA.get(i).indexOf("/");
-            String a = optionsA.get(i).substring(1, index);
-            String locA = optionsA.get(i).substring(index + 1);
+			for (int j = 0; j < myProductions.size(); j++) {
+				if (myProductions.get(j).getRHS().equals(a)) {
+					count++;
+					temp.add(myProductions.get(j).getLHS());
+				}
+			}
+			final String key = i + "," + i;
+			myMap.put(key, temp);
+			if (count == 0) {
+				return false;
+			}
+			count = 0;
+		}
+		// System.out.println(myMap);
 
-            for (int j = 0; j < optionsB.size(); j++) {
-                index = optionsB.get(i).indexOf("/");
-                String b = optionsB.get(i).substring(1, index);
-                String locB = optionsB.get(i).substring(index + 1);
+		int increment = 1;
+		for (int i = 0; i < targetLength; i++) {
+			for (int j = 0; j < targetLength; j++) {
+				if (targetLength <= j + increment) {
+					break;
+				}
+				final int k = j + increment;
+				checkProductions(j, k);
 
-                Production p = new Production(variable, a + b);
-                for (int k = 0; k < myProductions.size(); k++) {
-                    if (myProductions.get(k).getLHS().equals(p.getLHS())
-                            && myProductions.get(k).getRHS().equals(p.getRHS())) {
-                        A.set(0, a);
-                        A.set(1, locA);
-                        B.set(0, b);
-                        B.set(1, locB);
-                        isDone = true;
-                        break;
-                    }
-                }
-                if (isDone) {
-                    break;
-                }
-            }
-            if (isDone) {
-                break;
-            }
-        }
+				// System.out.print(myMap.get(j+","+k));
+			}
+			// System.out.println();
+			increment++;
+		}
 
-        // //System.out.println("Selected = "+A.get(0)+" at "+A.get(1));
-        // //System.out.println("Selected = "+B.get(0)+" at "+B.get(1));
+		if (increment == 2) {
+			return myMap.get("0," + (targetLength - 1)).contains(START_VARIABLE);
+		}
 
-        myAnswerProductions.add(new Production(variable, A.get(0) + B.get(0)));
-        getMoreProductions(A.get(0), A.get(1));
-        getMoreProductions(B.get(0), B.get(1));
-    }
+		if (myMap.get("0," + (targetLength - 1)).contains(START_VARIABLE)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 final class OrderCorrectly implements Comparator<Object> {
-    @Override
-    public int compare(Object o1, Object o2) {
-        String str1 = (String) o1;
-        String str2 = (String) o2;
-        int index1 = str1.indexOf("/");
-        String loc1 = str1.substring(index1 + 1);
-        int index1_1 = loc1.indexOf(",");
-        int lc1_1 = Integer.parseInt(loc1.substring(0, index1_1));
-        int lc1_2 = Integer.parseInt(loc1.substring(index1_1 + 1));
+	@Override
+	public int compare(final Object o1, final Object o2) {
+		final String str1 = (String) o1;
+		final String str2 = (String) o2;
+		final int index1 = str1.indexOf("/");
+		final String loc1 = str1.substring(index1 + 1);
+		final int index1_1 = loc1.indexOf(",");
+		final int lc1_1 = Integer.parseInt(loc1.substring(0, index1_1));
+		final int lc1_2 = Integer.parseInt(loc1.substring(index1_1 + 1));
 
-        int index2 = str2.indexOf("/");
-        String loc2 = str2.substring(index2 + 1);
-        int index2_1 = loc2.indexOf(",");
-        int lc2_1 = Integer.parseInt(loc2.substring(0, index2_1));
-        int lc2_2 = Integer.parseInt(loc2.substring(index2_1 + 1));
+		final int index2 = str2.indexOf("/");
+		final String loc2 = str2.substring(index2 + 1);
+		final int index2_1 = loc2.indexOf(",");
+		final int lc2_1 = Integer.parseInt(loc2.substring(0, index2_1));
+		final int lc2_2 = Integer.parseInt(loc2.substring(index2_1 + 1));
 
-        if (lc1_1 == lc2_1) {
-            return lc1_2 - lc2_2;
-        }
+		if (lc1_1 == lc2_1) {
+			return lc1_2 - lc2_2;
+		}
 
-        return lc1_1 - lc2_1;
-    }
+		return lc1_1 - lc2_1;
+	}
 }

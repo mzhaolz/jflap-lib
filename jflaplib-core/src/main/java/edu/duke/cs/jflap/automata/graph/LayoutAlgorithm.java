@@ -28,207 +28,205 @@ import java.util.Set;
  * @author Thomas Finley & Chris Morgan
  */
 public abstract class LayoutAlgorithm<V> {
-    /**
-     * The size of the canvas on which the <code>LayoutAlgorithm</code> will be
-     * implemented on.
-     */
-    protected Dimension size;
-    /**
-     * The value for how much space in the graph a vertex is assumed to take.
-     */
-    protected Dimension vertexDim;
-    /**
-     * The minimum space between vertices.
-     */
-    protected double vertexBuffer;
+	/**
+	 * Converts the points in the graph of all given vertices from Cartesian
+	 * polar coordinates. The points will be returned with x = <i>r</i> and y =
+	 * <i>θ</i>. The center is assumed to be the origin.
+	 *
+	 * @param graph
+	 *            - the graph the points are listed in
+	 * @param vertices
+	 *            - a list of objects whose points need to be changed
+	 */
+	public static <T> void cartesianToPolar(final Graph<T> graph, final List<T> vertices) {
+		double theta, r;
+		Point2D cartesian;
+		for (int i = 0; i < vertices.size(); i++) {
+			cartesian = graph.pointForVertex(vertices.get(i));
+			if (cartesian.getY() != 0) {
+				theta = Math.atan(cartesian.getY() / cartesian.getX());
+			} else {
+				theta = Math.PI / 2;
+			}
+			r = Math.sqrt(Math.pow(cartesian.getX(), 2) + Math.pow(cartesian.getY(), 2));
+			graph.moveVertex(vertices.get(i), new Point2D.Double(r, theta));
+		}
+	}
 
-    public LayoutAlgorithm() {
-        size = new Dimension(900, 900);
-        vertexDim = new Dimension(30, 30);
-        vertexBuffer = 30;
-    }
+	/**
+	 * Returns a list of vertices that are in the <code>graph</code> but are not
+	 * in <code>notMoving
+	 * </code>. If called by <code>layout()</code>, it should return a list of
+	 * vertices that can be moved.
+	 *
+	 * @return the list of vertices
+	 */
+	public static <V> List<V> getMovableVertices(final Graph<V> graph, final Set<V> notMoving) {
+		final List<V> vArray = graph.vertices();
+		final ArrayList<V> vertices = new ArrayList<>();
+		for (int i = 0; i < vArray.size(); i++) {
+			if (notMoving == null || !notMoving.contains(vArray.get(i))) {
+				vertices.add(vArray.get(i));
+			}
+		}
+		return vertices;
+	}
 
-    /**
-     * Constructor allowing the user to customize certain values.
-     *
-     * @param pSize
-     *            - value for <code>size</code>.
-     * @param vDim
-     *            - value for <code>vertexDim</code>.
-     * @param vBuffer
-     *            - value for <code>vertexBuffer</code>.
-     */
-    public LayoutAlgorithm(Dimension pSize, Dimension vDim, double vBuffer) {
-        size = pSize;
-        vertexDim = vDim;
-        vertexBuffer = vBuffer;
-    }
+	/**
+	 * Converts the points in the graph of all given vertices from polar to
+	 * Cartesian coordinates. It is assumed that the current points on the graph
+	 * are in polar coordinates, with x = <i>r</i> and y = <i>θ</i>. The center
+	 * is assumed to be the origin
+	 *
+	 * @param graph
+	 *            - the graph the points are listed in
+	 * @param vertices
+	 *            - a list of objects whose points need to be changed
+	 */
+	public static <T> void polarToCartesian(final Graph<T> graph, final List<T> vertices) {
+		Point2D polar, cartesian;
+		for (int i = 0; i < vertices.size(); i++) {
+			polar = graph.pointForVertex(vertices.get(i));
+			cartesian = new Point2D.Double(Math.cos(polar.getY()) * polar.getX(),
+					Math.sin(polar.getY()) * polar.getX());
+			graph.moveVertex(vertices.get(i), cartesian);
+		}
+	}
 
-    /**
-     * Moves the vertices of the states of the graph so that they are in some
-     * pleasing position.
-     *
-     * @param graph
-     *            the graph whose states this method shall move.
-     * @param notMoving
-     *            the set of vertices that will not move at all.
-     */
-    public abstract void layout(Graph<V> graph, Set<V> notMoving);
+	/**
+	 * Method that can make sure that all vertices are visible in the screen.
+	 * The leftmost vertex is shifted to an x-coordinate of
+	 * <code>buffer.width</code>, the highest vertex is shifted to a
+	 * y-coordinate of <code>buffer.height</code>, the rightmost vertex is
+	 * shifted to a coordinate of <code>size.width</code> -
+	 * <code>buffer.width</code>, and the bottom-most vertex is shifted to a
+	 * coordinate of <code>size.width</code> - <code>buffer.height</code>. All
+	 * other vertices are adjusted accordingly. Additionally, if the graph is
+	 * too large to fit onto the current screen, the distance between the
+	 * vertices is proportionally shrunk so that they are..
+	 *
+	 * @param graph
+	 *            The graph whose states this method shall move.
+	 * @param size
+	 *            The assumed size of the screen
+	 * @param buffer
+	 *            The minimum space from the side of the screen that a vertex
+	 *            can be placed at. There can be different values for the width
+	 *            and height.
+	 * @param scaleOnlyOverflow
+	 *            If true, will only fill the screen with a graph if the points
+	 *            are outside the given size.
+	 */
+	public static <T> void shiftOntoScreen(final Graph<T> graph, final Dimension size, final Dimension buffer,
+			final boolean scaleOnlyOverflow) {
+		if (size == null || size.getHeight() == 0 || size.getWidth() == 0) {
+			return;
+		}
 
-    /**
-     * Method that can make sure that all vertices are visible in the screen.
-     * The leftmost vertex is shifted to an x-coordinate of
-     * <code>buffer.width</code>, the highest vertex is shifted to a
-     * y-coordinate of <code>buffer.height</code>, the rightmost vertex is
-     * shifted to a coordinate of <code>size.width</code> -
-     * <code>buffer.width</code>, and the bottom-most vertex is shifted to a
-     * coordinate of <code>size.width</code> - <code>buffer.height</code>. All
-     * other vertices are adjusted accordingly. Additionally, if the graph is
-     * too large to fit onto the current screen, the distance between the
-     * vertices is proportionally shrunk so that they are..
-     *
-     * @param graph
-     *            The graph whose states this method shall move.
-     * @param size
-     *            The assumed size of the screen
-     * @param buffer
-     *            The minimum space from the side of the screen that a vertex
-     *            can be placed at. There can be different values for the width
-     *            and height.
-     * @param scaleOnlyOverflow
-     *            If true, will only fill the screen with a graph if the points
-     *            are outside the given size.
-     */
-    public static <T> void shiftOntoScreen(Graph<T> graph, Dimension size, Dimension buffer,
-            boolean scaleOnlyOverflow) {
-        if (size == null || size.getHeight() == 0 || size.getWidth() == 0) {
-            return;
-        }
+		final List<T> vertices = graph.vertices();
+		double currentX, currentY, minX, minY, maxX, maxY, heightRatio, widthRatio;
 
-        List<T> vertices = graph.vertices();
-        double currentX, currentY, minX, minY, maxX, maxY, heightRatio, widthRatio;
+		// First, find the extreme values of x & y
+		minX = Integer.MAX_VALUE;
+		minY = Integer.MAX_VALUE;
+		maxX = Integer.MIN_VALUE;
+		maxY = Integer.MIN_VALUE;
+		for (int i = 0; i < vertices.size(); i++) {
+			currentX = graph.pointForVertex(vertices.get(i)).getX();
+			currentY = graph.pointForVertex(vertices.get(i)).getY();
+			if (currentX < minX) {
+				minX = currentX;
+			}
+			if (currentX > maxX) {
+				maxX = currentX;
+			}
+			if (currentY < minY) {
+				minY = currentY;
+			}
+			if (currentY > maxY) {
+				maxY = currentY;
+			}
+		}
 
-        // First, find the extreme values of x & y
-        minX = Integer.MAX_VALUE;
-        minY = Integer.MAX_VALUE;
-        maxX = Integer.MIN_VALUE;
-        maxY = Integer.MIN_VALUE;
-        for (int i = 0; i < vertices.size(); i++) {
-            currentX = graph.pointForVertex(vertices.get(i)).getX();
-            currentY = graph.pointForVertex(vertices.get(i)).getY();
-            if (currentX < minX) {
-                minX = currentX;
-            }
-            if (currentX > maxX) {
-                maxX = currentX;
-            }
-            if (currentY < minY) {
-                minY = currentY;
-            }
-            if (currentY > maxY) {
-                maxY = currentY;
-            }
-        }
+		// Then, set all points so that their coordinates range from
+		// (0...maxX-minX, 0...maxY-minY)
+		for (int i = 0; i < vertices.size(); i++) {
+			graph.moveVertex(vertices.get(i), new Point2D.Double(graph.pointForVertex(vertices.get(i)).getX() - minX,
+					graph.pointForVertex(vertices.get(i)).getY() - minY));
+		}
 
-        // Then, set all points so that their coordinates range from
-        // (0...maxX-minX, 0...maxY-minY)
-        for (int i = 0; i < vertices.size(); i++) {
-            graph.moveVertex(vertices.get(i),
-                    new Point2D.Double(graph.pointForVertex(vertices.get(i)).getX() - minX,
-                            graph.pointForVertex(vertices.get(i)).getY() - minY));
-        }
+		// Calculate whether the points go off the defined screen minus buffer
+		// space, and adjust
+		widthRatio = (maxX - minX) / (size.getWidth() - 2 * buffer.getWidth());
+		heightRatio = (maxY - minY) / (size.getHeight() - 2 * buffer.getHeight());
+		if (widthRatio > 1.0 || !scaleOnlyOverflow) {
+			for (int i = 0; i < vertices.size(); i++) {
+				graph.moveVertex(vertices.get(i),
+						new Point2D.Double(graph.pointForVertex(vertices.get(i)).getX() / widthRatio,
+								graph.pointForVertex(vertices.get(i)).getY()));
+			}
+		}
+		if (heightRatio > 1.0 || !scaleOnlyOverflow) {
+			for (int i = 0; i < vertices.size(); i++) {
+				graph.moveVertex(vertices.get(i), new Point2D.Double(graph.pointForVertex(vertices.get(i)).getX(),
+						graph.pointForVertex(vertices.get(i)).getY() / heightRatio));
+			}
+		}
 
-        // Calculate whether the points go off the defined screen minus buffer
-        // space, and adjust
-        widthRatio = (maxX - minX) / (size.getWidth() - 2 * buffer.getWidth());
-        heightRatio = (maxY - minY) / (size.getHeight() - 2 * buffer.getHeight());
-        if (widthRatio > 1.0 || !scaleOnlyOverflow) {
-            for (int i = 0; i < vertices.size(); i++) {
-                graph.moveVertex(vertices.get(i),
-                        new Point2D.Double(
-                                graph.pointForVertex(vertices.get(i)).getX() / widthRatio,
-                                graph.pointForVertex(vertices.get(i)).getY()));
-            }
-        }
-        if (heightRatio > 1.0 || !scaleOnlyOverflow) {
-            for (int i = 0; i < vertices.size(); i++) {
-                graph.moveVertex(vertices.get(i),
-                        new Point2D.Double(graph.pointForVertex(vertices.get(i)).getX(),
-                                graph.pointForVertex(vertices.get(i)).getY() / heightRatio));
-            }
-        }
+		// Finally, shift the points right and down the respective buffer values
+		for (int i = 0; i < vertices.size(); i++) {
+			graph.moveVertex(vertices.get(i),
+					new Point2D.Double(graph.pointForVertex(vertices.get(i)).getX() + buffer.getWidth(),
+							graph.pointForVertex(vertices.get(i)).getY() + buffer.getHeight()));
+		}
+	}
 
-        // Finally, shift the points right and down the respective buffer values
-        for (int i = 0; i < vertices.size(); i++) {
-            graph.moveVertex(vertices.get(i),
-                    new Point2D.Double(
-                            graph.pointForVertex(vertices.get(i)).getX() + buffer.getWidth(),
-                            graph.pointForVertex(vertices.get(i)).getY() + buffer.getHeight()));
-        }
-    }
+	/**
+	 * The size of the canvas on which the <code>LayoutAlgorithm</code> will be
+	 * implemented on.
+	 */
+	protected Dimension size;
 
-    /**
-     * Returns a list of vertices that are in the <code>graph</code> but are not
-     * in <code>notMoving
-     * </code>. If called by <code>layout()</code>, it should return a list of
-     * vertices that can be moved.
-     *
-     * @return the list of vertices
-     */
-    public static <V> List<V> getMovableVertices(Graph<V> graph, Set<V> notMoving) {
-        List<V> vArray = graph.vertices();
-        ArrayList<V> vertices = new ArrayList<>();
-        for (int i = 0; i < vArray.size(); i++) {
-            if (notMoving == null || !notMoving.contains(vArray.get(i))) {
-                vertices.add(vArray.get(i));
-            }
-        }
-        return vertices;
-    }
+	/**
+	 * The value for how much space in the graph a vertex is assumed to take.
+	 */
+	protected Dimension vertexDim;
 
-    /**
-     * Converts the points in the graph of all given vertices from Cartesian
-     * polar coordinates. The points will be returned with x = <i>r</i> and y =
-     * <i>θ</i>. The center is assumed to be the origin.
-     *
-     * @param graph
-     *            - the graph the points are listed in
-     * @param vertices
-     *            - a list of objects whose points need to be changed
-     */
-    public static <T> void cartesianToPolar(Graph<T> graph, List<T> vertices) {
-        double theta, r;
-        Point2D cartesian;
-        for (int i = 0; i < vertices.size(); i++) {
-            cartesian = graph.pointForVertex(vertices.get(i));
-            if (cartesian.getY() != 0) {
-                theta = Math.atan(cartesian.getY() / cartesian.getX());
-            } else {
-                theta = Math.PI / 2;
-            }
-            r = Math.sqrt(Math.pow(cartesian.getX(), 2) + Math.pow(cartesian.getY(), 2));
-            graph.moveVertex(vertices.get(i), new Point2D.Double(r, theta));
-        }
-    }
+	/**
+	 * The minimum space between vertices.
+	 */
+	protected double vertexBuffer;
 
-    /**
-     * Converts the points in the graph of all given vertices from polar to
-     * Cartesian coordinates. It is assumed that the current points on the graph
-     * are in polar coordinates, with x = <i>r</i> and y = <i>θ</i>. The center
-     * is assumed to be the origin
-     *
-     * @param graph
-     *            - the graph the points are listed in
-     * @param vertices
-     *            - a list of objects whose points need to be changed
-     */
-    public static <T> void polarToCartesian(Graph<T> graph, List<T> vertices) {
-        Point2D polar, cartesian;
-        for (int i = 0; i < vertices.size(); i++) {
-            polar = graph.pointForVertex(vertices.get(i));
-            cartesian = new Point2D.Double(Math.cos(polar.getY()) * polar.getX(),
-                    Math.sin(polar.getY()) * polar.getX());
-            graph.moveVertex(vertices.get(i), cartesian);
-        }
-    }
+	public LayoutAlgorithm() {
+		size = new Dimension(900, 900);
+		vertexDim = new Dimension(30, 30);
+		vertexBuffer = 30;
+	}
+
+	/**
+	 * Constructor allowing the user to customize certain values.
+	 *
+	 * @param pSize
+	 *            - value for <code>size</code>.
+	 * @param vDim
+	 *            - value for <code>vertexDim</code>.
+	 * @param vBuffer
+	 *            - value for <code>vertexBuffer</code>.
+	 */
+	public LayoutAlgorithm(final Dimension pSize, final Dimension vDim, final double vBuffer) {
+		size = pSize;
+		vertexDim = vDim;
+		vertexBuffer = vBuffer;
+	}
+
+	/**
+	 * Moves the vertices of the states of the graph so that they are in some
+	 * pleasing position.
+	 *
+	 * @param graph
+	 *            the graph whose states this method shall move.
+	 * @param notMoving
+	 *            the set of vertices that will not move at all.
+	 */
+	public abstract void layout(Graph<V> graph, Set<V> notMoving);
 }

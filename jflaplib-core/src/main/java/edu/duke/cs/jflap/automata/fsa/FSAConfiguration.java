@@ -29,120 +29,118 @@ import edu.duke.cs.jflap.automata.State;
  * @author Ryan Cavalcante
  */
 public class FSAConfiguration extends Configuration {
-    /**
-     * Instantiates a new FSAConfiguration.
-     *
-     * @param state
-     *            the state the automaton is currently in.
-     * @param parent
-     *            the configuration that is the immediate ancestor of this
-     *            configuration
-     * @param input
-     *            the input
-     * @param unprocessed
-     *            the unprocessed input
-     */
-    public FSAConfiguration(State state,
-            FSAConfiguration parent,
-            String input,
-            String unprocessed) {
-        super(state, parent);
-        myInput = input;
-        myUnprocessedInput = unprocessed;
-    }
+	/** The total input. */
+	private final String myInput;
 
-    /**
-     * Returns the total input.
-     */
-    public String getInput() {
-        return myInput;
-    }
+	/** The unprocessed input. */
+	private String myUnprocessedInput;
 
-    /**
-     * Returns the unprocessed input.
-     *
-     * @return the unprocessed input.
-     */
-    public String getUnprocessedInput() {
-        return myUnprocessedInput;
-    }
+	/**
+	 * Instantiates a new FSAConfiguration.
+	 *
+	 * @param state
+	 *            the state the automaton is currently in.
+	 * @param parent
+	 *            the configuration that is the immediate ancestor of this
+	 *            configuration
+	 * @param input
+	 *            the input
+	 * @param unprocessed
+	 *            the unprocessed input
+	 */
+	public FSAConfiguration(final State state, final FSAConfiguration parent, final String input,
+			final String unprocessed) {
+		super(state, parent);
+		myInput = input;
+		myUnprocessedInput = unprocessed;
+	}
 
-    /**
-     * Changes the unprocessed input.
-     *
-     * @param input
-     *            the string that will represent the unprocessed input of the
-     *            FSA.
-     */
-    public void setUnprocessedInput(String input) {
-        myUnprocessedInput = input;
-    }
+	/**
+	 * Checks for equality. Two FSAConfigurations are equal if they have the
+	 * same unprocessed input, and satisfy the .equals() test of the base
+	 * <CODE>Configuration</CODE> class.
+	 *
+	 * @see edu.duke.cs.jflap.automata.Configuration#equals
+	 * @param configuration
+	 *            the configuration to check against this one for equality
+	 * @return <CODE>true</CODE> if the two configurations are equal,
+	 *         <CODE>false</CODE> otherwise
+	 */
+	@Override
+	public boolean equals(final Object configuration) {
+		if (configuration == this) {
+			return true;
+		}
+		try {
+			return super.equals(configuration)
+					&& myUnprocessedInput.equals(((FSAConfiguration) configuration).myUnprocessedInput);
+		} catch (final ClassCastException e) {
+			return false;
+		}
+	}
 
-    /**
-     * Returns a string representation of this object.
-     *
-     * @return a string representation of this object.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + ": " + getUnprocessedInput();
-    }
+	/**
+	 * Returns the total input.
+	 */
+	public String getInput() {
+		return myInput;
+	}
 
-    /**
-     * Returns <CODE>true</CODE> if this configuration is an accepting
-     * configuration, which in this case means that there is no more input and
-     * our state is an accept state.
-     *
-     * @return <CODE>true</CODE> if this configuration is accepting,
-     *         <CODE>false</CODE> otherwise
-     */
-    @Override
-    public boolean isAccept() {
-        if (getUnprocessedInput().length() != 0) {
-            return false;
-        }
-        State s = getCurrentState();
-        Automaton a = s.getAutomaton();
-        return a.isFinalState(s);
-    }
+	/**
+	 * Returns the unprocessed input.
+	 *
+	 * @return the unprocessed input.
+	 */
+	public String getUnprocessedInput() {
+		return myUnprocessedInput;
+	}
 
-    /**
-     * Checks for equality. Two FSAConfigurations are equal if they have the
-     * same unprocessed input, and satisfy the .equals() test of the base
-     * <CODE>Configuration</CODE> class.
-     *
-     * @see edu.duke.cs.jflap.automata.Configuration#equals
-     * @param configuration
-     *            the configuration to check against this one for equality
-     * @return <CODE>true</CODE> if the two configurations are equal,
-     *         <CODE>false</CODE> otherwise
-     */
-    @Override
-    public boolean equals(Object configuration) {
-        if (configuration == this) {
-            return true;
-        }
-        try {
-            return super.equals(configuration) && myUnprocessedInput
-                    .equals(((FSAConfiguration) configuration).myUnprocessedInput);
-        } catch (ClassCastException e) {
-            return false;
-        }
-    }
+	/**
+	 * Returns a hashcode for this object.
+	 *
+	 * @return a hashcode for this object
+	 */
+	@Override
+	public int hashCode() {
+		return super.hashCode() ^ myUnprocessedInput.hashCode();
+	}
 
-    /**
-     * Returns a hashcode for this object.
-     *
-     * @return a hashcode for this object
-     */
-    @Override
-    public int hashCode() {
-        return super.hashCode() ^ myUnprocessedInput.hashCode();
-    }
+	/**
+	 * Returns <CODE>true</CODE> if this configuration is an accepting
+	 * configuration, which in this case means that there is no more input and
+	 * our state is an accept state.
+	 *
+	 * @return <CODE>true</CODE> if this configuration is accepting,
+	 *         <CODE>false</CODE> otherwise
+	 */
+	@Override
+	public boolean isAccept() {
+		if (getUnprocessedInput().length() != 0) {
+			return false;
+		}
+		final State s = getCurrentState();
+		final Automaton a = s.getAutomaton();
+		return a.isFinalState(s);
+	}
 
-    /** The total input. */
-    private String myInput;
+	/**
+	 * Changes the unprocessed input.
+	 *
+	 * @param input
+	 *            the string that will represent the unprocessed input of the
+	 *            FSA.
+	 */
+	public void setUnprocessedInput(final String input) {
+		myUnprocessedInput = input;
+	}
 
-    /** The unprocessed input. */
-    private String myUnprocessedInput;
+	/**
+	 * Returns a string representation of this object.
+	 *
+	 * @return a string representation of this object.
+	 */
+	@Override
+	public String toString() {
+		return super.toString() + ": " + getUnprocessedInput();
+	}
 }

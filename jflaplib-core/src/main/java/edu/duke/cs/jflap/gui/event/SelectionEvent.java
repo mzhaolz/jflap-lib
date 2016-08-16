@@ -25,18 +25,18 @@ import java.util.EventObject;
  * @author Thomas Finley
  */
 public class SelectionEvent extends EventObject {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>SelectionEvent</CODE>.
-     *
-     * @param object
-     *            the generating object, whose selection has changed
-     */
-    public SelectionEvent(Object object) {
-        super(object);
-    }
+	/**
+	 * Instantiates a new <CODE>SelectionEvent</CODE>.
+	 *
+	 * @param object
+	 *            the generating object, whose selection has changed
+	 */
+	public SelectionEvent(final Object object) {
+		super(object);
+	}
 }

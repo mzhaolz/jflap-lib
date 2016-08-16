@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import java.awt.event.ActionEvent;
+
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.parse.BruteParsePane;
-
-import java.awt.event.ActionEvent;
 
 /**
  * This action creates a new brute force parser for the grammar.
@@ -30,37 +30,37 @@ import java.awt.event.ActionEvent;
  * @author Thomas Finley
  */
 public class BruteParseAction extends GrammarAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>BruteParseAction</CODE>.
-     *
-     * @param environment
-     *            the grammar environment
-     */
-    public BruteParseAction(GrammarEnvironment environment) {
-        super("Brute Force Parse", null);
-        this.environment = environment;
-    }
+	/** The grammar environment. */
+	private final GrammarEnvironment environment;
 
-    /**
-     * Performs the action.
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-        if (g == null) {
-            return;
-        }
-        BruteParsePane bpp = new BruteParsePane(environment, g, null);
-        environment.add(bpp, "Brute Parser", new CriticalTag() {
-        });
-        environment.setActive(bpp);
-    }
+	/**
+	 * Instantiates a new <CODE>BruteParseAction</CODE>.
+	 *
+	 * @param environment
+	 *            the grammar environment
+	 */
+	public BruteParseAction(final GrammarEnvironment environment) {
+		super("Brute Force Parse", null);
+		this.environment = environment;
+	}
 
-    /** The grammar environment. */
-    private GrammarEnvironment environment;
+	/**
+	 * Performs the action.
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		final Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+		if (g == null) {
+			return;
+		}
+		final BruteParsePane bpp = new BruteParsePane(environment, g, null);
+		environment.add(bpp, "Brute Parser", new CriticalTag() {
+		});
+		environment.setActive(bpp);
+	}
 }

@@ -16,14 +16,14 @@
 
 package edu.duke.cs.jflap.gui.tree;
 
-import com.google.common.collect.Lists;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.List;
 import java.util.WeakHashMap;
 
 import javax.swing.tree.TreeNode;
+
+import com.google.common.collect.Lists;
 
 /**
  * Adding this to a drawer allows one to select nodes, and have them appear to
@@ -32,69 +32,69 @@ import javax.swing.tree.TreeNode;
  * @author Thomas Finley
  */
 public class SelectNodeDrawer extends DefaultNodeDrawer {
-    /**
-     * This draws a node. The fill color is the color of the graphics object
-     * before this method was called.
-     *
-     * @param g
-     *            the graphics object to draw the node on
-     * @param node
-     *            the node to draw
-     */
-    @Override
-    public void draw(Graphics2D g, TreeNode node) {
-        Color c = g.getColor();
-        if (isSelected(node)) {
-            g.setColor(c.darker());
-        }
-        super.draw(g, node);
-        g.setColor(c);
-    }
+	/** The selected nodes, with keys as nodes. */
+	protected WeakHashMap<TreeNode, ?> selectedNodes = new WeakHashMap<>();
 
-    /**
-     * Determines if a node is selected.
-     *
-     * @param node
-     *            the node to check for selectedness
-     * @return <CODE>true</CODE> if the node is selected, <CODE>false</CODE>
-     *         otehrwise
-     */
-    public boolean isSelected(TreeNode node) {
-        return selectedNodes.containsKey(node);
-    }
+	/**
+	 * Sets all nodes as deselected.
+	 */
+	public void clearSelected() {
+		selectedNodes.clear();
+	}
 
-    /**
-     * Sets the selectedness of a node.
-     *
-     * @param node
-     *            the node to select or deselect
-     * @param select
-     *            if true, then select the node, otherwise deselect
-     */
-    public void setSelected(TreeNode node, boolean select) {
-        if (select) {
-            selectedNodes.put(node, null);
-        } else {
-            selectedNodes.remove(node);
-        }
-    }
+	/**
+	 * This draws a node. The fill color is the color of the graphics object
+	 * before this method was called.
+	 *
+	 * @param g
+	 *            the graphics object to draw the node on
+	 * @param node
+	 *            the node to draw
+	 */
+	@Override
+	public void draw(final Graphics2D g, final TreeNode node) {
+		final Color c = g.getColor();
+		if (isSelected(node)) {
+			g.setColor(c.darker());
+		}
+		super.draw(g, node);
+		g.setColor(c);
+	}
 
-    /**
-     * Returns an array containing the list of all selected nodes.
-     *
-     * @return an array containing the list of all selected nodes
-     */
-    public List<TreeNode> getSelected() {
-        return Lists.newArrayList(selectedNodes.keySet());
-    }
+	/**
+	 * Returns an array containing the list of all selected nodes.
+	 *
+	 * @return an array containing the list of all selected nodes
+	 */
+	public List<TreeNode> getSelected() {
+		return Lists.newArrayList(selectedNodes.keySet());
+	}
 
-    /**
-     * Sets all nodes as deselected.
-     */
-    public void clearSelected() {
-        selectedNodes.clear();
-    }
+	/**
+	 * Determines if a node is selected.
+	 *
+	 * @param node
+	 *            the node to check for selectedness
+	 * @return <CODE>true</CODE> if the node is selected, <CODE>false</CODE>
+	 *         otehrwise
+	 */
+	public boolean isSelected(final TreeNode node) {
+		return selectedNodes.containsKey(node);
+	}
 
-    /** The selected nodes, with keys as nodes. */
-    protected WeakHashMap<TreeNode, ?> selectedNodes = new WeakHashMap<>();
+	/**
+	 * Sets the selectedness of a node.
+	 *
+	 * @param node
+	 *            the node to select or deselect
+	 * @param select
+	 *            if true, then select the node, otherwise deselect
+	 */
+	public void setSelected(final TreeNode node, final boolean select) {
+		if (select) {
+			selectedNodes.put(node, null);
+		} else {
+			selectedNodes.remove(node);
+		}
+	}
 }

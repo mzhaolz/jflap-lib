@@ -16,19 +16,19 @@
 
 package edu.duke.cs.jflap.file.xml;
 
-import edu.duke.cs.jflap.pumping.Case;
-import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
-
-import com.google.common.collect.Lists;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.collect.Lists;
+
+import edu.duke.cs.jflap.pumping.Case;
+import edu.duke.cs.jflap.pumping.ContextFreePumpingLemma;
 
 /**
  * This is the transducer for encoding and decoding
@@ -39,167 +39,162 @@ import java.util.List;
  *
  */
 public class CFPumpingLemmaTransducer extends PumpingLemmaTransducer {
-    /**
-     * The type of pumping lemma.
-     */
-    public static String TYPE = "context-free pumping lemma";
-    /**
-     * The tag for the length of <i>u</i>.
-     */
-    public static String U_NAME = "uLength";
-    /**
-     * The tag for the length of <i>v</i>.
-     */
-    public static String V_NAME = "vLength";
-    /**
-     * The tag for the length of <i>x</i>.
-     */
-    public static String X_NAME = "xLength";
-    /**
-     * The tag for the length of <i>y</i>.
-     */
-    public static String Y_NAME = "yLength";
-    /**
-     * The tag for a case.
-     */
-    public static String CASE_NAME = "case";
-    /**
-     * The tag for the <i>i</i> of a case.
-     */
-    public static String CASE_I_NAME = "caseI";
-    /**
-     * The tag for the length of <i>u</i> of a case.
-     */
-    public static String CASE_U_NAME = "caseULength";
-    /**
-     * The tag for the length of <i>v</i> of a case.
-     */
-    public static String CASE_V_NAME = "caseVLength";
-    /**
-     * The tag for the length of <i>x</i> of a case.
-     */
-    public static String CASE_X_NAME = "caseXLength";
-    /**
-     * The tag for the length of <i>y</i> of a case.
-     */
-    public static String CASE_Y_NAME = "caseYLength";
+	/**
+	 * The type of pumping lemma.
+	 */
+	public static String TYPE = "context-free pumping lemma";
+	/**
+	 * The tag for the length of <i>u</i>.
+	 */
+	public static String U_NAME = "uLength";
+	/**
+	 * The tag for the length of <i>v</i>.
+	 */
+	public static String V_NAME = "vLength";
+	/**
+	 * The tag for the length of <i>x</i>.
+	 */
+	public static String X_NAME = "xLength";
+	/**
+	 * The tag for the length of <i>y</i>.
+	 */
+	public static String Y_NAME = "yLength";
+	/**
+	 * The tag for a case.
+	 */
+	public static String CASE_NAME = "case";
+	/**
+	 * The tag for the <i>i</i> of a case.
+	 */
+	public static String CASE_I_NAME = "caseI";
+	/**
+	 * The tag for the length of <i>u</i> of a case.
+	 */
+	public static String CASE_U_NAME = "caseULength";
+	/**
+	 * The tag for the length of <i>v</i> of a case.
+	 */
+	public static String CASE_V_NAME = "caseVLength";
+	/**
+	 * The tag for the length of <i>x</i> of a case.
+	 */
+	public static String CASE_X_NAME = "caseXLength";
+	/**
+	 * The tag for the length of <i>y</i> of a case.
+	 */
+	public static String CASE_Y_NAME = "caseYLength";
 
-    @Override
-    public Serializable fromDOM(Document document) {
-        ContextFreePumpingLemma pl = (ContextFreePumpingLemma) PumpingLemmaFactory
-                .createPumpingLemma(TYPE,
-                        document.getElementsByTagName(LEMMA_NAME).item(0).getTextContent());
-        /*
-         * Decode m, w, & i.
-         */
-        pl.setM(Integer.parseInt(document.getElementsByTagName(M_NAME).item(0).getTextContent()));
-        pl.setW(document.getElementsByTagName(W_NAME).item(0).getTextContent());
-        pl.setI(Integer.parseInt(document.getElementsByTagName(I_NAME).item(0).getTextContent()));
+	protected Element createCaseElement(final Document doc, final Case c) {
+		final Element elem = createElement(doc, CASE_NAME, null, null);
 
-        /*
-         * Decode cases.
-         *
-         * Must decode cases before decoding the decomposition, otherwise the
-         * decomposition will be that of the last case. This is because, when
-         * add case is called, the pumping lemma chooses the decomposition to
-         * check if it's legal.
-         */
-        readCases(document, pl);
+		final List<Integer> decomposition = c.getInput();
+		elem.appendChild(createElement(doc, CASE_U_NAME, null, "" + decomposition.get(0)));
+		elem.appendChild(createElement(doc, CASE_V_NAME, null, "" + decomposition.get(1)));
+		elem.appendChild(createElement(doc, CASE_X_NAME, null, "" + decomposition.get(2)));
+		elem.appendChild(createElement(doc, CASE_Y_NAME, null, "" + decomposition.get(3)));
+		elem.appendChild(createElement(doc, CASE_I_NAME, null, "" + c.getI()));
+		return elem;
+	}
 
-        // Decode the attempts
-        NodeList attempts = document.getDocumentElement().getElementsByTagName(ATTEMPT);
-        for (int i = 0; i < attempts.getLength(); i++) {
-            pl.addAttempt(attempts.item(i).getTextContent());
-        }
+	@Override
+	public Serializable fromDOM(final Document document) {
+		final ContextFreePumpingLemma pl = (ContextFreePumpingLemma) PumpingLemmaFactory.createPumpingLemma(TYPE,
+				document.getElementsByTagName(LEMMA_NAME).item(0).getTextContent());
+		/*
+		 * Decode m, w, & i.
+		 */
+		pl.setM(Integer.parseInt(document.getElementsByTagName(M_NAME).item(0).getTextContent()));
+		pl.setW(document.getElementsByTagName(W_NAME).item(0).getTextContent());
+		pl.setI(Integer.parseInt(document.getElementsByTagName(I_NAME).item(0).getTextContent()));
 
-        // Decode the first player.
-        pl.setFirstPlayer(document.getElementsByTagName(FIRST_PLAYER).item(0).getTextContent());
+		/*
+		 * Decode cases.
+		 *
+		 * Must decode cases before decoding the decomposition, otherwise the
+		 * decomposition will be that of the last case. This is because, when
+		 * add case is called, the pumping lemma chooses the decomposition to
+		 * check if it's legal.
+		 */
+		readCases(document, pl);
 
-        // Decode the decomposition.
-        int uLength = Integer
-                .parseInt(document.getElementsByTagName(U_NAME).item(0).getTextContent());
-        int vLength = Integer
-                .parseInt(document.getElementsByTagName(V_NAME).item(0).getTextContent());
-        int xLength = Integer
-                .parseInt(document.getElementsByTagName(X_NAME).item(0).getTextContent());
-        int yLength = Integer
-                .parseInt(document.getElementsByTagName(Y_NAME).item(0).getTextContent());
+		// Decode the attempts
+		final NodeList attempts = document.getDocumentElement().getElementsByTagName(ATTEMPT);
+		for (int i = 0; i < attempts.getLength(); i++) {
+			pl.addAttempt(attempts.item(i).getTextContent());
+		}
 
-        pl.setDecomposition(Lists.newArrayList(uLength, vLength, xLength, yLength));
+		// Decode the first player.
+		pl.setFirstPlayer(document.getElementsByTagName(FIRST_PLAYER).item(0).getTextContent());
 
-        // Return!
-        return pl;
-    }
+		// Decode the decomposition.
+		final int uLength = Integer.parseInt(document.getElementsByTagName(U_NAME).item(0).getTextContent());
+		final int vLength = Integer.parseInt(document.getElementsByTagName(V_NAME).item(0).getTextContent());
+		final int xLength = Integer.parseInt(document.getElementsByTagName(X_NAME).item(0).getTextContent());
+		final int yLength = Integer.parseInt(document.getElementsByTagName(Y_NAME).item(0).getTextContent());
 
-    protected void readCases(Document doc, ContextFreePumpingLemma pl) {
-        NodeList caseNodes = doc.getDocumentElement().getElementsByTagName(CASE_NAME);
-        for (int i = 0; i < caseNodes.getLength(); i++) {
-            Node caseNode = caseNodes.item(i);
-            if (caseNode.getNodeType() != Node.ELEMENT_NODE) {
-                continue;
-            }
-            int u = Integer.parseInt(((Element) caseNode).getElementsByTagName(CASE_U_NAME).item(0)
-                    .getTextContent());
-            int v = Integer.parseInt(((Element) caseNode).getElementsByTagName(CASE_V_NAME).item(0)
-                    .getTextContent());
-            int x = Integer.parseInt(((Element) caseNode).getElementsByTagName(CASE_X_NAME).item(0)
-                    .getTextContent());
-            int y = Integer.parseInt(((Element) caseNode).getElementsByTagName(CASE_Y_NAME).item(0)
-                    .getTextContent());
-            int j = Integer.parseInt(((Element) caseNode).getElementsByTagName(CASE_I_NAME).item(0)
-                    .getTextContent());
-            pl.addCase(Lists.newArrayList(u, v, x, y), j);
-        }
-    }
+		pl.setDecomposition(Lists.newArrayList(uLength, vLength, xLength, yLength));
 
-    @Override
-    public Document toDOM(Serializable structure) {
-        ContextFreePumpingLemma pl = (ContextFreePumpingLemma) structure;
-        Document doc = newEmptyDocument();
-        Element elem = doc.getDocumentElement();
-        elem.appendChild(createElement(doc, LEMMA_NAME, null, pl.getTitle()));
-        elem.appendChild(createElement(doc, FIRST_PLAYER, null, pl.getFirstPlayer()));
-        elem.appendChild(createElement(doc, M_NAME, null, "" + pl.getM()));
-        elem.appendChild(createElement(doc, W_NAME, null, "" + pl.getW()));
-        elem.appendChild(createElement(doc, I_NAME, null, "" + pl.getI()));
-        elem.appendChild(createElement(doc, U_NAME, null, "" + pl.getU().length()));
-        elem.appendChild(createElement(doc, V_NAME, null, "" + pl.getV().length()));
-        elem.appendChild(createElement(doc, X_NAME, null, "" + pl.getX().length()));
-        elem.appendChild(createElement(doc, Y_NAME, null, "" + pl.getY().length()));
+		// Return!
+		return pl;
+	}
 
-        // Encode the list of attempts.
-        ArrayList<?> attempts = pl.getAttempts();
-        if (attempts != null && attempts.size() > 0) {
-            for (int i = 0; i < attempts.size(); i++) {
-                elem.appendChild(createElement(doc, ATTEMPT, null, (String) attempts.get(i)));
-            }
-        }
+	@Override
+	public String getType() {
+		return TYPE;
+	}
 
-        // Encode the list of attempts.
-        ArrayList<?> cases = pl.getDoneCases();
-        if (cases != null && cases.size() > 0) {
-            for (int i = 0; i < cases.size(); i++) {
-                elem.appendChild(createCaseElement(doc, (Case) cases.get(i)));
-            }
-        }
+	protected void readCases(final Document doc, final ContextFreePumpingLemma pl) {
+		final NodeList caseNodes = doc.getDocumentElement().getElementsByTagName(CASE_NAME);
+		for (int i = 0; i < caseNodes.getLength(); i++) {
+			final Node caseNode = caseNodes.item(i);
+			if (caseNode.getNodeType() != Node.ELEMENT_NODE) {
+				continue;
+			}
+			final int u = Integer
+					.parseInt(((Element) caseNode).getElementsByTagName(CASE_U_NAME).item(0).getTextContent());
+			final int v = Integer
+					.parseInt(((Element) caseNode).getElementsByTagName(CASE_V_NAME).item(0).getTextContent());
+			final int x = Integer
+					.parseInt(((Element) caseNode).getElementsByTagName(CASE_X_NAME).item(0).getTextContent());
+			final int y = Integer
+					.parseInt(((Element) caseNode).getElementsByTagName(CASE_Y_NAME).item(0).getTextContent());
+			final int j = Integer
+					.parseInt(((Element) caseNode).getElementsByTagName(CASE_I_NAME).item(0).getTextContent());
+			pl.addCase(Lists.newArrayList(u, v, x, y), j);
+		}
+	}
 
-        return doc;
-    }
+	@Override
+	public Document toDOM(final Serializable structure) {
+		final ContextFreePumpingLemma pl = (ContextFreePumpingLemma) structure;
+		final Document doc = newEmptyDocument();
+		final Element elem = doc.getDocumentElement();
+		elem.appendChild(createElement(doc, LEMMA_NAME, null, pl.getTitle()));
+		elem.appendChild(createElement(doc, FIRST_PLAYER, null, pl.getFirstPlayer()));
+		elem.appendChild(createElement(doc, M_NAME, null, "" + pl.getM()));
+		elem.appendChild(createElement(doc, W_NAME, null, "" + pl.getW()));
+		elem.appendChild(createElement(doc, I_NAME, null, "" + pl.getI()));
+		elem.appendChild(createElement(doc, U_NAME, null, "" + pl.getU().length()));
+		elem.appendChild(createElement(doc, V_NAME, null, "" + pl.getV().length()));
+		elem.appendChild(createElement(doc, X_NAME, null, "" + pl.getX().length()));
+		elem.appendChild(createElement(doc, Y_NAME, null, "" + pl.getY().length()));
 
-    protected Element createCaseElement(Document doc, Case c) {
-        Element elem = createElement(doc, CASE_NAME, null, null);
+		// Encode the list of attempts.
+		final ArrayList<?> attempts = pl.getAttempts();
+		if (attempts != null && attempts.size() > 0) {
+			for (int i = 0; i < attempts.size(); i++) {
+				elem.appendChild(createElement(doc, ATTEMPT, null, (String) attempts.get(i)));
+			}
+		}
 
-        List<Integer> decomposition = c.getInput();
-        elem.appendChild(createElement(doc, CASE_U_NAME, null, "" + decomposition.get(0)));
-        elem.appendChild(createElement(doc, CASE_V_NAME, null, "" + decomposition.get(1)));
-        elem.appendChild(createElement(doc, CASE_X_NAME, null, "" + decomposition.get(2)));
-        elem.appendChild(createElement(doc, CASE_Y_NAME, null, "" + decomposition.get(3)));
-        elem.appendChild(createElement(doc, CASE_I_NAME, null, "" + c.getI()));
-        return elem;
-    }
+		// Encode the list of attempts.
+		final ArrayList<?> cases = pl.getDoneCases();
+		if (cases != null && cases.size() > 0) {
+			for (int i = 0; i < cases.size(); i++) {
+				elem.appendChild(createCaseElement(doc, (Case) cases.get(i)));
+			}
+		}
 
-    @Override
-    public String getType() {
-        return TYPE;
-    }
+		return doc;
+	}
 }

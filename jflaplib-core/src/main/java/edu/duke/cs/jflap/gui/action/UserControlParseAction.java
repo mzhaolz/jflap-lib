@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import java.awt.event.ActionEvent;
+
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.parse.UserControlParsePane;
-
-import java.awt.event.ActionEvent;
 
 /**
  * Action for User Controlling Parsing
@@ -32,41 +32,41 @@ import java.awt.event.ActionEvent;
  */
 public class UserControlParseAction extends GrammarAction {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** The grammar environment. */
-    private GrammarEnvironment environment;
+	public static boolean isApplicable(final Object object) {
+		return object instanceof Grammar;
+	}
 
-    /**
-     * Instantiates a new <CODE>BruteParseAction</CODE>.
-     *
-     * @param environment
-     *            the grammar environment
-     */
-    public UserControlParseAction(GrammarEnvironment environment) {
-        super("User Control Parse", null);
-        this.environment = environment;
-    }
+	/** The grammar environment. */
+	private final GrammarEnvironment environment;
 
-    public static boolean isApplicable(Object object) {
-        return object instanceof Grammar;
-    }
+	/**
+	 * Instantiates a new <CODE>BruteParseAction</CODE>.
+	 *
+	 * @param environment
+	 *            the grammar environment
+	 */
+	public UserControlParseAction(final GrammarEnvironment environment) {
+		super("User Control Parse", null);
+		this.environment = environment;
+	}
 
-    /**
-     * Performs the action.
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-        if (g == null) {
-            return;
-        }
-        UserControlParsePane userPane = new UserControlParsePane(environment, g);
-        environment.add(userPane, "User Control Parser", new CriticalTag() {
-        });
-        environment.setActive(userPane);
-    }
+	/**
+	 * Performs the action.
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		final Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+		if (g == null) {
+			return;
+		}
+		final UserControlParsePane userPane = new UserControlParsePane(environment, g);
+		environment.add(userPane, "User Control Parser", new CriticalTag() {
+		});
+		environment.setActive(userPane);
+	}
 }

@@ -19,58 +19,58 @@ package edu.duke.cs.jflap.gui.grammar.parse;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 class UnrestrictedTreeNode extends DefaultMutableTreeNode {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Creates a new unrestricted tree node.
-     *
-     * @param text
-     *            the label for this unrestricted tree node
-     */
-    public UnrestrictedTreeNode(String text) {
-        super(text);
-        this.text = text;
-    }
+	/** The text! */
+	private final String text;
 
-    /**
-     * Returns the length of this node, which is the length of the text.
-     */
-    public int length() {
-        return text.length();
-    }
+	/** The weight. */
+	public double weight = 1.0;
 
-    /**
-     * Returns the text.
-     *
-     * @return the text
-     */
-    public String getText() {
-        return text;
-    }
+	/** The highest row. */
+	public int highest = 0;
 
-    /**
-     * Returns a string representation of the node.
-     *
-     * @return a string representation of the node
-     */
-    @Override
-    public String toString() {
-        return super.toString();
-        // return "("+text+", "+weight+")";
-    }
+	/** The lowest row. */
+	public int lowest = 0;
 
-    /** The text! */
-    private String text;
+	/**
+	 * Creates a new unrestricted tree node.
+	 *
+	 * @param text
+	 *            the label for this unrestricted tree node
+	 */
+	public UnrestrictedTreeNode(final String text) {
+		super(text);
+		this.text = text;
+	}
 
-    /** The weight. */
-    public double weight = 1.0;
+	/**
+	 * Returns the text.
+	 *
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
+	}
 
-    /** The highest row. */
-    public int highest = 0;
+	/**
+	 * Returns the length of this node, which is the length of the text.
+	 */
+	public int length() {
+		return text.length();
+	}
 
-    /** The lowest row. */
-    public int lowest = 0;
+	/**
+	 * Returns a string representation of the node.
+	 *
+	 * @return a string representation of the node
+	 */
+	@Override
+	public String toString() {
+		return super.toString();
+		// return "("+text+", "+weight+")";
+	}
 }

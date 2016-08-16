@@ -31,34 +31,34 @@ import java.util.EventObject;
  * @author Thomas Finley
  */
 public class FileChangeEvent extends EventObject {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>FileChangeEvent</CODE>.
-     *
-     * @param environment
-     *            the environment that threw this event
-     * @param oldFile
-     *            the previous file that was the file of the
-     *            <CODE>Environment</CODE>
-     */
-    public FileChangeEvent(Environment environment, File oldFile) {
-        super(environment);
-        this.oldFile = oldFile;
-    }
+	/** The old file that was the native file for the environment. */
+	private final File oldFile;
 
-    /**
-     * Returns the native file for the environment before the change.
-     *
-     * @return the native file for the environment before the change
-     */
-    public File getOldFile() {
-        return oldFile;
-    }
+	/**
+	 * Instantiates a new <CODE>FileChangeEvent</CODE>.
+	 *
+	 * @param environment
+	 *            the environment that threw this event
+	 * @param oldFile
+	 *            the previous file that was the file of the
+	 *            <CODE>Environment</CODE>
+	 */
+	public FileChangeEvent(final Environment environment, final File oldFile) {
+		super(environment);
+		this.oldFile = oldFile;
+	}
 
-    /** The old file that was the native file for the environment. */
-    private File oldFile;
+	/**
+	 * Returns the native file for the environment before the change.
+	 *
+	 * @return the native file for the environment before the change
+	 */
+	public File getOldFile() {
+		return oldFile;
+	}
 }
