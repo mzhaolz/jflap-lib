@@ -24,46 +24,46 @@ import java.util.EventObject;
  * @author Thomas Finley
  */
 public class ExpressionChangeEvent extends EventObject {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 8094984580797690783L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 8094984580797690783L;
 
-    /**
-     * Instantiates a change event.
-     *
-     * @param expression
-     *            the expression object that was changed
-     * @param old
-     *            the string representing the old regular expression
-     */
-    public ExpressionChangeEvent(RegularExpression expression, String old) {
-        super(expression);
-        this.expression = expression;
-        this.old = old;
-    }
+	/** The changed RE. */
+	private final RegularExpression expression;
 
-    /**
-     * Returns the regular expression that was changed.
-     *
-     * @return the regular expression that was changed
-     */
-    public RegularExpression getExpression() {
-        return expression;
-    }
+	/** The old string representation of the RE. */
+	private final String old;
 
-    /**
-     * Returns the old string representation of the expression.
-     *
-     * @return the old string representation of the expression
-     */
-    public String getOld() {
-        return old;
-    }
+	/**
+	 * Instantiates a change event.
+	 *
+	 * @param expression
+	 *            the expression object that was changed
+	 * @param old
+	 *            the string representing the old regular expression
+	 */
+	public ExpressionChangeEvent(final RegularExpression expression, final String old) {
+		super(expression);
+		this.expression = expression;
+		this.old = old;
+	}
 
-    /** The changed RE. */
-    private RegularExpression expression;
+	/**
+	 * Returns the regular expression that was changed.
+	 *
+	 * @return the regular expression that was changed
+	 */
+	public RegularExpression getExpression() {
+		return expression;
+	}
 
-    /** The old string representation of the RE. */
-    private String old;
+	/**
+	 * Returns the old string representation of the expression.
+	 *
+	 * @return the old string representation of the expression
+	 */
+	public String getOld() {
+		return old;
+	}
 }

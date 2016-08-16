@@ -26,88 +26,88 @@ import java.util.Comparator;
  * @author Thomas Finley
  */
 public class ProductionComparator implements Comparator<Production> {
-    /**
-     * Instantiates a comparator, getting the start variable from a given
-     * grammar.
-     *
-     * @param grammar
-     *            the grammar
-     * @throws IllegalArgumentException
-     *             if the grammar does not have a start variable
-     */
-    public ProductionComparator(Grammar grammar) {
-        this(grammar.getStartVariable());
-    }
+	/** The start variable. */
+	private String start = null;
 
-    /**
-     * Instantiates a comparator, with the start variable is passed in
-     * explicitly.
-     *
-     * @param variable
-     *            the start variable
-     */
-    public ProductionComparator(String variable) {
-        start = variable;
-        if (start == null) {
-            throw new IllegalArgumentException("Null start variable!");
-        }
-    }
+	/**
+	 * Instantiates a comparator, getting the start variable from a given
+	 * grammar.
+	 *
+	 * @param grammar
+	 *            the grammar
+	 * @throws IllegalArgumentException
+	 *             if the grammar does not have a start variable
+	 */
+	public ProductionComparator(final Grammar grammar) {
+		this(grammar.getStartVariable());
+	}
 
-    /**
-     * Compares two productions.
-     */
-    @Override
-    public int compare(Production p1, Production p2) {
-        if (start.equals(p1.getLHS())) {
-            if (p1.getLHS().equals(p2.getLHS())) {
-                return 0;
-            } else {
-                return -1;
-            }
-        }
-        if (start.equals(p2.getLHS())) {
-            return 1;
-        }
-        return p1.getLHS().compareTo(p2.getRHS());
-    }
+	/**
+	 * Instantiates a comparator, with the start variable is passed in
+	 * explicitly.
+	 *
+	 * @param variable
+	 *            the start variable
+	 */
+	public ProductionComparator(final String variable) {
+		start = variable;
+		if (start == null) {
+			throw new IllegalArgumentException("Null start variable!");
+		}
+	}
 
-    /**
-     * Returns the start variable this comparator keys on.
-     *
-     * @return the start variable
-     */
-    public String getStartVariable() {
-        return start;
-    }
+	/**
+	 * Compares two productions.
+	 */
+	@Override
+	public int compare(final Production p1, final Production p2) {
+		if (start.equals(p1.getLHS())) {
+			if (p1.getLHS().equals(p2.getLHS())) {
+				return 0;
+			} else {
+				return -1;
+			}
+		}
+		if (start.equals(p2.getLHS())) {
+			return 1;
+		}
+		return p1.getLHS().compareTo(p2.getRHS());
+	}
 
-    /**
-     * Included to ensure compatibility with equals.
-     *
-     * @return a hash code for this object
-     */
-    @Override
-    public int hashCode() {
-        return getClass().hashCode() ^ start.hashCode();
-    }
+	/**
+	 * Two production comparators are equal if they have the same start
+	 * variable.
+	 *
+	 * @param object
+	 *            the object to test for equality
+	 * @return if the two objects are equal
+	 */
+	@Override
+	public boolean equals(final Object object) {
+		try {
+			final ProductionComparator c = (ProductionComparator) object;
+			return c.start.equals(start);
+		} catch (final ClassCastException e) {
+			return false;
+		}
+	}
 
-    /**
-     * Two production comparators are equal if they have the same start
-     * variable.
-     *
-     * @param object
-     *            the object to test for equality
-     * @return if the two objects are equal
-     */
-    @Override
-    public boolean equals(Object object) {
-        try {
-            ProductionComparator c = (ProductionComparator) object;
-            return c.start.equals(start);
-        } catch (ClassCastException e) {
-            return false;
-        }
-    }
+	/**
+	 * Returns the start variable this comparator keys on.
+	 *
+	 * @return the start variable
+	 */
+	public String getStartVariable() {
+		return start;
+	}
 
-    /** The start variable. */
-    private String start = null;
+	/**
+	 * Included to ensure compatibility with equals.
+	 *
+	 * @return a hash code for this object
+	 */
+	@Override
+	public int hashCode() {
+		return getClass().hashCode() ^ start.hashCode();
+	}
 }

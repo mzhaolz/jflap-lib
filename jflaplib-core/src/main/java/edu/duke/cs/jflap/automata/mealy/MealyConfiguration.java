@@ -32,138 +32,135 @@ import edu.duke.cs.jflap.automata.State;
  *
  */
 public class MealyConfiguration extends Configuration {
-    /**
-     * The total input.
-     */
-    private String myInput = "";
-    /**
-     * The unprocesed input.
-     */
-    private String myUnprocessedInput = "";
-    /**
-     * The processed output.
-     */
-    private String myOutput = "";
+	/**
+	 * The total input.
+	 */
+	private String myInput = "";
+	/**
+	 * The unprocesed input.
+	 */
+	private String myUnprocessedInput = "";
+	/**
+	 * The processed output.
+	 */
+	private String myOutput = "";
 
-    /**
-     * Constructs a new <code>MealyConfiguration</code>.
-     *
-     * @param state
-     *            the state that the MealyMachine is currently in
-     * @param parent
-     *            the configuration that is the parent of this configuration
-     * @param input
-     *            the entire test input
-     * @param unprocessed
-     *            the unprocessed input
-     * @param output
-     *            the ouput produced before this configuration
-     */
-    public MealyConfiguration(State state,
-            MealyConfiguration parent,
-            String input,
-            String unprocessed,
-            String output) {
-        super(state, parent);
-        myInput = input;
-        myUnprocessedInput = unprocessed;
-        myOutput = output;
-    }
+	/**
+	 * Constructs a new <code>MealyConfiguration</code>.
+	 *
+	 * @param state
+	 *            the state that the MealyMachine is currently in
+	 * @param parent
+	 *            the configuration that is the parent of this configuration
+	 * @param input
+	 *            the entire test input
+	 * @param unprocessed
+	 *            the unprocessed input
+	 * @param output
+	 *            the ouput produced before this configuration
+	 */
+	public MealyConfiguration(final State state, final MealyConfiguration parent, final String input,
+			final String unprocessed, final String output) {
+		super(state, parent);
+		myInput = input;
+		myUnprocessedInput = unprocessed;
+		myOutput = output;
+	}
 
-    /**
-     * Returns the total input.
-     *
-     * @return total input
-     */
-    public String getInput() {
-        return myInput;
-    }
+	/**
+	 * This function checks if two configurations are equal. Two configurations
+	 * are equal if they have the same output and unprocessed input and satisfy
+	 * the <code>.equals()</code> test of the base <code>Configuration</code>
+	 * class.
+	 *
+	 * @see edu.duke.cs.jflap.automata.Configuration#equals(Object)
+	 * @param configuration
+	 *            the configuration to check for equality
+	 * @return <code>true</code> if the two configurations are equal,
+	 *         <code>false</code> otherwise
+	 */
+	@Override
+	public boolean equals(final Object configuration) {
+		if (configuration == this) {
+			return true;
+		}
+		try {
+			final MealyConfiguration config = (MealyConfiguration) configuration;
+			return super.equals(config) && myUnprocessedInput.equals(config.myUnprocessedInput)
+					&& myOutput.equals(config.myOutput);
+		} catch (final ClassCastException e) {
+			return false;
+		}
+	}
 
-    /**
-     * Returns the unprocessed input.
-     *
-     * @return unprocessed input
-     */
-    public String getUnprocessedInput() {
-        return myUnprocessedInput;
-    }
+	/**
+	 * Returns the total input.
+	 *
+	 * @return total input
+	 */
+	public String getInput() {
+		return myInput;
+	}
 
-    /**
-     * Returns the output produced by previous ancestor configurations. This is
-     * the only way to obtain the output produced by a Mealy machine, as
-     * <code>Configuration.isAccept()</code> returns a <code>boolean</code>.
-     *
-     * @return output by ancestor configurations.
-     */
-    public String getOutput() {
-        return myOutput;
-    }
+	/**
+	 * Returns the output produced by previous ancestor configurations. This is
+	 * the only way to obtain the output produced by a Mealy machine, as
+	 * <code>Configuration.isAccept()</code> returns a <code>boolean</code>.
+	 *
+	 * @return output by ancestor configurations.
+	 */
+	public String getOutput() {
+		return myOutput;
+	}
 
-    /**
-     * Changes the unprocessed input.
-     *
-     * @param input
-     *            the string that will replace the unprocessed input
-     */
-    public void setUnprocessedInput(String input) {
-        myUnprocessedInput = input;
-    }
+	/**
+	 * Returns the unprocessed input.
+	 *
+	 * @return unprocessed input
+	 */
+	public String getUnprocessedInput() {
+		return myUnprocessedInput;
+	}
 
-    /**
-     * Returns a string representation of this configuration.
-     *
-     * @return string representation of this configuration.
-     */
-    @Override
-    public String toString() {
-        return super.toString() + ": " + getUnprocessedInput() + "--" + getOutput();
-    }
+	/**
+	 * Returns a hashcode for this object.
+	 *
+	 * @return hashcode for this object
+	 */
+	@Override
+	public int hashCode() {
+		return super.hashCode() ^ myUnprocessedInput.hashCode() ^ myOutput.hashCode();
+	}
 
-    /**
-     * Accepts if there is no more unprocessed input (all of the input has been
-     * process and output generated).
-     *
-     * @return <code>true</code> if all input has been processed,
-     *         <code>false</code> otherwise.
-     */
-    @Override
-    public boolean isAccept() {
-        return getUnprocessedInput().length() == 0;
-    }
+	/**
+	 * Accepts if there is no more unprocessed input (all of the input has been
+	 * process and output generated).
+	 *
+	 * @return <code>true</code> if all input has been processed,
+	 *         <code>false</code> otherwise.
+	 */
+	@Override
+	public boolean isAccept() {
+		return getUnprocessedInput().length() == 0;
+	}
 
-    /**
-     * This function checks if two configurations are equal. Two configurations
-     * are equal if they have the same output and unprocessed input and satisfy
-     * the <code>.equals()</code> test of the base <code>Configuration</code>
-     * class.
-     *
-     * @see edu.duke.cs.jflap.automata.Configuration#equals(Object)
-     * @param configuration
-     *            the configuration to check for equality
-     * @return <code>true</code> if the two configurations are equal,
-     *         <code>false</code> otherwise
-     */
-    @Override
-    public boolean equals(Object configuration) {
-        if (configuration == this) {
-            return true;
-        }
-        try {
-            MealyConfiguration config = (MealyConfiguration) configuration;
-            return super.equals(config) && myUnprocessedInput.equals(config.myUnprocessedInput)
-                    && myOutput.equals(config.myOutput);
-        } catch (ClassCastException e) {
-            return false;
-        }
-    }
+	/**
+	 * Changes the unprocessed input.
+	 *
+	 * @param input
+	 *            the string that will replace the unprocessed input
+	 */
+	public void setUnprocessedInput(final String input) {
+		myUnprocessedInput = input;
+	}
 
-    /**
-     * Returns a hashcode for this object.
-     *
-     * @return hashcode for this object
-     */
-    @Override
-    public int hashCode() {
-        return super.hashCode() ^ myUnprocessedInput.hashCode() ^ myOutput.hashCode();
-    }
+	/**
+	 * Returns a string representation of this configuration.
+	 *
+	 * @return string representation of this configuration.
+	 */
+	@Override
+	public String toString() {
+		return super.toString() + ": " + getUnprocessedInput() + "--" + getOutput();
+	}
 }

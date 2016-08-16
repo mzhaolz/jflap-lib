@@ -25,18 +25,18 @@ import java.util.List;
  * @author Ryan Cavalcante
  */
 public abstract class AlphabetRetriever {
-    /**
-     * Instantiates an <CODE>AlphabetRetriever</CODE> object.
-     */
-    public AlphabetRetriever() {
-    }
+	/**
+	 * Instantiates an <CODE>AlphabetRetriever</CODE> object.
+	 */
+	public AlphabetRetriever() {
+	}
 
-    /**
-     * Returns the alphabet for <CODE>automaton</CODE> in an array of strings.
-     *
-     * @param automaton
-     *            the automaton.
-     * @return the alphabet.
-     */
-    public abstract List<String> getAlphabet(Automaton automaton);
+	/**
+	 * Returns the alphabet for <CODE>automaton</CODE> in an array of strings.
+	 *
+	 * @param automaton
+	 *            the automaton.
+	 * @return the alphabet.
+	 */
+	public abstract List<String> getAlphabet(Automaton automaton);
 }

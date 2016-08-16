@@ -30,33 +30,33 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
  *
  */
 public class MealyArrowTool extends ArrowTool {
-    /**
-     * Instantiates a new arrow tool.
-     *
-     * @param view
-     *            the view where the automaton is drawn
-     * @param drawer
-     *            the object that draws the automaton
-     * @param creator
-     *            the transition creator used for editing transitions
-     */
-    public MealyArrowTool(AutomatonPane view, AutomatonDrawer drawer, TransitionCreator creator) {
-        super(view, drawer, creator);
-        // stateMenu.makeFinal.setEnabled(false);
-        stateMenu.remove(stateMenu.makeFinal);
-    }
+	/**
+	 * Instantiates a new arrow tool.
+	 *
+	 * @param view
+	 *            the view where the automaton is drawn
+	 * @param drawer
+	 *            the object that draws the automaton
+	 */
+	public MealyArrowTool(final AutomatonPane view, final AutomatonDrawer drawer) {
+		super(view, drawer);
+		// stateMenu.makeFinal.setEnabled(false);
+		stateMenu.remove(stateMenu.makeFinal);
+	}
 
-    /**
-     * Instantiates a new arrow tool.
-     *
-     * @param view
-     *            the view where the automaton is drawn
-     * @param drawer
-     *            the object that draws the automaton
-     */
-    public MealyArrowTool(AutomatonPane view, AutomatonDrawer drawer) {
-        super(view, drawer);
-        // stateMenu.makeFinal.setEnabled(false);
-        stateMenu.remove(stateMenu.makeFinal);
-    }
+	/**
+	 * Instantiates a new arrow tool.
+	 *
+	 * @param view
+	 *            the view where the automaton is drawn
+	 * @param drawer
+	 *            the object that draws the automaton
+	 * @param creator
+	 *            the transition creator used for editing transitions
+	 */
+	public MealyArrowTool(final AutomatonPane view, final AutomatonDrawer drawer, final TransitionCreator creator) {
+		super(view, drawer, creator);
+		// stateMenu.makeFinal.setEnabled(false);
+		stateMenu.remove(stateMenu.makeFinal);
+	}
 }

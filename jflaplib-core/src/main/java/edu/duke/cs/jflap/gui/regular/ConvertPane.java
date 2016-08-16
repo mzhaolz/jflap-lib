@@ -16,14 +16,6 @@
 
 package edu.duke.cs.jflap.gui.regular;
 
-import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
-import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
-import edu.duke.cs.jflap.gui.editor.Tool;
-import edu.duke.cs.jflap.gui.editor.ToolBox;
-import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
@@ -35,6 +27,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
+import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
+import edu.duke.cs.jflap.gui.editor.Tool;
+import edu.duke.cs.jflap.gui.editor.ToolBox;
+import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
+import edu.duke.cs.jflap.gui.environment.Universe;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 /**
  * This is the pane that holds the tools necessary for the conversion of a
  * finite state automaton to a regular expression.
@@ -42,90 +42,90 @@ import javax.swing.JToolBar;
  * @author Thomas Finley
  */
 public class ConvertPane extends JPanel {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Creates a new conversion pane for the conversion of an automaton to a
-     * regular expression.
-     *
-     * @param environment
-     *            the environment that this convert pane will be a part of
-     */
-    public ConvertPane(AutomatonEnvironment environment) {
-        this.environment = environment;
-        automaton = (FiniteStateAutomaton) environment.getAutomaton().clone();
-        JFrame frame = Universe.frameForEnvironment(environment);
+	/**
+	 * The environment that holds the automaton. The automaton from the
+	 * environment is itself not modified.
+	 */
+	AutomatonEnvironment environment;
 
-        setLayout(new BorderLayout());
+	/**
+	 * The copy of the original automaton, which will be modified throughout
+	 * this process.
+	 */
+	private FiniteStateAutomaton automaton;
 
-        JPanel labels = new JPanel(new BorderLayout());
-        JLabel mainLabel = new JLabel();
-        JLabel detailLabel = new JLabel();
-        labels.add(mainLabel, BorderLayout.NORTH);
-        labels.add(detailLabel, BorderLayout.SOUTH);
+	/**
+	 * Creates a new conversion pane for the conversion of an automaton to a
+	 * regular expression.
+	 *
+	 * @param environment
+	 *            the environment that this convert pane will be a part of
+	 */
+	public ConvertPane(final AutomatonEnvironment environment) {
+		this.environment = environment;
+		automaton = (FiniteStateAutomaton) environment.getAutomaton().clone();
+		final JFrame frame = Universe.frameForEnvironment(environment);
 
-        add(labels, BorderLayout.NORTH);
-        SelectionDrawer automatonDrawer = new SelectionDrawer(automaton);
+		setLayout(new BorderLayout());
 
-        final FSAToREController controller = new FSAToREController(automaton, automatonDrawer,
-                mainLabel, detailLabel, frame);
+		final JPanel labels = new JPanel(new BorderLayout());
+		final JLabel mainLabel = new JLabel();
+		final JLabel detailLabel = new JLabel();
+		labels.add(mainLabel, BorderLayout.NORTH);
+		labels.add(detailLabel, BorderLayout.SOUTH);
 
-        edu.duke.cs.jflap.gui.editor.EditorPane ep = new edu.duke.cs.jflap.gui.editor.EditorPane(
-                automatonDrawer, (ToolBox) (view, drawer) -> {
-                    LinkedList<Tool> tools = new LinkedList<>();
-                    tools.add(new ArrowNontransitionTool(view, drawer));
-                    tools.add(new RegularStateTool(view, drawer, controller));
-                    tools.add(new RegularTransitionTool(view, drawer, controller));
-                    tools.add(new CollapseTool(view, drawer, controller));
-                    tools.add(new StateCollapseTool(view, drawer, controller));
-                    return tools;
-                });
+		add(labels, BorderLayout.NORTH);
+		final SelectionDrawer automatonDrawer = new SelectionDrawer(automaton);
 
-        JToolBar bar = ep.getToolBar();
-        bar.addSeparator();
-        bar.add(new JButton(new AbstractAction("Do It") {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+		final FSAToREController controller = new FSAToREController(automaton, automatonDrawer, mainLabel, detailLabel,
+				frame);
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.moveNextStep();
-            }
-        }));
-        bar.add(new JButton(new AbstractAction("Export") {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+		final edu.duke.cs.jflap.gui.editor.EditorPane ep = new edu.duke.cs.jflap.gui.editor.EditorPane(automatonDrawer,
+				(ToolBox) (view, drawer) -> {
+					final LinkedList<Tool> tools = new LinkedList<>();
+					tools.add(new ArrowNontransitionTool(view, drawer));
+					tools.add(new RegularStateTool(view, drawer, controller));
+					tools.add(new RegularTransitionTool(view, drawer, controller));
+					tools.add(new CollapseTool(view, drawer, controller));
+					tools.add(new StateCollapseTool(view, drawer, controller));
+					return tools;
+				});
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.export();
-            }
-        }));
-        /*
-         * bar.add(new JButton(new AbstractAction("Export Automaton") { public
-         * void actionPerformed(ActionEvent e) { controller.exportAutomaton(); }
-         * }));
-         */
+		final JToolBar bar = ep.getToolBar();
+		bar.addSeparator();
+		bar.add(new JButton(new AbstractAction("Do It") {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 1L;
 
-        add(ep, BorderLayout.CENTER);
-    }
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				controller.moveNextStep();
+			}
+		}));
+		bar.add(new JButton(new AbstractAction("Export") {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 1L;
 
-    /**
-     * The environment that holds the automaton. The automaton from the
-     * environment is itself not modified.
-     */
-    AutomatonEnvironment environment;
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				controller.export();
+			}
+		}));
+		/*
+		 * bar.add(new JButton(new AbstractAction("Export Automaton") { public
+		 * void actionPerformed(ActionEvent e) { controller.exportAutomaton(); }
+		 * }));
+		 */
 
-    /**
-     * The copy of the original automaton, which will be modified throughout
-     * this process.
-     */
-    private FiniteStateAutomaton automaton;
+		add(ep, BorderLayout.CENTER);
+	}
 }

@@ -16,15 +16,15 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.environment.Environment;
-import edu.duke.cs.jflap.gui.environment.Universe;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
 import javax.swing.KeyStroke;
+
+import edu.duke.cs.jflap.gui.environment.Environment;
+import edu.duke.cs.jflap.gui.environment.Universe;
 
 /**
  * The <CODE>SaveAsAction</CODE> is an action to save a serializable object
@@ -33,48 +33,47 @@ import javax.swing.KeyStroke;
  * @author Thomas Finley
  */
 public class SaveAsAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>SaveAction</CODE>.
-     *
-     * @param environment
-     *            the environment that holds the serializable object
-     */
-    public SaveAsAction(Environment environment) {
-        super("Save As...", null);
-        putValue(ACCELERATOR_KEY,
-                KeyStroke.getKeyStroke(KeyEvent.VK_S, MAIN_MENU_MASK + InputEvent.SHIFT_MASK));
-        this.environment = environment;
-    }
+	/**
+	 * This action is restricted to those objects that are serializable.
+	 *
+	 * @param object
+	 *            the object to check for serializable-ness
+	 * @return <CODE>true</CODE> if the object is an instance of a serializable
+	 *         object, <CODE>false</CODE> otherwise
+	 */
+	public static boolean isApplicable(final Object object) {
+		return object instanceof Serializable;
+	}
 
-    /**
-     * If a save was attempted, call the methods that handle the saving of the
-     * serializable object to a file.
-     *
-     * @param event
-     *            the action event
-     */
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        Universe.frameForEnvironment(environment).save(true);
-    }
+	/** The environment that this save action gets it's object from. */
+	protected Environment environment;
 
-    /**
-     * This action is restricted to those objects that are serializable.
-     *
-     * @param object
-     *            the object to check for serializable-ness
-     * @return <CODE>true</CODE> if the object is an instance of a serializable
-     *         object, <CODE>false</CODE> otherwise
-     */
-    public static boolean isApplicable(Object object) {
-        return object instanceof Serializable;
-    }
+	/**
+	 * Instantiates a new <CODE>SaveAction</CODE>.
+	 *
+	 * @param environment
+	 *            the environment that holds the serializable object
+	 */
+	public SaveAsAction(final Environment environment) {
+		super("Save As...", null);
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, MAIN_MENU_MASK + InputEvent.SHIFT_MASK));
+		this.environment = environment;
+	}
 
-    /** The environment that this save action gets it's object from. */
-    protected Environment environment;
+	/**
+	 * If a save was attempted, call the methods that handle the saving of the
+	 * serializable object to a file.
+	 *
+	 * @param event
+	 *            the action event
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent event) {
+		Universe.frameForEnvironment(environment).save(true);
+	}
 }

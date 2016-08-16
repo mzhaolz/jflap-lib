@@ -16,8 +16,6 @@
 
 package edu.duke.cs.jflap.gui.regular;
 
-import edu.duke.cs.jflap.regular.RegularExpression;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.lang.ref.Reference;
@@ -29,6 +27,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import edu.duke.cs.jflap.regular.RegularExpression;
+
 /**
  * The editor pane for a regular expression allows the user to change the
  * regular expression.
@@ -36,67 +36,67 @@ import javax.swing.event.DocumentListener;
  * @author Thomas Finley
  */
 public class EditorPane extends JPanel {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new editor pane for a given regular expression.
-     *
-     * @param expression
-     *            the regular expression
-     */
-    public EditorPane(RegularExpression expression) {
-        // super(new BorderLayout());
-        this.expression = expression;
-        field.setText(expression.asString());
-        field.addActionListener(event -> updateExpression());
-        field.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateExpression();
-            }
+	/** The regular expression. */
+	private final RegularExpression expression;
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateExpression();
-            }
+	/** The field where the expression is displayed and edited. */
+	private final JTextField field = new JTextField("");
 
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateExpression();
-            }
-        });
-        setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 1.0;
-        c.gridwidth = GridBagConstraints.REMAINDER;
+	/** The reference object. */
+	private final Reference<?> ref = new WeakReference<Object>(null) {
+		@Override
+		public Object get() {
+			return field.getText();
+		}
+	};
 
-        add(new JLabel("Edit the regular expression below:"), c);
-        add(field, c);
-    }
+	/**
+	 * Instantiates a new editor pane for a given regular expression.
+	 *
+	 * @param expression
+	 *            the regular expression
+	 */
+	public EditorPane(final RegularExpression expression) {
+		// super(new BorderLayout());
+		this.expression = expression;
+		field.setText(expression.asString());
+		field.addActionListener(event -> updateExpression());
+		field.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void changedUpdate(final DocumentEvent e) {
+				updateExpression();
+			}
 
-    /**
-     * This is called when the regular expression should be updated to accord
-     * with the field.
-     */
-    private void updateExpression() {
-        expression.change(ref);
-    }
+			@Override
+			public void insertUpdate(final DocumentEvent e) {
+				updateExpression();
+			}
 
-    /** The regular expression. */
-    private RegularExpression expression;
+			@Override
+			public void removeUpdate(final DocumentEvent e) {
+				updateExpression();
+			}
+		});
+		setLayout(new GridBagLayout());
+		final GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1.0;
+		c.gridwidth = GridBagConstraints.REMAINDER;
 
-    /** The field where the expression is displayed and edited. */
-    private JTextField field = new JTextField("");
+		add(new JLabel("Edit the regular expression below:"), c);
+		add(field, c);
+	}
 
-    /** The reference object. */
-    private Reference<?> ref = new WeakReference<Object>(null) {
-        @Override
-        public Object get() {
-            return field.getText();
-        }
-    };
+	/**
+	 * This is called when the regular expression should be updated to accord
+	 * with the field.
+	 */
+	private void updateExpression() {
+		expression.change(ref);
+	}
 }

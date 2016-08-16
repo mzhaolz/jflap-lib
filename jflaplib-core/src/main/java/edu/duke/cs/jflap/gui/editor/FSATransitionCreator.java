@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.Transition;
 import edu.duke.cs.jflap.automata.fsa.FSATransition;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
-
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 
 /**
  * This is a transition creator for finite state automata.
@@ -30,91 +30,91 @@ import javax.swing.table.TableModel;
  * @author Thomas Finley
  */
 public class FSATransitionCreator extends TableTransitionCreator {
-    /**
-     * Instantiates a transition creator.
-     *
-     * @param parent
-     *            the parent object that any dialogs or windows brought up by
-     *            this creator should be the child of
-     */
-    public FSATransitionCreator(AutomatonPane parent) {
-        super(parent);
-    }
+	/**
+	 * Instantiates a transition creator.
+	 *
+	 * @param parent
+	 *            the parent object that any dialogs or windows brought up by
+	 *            this creator should be the child of
+	 */
+	public FSATransitionCreator(final AutomatonPane parent) {
+		super(parent);
+	}
 
-    /**
-     * Initializes a new empty transition.
-     *
-     * @param from
-     *            the from state
-     * @param to
-     *            to too state
-     */
-    @Override
-    protected Transition initTransition(State from, State to) {
-        return new FSATransition(from, to, "");
-    }
+	/**
+	 * Creates a new table model.
+	 *
+	 * @param transition
+	 *            the transition to create the model for
+	 */
+	@Override
+	protected TableModel createModel(final Transition transition) {
+		final FSATransition t = (FSATransition) transition;
+		return new AbstractTableModel() {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 1L;
 
-    /**
-     * Creates a new table model.
-     *
-     * @param transition
-     *            the transition to create the model for
-     */
-    @Override
-    protected TableModel createModel(Transition transition) {
-        final FSATransition t = (FSATransition) transition;
-        return new AbstractTableModel() {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+			String s = t.getLabel();
 
-            @Override
-            public Object getValueAt(int row, int column) {
-                return s;
-            }
+			@Override
+			public int getColumnCount() {
+				return 1;
+			}
 
-            @Override
-            public void setValueAt(Object o, int r, int c) {
-                s = (String) o;
-            }
+			@Override
+			public String getColumnName(final int c) {
+				return "Label";
+			}
 
-            @Override
-            public boolean isCellEditable(int r, int c) {
-                return true;
-            }
+			@Override
+			public int getRowCount() {
+				return 1;
+			}
 
-            @Override
-            public int getRowCount() {
-                return 1;
-            }
+			@Override
+			public Object getValueAt(final int row, final int column) {
+				return s;
+			}
 
-            @Override
-            public int getColumnCount() {
-                return 1;
-            }
+			@Override
+			public boolean isCellEditable(final int r, final int c) {
+				return true;
+			}
 
-            @Override
-            public String getColumnName(int c) {
-                return "Label";
-            }
+			@Override
+			public void setValueAt(final Object o, final int r, final int c) {
+				s = (String) o;
+			}
+		};
+	}
 
-            String s = t.getLabel();
-        };
-    }
+	/**
+	 * Initializes a new empty transition.
+	 *
+	 * @param from
+	 *            the from state
+	 * @param to
+	 *            to too state
+	 */
+	@Override
+	protected Transition initTransition(final State from, final State to) {
+		return new FSATransition(from, to, "");
+	}
 
-    /**
-     * Modifies a transition according to what's in the table.
-     */
-    @Override
-    public Transition modifyTransition(Transition t, TableModel model) {
-        // EDebug.print("ModifyTransitionCalled");
-        String s = (String) model.getValueAt(0, 0);
-        try {
-            return new FSATransition(t.getFromState(), t.getToState(), s);
-        } catch (IllegalArgumentException e) {
-            reportException(e);
-            return null;
-        }
-    }
+	/**
+	 * Modifies a transition according to what's in the table.
+	 */
+	@Override
+	public Transition modifyTransition(final Transition t, final TableModel model) {
+		// EDebug.print("ModifyTransitionCalled");
+		final String s = (String) model.getValueAt(0, 0);
+		try {
+			return new FSATransition(t.getFromState(), t.getToState(), s);
+		} catch (final IllegalArgumentException e) {
+			reportException(e);
+			return null;
+		}
+	}
 }

@@ -26,11 +26,11 @@ import java.util.EventListener;
  * @see edu.duke.cs.jflap.gui.sim.ConfigurationPane#addSelectionListener
  */
 public interface ConfigurationSelectionListener extends EventListener {
-    /**
-     * Registers with the listener that an event has occurred.
-     *
-     * @param event
-     *            the event
-     */
-    public void configurationSelectionChange(ConfigurationSelectionEvent event);
+	/**
+	 * Registers with the listener that an event has occurred.
+	 *
+	 * @param event
+	 *            the event
+	 */
+	public void configurationSelectionChange(ConfigurationSelectionEvent event);
 }

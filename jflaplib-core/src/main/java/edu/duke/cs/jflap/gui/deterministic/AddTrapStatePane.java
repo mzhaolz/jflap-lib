@@ -16,14 +16,6 @@
 
 package edu.duke.cs.jflap.gui.deterministic;
 
-import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
-import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
-import edu.duke.cs.jflap.gui.editor.Tool;
-import edu.duke.cs.jflap.gui.editor.ToolBox;
-import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
-import edu.duke.cs.jflap.gui.environment.Universe;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
@@ -35,6 +27,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
+import edu.duke.cs.jflap.gui.editor.ArrowNontransitionTool;
+import edu.duke.cs.jflap.gui.editor.Tool;
+import edu.duke.cs.jflap.gui.editor.ToolBox;
+import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
+import edu.duke.cs.jflap.gui.environment.Universe;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 /**
  * Pane used for adding trap state
  *
@@ -43,64 +43,64 @@ import javax.swing.JToolBar;
  */
 public class AddTrapStatePane extends JPanel {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * The copy of the original automaton, which will be modified throughout
-     * this process.
-     */
-    private FiniteStateAutomaton myAutomaton;
+	/**
+	 * The copy of the original automaton, which will be modified throughout
+	 * this process.
+	 */
+	private FiniteStateAutomaton myAutomaton;
 
-    /**
-     * Constructor for creating Trap State Pane
-     *
-     * @param environment
-     */
-    public AddTrapStatePane(AutomatonEnvironment environment) {
-        myAutomaton = (FiniteStateAutomaton) environment.getAutomaton().clone();
-        JFrame frame = Universe.frameForEnvironment(environment);
+	/**
+	 * Constructor for creating Trap State Pane
+	 *
+	 * @param environment
+	 */
+	public AddTrapStatePane(final AutomatonEnvironment environment) {
+		myAutomaton = (FiniteStateAutomaton) environment.getAutomaton().clone();
+		final JFrame frame = Universe.frameForEnvironment(environment);
 
-        setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 
-        JPanel labels = new JPanel(new BorderLayout());
-        JLabel mainLabel = new JLabel();
-        JLabel detailLabel = new JLabel();
-        labels.add(mainLabel, BorderLayout.NORTH);
-        labels.add(detailLabel, BorderLayout.SOUTH);
+		final JPanel labels = new JPanel(new BorderLayout());
+		final JLabel mainLabel = new JLabel();
+		final JLabel detailLabel = new JLabel();
+		labels.add(mainLabel, BorderLayout.NORTH);
+		labels.add(detailLabel, BorderLayout.SOUTH);
 
-        add(labels, BorderLayout.NORTH);
-        SelectionDrawer automatonDrawer = new SelectionDrawer(myAutomaton);
+		add(labels, BorderLayout.NORTH);
+		final SelectionDrawer automatonDrawer = new SelectionDrawer(myAutomaton);
 
-        final AddTrapStateController controller = new AddTrapStateController(myAutomaton,
-                automatonDrawer, mainLabel, detailLabel, frame);
+		final AddTrapStateController controller = new AddTrapStateController(myAutomaton, automatonDrawer, mainLabel,
+				detailLabel, frame);
 
-        edu.duke.cs.jflap.gui.editor.EditorPane ep = new edu.duke.cs.jflap.gui.editor.EditorPane(
-                automatonDrawer, (ToolBox) (view, drawer) -> {
-                    LinkedList<Tool> tools = new LinkedList<>();
-                    tools.add(new ArrowNontransitionTool(view, drawer));
-                    tools.add(new TrapStateTool(view, drawer, controller));
-                    tools.add(new TrapTransitionTool(view, drawer, controller));
-                    return tools;
-                });
+		final edu.duke.cs.jflap.gui.editor.EditorPane ep = new edu.duke.cs.jflap.gui.editor.EditorPane(automatonDrawer,
+				(ToolBox) (view, drawer) -> {
+					final LinkedList<Tool> tools = new LinkedList<>();
+					tools.add(new ArrowNontransitionTool(view, drawer));
+					tools.add(new TrapStateTool(view, drawer, controller));
+					tools.add(new TrapTransitionTool(view, drawer, controller));
+					return tools;
+				});
 
-        JToolBar bar = ep.getToolBar();
+		final JToolBar bar = ep.getToolBar();
 
-        bar.addSeparator();
-        bar.add(new JButton(new AbstractAction("Do All") {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 3085654730397188499L;
+		bar.addSeparator();
+		bar.add(new JButton(new AbstractAction("Do All") {
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 3085654730397188499L;
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.doAll();
-            }
-        }));
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				controller.doAll();
+			}
+		}));
 
-        add(ep, BorderLayout.CENTER);
-    }
+		add(ep, BorderLayout.CENTER);
+	}
 }

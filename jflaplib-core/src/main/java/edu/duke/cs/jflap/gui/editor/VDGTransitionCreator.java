@@ -27,40 +27,40 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
  * @author Thomas Finley
  */
 public class VDGTransitionCreator extends TransitionCreator {
-    /**
-     * Instantiates a transition creator.
-     *
-     * @param parent
-     *            the parent object that any dialogs or windows brought up by
-     *            this creator should be the child of
-     */
-    public VDGTransitionCreator(AutomatonPane parent) {
-        super(parent);
-    }
+	/**
+	 * Instantiates a transition creator.
+	 *
+	 * @param parent
+	 *            the parent object that any dialogs or windows brought up by
+	 *            this creator should be the child of
+	 */
+	public VDGTransitionCreator(final AutomatonPane parent) {
+		super(parent);
+	}
 
-    /**
-     * Creates a transition with user interaction and returns it.
-     *
-     * @return returns the variable dependency transition
-     */
-    @Override
-    public Transition createTransition(State from, State to) {
-        VDGTransition t = new VDGTransition(from, to);
-        getParent().getDrawer().getAutomaton().addTransition(t);
-        return null;
-    }
+	/**
+	 * Creates a transition with user interaction and returns it.
+	 *
+	 * @return returns the variable dependency transition
+	 */
+	@Override
+	public Transition createTransition(final State from, final State to) {
+		final VDGTransition t = new VDGTransition(from, to);
+		getParent().getDrawer().getAutomaton().addTransition(t);
+		return null;
+	}
 
-    /**
-     * Edits a given transition. Ideally this should use the same interface as
-     * that given by <CODE>createTransition</CODE>.
-     *
-     * @param transition
-     *            the transition to edit
-     * @return <CODE>false</CODE> if the user decided to not edit a transition,
-     *         <CODE>true</CODE> if the edit was "approved"
-     */
-    @Override
-    public boolean editTransition(Transition transition) {
-        return false;
-    }
+	/**
+	 * Edits a given transition. Ideally this should use the same interface as
+	 * that given by <CODE>createTransition</CODE>.
+	 *
+	 * @param transition
+	 *            the transition to edit
+	 * @return <CODE>false</CODE> if the user decided to not edit a transition,
+	 *         <CODE>true</CODE> if the edit was "approved"
+	 */
+	@Override
+	public boolean editTransition(final Transition transition) {
+		return false;
+	}
 }

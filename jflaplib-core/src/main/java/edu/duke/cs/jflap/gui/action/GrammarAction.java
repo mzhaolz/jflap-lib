@@ -16,9 +16,9 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.grammar.Grammar;
-
 import javax.swing.Icon;
+
+import edu.duke.cs.jflap.grammar.Grammar;
 
 /**
  * The <CODE>GrammarAction</CODE> is the general action that various controllers
@@ -32,45 +32,45 @@ import javax.swing.Icon;
  * @author Thomas Finley
  */
 public abstract class GrammarAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>GrammarAction</CODE>.
-     *
-     * @param string
-     *            a string description
-     * @param icon
-     *            the optional icon, or <CODE>null</CODE> if there is to be no
-     *            icon associated with this action
-     */
-    public GrammarAction(String string, Icon icon) {
-        super(string, icon);
-    }
+	/**
+	 * Given an object, determine if this grammar action is able to be applied
+	 * to that object based on its class. By default, this method returns
+	 * <CODE>true</CODE> if this object is an instance of <CODE>Grammar</CODE>.
+	 *
+	 * @param object
+	 *            the object to test for "applicability"
+	 * @return <CODE>true</CODE> if this action should be available to an object
+	 *         of this type, <CODE>false</CODE> otherwise.
+	 */
+	public static boolean isApplicable(final Object object) {
 
-    /**
-     * Given an object, determine if this grammar action is able to be applied
-     * to that object based on its class. By default, this method returns
-     * <CODE>true</CODE> if this object is an instance of <CODE>Grammar</CODE>.
-     *
-     * @param object
-     *            the object to test for "applicability"
-     * @return <CODE>true</CODE> if this action should be available to an object
-     *         of this type, <CODE>false</CODE> otherwise.
-     */
-    public static boolean isApplicable(Object object) {
+		if (object instanceof Grammar) {
+			final Grammar g = (Grammar) object;
+			if (g.isConverted()) {
+				// System.out.println("false");
+				return false;
+			}
+			// System.out.println("true");
+			return true;
+		}
+		return false;
+	}
 
-        if (object instanceof Grammar) {
-            Grammar g = (Grammar) object;
-            if (g.isConverted()) {
-                // System.out.println("false");
-                return false;
-            }
-            // System.out.println("true");
-            return true;
-        }
-        return false;
-    }
+	/**
+	 * Instantiates a new <CODE>GrammarAction</CODE>.
+	 *
+	 * @param string
+	 *            a string description
+	 * @param icon
+	 *            the optional icon, or <CODE>null</CODE> if there is to be no
+	 *            icon associated with this action
+	 */
+	public GrammarAction(final String string, final Icon icon) {
+		super(string, icon);
+	}
 }

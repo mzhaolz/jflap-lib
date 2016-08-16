@@ -16,11 +16,11 @@
 
 package edu.duke.cs.jflap.automata.fsa;
 
-import edu.duke.cs.jflap.automata.State;
-
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import edu.duke.cs.jflap.automata.State;
 
 /**
  * The Minimize Tree Node object is merely a default mutable tree node with an
@@ -33,63 +33,63 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author Ryan Cavalcante
  */
 public class MinimizeTreeNode extends DefaultMutableTreeNode {
-    private static final long serialVersionUID = 600L;
+	private static final long serialVersionUID = 600L;
 
-    /**
-     * Creates a new <CODE>MinimizeTreeNode</CODE> with <CODE>userObject</CODE>
-     * as its user object and the empty string as its terminal.
-     *
-     * @param userObject
-     *            the node's user object
-     */
-    public MinimizeTreeNode(Object userObject) {
-        super(userObject);
-        myTerminal = "";
-    }
+	/** The node's terminal field. */
+	protected String myTerminal = "";
 
-    /**
-     * Creates a new <CODE>MinimizeTreeNode</CODE> with <CODE>userObject</CODE>
-     * as its user object and <CODE>terminal</CODE> as its terminal.
-     *
-     * @param userObject
-     *            the node's user object
-     * @param terminal
-     *            the node's terminal
-     */
-    public MinimizeTreeNode(Object userObject, String terminal) {
-        super(userObject);
-        myTerminal = terminal;
-    }
+	/**
+	 * Creates a new <CODE>MinimizeTreeNode</CODE> with <CODE>userObject</CODE>
+	 * as its user object and the empty string as its terminal.
+	 *
+	 * @param userObject
+	 *            the node's user object
+	 */
+	public MinimizeTreeNode(final Object userObject) {
+		super(userObject);
+		myTerminal = "";
+	}
 
-    /**
-     * Sets the node's terminal field to <CODE>terminal</CODE>.
-     *
-     * @param terminal
-     *            the node's terminal
-     */
-    public void setTerminal(String terminal) {
-        myTerminal = terminal;
-    }
+	/**
+	 * Creates a new <CODE>MinimizeTreeNode</CODE> with <CODE>userObject</CODE>
+	 * as its user object and <CODE>terminal</CODE> as its terminal.
+	 *
+	 * @param userObject
+	 *            the node's user object
+	 * @param terminal
+	 *            the node's terminal
+	 */
+	public MinimizeTreeNode(final Object userObject, final String terminal) {
+		super(userObject);
+		myTerminal = terminal;
+	}
 
-    /**
-     * Returns the node's terminal field
-     *
-     * @return the node's terminal field
-     */
-    public String getTerminal() {
-        return myTerminal;
-    }
+	/**
+	 * Returns the states on this node.
+	 *
+	 * @return the array of states for this group
+	 */
+	@SuppressWarnings("unchecked")
+	public List<State> getStates() {
+		return (List<State>) getUserObject();
+	}
 
-    /**
-     * Returns the states on this node.
-     *
-     * @return the array of states for this group
-     */
-    @SuppressWarnings("unchecked")
-    public List<State> getStates() {
-        return (List<State>) getUserObject();
-    }
+	/**
+	 * Returns the node's terminal field
+	 *
+	 * @return the node's terminal field
+	 */
+	public String getTerminal() {
+		return myTerminal;
+	}
 
-    /** The node's terminal field. */
-    protected String myTerminal = "";
+	/**
+	 * Sets the node's terminal field to <CODE>terminal</CODE>.
+	 *
+	 * @param terminal
+	 *            the node's terminal
+	 */
+	public void setTerminal(final String terminal) {
+		myTerminal = terminal;
+	}
 }
