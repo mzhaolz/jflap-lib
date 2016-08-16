@@ -286,11 +286,13 @@ public class WebFrame extends JFrame {
 			myBrowserDisplay.setPage(url);
 		} catch (final IOException e) {
 			// Display an alert to that effect.
-			System.err.println(e);
-			JOptionPane.showMessageDialog(this, "Could not access URL " + url + "!", "Web Error",
-					JOptionPane.ERROR_MESSAGE);
-			myURLHistory.remove(myCurrentPosition);
-			myCurrentPosition--;
+      // runtime exception for debug purpose
+      throw new RuntimeException(e);
+			//System.err.println(e);
+			//JOptionPane.showMessageDialog(this, "Could not access URL " + url + "!", "Web Error",
+			//		JOptionPane.ERROR_MESSAGE);
+			//myURLHistory.remove(myCurrentPosition);
+			//myCurrentPosition--;
 		}
 		setEnabledStates();
 	}
