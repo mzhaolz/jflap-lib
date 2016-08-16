@@ -1,3 +1,7 @@
+package(
+  licenses =  ["notice"],
+)
+
 java_library(
 	name = "jflaplib_core",
 	srcs = glob(["**/*.java"], exclude = ["**/LRParser.java"]),
@@ -13,4 +17,17 @@ java_library(
 			"@org_apache_xmlgraphics_batik_util//jar",
 			"@org_slf4j_slf4j_api//jar",
 	]
+)
+
+java_binary(
+  name = "jflap",
+  srcs = glob([ "**/JFLAP.java" ]),
+  deps = [
+      ":jflaplib_core",
+  ],
+  main_class = "edu.duke.cs.jflap.JFLAP",
+  data = [
+    "//third_party/java/jflap-lib/jflaplib-core/src/main/resources/MEDIA:media",
+    "//third_party/java/jflap-lib/jflaplib-core/src/main/resources/ICON:icons",
+  ],
 )
