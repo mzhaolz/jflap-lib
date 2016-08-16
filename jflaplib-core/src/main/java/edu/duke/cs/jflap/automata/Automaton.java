@@ -81,7 +81,7 @@ public class Automaton implements Serializable, Cloneable {
      *         failed
      */
     @Override
-    public Object clone() {
+    public Automaton clone() {
         Automaton a;
         // Try to create a new object.
         try {
@@ -100,6 +100,7 @@ public class Automaton implements Serializable, Cloneable {
             State newState = new State(state.getID(), new Point(state.getPoint()), a);
             newState.setLabel(state.getLabel());
             newState.setName(state.getName());
+            map.put(state, newState);
             a.addState(newState);
             if (this instanceof MooreMachine) {
                 ((MooreMachine) a).setOutput(newState, ((MooreMachine) this).getOutput(state));
@@ -121,6 +122,9 @@ public class Automaton implements Serializable, Cloneable {
                 Transition toBeAdded = (Transition) transition.clone();
                 toBeAdded.setFromState(from);
                 toBeAdded.setToState(to);
+                System.err.println("toBeAdded is null: " + (toBeAdded == null));
+                System.err.println("toBeAdded.from is null: " + (toBeAdded.getFromState() == null));
+                System.err.println("toBeAdded.to is null: " + (toBeAdded.getToState() == null));
                 a.addTransition(toBeAdded);
             });
         });

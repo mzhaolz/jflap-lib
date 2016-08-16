@@ -92,7 +92,7 @@ public class LayoutAlgorithmFactory {
     public static <V> LayoutAlgorithm<V> getRandomLayoutAlgorithm() {
         Random random = new Random();
         return LayoutAlgorithmFactory
-                .<V>getLayoutAlgorithm(Math.abs(random.nextInt() % NUM_ALGORITHMS));
+                .<V>getLayoutAlgorithm(Math.abs(random.nextInt(NUM_ALGORITHMS)));
     }
 
     /**
@@ -111,7 +111,7 @@ public class LayoutAlgorithmFactory {
     public static <V> LayoutAlgorithm<V> getRandomLayoutAlgorithm(Dimension pSize, Dimension vDim,
             double vBuffer) {
         Random random = new Random();
-        return getLayoutAlgorithm(Math.abs(random.nextInt() % NUM_ALGORITHMS), pSize, vDim,
+        return getLayoutAlgorithm(Math.abs(random.nextInt(NUM_ALGORITHMS)), pSize, vDim,
                 vBuffer);
     }
 

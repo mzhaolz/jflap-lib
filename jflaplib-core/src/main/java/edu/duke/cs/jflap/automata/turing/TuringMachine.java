@@ -138,7 +138,7 @@ public class TuringMachine extends Automaton {
      * handle the building block cloning in a more elegant way.
      */
     @Override
-    public Object clone() {
+    public TuringMachine clone() {
         // MERLIN MERLIN MERLIN MERLIN MERLIN//
 
         TuringMachine a = new TuringMachine(tapes());
