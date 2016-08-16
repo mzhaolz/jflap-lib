@@ -16,12 +16,12 @@
 
 package edu.duke.cs.jflap.gui.sim;
 
+import edu.duke.cs.jflap.gui.TooltipAction;
+
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JToolBar;
-
-import edu.duke.cs.jflap.gui.TooltipAction;
 
 /**
  * This is a control panel with buttons for invoking methods on a configuration
@@ -30,147 +30,147 @@ import edu.duke.cs.jflap.gui.TooltipAction;
  * @author Thomas Finley
  */
 public class ControlPanel extends JToolBar {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	private boolean blockStep = false;
+    /**
+     * Instantiates a new <CODE>ControlPanel</CODE> for the given configuration
+     * controller.
+     *
+     * @param controller
+     *            the configuration controller object
+     */
+    public ControlPanel(ConfigurationController controller) {
+        this.controller = controller;
+        initView();
+    }
 
-	/** The configuration controller object. */
-	private final ConfigurationController controller;
+    /**
+     * Returns the configuration controller object this panel controls.
+     *
+     * @return the configuration controller object this panel controls
+     */
+    public ConfigurationController getController() {
+        return controller;
+    }
 
-	/**
-	 * Instantiates a new <CODE>ControlPanel</CODE> for the given configuration
-	 * controller.
-	 *
-	 * @param controller
-	 *            the configuration controller object
-	 */
-	public ControlPanel(final ConfigurationController controller) {
-		this.controller = controller;
-		initView();
-	}
+    /**
+     * A simple helper function that initializes the gui.
+     */
+    protected void initView() {
+        this.add(new TooltipAction("Step",
+                "Moves existing valid " + "configurations to the next " + "configurations.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-	/**
-	 * Returns the configuration controller object this panel controls.
-	 *
-	 * @return the configuration controller object this panel controls
-	 */
-	public ConfigurationController getController() {
-		return controller;
-	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.step(blockStep);
+            }
+        });
 
-	/**
-	 * A simple helper function that initializes the gui.
-	 */
-	protected void initView() {
-		this.add(
-				new TooltipAction("Step", "Moves existing valid " + "configurations to the next " + "configurations.") {
-					/**
-					 *
-					 */
-					private static final long serialVersionUID = 1L;
+        this.add(new TooltipAction("Reset", "Resets the simulation to " + "start conditions.") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-					@Override
-					public void actionPerformed(final ActionEvent e) {
-						controller.step(blockStep);
-					}
-				});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.reset();
+            }
+        });
 
-		this.add(new TooltipAction("Reset", "Resets the simulation to " + "start conditions.") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+        /*
+         * Add Focus and Defocus buttons only if it is a Turing machine.
+         */
+        if (controller.isTuringMachine()) {
+            this.add(new AbstractAction("Focus") {
+                /**
+                 *
+                 */
+                private static final long serialVersionUID = 1L;
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.reset();
-			}
-		});
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    controller.focus();
+                }
+            });
 
-		/*
-		 * Add Focus and Defocus buttons only if it is a Turing machine.
-		 */
-		if (controller.isTuringMachine()) {
-			this.add(new AbstractAction("Focus") {
-				/**
-				 *
-				 */
-				private static final long serialVersionUID = 1L;
+            this.add(new AbstractAction("Defocus") {
+                /**
+                 *
+                 */
+                private static final long serialVersionUID = 1L;
 
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					controller.focus();
-				}
-			});
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    controller.defocus();
+                }
+            });
+        }
+        this.add(new AbstractAction("Freeze") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-			this.add(new AbstractAction("Defocus") {
-				/**
-				 *
-				 */
-				private static final long serialVersionUID = 1L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.freeze();
+            }
+        });
 
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					controller.defocus();
-				}
-			});
-		}
-		this.add(new AbstractAction("Freeze") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+        this.add(new AbstractAction("Thaw") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.freeze();
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.thaw();
+            }
+        });
 
-		this.add(new AbstractAction("Thaw") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+        this.add(new AbstractAction("Trace") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.thaw();
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.trace();
+            }
+        });
 
-		this.add(new AbstractAction("Trace") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+        this.add(new AbstractAction("Remove") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.trace();
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.remove();
+            }
+        });
+    }
 
-		this.add(new AbstractAction("Remove") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+    /**
+     * @param blockStep
+     */
+    public void setBlock(boolean step) {
+        blockStep = step;
+    }
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				controller.remove();
-			}
-		});
-	}
+    private boolean blockStep = false;
 
-	/**
-	 * @param blockStep
-	 */
-	public void setBlock(final boolean step) {
-		blockStep = step;
-	}
+    /** The configuration controller object. */
+    private ConfigurationController controller;
 }

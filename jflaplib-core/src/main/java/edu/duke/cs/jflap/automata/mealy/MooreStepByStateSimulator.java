@@ -16,11 +16,11 @@
 
 package edu.duke.cs.jflap.automata.mealy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.Configuration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Mealy machine step by state simulator simulates the behavior of a Mealy
@@ -40,29 +40,29 @@ import edu.duke.cs.jflap.automata.Configuration;
  *
  */
 public class MooreStepByStateSimulator extends MealyStepByStateSimulator {
-	/**
-	 * Creates a Moore step by state simulator for the given automaton.
-	 *
-	 * @param automaton
-	 *            the machine to simulate
-	 */
-	public MooreStepByStateSimulator(final Automaton automaton) {
-		super(automaton);
-	}
+    /**
+     * Creates a Moore step by state simulator for the given automaton.
+     *
+     * @param automaton
+     *            the machine to simulate
+     */
+    public MooreStepByStateSimulator(Automaton automaton) {
+        super(automaton);
+    }
 
-	/**
-	 * Returns a <code>MooreConfiguration</code> that represents the initial
-	 * configuration of the Moore machine, before any input has been processed.
-	 * This returns an array of length one.
-	 *
-	 * @param input
-	 *            the input string to simulate
-	 */
-	@Override
-	public List<Configuration> getInitialConfigurations(final String input) {
-		final List<Configuration> configs = new ArrayList<>();
-		configs.add(new MealyConfiguration(myAutomaton.getInitialState(), null, input, input,
-				((MooreMachine) myAutomaton).getOutput(myAutomaton.getInitialState())));
-		return configs;
-	}
+    /**
+     * Returns a <code>MooreConfiguration</code> that represents the initial
+     * configuration of the Moore machine, before any input has been processed.
+     * This returns an array of length one.
+     *
+     * @param input
+     *            the input string to simulate
+     */
+    @Override
+    public List<Configuration> getInitialConfigurations(String input) {
+        List<Configuration> configs = new ArrayList<>();
+        configs.add(new MealyConfiguration(myAutomaton.getInitialState(), null, input, input,
+                ((MooreMachine) myAutomaton).getOutput(myAutomaton.getInitialState())));
+        return configs;
+    }
 }

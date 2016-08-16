@@ -28,53 +28,53 @@ import javax.swing.Icon;
  * @author Thomas Finley
  */
 public class ArrowIcon implements Icon {
-	/** The width of the icon. */
-	private final int width;
+    /**
+     * Instantiates a new <CODE>ArrowIcon</CODE>.
+     *
+     * @param width
+     *            the width of this icon
+     * @param height
+     *            the height of this icon
+     */
+    public ArrowIcon(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
-	/** The height of the icon. */
-	private final int height;
+    /**
+     * Returns the icon's height.
+     *
+     * @return the icon's height
+     */
+    @Override
+    public int getIconHeight() {
+        return height;
+    }
 
-	/**
-	 * Instantiates a new <CODE>ArrowIcon</CODE>.
-	 *
-	 * @param width
-	 *            the width of this icon
-	 * @param height
-	 *            the height of this icon
-	 */
-	public ArrowIcon(final int width, final int height) {
-		this.width = width;
-		this.height = height;
-	}
+    /**
+     * Returns the icon's width.
+     *
+     * @return the icon's width
+     */
+    @Override
+    public int getIconWidth() {
+        return width;
+    }
 
-	/**
-	 * Returns the icon's height.
-	 *
-	 * @return the icon's height
-	 */
-	@Override
-	public int getIconHeight() {
-		return height;
-	}
+    /**
+     * Paints the arrow.
+     */
+    @Override
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+        g.setColor(Color.black);
+        g.drawLine(x, y + height / 2, x + width, y + height / 2);
+        g.drawLine(x + width - height / 2, y, x + width, y + height / 2);
+        g.drawLine(x + width - height / 2, y + height, x + width, y + height / 2);
+    }
 
-	/**
-	 * Returns the icon's width.
-	 *
-	 * @return the icon's width
-	 */
-	@Override
-	public int getIconWidth() {
-		return width;
-	}
+    /** The width of the icon. */
+    private int width;
 
-	/**
-	 * Paints the arrow.
-	 */
-	@Override
-	public void paintIcon(final Component c, final Graphics g, final int x, final int y) {
-		g.setColor(Color.black);
-		g.drawLine(x, y + height / 2, x + width, y + height / 2);
-		g.drawLine(x + width - height / 2, y, x + width, y + height / 2);
-		g.drawLine(x + width - height / 2, y + height, x + width, y + height / 2);
-	}
+    /** The height of the icon. */
+    private int height;
 }

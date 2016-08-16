@@ -23,25 +23,25 @@ package edu.duke.cs.jflap.gui.grammar.automata;
  * @author Thomas Finley
  */
 public class GrammarCreationException extends RuntimeException {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Instantiates a new <CODE>GrammarCreationException</CODE>.
-	 */
-	public GrammarCreationException() {
-		super();
-	}
+    /**
+     * Instantiates a new <CODE>GrammarCreationException</CODE>.
+     */
+    public GrammarCreationException() {
+        super();
+    }
 
-	/**
-	 * Instantiates a new <CODE>GrammarCreationException</CODE>.
-	 *
-	 * @param message
-	 *            the message to accompany this exception
-	 */
-	public GrammarCreationException(final String message) {
-		super(message);
-	}
+    /**
+     * Instantiates a new <CODE>GrammarCreationException</CODE>.
+     *
+     * @param message
+     *            the message to accompany this exception
+     */
+    public GrammarCreationException(String message) {
+        super(message);
+    }
 }

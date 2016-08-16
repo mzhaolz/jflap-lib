@@ -16,15 +16,15 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
+import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
+import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
+import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+
 import java.awt.event.MouseEvent;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
-
-import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
-import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
-import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
 
 /**
  * A tool that handles the creation of states.
@@ -32,71 +32,72 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
  * @author Thomas Finley
  */
 public class StateTool extends Tool {
-	/** The state that was created. */
-	edu.duke.cs.jflap.automata.State state = null;
+    /**
+     * Instantiates a new state tool.
+     */
+    public StateTool(AutomatonPane view, AutomatonDrawer drawer) {
+        super(view, drawer);
+    }
 
-	/**
-	 * Instantiates a new state tool.
-	 */
-	public StateTool(final AutomatonPane view, final AutomatonDrawer drawer) {
-		super(view, drawer);
-	}
+    /**
+     * Gets the tool tip for this tool.
+     *
+     * @return the tool tip for this tool
+     */
+    @Override
+    public String getToolTip() {
+        return "State Creator";
+    }
 
-	/**
-	 * Returns the tool icon.
-	 *
-	 * @return the state tool icon
-	 */
-	@Override
-	protected Icon getIcon() {
-		final java.net.URL url = getClass().getResource("/ICON/state.gif");
-		return new ImageIcon(url);
-	}
+    /**
+     * Returns the tool icon.
+     *
+     * @return the state tool icon
+     */
+    @Override
+    protected Icon getIcon() {
+        java.net.URL url = getClass().getResource("/ICON/state.gif");
+        return new ImageIcon(url);
+    }
 
-	/**
-	 * Returns the keystroke to switch to this tool, S.
-	 *
-	 * @return the keystroke for this tool
-	 */
-	@Override
-	public KeyStroke getKey() {
-		return KeyStroke.getKeyStroke('s');
-	}
+    /**
+     * When the user clicks, one creates a state.
+     *
+     * @param event
+     *            the mouse event
+     */
+    @Override
+    public void mousePressed(MouseEvent event) {
+        if (getDrawer().getAutomaton().getEnvironmentFrame() != null) {
+            ((AutomatonEnvironment) getDrawer().getAutomaton().getEnvironmentFrame()
+                    .getEnvironment()).saveStatus();
+        }
+        state = getAutomaton().createState(event.getPoint());
+        getView().repaint();
+    }
 
-	/**
-	 * Gets the tool tip for this tool.
-	 *
-	 * @return the tool tip for this tool
-	 */
-	@Override
-	public String getToolTip() {
-		return "State Creator";
-	}
+    /**
+     * When the user drags, one moves the created state.
+     *
+     * @param event
+     *            the mouse event
+     */
+    @Override
+    public void mouseDragged(MouseEvent event) {
+        state.setPoint(event.getPoint());
+        getView().repaint();
+    }
 
-	/**
-	 * When the user drags, one moves the created state.
-	 *
-	 * @param event
-	 *            the mouse event
-	 */
-	@Override
-	public void mouseDragged(final MouseEvent event) {
-		state.setPoint(event.getPoint());
-		getView().repaint();
-	}
+    /**
+     * Returns the keystroke to switch to this tool, S.
+     *
+     * @return the keystroke for this tool
+     */
+    @Override
+    public KeyStroke getKey() {
+        return KeyStroke.getKeyStroke('s');
+    }
 
-	/**
-	 * When the user clicks, one creates a state.
-	 *
-	 * @param event
-	 *            the mouse event
-	 */
-	@Override
-	public void mousePressed(final MouseEvent event) {
-		if (getDrawer().getAutomaton().getEnvironmentFrame() != null) {
-			((AutomatonEnvironment) getDrawer().getAutomaton().getEnvironmentFrame().getEnvironment()).saveStatus();
-		}
-		state = getAutomaton().createState(event.getPoint());
-		getView().repaint();
-	}
+    /** The state that was created. */
+    edu.duke.cs.jflap.automata.State state = null;
 }

@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.gui.regular;
 
+import edu.duke.cs.jflap.automata.Transition;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -27,8 +29,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
-import edu.duke.cs.jflap.automata.Transition;
 
 /**
  * This shows a bunch of transitions for the step of the conversion when the
@@ -42,75 +42,76 @@ import edu.duke.cs.jflap.automata.Transition;
  * @author Thomas Finley
  */
 public class TransitionWindow extends JFrame {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/** The controller object for this window. */
-	private FSAToREController controller;
+    /**
+     * Instantiates a new <CODE>TransitionWindow</CODE>.
+     *
+     * @param controller
+     *            the FSA to RE controller object
+     */
+    public TransitionWindow(FSAToREController controller) {
+        super("Transitions");
+        this.controller = controller;
+        // Init the GUI.
+        setSize(250, 400);
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(new JLabel("Select to see what transitions were combined."),
+                BorderLayout.NORTH);
+        getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
+        getContentPane().add(new JButton(new AbstractAction("Finalize") {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-	/** The array of transitions displayed. */
-	private List<Transition> transitions = new ArrayList<>();
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TransitionWindow.this.controller.finalizeStateRemove();
+            }
+        }), BorderLayout.SOUTH);
+        // Have the listener to the transition.
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (table.getSelectedRowCount() != 1) {
+                TransitionWindow.this.controller.tableTransitionSelected(null);
+                return;
+            }
+            Transition t = transitions.get(table.getSelectedRow());
+            TransitionWindow.this.controller.tableTransitionSelected(t);
+            ;
+        });
+    }
 
-	/** The table object that displays the transitions. */
-	private final JTable table = new JTable(new TransitionTableModel());
+    /**
+     * Returns the transition this transition window displays.
+     *
+     * @return the array of transitions displayed by this window
+     */
+    public List<Transition> getTransitions() {
+        return transitions;
+    }
 
-	/**
-	 * Instantiates a new <CODE>TransitionWindow</CODE>.
-	 *
-	 * @param controller
-	 *            the FSA to RE controller object
-	 */
-	public TransitionWindow(final FSAToREController controller) {
-		super("Transitions");
-		this.controller = controller;
-		// Init the GUI.
-		setSize(250, 400);
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(new JLabel("Select to see what transitions were combined."), BorderLayout.NORTH);
-		getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
-		getContentPane().add(new JButton(new AbstractAction("Finalize") {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+    /**
+     * Sets the array of transitions the table in this window displays, and
+     * shows the window.
+     *
+     * @param list
+     *            the new array of transitions
+     */
+    public void setTransitions(List<Transition> list) {
+        transitions = list;
+        table.setModel(new TransitionTableModel(list));
+    }
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				TransitionWindow.this.controller.finalizeStateRemove();
-			}
-		}), BorderLayout.SOUTH);
-		// Have the listener to the transition.
-		table.getSelectionModel().addListSelectionListener(e -> {
-			if (table.getSelectedRowCount() != 1) {
-				TransitionWindow.this.controller.tableTransitionSelected(null);
-				return;
-			}
-			final Transition t = transitions.get(table.getSelectedRow());
-			TransitionWindow.this.controller.tableTransitionSelected(t);
-			;
-		});
-	}
+    /** The controller object for this window. */
+    private FSAToREController controller;
 
-	/**
-	 * Returns the transition this transition window displays.
-	 *
-	 * @return the array of transitions displayed by this window
-	 */
-	public List<Transition> getTransitions() {
-		return transitions;
-	}
+    /** The array of transitions displayed. */
+    private List<Transition> transitions = new ArrayList<>();
 
-	/**
-	 * Sets the array of transitions the table in this window displays, and
-	 * shows the window.
-	 *
-	 * @param list
-	 *            the new array of transitions
-	 */
-	public void setTransitions(final List<Transition> list) {
-		transitions = list;
-		table.setModel(new TransitionTableModel(list));
-	}
+    /** The table object that displays the transitions. */
+    private JTable table = new JTable(new TransitionTableModel());
 }

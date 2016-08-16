@@ -16,11 +16,11 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a special <code>ToolBox</code> for Moore machines that loads the
@@ -35,27 +35,27 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
  *
  */
 public class MooreToolBox implements ToolBox {
-	/**
-	 * Returns a list of tools for Moore machines, similar to the
-	 * <code>DefaultToolBox</code>. This includes a <code>MooreArrowTool</code>,
-	 * <code>MooreStateTool</code> <code>TransitionTool</code>, and
-	 * <code>DeleteTool</code> in that order.
-	 *
-	 * @param view
-	 *            the component that the automaton will be drawn in
-	 * @param drawer
-	 *            the drawer that will draw the automaton in the view
-	 * @return a list of <CODE>Tool</CODE> objects.
-	 */
-	@Override
-	public List<Tool> tools(final AutomatonPane view, final AutomatonDrawer drawer) {
-		final List<Tool> list = new ArrayList<>();
-		list.add(new MooreArrowTool(view, drawer));
-		list.add(new MooreStateTool(view, drawer));
-		list.add(new TransitionTool(view, drawer));
-		list.add(new DeleteTool(view, drawer));
-		list.add(new UndoTool(view, drawer));
-		list.add(new RedoTool(view, drawer));
-		return list;
-	}
+    /**
+     * Returns a list of tools for Moore machines, similar to the
+     * <code>DefaultToolBox</code>. This includes a <code>MooreArrowTool</code>,
+     * <code>MooreStateTool</code> <code>TransitionTool</code>, and
+     * <code>DeleteTool</code> in that order.
+     *
+     * @param view
+     *            the component that the automaton will be drawn in
+     * @param drawer
+     *            the drawer that will draw the automaton in the view
+     * @return a list of <CODE>Tool</CODE> objects.
+     */
+    @Override
+    public List<Tool> tools(AutomatonPane view, AutomatonDrawer drawer) {
+        List<Tool> list = new ArrayList<>();
+        list.add(new MooreArrowTool(view, drawer));
+        list.add(new MooreStateTool(view, drawer));
+        list.add(new TransitionTool(view, drawer));
+        list.add(new DeleteTool(view, drawer));
+        list.add(new UndoTool(view, drawer));
+        list.add(new RedoTool(view, drawer));
+        return list;
+    }
 }

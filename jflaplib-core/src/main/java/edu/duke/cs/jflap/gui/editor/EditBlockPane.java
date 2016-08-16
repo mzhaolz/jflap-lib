@@ -27,38 +27,37 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
  * @author Thomas Finley
  */
 public class EditBlockPane extends EditorPane {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	protected State myBlock = null;
+    /**
+     * Instantiates a new editor pane for the given automaton.
+     *
+     * @param automaton
+     *            the automaton to create the editor pane for
+     */
+    public EditBlockPane(Automaton automaton) {
+        super(new SelectionDrawer(automaton));
+    }
 
-	protected State myOldBlock = null;
+    public void setBlock(State state) {
+        myBlock = state;
+    }
 
-	/**
-	 * Instantiates a new editor pane for the given automaton.
-	 *
-	 * @param automaton
-	 *            the automaton to create the editor pane for
-	 */
-	public EditBlockPane(final Automaton automaton) {
-		super(new SelectionDrawer(automaton));
-	}
+    public State getBlock() {
+        return myBlock;
+    }
 
-	public State getBlock() {
-		return myBlock;
-	}
+    public void setOldBlock(State state) {
+        myOldBlock = state;
+    }
 
-	public State getOldBlock() {
-		return myOldBlock;
-	}
+    public State getOldBlock() {
+        return myOldBlock;
+    }
 
-	public void setBlock(final State state) {
-		myBlock = state;
-	}
-
-	public void setOldBlock(final State state) {
-		myOldBlock = state;
-	}
+    protected State myBlock = null;
+    protected State myOldBlock = null;
 }

@@ -26,32 +26,32 @@ import java.awt.Point;
  * @author Ryan Cavalcante
  */
 public class StatePlacer {
-	/** The maximum value for the X-coordinate. */
-	protected final static int X_MAX = 600;
+    /**
+     * Instantiates a <CODE>StatePlacer</CODE>.
+     */
+    public StatePlacer() {
+    }
 
-	/** The maximum value for the Y-coordinate. */
-	protected final static int Y_MAX = 600;
+    /**
+     * Returns a Point object that represents where to place the State on the
+     * canvas.
+     *
+     * @param automaton
+     *            the automaton.
+     * @return a Point object that represents where to place the State on the
+     *         canvas.
+     */
+    public Point getPointForState(Automaton automaton) {
+        double xcoord = Math.random() * X_MAX;
+        int x = (int) xcoord;
+        double ycoord = Math.random() * Y_MAX;
+        int y = (int) ycoord;
+        return new Point(x, y);
+    }
 
-	/**
-	 * Instantiates a <CODE>StatePlacer</CODE>.
-	 */
-	public StatePlacer() {
-	}
+    /** The maximum value for the X-coordinate. */
+    protected final static int X_MAX = 600;
 
-	/**
-	 * Returns a Point object that represents where to place the State on the
-	 * canvas.
-	 *
-	 * @param automaton
-	 *            the automaton.
-	 * @return a Point object that represents where to place the State on the
-	 *         canvas.
-	 */
-	public Point getPointForState(final Automaton automaton) {
-		final double xcoord = Math.random() * X_MAX;
-		final int x = (int) xcoord;
-		final double ycoord = Math.random() * Y_MAX;
-		final int y = (int) ycoord;
-		return new Point(x, y);
-	}
+    /** The maximum value for the Y-coordinate. */
+    protected final static int Y_MAX = 600;
 }

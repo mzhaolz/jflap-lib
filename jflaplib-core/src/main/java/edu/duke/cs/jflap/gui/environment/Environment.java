@@ -16,6 +16,12 @@
 
 package edu.duke.cs.jflap.gui.environment;
 
+import edu.duke.cs.jflap.file.Encoder;
+import edu.duke.cs.jflap.gui.action.MultipleSimulateAction.MultiplePane;
+import edu.duke.cs.jflap.gui.environment.tag.EditorTag;
+import edu.duke.cs.jflap.gui.environment.tag.Satisfier;
+import edu.duke.cs.jflap.gui.environment.tag.Tag;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.File;
@@ -32,12 +38,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import edu.duke.cs.jflap.file.Encoder;
-import edu.duke.cs.jflap.gui.action.MultipleSimulateAction.MultiplePane;
-import edu.duke.cs.jflap.gui.environment.tag.EditorTag;
-import edu.duke.cs.jflap.gui.environment.tag.Satisfier;
-import edu.duke.cs.jflap.gui.environment.tag.Tag;
-
 /**
  * The environment class is the central view that manages various "hangers on"
  * of an object. By "hanger on" I mean a component that has some relevance to
@@ -53,461 +53,458 @@ import edu.duke.cs.jflap.gui.environment.tag.Tag;
  */
 public abstract class Environment extends JPanel {
 
-	private static final long serialVersionUID = 37L;
+    private static final long serialVersionUID = 37L;
 
-	/** For Testing multiple objects */
-	public List<Object> myObjects;
+    /**
+     * Instantiates a new environment for the given object. This environment is
+     * assumed to have no native file to which to save the object. One should
+     * use the <CODE>setFile</CODE> object if this environment should have one.
+     *
+     * @param object
+     *            assumed to be some sort of object that this environment holds;
+     *            subclasses may provide more stringent requirements for this
+     *            kind of object
+     */
+    public Environment(Serializable object) {
+        theMainObject = object;
+        clearDirty();
+        initView();
+    }
 
-	public List<String> myTestStrings;
+    /**
+     * Returns the main object for this environment. This is the object that was
+     * passed in for the constructor.
+     *
+     * @return the main object for this environment
+     */
+    public Serializable getObject() {
+        return theMainObject;
+    }
 
-	public List<String> myTransducerStrings;
+    /**
+     * Adds a file change listener to this environment.
+     *
+     * @param listener
+     *            the listener to add
+     */
+    public void addFileChangeListener(FileChangeListener listener) {
+        fileListeners.add(listener);
+    }
 
-	/** The encoder for this document. */
-	private Encoder encoder = null;
+    /**
+     * Removes a file change listener from this environment.
+     *
+     * @param listener
+     *            the listener to remove
+     */
+    public void removeFileChangeListener(FileChangeListener listener) {
+        fileListeners.remove(listener);
+    }
 
-	/** The mapping of components to their respective tag objects. */
-	private final HashMap<Component, Tag> componentTags = new HashMap<>();
+    /**
+     * Distributes the given file change event among all file change listeners.
+     *
+     * @param event
+     *            the file change event to distribute
+     */
+    protected void distributeFileChangeEvent(FileChangeEvent event) {
+        Iterator<FileChangeListener> it = fileListeners.iterator();
+        while (it.hasNext()) {
+            FileChangeListener listener = it.next();
+            listener.fileChanged(event);
+        }
+    }
 
-	/** The tabbed pane for this environment. */
-	public JTabbedPane tabbed;
+    /**
+     * Returns the file that this <CODE>Environment</CODE> has loaded itself
+     * from.
+     *
+     * @return the file object that is owned by this environment as the place to
+     *         store the serializable object, or <CODE>null</CODE> if this
+     *         environment currently has no file
+     */
+    public File getFile() {
+        return file;
+    }
 
-	/** The collection of change listeners for this object. */
-	private transient HashSet<ChangeListener> changeListeners = new HashSet<>();
+    /**
+     * Sets the file owned by this <CODE>Environment</CODE> as the default
+     * location to save the object.
+     *
+     * @param file
+     *            the new file for the environment
+     */
+    public void setFile(File file) {
+        File oldFile = this.file;
+        this.file = file;
+        distributeFileChangeEvent(new FileChangeEvent(this, oldFile));
+    }
 
-	/** The object that this environment centers on. */
-	private Serializable theMainObject;
+    public void setMultipleObjects(List<Object> objects) {
+        myObjects = objects;
+    }
 
-	/** The file owned by this serializable object. */
-	private File file;
+    /**
+     * Sets the encoder to use when writing this environment's file. This should
+     * be set when the file is ever written, or when a file is read and the
+     * format it was read in has a corresponding encoder.
+     *
+     * @param encoder
+     *            the encoder for this
+     */
+    public void setEncoder(Encoder encoder) {
+        this.encoder = encoder;
+    }
 
-	/** The collection of file change listeners. */
-	private final Set<FileChangeListener> fileListeners = new HashSet<>();
+    /**
+     * Gets the encoder to be used when saving this file.
+     *
+     * @return the encoder to use to save this file, or <CODE>null</CODE> if no
+     *         encoder has been chosen yet
+     */
+    public Encoder getEncoder() {
+        return encoder;
+    }
 
-	/**
-	 * The number of "CriticalTag" tagged components. Hokey but fast.
-	 */
-	private int criticalObjects = 0;
+    /**
+     * A helper function to set up the GUI components.
+     */
+    private void initView() {
+        setLayout(new BorderLayout());
+        tabbed = new JTabbedPane();
+        super.add(tabbed, BorderLayout.CENTER);
+        // So that when the user changes the view by clicking in the
+        // tabbed pane, this knows about it.
+        tabbed.addChangeListener(event -> distributeChangeEvent());
+    }
 
-	/** The dirty bit. */
-	private boolean dirty = false;
+    /**
+     * Adds a new component to the environment. Presumably this added component
+     * has some relevance to the current automaton or grammar held by the
+     * environment, though this is not strictly required.
+     *
+     * @param component
+     *            the component to add, which should be unique for this
+     *            environment
+     * @param name
+     *            the name this component should be labeled with, which is not
+     *            necessarily a unique label
+     * @param tags
+     *            the tags associated with the component, or just a raw
+     *            <CODE>Tag</CODE> implementor if this component has no special
+     *            tags associated with it
+     * @see edu.duke.cs.jflap.gui.environment.tag
+     */
+    public void add(Component component, String name, Tag tags) {
+        componentTags.put(component, tags);
+        tabbed.addTab(name, component);
 
-	/**
-	 * Instantiates a new environment for the given object. This environment is
-	 * assumed to have no native file to which to save the object. One should
-	 * use the <CODE>setFile</CODE> object if this environment should have one.
-	 *
-	 * @param object
-	 *            assumed to be some sort of object that this environment holds;
-	 *            subclasses may provide more stringent requirements for this
-	 *            kind of object
-	 */
-	public Environment(final Serializable object) {
-		theMainObject = object;
-		clearDirty();
-		initView();
-	}
+        // Takes care of the deactivation of EditorTag tagged
+        // components in the event that such action is appropriate.
+        if (tags instanceof edu.duke.cs.jflap.gui.environment.tag.CriticalTag) {
+            criticalObjects++;
+            if (criticalObjects == 1) {
+                setEnabledEditorTagged(false);
+            }
+        }
 
-	/**
-	 * Adds a component with the specified name. This is the same as the other
-	 * add method, except without that tag field, which is assumed to be a tag
-	 * object with no other tagness ascribed to it (i.e. a generic tag). That
-	 * is, the component is assumed to have an empty tag.
-	 *
-	 * @param component
-	 *            the component to add, which should be unique for this
-	 *            environment
-	 * @param name
-	 *            the name this component should be labeled with, which is not
-	 *            necessarily a unique label
-	 * @see #add(Component, String, Tag)
-	 */
-	public void add(final Component component, final String name) {
-		this.add(component, name, new Tag() {
-		});
-	}
+        distributeChangeEvent();
+    }
 
-	/**
-	 * Adds a new component to the environment. Presumably this added component
-	 * has some relevance to the current automaton or grammar held by the
-	 * environment, though this is not strictly required.
-	 *
-	 * @param component
-	 *            the component to add, which should be unique for this
-	 *            environment
-	 * @param name
-	 *            the name this component should be labeled with, which is not
-	 *            necessarily a unique label
-	 * @param tags
-	 *            the tags associated with the component, or just a raw
-	 *            <CODE>Tag</CODE> implementor if this component has no special
-	 *            tags associated with it
-	 * @see edu.duke.cs.jflap.gui.environment.tag
-	 */
-	public void add(final Component component, final String name, final Tag tags) {
-		componentTags.put(component, tags);
-		tabbed.addTab(name, component);
+    /**
+     * Returns if a particular component is part of this environment, as through
+     * addition through one of the <CODE>add</CODE> methods
+     *
+     * @param component
+     *            the component to check for membership in this environment
+     * @see #add
+     * @see #remove
+     */
+    public boolean contains(Component component) {
+        return tabbed.indexOfComponent(component) != -1;
+    }
 
-		// Takes care of the deactivation of EditorTag tagged
-		// components in the event that such action is appropriate.
-		if (tags instanceof edu.duke.cs.jflap.gui.environment.tag.CriticalTag) {
-			criticalObjects++;
-			if (criticalObjects == 1) {
-				setEnabledEditorTagged(false);
-			}
-		}
+    /**
+     * Deactivates or activates editor tagged objects in this environment.
+     *
+     * @param enabled
+     *            <CODE>true</CODE> if editor tagged objects should be enabled,
+     *            <CODE>false</CODE> if editor tagged objects should be disabled
+     */
+    public void setEnabledEditorTagged(boolean enabled) {
+        for (int i = 0; i < tabbed.getTabCount(); i++) {
+            Component c = tabbed.getComponentAt(i);
+            if (componentTags.get(c) instanceof EditorTag) {
+                tabbed.setEnabledAt(i, enabled);
+            }
+        }
+    }
 
-		distributeChangeEvent();
-	}
+    /**
+     * Adds a component with the specified name. This is the same as the other
+     * add method, except without that tag field, which is assumed to be a tag
+     * object with no other tagness ascribed to it (i.e. a generic tag). That
+     * is, the component is assumed to have an empty tag.
+     *
+     * @param component
+     *            the component to add, which should be unique for this
+     *            environment
+     * @param name
+     *            the name this component should be labeled with, which is not
+     *            necessarily a unique label
+     * @see #add(Component, String, Tag)
+     */
+    public void add(Component component, String name) {
+        this.add(component, name, new Tag() {
+        });
+    }
 
-	/**
-	 * Adds a change listener to this object. The listener will receive events
-	 * whenever the active component changes, or when components are made
-	 * enabled or disabled, or when components are added or removed.
-	 *
-	 * @param listener
-	 *            the listener to add
-	 */
-	public void addChangeListener(final ChangeListener listener) {
-		changeListeners.add(listener);
-	}
+    /**
+     * Programmatically sets the currently active component in this environment.
+     *
+     * @param component
+     *            the component to make active
+     * @see #getActive
+     */
+    public void setActive(Component component) {
+        tabbed.setSelectedComponent(component);
+        // The change event should be automatically distributed by the
+        // model of the tabbed pane
+    }
 
-	/**
-	 * Adds a file change listener to this environment.
-	 *
-	 * @param listener
-	 *            the listener to add
-	 */
-	public void addFileChangeListener(final FileChangeListener listener) {
-		fileListeners.add(listener);
-	}
+    /**
+     * Returns the currently active component in this environment.
+     *
+     * @return the currently active component in this environment
+     * @see #setActive
+     */
+    public Component getActive() {
+        return tabbed.getSelectedComponent();
+    }
 
-	/**
-	 * Clears the dirty bit. This should be called when the object is saved to a
-	 * file, or is in some other such state that a save is not required.
-	 */
-	public void clearDirty() {
-		dirty = false;
-	}
+    /**
+     * Returns whether or not the component is enabled, that is, selectable.
+     *
+     * @param component
+     *            the component to check for enabledness
+     * @return <CODE>true</CODE> if the given component is enabled,
+     *         <CODE>false</CODE> if the given component is disabled
+     */
+    public boolean isEnabled(Component component) {
+        return tabbed.isEnabledAt(tabbed.indexOfComponent(component));
+    }
 
-	/**
-	 * Returns if a particular component is part of this environment, as through
-	 * addition through one of the <CODE>add</CODE> methods
-	 *
-	 * @param component
-	 *            the component to check for membership in this environment
-	 * @see #add
-	 * @see #remove
-	 */
-	public boolean contains(final Component component) {
-		return tabbed.indexOfComponent(component) != -1;
-	}
+    /**
+     * Sets whether or not a component is enabled.
+     *
+     * @param component
+     *            the component to change the enabledness
+     * @param enabled
+     *            <CODE>true</CODE> if the component should be made enabled,
+     *            <CODE>false</CODE> if it should be made disabled
+     */
+    public void setEnabled(Component component, boolean enabled) {
+        tabbed.setEnabledAt(tabbed.indexOfComponent(component), enabled);
+        distributeChangeEvent();
+    }
 
-	/**
-	 * Distributes a change event to all listeners.
-	 */
-	protected void distributeChangeEvent() {
+    /**
+     * Adds a change listener to this object. The listener will receive events
+     * whenever the active component changes, or when components are made
+     * enabled or disabled, or when components are added or removed.
+     *
+     * @param listener
+     *            the listener to add
+     */
+    public void addChangeListener(ChangeListener listener) {
+        changeListeners.add(listener);
+    }
 
-		final ChangeEvent e = new ChangeEvent(this);
-		final Iterator<ChangeListener> it = (new HashSet<>(changeListeners)).iterator();
-		while (it.hasNext()) {
-			it.next().stateChanged(e);
-		}
-	}
+    /**
+     * Removes a change listener from this object.
+     *
+     * @param listener
+     *            the listener to remove
+     */
+    public void removeChangeListener(ChangeListener listener) {
+        changeListeners.remove(listener);
+    }
 
-	/**
-	 * Distributes the given file change event among all file change listeners.
-	 *
-	 * @param event
-	 *            the file change event to distribute
-	 */
-	protected void distributeFileChangeEvent(final FileChangeEvent event) {
-		final Iterator<FileChangeListener> it = fileListeners.iterator();
-		while (it.hasNext()) {
-			final FileChangeListener listener = it.next();
-			listener.fileChanged(event);
-		}
-	}
+    /**
+     * Distributes a change event to all listeners.
+     */
+    protected void distributeChangeEvent() {
 
-	/**
-	 * Returns the currently active component in this environment.
-	 *
-	 * @return the currently active component in this environment
-	 * @see #setActive
-	 */
-	public Component getActive() {
-		return tabbed.getSelectedComponent();
-	}
+        ChangeEvent e = new ChangeEvent(this);
+        Iterator<ChangeListener> it = (new HashSet<>(changeListeners)).iterator();
+        while (it.hasNext()) {
+            it.next().stateChanged(e);
+        }
+    }
 
-	/**
-	 * Returns an array containing all components.
-	 *
-	 * @return an array containing all components.
-	 */
-	@Override
-	public Component[] getComponents() {
-		final List<Component> comps = new ArrayList<>();
-		for (int i = 0; i < comps.size(); i++) {
-			comps.add(tabbed.getComponentAt(i));
-		}
-		return comps.toArray(new Component[0]);
-	}
+    /**
+     * Removes a component from this environment.
+     *
+     * @param component
+     *            the component to remove
+     */
+    @Override
+    public void remove(Component component) {
+        tabbed.remove(component);
+        Tag tag = componentTags.remove(component);
 
-	/**
-	 * Returns an array whose components and tags satisfy the given satisfier.
-	 *
-	 * @param satisfier
-	 *            the satisfier all components and their tags must satisfy
-	 * @return an array containing all those components who, along with their
-	 *         tags, satisfied the satisfier
-	 */
-	public List<Component> getComponents(final Satisfier satisfier) {
-		final List<Component> list = new ArrayList<>();
-		for (int i = 0; i < tabbed.getTabCount(); i++) {
-			final Component c = tabbed.getComponentAt(i);
-			if (satisfier.satisfies(c, componentTags.get(c))) {
-				list.add(c);
-			}
-		}
-		return list;
-	}
+        // Takes care of the deactivation of EditorTag tagged
+        // components in the event that such action is appropriate.
+        if (tag instanceof edu.duke.cs.jflap.gui.environment.tag.CriticalTag) {
+            criticalObjects--;
+            if (criticalObjects == 0) {
+                setEnabledEditorTagged(true);
+            }
+        }
 
-	/**
-	 * Gets the encoder to be used when saving this file.
-	 *
-	 * @return the encoder to use to save this file, or <CODE>null</CODE> if no
-	 *         encoder has been chosen yet
-	 */
-	public Encoder getEncoder() {
-		return encoder;
-	}
+        distributeChangeEvent();
+    }
 
-	/**
-	 * Returns the file that this <CODE>Environment</CODE> has loaded itself
-	 * from.
-	 *
-	 * @return the file object that is owned by this environment as the place to
-	 *         store the serializable object, or <CODE>null</CODE> if this
-	 *         environment currently has no file
-	 */
-	public File getFile() {
-		return file;
-	}
+    /**
+     * Returns the tag for a given component, provided this tag is in the
+     * component.
+     *
+     * @param component
+     *            the component to get the tag for
+     * @return the tag for the component
+     */
+    public Tag getTag(Component component) {
+        return componentTags.get(component);
+    }
 
-	/**
-	 * Returns the main object for this environment. This is the object that was
-	 * passed in for the constructor.
-	 *
-	 * @return the main object for this environment
-	 */
-	public Serializable getObject() {
-		return theMainObject;
-	}
+    /**
+     * Returns an array containing all components.
+     *
+     * @return an array containing all components.
+     */
+    @Override
+    public Component[] getComponents() {
+        List<Component> comps = new ArrayList<>();
+        for (int i = 0; i < comps.size(); i++) {
+            comps.add(tabbed.getComponentAt(i));
+        }
+        return comps.toArray(new Component[0]);
+    }
 
-	/**
-	 * Returns the tag for a given component, provided this tag is in the
-	 * component.
-	 *
-	 * @param component
-	 *            the component to get the tag for
-	 * @return the tag for the component
-	 */
-	public Tag getTag(final Component component) {
-		return componentTags.get(component);
-	}
+    /**
+     * Returns an array whose components and tags satisfy the given satisfier.
+     *
+     * @param satisfier
+     *            the satisfier all components and their tags must satisfy
+     * @return an array containing all those components who, along with their
+     *         tags, satisfied the satisfier
+     */
+    public List<Component> getComponents(Satisfier satisfier) {
+        List<Component> list = new ArrayList<>();
+        for (int i = 0; i < tabbed.getTabCount(); i++) {
+            Component c = tabbed.getComponentAt(i);
+            if (satisfier.satisfies(c, componentTags.get(c))) {
+                list.add(c);
+            }
+        }
+        return list;
+    }
 
-	/**
-	 * A helper function to set up the GUI components.
-	 */
-	private void initView() {
-		setLayout(new BorderLayout());
-		tabbed = new JTabbedPane();
-		super.add(tabbed, BorderLayout.CENTER);
-		// So that when the user changes the view by clicking in the
-		// tabbed pane, this knows about it.
-		tabbed.addChangeListener(event -> distributeChangeEvent());
-	}
+    /**
+     * Detects if there are any components in this environment that satisfy the
+     * given satisfier. This method works in time linear in the number of
+     * components in this environment.
+     *
+     * @param satisfier
+     *            the satisfier to check components and their tags against
+     * @return <CODE>true</CODE> if the satisfier has managed to match at least
+     *         one object, <CODE>false</CODE> if none of the objects in this
+     *         satisfier are matched
+     */
+    public boolean isPresent(Satisfier satisfier) {
+        for (int i = 0; i < tabbed.getTabCount(); i++) {
+            Component c = tabbed.getComponentAt(i);
+            if (satisfier.satisfies(c, componentTags.get(c))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * Returns if this environment dirty. An environment is called dirty if the
-	 * object it holds has been modified since the last save.
-	 *
-	 * @return <CODE>true</CODE> if the environment is dirty, <CODE>false</CODE>
-	 *         otherwise
-	 */
-	public boolean isDirty() {
-		return dirty;
-	}
+    /**
+     * Returns if this environment dirty. An environment is called dirty if the
+     * object it holds has been modified since the last save.
+     *
+     * @return <CODE>true</CODE> if the environment is dirty, <CODE>false</CODE>
+     *         otherwise
+     */
+    public boolean isDirty() {
+        return dirty;
+    }
 
-	/**
-	 * Returns whether or not the component is enabled, that is, selectable.
-	 *
-	 * @param component
-	 *            the component to check for enabledness
-	 * @return <CODE>true</CODE> if the given component is enabled,
-	 *         <CODE>false</CODE> if the given component is disabled
-	 */
-	public boolean isEnabled(final Component component) {
-		return tabbed.isEnabledAt(tabbed.indexOfComponent(component));
-	}
+    /**
+     * Sets the dirty bit. This should be called if the object is changed.
+     */
+    public void setDirty() {
+        // EDebug.print("Change has come");
+        dirty = true;
+    }
 
-	/**
-	 * Detects if there are any components in this environment that satisfy the
-	 * given satisfier. This method works in time linear in the number of
-	 * components in this environment.
-	 *
-	 * @param satisfier
-	 *            the satisfier to check components and their tags against
-	 * @return <CODE>true</CODE> if the satisfier has managed to match at least
-	 *         one object, <CODE>false</CODE> if none of the objects in this
-	 *         satisfier are matched
-	 */
-	public boolean isPresent(final Satisfier satisfier) {
-		for (int i = 0; i < tabbed.getTabCount(); i++) {
-			final Component c = tabbed.getComponentAt(i);
-			if (satisfier.satisfies(c, componentTags.get(c))) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Clears the dirty bit. This should be called when the object is saved to a
+     * file, or is in some other such state that a save is not required.
+     */
+    public void clearDirty() {
+        dirty = false;
+    }
 
-	/**
-	 * Removes a component from this environment.
-	 *
-	 * @param component
-	 *            the component to remove
-	 */
-	@Override
-	public void remove(final Component component) {
-		tabbed.remove(component);
-		final Tag tag = componentTags.remove(component);
+    public void setNewMainObject(Serializable obj) {
+        theMainObject = obj;
+    }
 
-		// Takes care of the deactivation of EditorTag tagged
-		// components in the event that such action is appropriate.
-		if (tag instanceof edu.duke.cs.jflap.gui.environment.tag.CriticalTag) {
-			criticalObjects--;
-			if (criticalObjects == 0) {
-				setEnabledEditorTagged(true);
-			}
-		}
+    public void resizeSplit() {
+        // super.setSize(width, height);
+        if (myObjects != null && tabbed != null) {
+            if (myObjects.size() > 0 && tabbed.getTabCount() == 1) {
+                Component cur = getActive();
+                if (cur instanceof MultiplePane) {
+                    MultiplePane mult = (MultiplePane) cur;
+                    mult.mySplit.setDividerLocation(.5);
+                }
+            }
+        }
+    }
 
-		distributeChangeEvent();
-	}
+    /** For Testing multiple objects */
+    public List<Object> myObjects;
+    public List<String> myTestStrings;
+    public List<String> myTransducerStrings;
+    /** The encoder for this document. */
+    private Encoder encoder = null;
 
-	/**
-	 * Removes a change listener from this object.
-	 *
-	 * @param listener
-	 *            the listener to remove
-	 */
-	public void removeChangeListener(final ChangeListener listener) {
-		changeListeners.remove(listener);
-	}
+    /** The mapping of components to their respective tag objects. */
+    private HashMap<Component, Tag> componentTags = new HashMap<>();
 
-	/**
-	 * Removes a file change listener from this environment.
-	 *
-	 * @param listener
-	 *            the listener to remove
-	 */
-	public void removeFileChangeListener(final FileChangeListener listener) {
-		fileListeners.remove(listener);
-	}
+    /** The tabbed pane for this environment. */
+    public JTabbedPane tabbed;
 
-	public void resizeSplit() {
-		// super.setSize(width, height);
-		if (myObjects != null && tabbed != null) {
-			if (myObjects.size() > 0 && tabbed.getTabCount() == 1) {
-				final Component cur = getActive();
-				if (cur instanceof MultiplePane) {
-					final MultiplePane mult = (MultiplePane) cur;
-					mult.mySplit.setDividerLocation(.5);
-				}
-			}
-		}
-	}
+    /** The collection of change listeners for this object. */
+    private transient HashSet<ChangeListener> changeListeners = new HashSet<>();
 
-	/**
-	 * Programmatically sets the currently active component in this environment.
-	 *
-	 * @param component
-	 *            the component to make active
-	 * @see #getActive
-	 */
-	public void setActive(final Component component) {
-		tabbed.setSelectedComponent(component);
-		// The change event should be automatically distributed by the
-		// model of the tabbed pane
-	}
+    /** The object that this environment centers on. */
+    private Serializable theMainObject;
 
-	/**
-	 * Sets the dirty bit. This should be called if the object is changed.
-	 */
-	public void setDirty() {
-		// EDebug.print("Change has come");
-		dirty = true;
-	}
+    /** The file owned by this serializable object. */
+    private File file;
 
-	/**
-	 * Sets whether or not a component is enabled.
-	 *
-	 * @param component
-	 *            the component to change the enabledness
-	 * @param enabled
-	 *            <CODE>true</CODE> if the component should be made enabled,
-	 *            <CODE>false</CODE> if it should be made disabled
-	 */
-	public void setEnabled(final Component component, final boolean enabled) {
-		tabbed.setEnabledAt(tabbed.indexOfComponent(component), enabled);
-		distributeChangeEvent();
-	}
+    /** The collection of file change listeners. */
+    private Set<FileChangeListener> fileListeners = new HashSet<>();
 
-	/**
-	 * Deactivates or activates editor tagged objects in this environment.
-	 *
-	 * @param enabled
-	 *            <CODE>true</CODE> if editor tagged objects should be enabled,
-	 *            <CODE>false</CODE> if editor tagged objects should be disabled
-	 */
-	public void setEnabledEditorTagged(final boolean enabled) {
-		for (int i = 0; i < tabbed.getTabCount(); i++) {
-			final Component c = tabbed.getComponentAt(i);
-			if (componentTags.get(c) instanceof EditorTag) {
-				tabbed.setEnabledAt(i, enabled);
-			}
-		}
-	}
+    /**
+     * The number of "CriticalTag" tagged components. Hokey but fast.
+     */
+    private int criticalObjects = 0;
 
-	/**
-	 * Sets the encoder to use when writing this environment's file. This should
-	 * be set when the file is ever written, or when a file is read and the
-	 * format it was read in has a corresponding encoder.
-	 *
-	 * @param encoder
-	 *            the encoder for this
-	 */
-	public void setEncoder(final Encoder encoder) {
-		this.encoder = encoder;
-	}
-
-	/**
-	 * Sets the file owned by this <CODE>Environment</CODE> as the default
-	 * location to save the object.
-	 *
-	 * @param file
-	 *            the new file for the environment
-	 */
-	public void setFile(final File file) {
-		final File oldFile = this.file;
-		this.file = file;
-		distributeFileChangeEvent(new FileChangeEvent(this, oldFile));
-	}
-
-	public void setMultipleObjects(final List<Object> objects) {
-		myObjects = objects;
-	}
-
-	public void setNewMainObject(final Serializable obj) {
-		theMainObject = obj;
-	}
+    /** The dirty bit. */
+    private boolean dirty = false;
 }

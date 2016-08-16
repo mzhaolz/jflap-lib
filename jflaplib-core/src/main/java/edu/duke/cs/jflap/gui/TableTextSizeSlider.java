@@ -31,31 +31,31 @@ import javax.swing.event.ChangeListener;
  */
 public class TableTextSizeSlider extends JSlider {
 
-	class SliderListener implements ChangeListener {
-		@Override
-		public void stateChanged(final ChangeEvent e) {
-			final JSlider source = (JSlider) e.getSource();
-			myTable.setFont(new Font("Default", Font.PLAIN, source.getValue() / 10));
-			myTable.setRowHeight(source.getValue() / 10 + 10);
-		}
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    static final int FONT_SIZE_MIN = 1;
+    static final int FONT_SIZE_MAX = 600;
+    static final int FONT_SIZE_INIT = 200;
+    static final String TABLE_SIZE_TITLE = "Table Text Size";
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	static final int FONT_SIZE_MIN = 1;
-	static final int FONT_SIZE_MAX = 600;
-	static final int FONT_SIZE_INIT = 200;
+    JTable myTable;
 
-	static final String TABLE_SIZE_TITLE = "Table Text Size";
+    public TableTextSizeSlider(JTable table) {
+        super(FONT_SIZE_MIN, FONT_SIZE_MAX, FONT_SIZE_INIT);
+        addChangeListener(new SliderListener());
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                TABLE_SIZE_TITLE));
+        myTable = table;
+    }
 
-	JTable myTable;
-
-	public TableTextSizeSlider(final JTable table) {
-		super(FONT_SIZE_MIN, FONT_SIZE_MAX, FONT_SIZE_INIT);
-		addChangeListener(new SliderListener());
-		setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), TABLE_SIZE_TITLE));
-		myTable = table;
-	}
+    class SliderListener implements ChangeListener {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            JSlider source = (JSlider) e.getSource();
+            myTable.setFont(new Font("Default", Font.PLAIN, source.getValue() / 10));
+            myTable.setRowHeight(source.getValue() / 10 + 10);
+        }
+    }
 }

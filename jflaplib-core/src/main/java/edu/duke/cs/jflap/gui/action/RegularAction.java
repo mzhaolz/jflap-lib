@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import javax.swing.Icon;
-
 import edu.duke.cs.jflap.gui.environment.RegularEnvironment;
 import edu.duke.cs.jflap.regular.RegularExpression;
+
+import javax.swing.Icon;
 
 /**
  * The <CODE>RegularAction</CODE> is the general action that various controllers
@@ -31,59 +31,59 @@ import edu.duke.cs.jflap.regular.RegularExpression;
  * @author Thomas Finley
  */
 public abstract class RegularAction extends RestrictedAction {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Given an object, determine if this automaton action is able to be applied
-	 * to that object based on its class. By default, this method returns
-	 * <CODE>true</CODE> if this object is an instance of
-	 * <CODE>Automaton</CODE>.
-	 *
-	 * @param object
-	 *            the object to test for "applicability"
-	 * @return <CODE>true</CODE> if this action should be available to an object
-	 *         of this type, <CODE>false</CODE> otherwise.
-	 */
-	public static boolean isApplicable(final Object object) {
-		return object instanceof RegularExpression;
-	}
+    /**
+     * Instantiates a new <CODE>RegularAction</CODE>.
+     *
+     * @param string
+     *            a string description
+     * @param icon
+     *            the optional icon, or <CODE>null</CODE> if there is to be no
+     *            icon associated with this action
+     * @param environment
+     */
+    public RegularAction(String string, Icon icon, RegularEnvironment environment) {
+        super(string, icon);
+        this.environment = environment;
+    }
 
-	/** The environment associated with this action. */
-	private final RegularEnvironment environment;
+    /**
+     * Given an object, determine if this automaton action is able to be applied
+     * to that object based on its class. By default, this method returns
+     * <CODE>true</CODE> if this object is an instance of
+     * <CODE>Automaton</CODE>.
+     *
+     * @param object
+     *            the object to test for "applicability"
+     * @return <CODE>true</CODE> if this action should be available to an object
+     *         of this type, <CODE>false</CODE> otherwise.
+     */
+    public static boolean isApplicable(Object object) {
+        return object instanceof RegularExpression;
+    }
 
-	/**
-	 * Instantiates a new <CODE>RegularAction</CODE>.
-	 *
-	 * @param string
-	 *            a string description
-	 * @param icon
-	 *            the optional icon, or <CODE>null</CODE> if there is to be no
-	 *            icon associated with this action
-	 * @param environment
-	 */
-	public RegularAction(final String string, final Icon icon, final RegularEnvironment environment) {
-		super(string, icon);
-		this.environment = environment;
-	}
+    /**
+     * Returns the environment associated with this action
+     *
+     * @return the environment for this action
+     */
+    protected RegularEnvironment getEnvironment() {
+        return environment;
+    }
 
-	/**
-	 * Returns the environment associated with this action
-	 *
-	 * @return the environment for this action
-	 */
-	protected RegularEnvironment getEnvironment() {
-		return environment;
-	}
+    /**
+     * Returns expression for this action's environment.
+     *
+     * @return the expression for this action's environment
+     */
+    protected RegularExpression getExpression() {
+        return environment.getExpression();
+    }
 
-	/**
-	 * Returns expression for this action's environment.
-	 *
-	 * @return the expression for this action's environment
-	 */
-	protected RegularExpression getExpression() {
-		return environment.getExpression();
-	}
+    /** The environment associated with this action. */
+    private RegularEnvironment environment;
 }

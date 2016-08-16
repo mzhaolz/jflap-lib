@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
-import java.awt.event.MouseEvent;
-
 import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+
+import java.awt.event.MouseEvent;
 
 /**
  * This extension of the arrow tool does not allow the editing of an automaton
@@ -28,34 +28,34 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
  * @author Thomas Finley
  */
 public class ArrowNontransitionTool extends ArrowTool {
-	/**
-	 * Instantiates a new <CODE>ArrowNontransitionTool</CODE>.
-	 *
-	 * @param view
-	 *            the view the automaton is drawn in
-	 * @param drawer
-	 *            the automaton drawer
-	 */
-	public ArrowNontransitionTool(final AutomatonPane view, final AutomatonDrawer drawer) {
-		super(view, drawer);
-	}
+    /**
+     * Instantiates a new <CODE>ArrowNontransitionTool</CODE>.
+     *
+     * @param view
+     *            the view the automaton is drawn in
+     * @param drawer
+     *            the automaton drawer
+     */
+    public ArrowNontransitionTool(AutomatonPane view, AutomatonDrawer drawer) {
+        super(view, drawer);
+    }
 
-	/**
-	 * On a mouse click, this simply returns,
-	 *
-	 * @param event
-	 *            the mouse event
-	 */
-	@Override
-	public void mouseClicked(final MouseEvent event) {
-		return;
-		/*
-		 * if (event.getClickCount() == 2) return; super.mouseClicked(event);
-		 */
-	}
+    /**
+     * On a mouse click, this simply returns,
+     *
+     * @param event
+     *            the mouse event
+     */
+    @Override
+    public void mouseClicked(MouseEvent event) {
+        return;
+        /*
+         * if (event.getClickCount() == 2) return; super.mouseClicked(event);
+         */
+    }
 
-	@Override
-	protected boolean shouldShowStatePopup() {
-		return false;
-	}
+    @Override
+    protected boolean shouldShowStatePopup() {
+        return false;
+    }
 }

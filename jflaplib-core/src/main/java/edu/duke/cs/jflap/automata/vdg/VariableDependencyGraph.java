@@ -26,26 +26,26 @@ import edu.duke.cs.jflap.automata.Automaton;
  * @author Ryan Cavalcante
  */
 public class VariableDependencyGraph extends Automaton {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 4142341500255014699L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4142341500255014699L;
 
-	/**
-	 * Creates a variable dependency graph with no states and no transitions.
-	 */
-	public VariableDependencyGraph() {
-		super();
-	}
+    /**
+     * Creates a variable dependency graph with no states and no transitions.
+     */
+    public VariableDependencyGraph() {
+        super();
+    }
 
-	/**
-	 * Returns the class of <CODE>Transition</CODE> this automaton must accept.
-	 *
-	 * @return the <CODE>Class</CODE> object for
-	 *         <CODE>automata.vdg.VDGTransition</CODE>
-	 */
-	@Override
-	protected Class<VDGTransition> getTransitionClass() {
-		return edu.duke.cs.jflap.automata.vdg.VDGTransition.class;
-	}
+    /**
+     * Returns the class of <CODE>Transition</CODE> this automaton must accept.
+     *
+     * @return the <CODE>Class</CODE> object for
+     *         <CODE>automata.vdg.VDGTransition</CODE>
+     */
+    @Override
+    protected Class<VDGTransition> getTransitionClass() {
+        return edu.duke.cs.jflap.automata.vdg.VDGTransition.class;
+    }
 }

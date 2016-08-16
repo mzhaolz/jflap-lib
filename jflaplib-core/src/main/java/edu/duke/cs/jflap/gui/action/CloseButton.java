@@ -18,16 +18,16 @@ package edu.duke.cs.jflap.gui.action;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import java.awt.Dimension;
-
-import javax.swing.ImageIcon;
-
 import edu.duke.cs.jflap.automata.turing.TuringMachine;
 import edu.duke.cs.jflap.gui.editor.EditBlockPane;
 import edu.duke.cs.jflap.gui.editor.EditorPane;
 import edu.duke.cs.jflap.gui.environment.Environment;
 import edu.duke.cs.jflap.gui.environment.tag.PermanentTag;
 import edu.duke.cs.jflap.gui.environment.tag.Tag;
+
+import java.awt.Dimension;
+
+import javax.swing.ImageIcon;
 
 /**
  * The <code>CloseButton</code> is a button for removing tabs in an environment.
@@ -40,72 +40,72 @@ import edu.duke.cs.jflap.gui.environment.tag.Tag;
  *
  */
 public class CloseButton extends javax.swing.JButton {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	/**
-	 * The environment to handle closing tabs for.
-	 */
-	private final Environment env;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    /**
+     * The environment to handle closing tabs for.
+     */
+    private Environment env;
 
-	/**
-	 * Instantiates a <code>CloseButton</code>, and sets its values with
-	 * {@link #setDefaults()}.
-	 *
-	 * @param environment
-	 *            the environment to handle the closing for
-	 */
-	public CloseButton(final Environment environment) {
-		super();
-		setDefaults();
-		env = environment;
-		env.addChangeListener(e -> checkEnabled());
-		addActionListener(e -> {
-			boolean editor = false;
-			if (env.getActive() instanceof EditBlockPane) {
-				editor = true;
-				final EditBlockPane blockEditor = (EditBlockPane) env.getActive();
-				blockEditor.getAutomaton();
-				blockEditor.getBlock();
-			}
-			env.remove(env.getActive());
-			if (editor) {
-				final EditorPane higherEditor = (EditorPane) env.getActive();
-				checkArgument(higherEditor.getAutomaton() instanceof TuringMachine);
-				higherEditor.getAutomaton();
+    /**
+     * Instantiates a <code>CloseButton</code>, and sets its values with
+     * {@link #setDefaults()}.
+     *
+     * @param environment
+     *            the environment to handle the closing for
+     */
+    public CloseButton(Environment environment) {
+        super();
+        setDefaults();
+        env = environment;
+        env.addChangeListener(e -> checkEnabled());
+        addActionListener(e -> {
+            boolean editor = false;
+            if (env.getActive() instanceof EditBlockPane) {
+                editor = true;
+                EditBlockPane blockEditor = (EditBlockPane) env.getActive();
+                blockEditor.getAutomaton();
+                blockEditor.getBlock();
+            }
+            env.remove(env.getActive());
+            if (editor) {
+                EditorPane higherEditor = (EditorPane) env.getActive();
+                checkArgument(higherEditor.getAutomaton() instanceof TuringMachine);
+                higherEditor.getAutomaton();
 
-				// higher.replaceBlock(block, inside); this shouldn't be
-				// necessary if we are not making a clone, but editing the
-				// real thing.
-			}
-		});
-		checkEnabled();
-	}
+                // higher.replaceBlock(block, inside); this shouldn't be
+                // necessary if we are not making a clone, but editing the
+                // real thing.
+            }
+        });
+        checkEnabled();
+    }
 
-	/**
-	 * Checks the environment to see if the currently active object has the
-	 * <CODE>PermanentTag</CODE> associated with it, and if it does, disables
-	 * this action; otherwise it makes it activate.
-	 */
-	private void checkEnabled() {
-		final Tag tag = env.getTag(env.getActive());
-		// setEnabled(!(tag instanceof PermanentTag));
-		if (env.tabbed.getTabCount() == 1) {
-			setEnabled(false);
-		} else {
-			setEnabled(!(tag instanceof PermanentTag));
-		}
-	}
+    /**
+     * A convenience method that sets the button with certian values. The icon,
+     * size, and tooltip are set.
+     *
+     */
+    public void setDefaults() {
+        setIcon(new ImageIcon(getClass().getResource("/ICON/x.gif")));
+        setPreferredSize(new Dimension(22, 22));
+        setToolTipText("Dismiss Tab");
+    }
 
-	/**
-	 * A convenience method that sets the button with certian values. The icon,
-	 * size, and tooltip are set.
-	 *
-	 */
-	public void setDefaults() {
-		setIcon(new ImageIcon(getClass().getResource("/ICON/x.gif")));
-		setPreferredSize(new Dimension(22, 22));
-		setToolTipText("Dismiss Tab");
-	}
+    /**
+     * Checks the environment to see if the currently active object has the
+     * <CODE>PermanentTag</CODE> associated with it, and if it does, disables
+     * this action; otherwise it makes it activate.
+     */
+    private void checkEnabled() {
+        Tag tag = env.getTag(env.getActive());
+        // setEnabled(!(tag instanceof PermanentTag));
+        if (env.tabbed.getTabCount() == 1) {
+            setEnabled(false);
+        } else {
+            setEnabled(!(tag instanceof PermanentTag));
+        }
+    }
 }

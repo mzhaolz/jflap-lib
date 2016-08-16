@@ -16,17 +16,17 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import java.awt.event.ActionEvent;
-import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import edu.duke.cs.jflap.grammar.CNFConverter;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.ProductionChecker;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
+
+import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.swing.JOptionPane;
 
 /**
  * Action for testing grammar to see what type of grammar it is.
@@ -36,192 +36,195 @@ import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
  */
 public class GrammarTypeTestAction extends GrammarAction {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/** The grammar environment. */
-	private final GrammarEnvironment environment;
+    /** The grammar environment. */
+    private GrammarEnvironment environment;
 
-	/**
-	 * Instantiates a new <CODE>GrammarTypeTestAction</CODE>.
-	 *
-	 * @param environment
-	 *            the grammar environment
-	 */
-	public GrammarTypeTestAction(final GrammarEnvironment environment) {
-		super("Test for Grammar Type", null);
-		this.environment = environment;
-	}
+    /**
+     * Instantiates a new <CODE>GrammarTypeTestAction</CODE>.
+     *
+     * @param environment
+     *            the grammar environment
+     */
+    public GrammarTypeTestAction(GrammarEnvironment environment) {
+        super("Test for Grammar Type", null);
+        this.environment = environment;
+    }
 
-	/**
-	 * Performs the action.
-	 */
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-		final Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-		// EDebug.print(g == null);
-		if (g == null) {
-			return;
-		}
+    /**
+     * Performs the action.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+        // EDebug.print(g == null);
+        if (g == null) {
+            return;
+        }
 
-		final List<Production> p = g.getProductions();
-		final boolean isRegular = checkforLinearity(p);
-		if (!isRegular) {
-			if (!isContextFreeGrammar(p, g)) {
-				checkForSpecialUnrestrictedGrammar(p);
-			}
-		}
-	}
+        List<Production> p = g.getProductions();
+        boolean isRegular = checkforLinearity(p);
+        if (!isRegular) {
+            if (!isContextFreeGrammar(p, g)) {
+                checkForSpecialUnrestrictedGrammar(p);
+            }
+        }
+    }
 
-	/**
-	 * Checking to see if the grammar is linear
-	 *
-	 * @param Production
-	 *            to check
-	 * @return True if the grammar is linear
-	 */
-	private boolean checkforLinearity(final List<Production> p) {
-		int count = 0;
-		for (int i = 0; i < p.size(); i++) {
-			if (ProductionChecker.isRightLinear(p.get(i))) {
-				count++;
-			}
-		}
-		if (count == p.size()) {
-			JOptionPane.showMessageDialog(environment.getComponent(0),
-					"This is a right-linear Grammar (Regular Grammar and Context-Free Grammar)", "Grammar Type",
-					JOptionPane.INFORMATION_MESSAGE);
-			return true;
-		} else {
-			count = 0;
-			for (int i = 0; i < p.size(); i++) {
-				if (ProductionChecker.isLeftLinear(p.get(i))) {
-					count++;
-				}
-			}
-			if (count == p.size()) {
-				JOptionPane.showMessageDialog(environment.getComponent(0),
-						"This is a left-linear Grammar (Regular Grammar and Context-Free Grammar)", "Grammar Type",
-						JOptionPane.INFORMATION_MESSAGE);
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * Check if the grammar is Unrestrcited Grammar from TM (through our
+     * conversion feature)
+     *
+     * @param p
+     *            Production to check for
+     */
+    private void checkForSpecialUnrestrictedGrammar(List<Production> p) {
+        // primitive, but it's not that bad.
+        // Check to see if production contains three special productions that
+        // indicates, it is converted from TM\
+        Production[] sp = new Production[3];
+        sp[0] = new Production("S", "V(==)S");
+        sp[1] = new Production("S", "SV(==)");
+        sp[2] = new Production("S", "T");
+        boolean[] count = new boolean[3];
+        for (int i = 0; i < p.size(); i++) {
+            for (Production element : sp) {
+                if (p.get(i).getLHS().equals(element.getLHS())
+                        && p.get(i).getRHS().equals(element.getRHS())) {
+                    count[i] = true;
+                }
+            }
+        }
+        int pp = 0;
+        for (boolean element : count) {
+            if (element) {
+                pp++;
+            }
+        }
+        if (pp == count.length) {
+            JOptionPane.showMessageDialog(environment.getComponent(0),
+                    "This is an Unrestricted Grammar (converted from TM)", "Grammar Type",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            int tt = 0;
+            for (int i = 0; i < p.size(); i++) {
+                if (p.get(i).getLHS().length() <= p.get(i).getRHS().length()) {
+                    tt++;
+                }
+            }
+            if (tt == p.size()) {
+                JOptionPane.showMessageDialog(environment.getComponent(0),
+                        "This is a Context-Sensitive Grammar (also Unrestricted Grammar)",
+                        "Grammar Type", JOptionPane.INFORMATION_MESSAGE);
 
-	/**
-	 * Check if the grammar is Unrestrcited Grammar from TM (through our
-	 * conversion feature)
-	 *
-	 * @param p
-	 *            Production to check for
-	 */
-	private void checkForSpecialUnrestrictedGrammar(final List<Production> p) {
-		// primitive, but it's not that bad.
-		// Check to see if production contains three special productions that
-		// indicates, it is converted from TM\
-		final Production[] sp = new Production[3];
-		sp[0] = new Production("S", "V(==)S");
-		sp[1] = new Production("S", "SV(==)");
-		sp[2] = new Production("S", "T");
-		final boolean[] count = new boolean[3];
-		for (int i = 0; i < p.size(); i++) {
-			for (final Production element : sp) {
-				if (p.get(i).getLHS().equals(element.getLHS()) && p.get(i).getRHS().equals(element.getRHS())) {
-					count[i] = true;
-				}
-			}
-		}
-		int pp = 0;
-		for (final boolean element : count) {
-			if (element) {
-				pp++;
-			}
-		}
-		if (pp == count.length) {
-			JOptionPane.showMessageDialog(environment.getComponent(0),
-					"This is an Unrestricted Grammar (converted from TM)", "Grammar Type",
-					JOptionPane.INFORMATION_MESSAGE);
-		} else {
-			int tt = 0;
-			for (int i = 0; i < p.size(); i++) {
-				if (p.get(i).getLHS().length() <= p.get(i).getRHS().length()) {
-					tt++;
-				}
-			}
-			if (tt == p.size()) {
-				JOptionPane.showMessageDialog(environment.getComponent(0),
-						"This is a Context-Sensitive Grammar (also Unrestricted Grammar)", "Grammar Type",
-						JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(environment.getComponent(0),
+                        "This is an Unrestricted Grammar", "Grammar Type",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
 
-			} else {
-				JOptionPane.showMessageDialog(environment.getComponent(0), "This is an Unrestricted Grammar",
-						"Grammar Type", JOptionPane.INFORMATION_MESSAGE);
-			}
-		}
-	}
+    /**
+     * Check to see if grammar is Context Free Grammar or in CNF form or in GNF
+     * form
+     *
+     * @param p
+     *            Production to check for
+     * @return True if grammar is CFG
+     */
+    private boolean isContextFreeGrammar(List<Production> p, Grammar g) {
+        // TODO Auto-generated method stub
+        int count = 0;
+        for (int i = 0; i < p.size(); i++) {
+            if (ProductionChecker.isRestrictedOnLHS(p.get(i))) {
+                count++;
+            }
+        }
+        if (count != p.size()) {
+            return false;
+        }
+        CNFConverter converter = null;
+        converter = new CNFConverter(g);
+        boolean chomsky = true;
+        for (int i = 0; i < p.size(); i++) {
+            chomsky &= converter.isChomsky(p.get(i));
+        }
+        if (chomsky) {
+            JOptionPane.showMessageDialog(environment.getComponent(0),
+                    "This is a CNF Grammar (also Context-Free Grammar)", "Grammar Type",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } else {
+            count = 0;
+            boolean isGNF = true;
+            for (int i = 0; i < p.size(); i++) {
+                if (p.get(i).getRHS().length() == 0) {
+                    count++;
+                } else {
+                    char firstCh = p.get(i).getRHS().charAt(0);
+                    if (ProductionChecker.isTerminal(firstCh)) {
+                        for (int j = 1; j < p.get(i).getRHS().length(); j++) {
+                            if (!ProductionChecker.isVariable(p.get(i).getRHS().charAt(j))) {
+                                isGNF = false;
+                            }
+                        }
+                    } else {
+                        isGNF = false;
+                    }
+                }
+            }
+            if (isGNF) {
+                JOptionPane.showMessageDialog(environment.getComponent(0),
+                        "This is a GNF Grammar (also Context-Free Grammar)", "Grammar Type",
+                        JOptionPane.INFORMATION_MESSAGE);
 
-	/**
-	 * Check to see if grammar is Context Free Grammar or in CNF form or in GNF
-	 * form
-	 *
-	 * @param p
-	 *            Production to check for
-	 * @return True if grammar is CFG
-	 */
-	private boolean isContextFreeGrammar(final List<Production> p, final Grammar g) {
-		// TODO Auto-generated method stub
-		int count = 0;
-		for (int i = 0; i < p.size(); i++) {
-			if (ProductionChecker.isRestrictedOnLHS(p.get(i))) {
-				count++;
-			}
-		}
-		if (count != p.size()) {
-			return false;
-		}
-		CNFConverter converter = null;
-		converter = new CNFConverter(g);
-		boolean chomsky = true;
-		for (int i = 0; i < p.size(); i++) {
-			chomsky &= converter.isChomsky(p.get(i));
-		}
-		if (chomsky) {
-			JOptionPane.showMessageDialog(environment.getComponent(0),
-					"This is a CNF Grammar (also Context-Free Grammar)", "Grammar Type",
-					JOptionPane.INFORMATION_MESSAGE);
-			return true;
-		} else {
-			count = 0;
-			boolean isGNF = true;
-			for (int i = 0; i < p.size(); i++) {
-				if (p.get(i).getRHS().length() == 0) {
-					count++;
-				} else {
-					final char firstCh = p.get(i).getRHS().charAt(0);
-					if (ProductionChecker.isTerminal(firstCh)) {
-						for (int j = 1; j < p.get(i).getRHS().length(); j++) {
-							if (!ProductionChecker.isVariable(p.get(i).getRHS().charAt(j))) {
-								isGNF = false;
-							}
-						}
-					} else {
-						isGNF = false;
-					}
-				}
-			}
-			if (isGNF) {
-				JOptionPane.showMessageDialog(environment.getComponent(0),
-						"This is a GNF Grammar (also Context-Free Grammar)", "Grammar Type",
-						JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(environment.getComponent(0),
+                        "This is a Context-Free Grammar", "Grammar Type",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            return true;
+        }
+    }
 
-			} else {
-				JOptionPane.showMessageDialog(environment.getComponent(0), "This is a Context-Free Grammar",
-						"Grammar Type", JOptionPane.INFORMATION_MESSAGE);
-			}
-			return true;
-		}
-	}
+    /**
+     * Checking to see if the grammar is linear
+     *
+     * @param Production
+     *            to check
+     * @return True if the grammar is linear
+     */
+    private boolean checkforLinearity(List<Production> p) {
+        int count = 0;
+        for (int i = 0; i < p.size(); i++) {
+            if (ProductionChecker.isRightLinear(p.get(i))) {
+                count++;
+            }
+        }
+        if (count == p.size()) {
+            JOptionPane.showMessageDialog(environment.getComponent(0),
+                    "This is a right-linear Grammar (Regular Grammar and Context-Free Grammar)",
+                    "Grammar Type", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } else {
+            count = 0;
+            for (int i = 0; i < p.size(); i++) {
+                if (ProductionChecker.isLeftLinear(p.get(i))) {
+                    count++;
+                }
+            }
+            if (count == p.size()) {
+                JOptionPane.showMessageDialog(environment.getComponent(0),
+                        "This is a left-linear Grammar (Regular Grammar and Context-Free Grammar)",
+                        "Grammar Type", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            }
+        }
+        return false;
+    }
 }

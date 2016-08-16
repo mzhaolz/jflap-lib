@@ -16,12 +16,12 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
-import java.awt.event.MouseEvent;
-
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.gui.environment.AutomatonEnvironment;
 import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
 import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
+
+import java.awt.event.MouseEvent;
 
 /**
  * This is a subclass of a <code>MealyArrowTool</code> for Moore machines that
@@ -38,52 +38,53 @@ import edu.duke.cs.jflap.gui.viewer.AutomatonPane;
  *
  */
 public class MooreArrowTool extends MealyArrowTool {
-	/**
-	 * Instantiates a new arrow tool.
-	 *
-	 * @param view
-	 *            the view where the automaton is drawn
-	 * @param drawer
-	 *            the object that draws the automaton
-	 */
-	public MooreArrowTool(final AutomatonPane view, final AutomatonDrawer drawer) {
-		super(view, drawer);
-	}
+    /**
+     * Instantiates a new arrow tool.
+     *
+     * @param view
+     *            the view where the automaton is drawn
+     * @param drawer
+     *            the object that draws the automaton
+     * @param creator
+     *            the transition creator used for editing transitions
+     */
+    public MooreArrowTool(AutomatonPane view, AutomatonDrawer drawer, TransitionCreator creator) {
+        super(view, drawer, creator);
+    }
 
-	/**
-	 * Instantiates a new arrow tool.
-	 *
-	 * @param view
-	 *            the view where the automaton is drawn
-	 * @param drawer
-	 *            the object that draws the automaton
-	 * @param creator
-	 *            the transition creator used for editing transitions
-	 */
-	public MooreArrowTool(final AutomatonPane view, final AutomatonDrawer drawer, final TransitionCreator creator) {
-		super(view, drawer, creator);
-	}
+    /**
+     * Instantiates a new arrow tool.
+     *
+     * @param view
+     *            the view where the automaton is drawn
+     * @param drawer
+     *            the object that draws the automaton
+     */
+    public MooreArrowTool(AutomatonPane view, AutomatonDrawer drawer) {
+        super(view, drawer);
+    }
 
-	/**
-	 * Checks if the mouse was clicked on a state, and offers to change the
-	 * state output if so. Otherwise, {@link ArrowTool#mouseClicked(MouseEvent)}
-	 * is called so that other mouse events proceed as specified in
-	 * <code>ArrowTool</code>.
-	 *
-	 * @param event
-	 *            the mouse event
-	 * @see ArrowTool#mouseClicked(MouseEvent)
-	 */
-	@Override
-	public void mouseClicked(final MouseEvent event) {
-		((AutomatonEnvironment) getDrawer().getAutomaton().getEnvironmentFrame().getEnvironment()).saveStatus();
-		if (event.getButton() == MouseEvent.BUTTON1) {
-			final State state = getDrawer().stateAtPoint(event.getPoint());
-			if (state == null) {
-				super.mouseClicked(event);
-			} else {
-				MooreStateTool.editState(state);
-			}
-		}
-	}
+    /**
+     * Checks if the mouse was clicked on a state, and offers to change the
+     * state output if so. Otherwise, {@link ArrowTool#mouseClicked(MouseEvent)}
+     * is called so that other mouse events proceed as specified in
+     * <code>ArrowTool</code>.
+     *
+     * @param event
+     *            the mouse event
+     * @see ArrowTool#mouseClicked(MouseEvent)
+     */
+    @Override
+    public void mouseClicked(MouseEvent event) {
+        ((AutomatonEnvironment) getDrawer().getAutomaton().getEnvironmentFrame().getEnvironment())
+                .saveStatus();
+        if (event.getButton() == MouseEvent.BUTTON1) {
+            State state = getDrawer().stateAtPoint(event.getPoint());
+            if (state == null) {
+                super.mouseClicked(event);
+            } else {
+                MooreStateTool.editState(state);
+            }
+        }
+    }
 }

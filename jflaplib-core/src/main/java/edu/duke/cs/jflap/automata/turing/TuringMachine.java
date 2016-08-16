@@ -18,6 +18,15 @@ package edu.duke.cs.jflap.automata.turing;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import edu.duke.cs.jflap.automata.Automaton;
+import edu.duke.cs.jflap.automata.Note;
+import edu.duke.cs.jflap.automata.State;
+import edu.duke.cs.jflap.automata.Transition;
+import edu.duke.cs.jflap.gui.action.OpenAction;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Point;
 import java.io.File;
 import java.io.Serializable;
@@ -26,15 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import edu.duke.cs.jflap.automata.Automaton;
-import edu.duke.cs.jflap.automata.Note;
-import edu.duke.cs.jflap.automata.State;
-import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.gui.action.OpenAction;
 
 /**
  * This subclass of <CODE>Automaton</CODE> is specifically for a definition of a
@@ -46,330 +46,330 @@ import edu.duke.cs.jflap.gui.action.OpenAction;
  * @author Thomas Finley, Henry Qin
  */
 public class TuringMachine extends Automaton {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -297306935840189114L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -297306935840189114L;
 
-	private static final Logger logger = LoggerFactory.getLogger(TuringMachine.class);
+    private static final Logger logger = LoggerFactory.getLogger(TuringMachine.class);
 
-	public static void become(final TuringMachine dest, final TuringMachine src) {
-		logger.debug("Calling the real become");
-		System.out.println("Calling the real become");
+    /**
+     * Creates a 1-tape Turing machine with no states and no transitions.
+     */
+    public TuringMachine() {
+        this(1);
+    }
 
-		dest.clear();
-		// Copy over the states.
-		final HashMap<TMState, TMState> map = new HashMap<>(); // Old
-		// states
-		// to
-		// new
-		// states.
-		// Iterator it = src.states.iterator();
-		for (final Object o : src.states) {
-			logger.debug("become method, processing {}", o.getClass().getName());
-			final TMState state = (TMState) o;
-			final TMState nstate = new TMState(state.getID(), new Point(state.getPoint()), dest); // this
-			// time
-			// we're
-			// not
-			// using
-			// copy
-			// constructor
-			// copyStaticRelevantDataForBlocks(nstate, state, dest, src);
-			nstate.setLabel(state.getLabel());
-			nstate.setName(state.getName());
-			map.put(state, nstate);
-			dest.addState(nstate);
-		}
-		// Set special states.
-		for (final Object o : src.finalStates) {
-			final TMState tms = (TMState) o;
-			dest.addFinalState(map.get(tms));
-		}
-		dest.setInitialState(map.get(src.getInitialState()));
+    /**
+     * Creates a Turing machine with a variable number of tapes, no states, and
+     * no transitions.
+     *
+     * @param tapes
+     *            the number of tapes for the Turing machine
+     */
+    public TuringMachine(int tapes) {
+        super();
+        this.tapes = tapes;
+    }
 
-		// Copy over the transitions.
-		for (final Object o : src.states) {
-			final TMState tms = (TMState) o;
-			final List<Transition> ts = src.getTransitionsFromState(tms);
-			final TMState from = map.get(tms);
-			for (int i = 0; i < ts.size(); i++) {
-				final TMState to = map.get(ts.get(i).getToState());
-				final Transition toBeAdded = (Transition) ts.get(i).clone();
-				toBeAdded.setFromState(from);
-				toBeAdded.setToState(to);
+    /**
+     * Returns the class of <CODE>Transition</CODE> this automaton must accept.
+     *
+     * @return the <CODE>Class</CODE> object for
+     *         <CODE>automata.tm.TMTransition</CODE>
+     */
+    @Override
+    protected Class<? extends Transition> getTransitionClass() {
+        return edu.duke.cs.jflap.automata.turing.TMTransition.class;
+    }
 
-				// dest.addTransition(ts[i].copy(from, to));
-				dest.addTransition(toBeAdded);
-			}
-		}
-		for (int k = 0; k < src.getNotes().size(); k++) {
-			final Note curNote = src.getNotes().get(k);
-			dest.addNote(new Note(curNote.getAutoPoint(), curNote.getText()));
-			dest.getNotes().get(k).initializeForView(curNote.getView());
-		}
-		dest.setEnvironmentFrame(src.getEnvironmentFrame());
-		// EDebug.print("finished");
-	}
+    /**
+     * Adds a transition to this Turing machine.
+     *
+     * @param t
+     *            the transition to add
+     * @throws IllegalArgumentException
+     *             if this transition requires a different number of tapes than
+     *             required by other Turing machines
+     */
+    @Override
+    public void addTransition(Transition t) {
+        try {
+            int ttapes = ((TMTransition) t).tapes();
+            if (tapes == 0) {
+                tapes = ttapes;
+            }
+            if (ttapes != tapes) {
+                throw new IllegalArgumentException(
+                        "Transition has " + ttapes + " tapes while TM has " + tapes);
+            }
+            super.addTransition(t);
+        } catch (ClassCastException e) {
 
-	/**
-	 * The number of tapes. It's public for some hacky reasons related to
-	 * serialization.
-	 */
-	public int tapes;
+        }
+    }
 
-	public boolean isOuterMost;
+    /**
+     * Returns the number of tapes this Turing machine uses.
+     *
+     * @return the number of tapes this Turing machine uses
+     */
+    public int tapes() {
+        return tapes;
+    }
 
-	// MERLIN MERLIN MERLIN MERLIN MERLIN//
-	private TMState parent = null; // not going to force it with compiler, just
-	// make sure you set it WHERE it MATTERS
+    /**
+     * Creates a TMState, inserts it in this automaton, and returns that state.
+     * The ID for the state is set appropriately. This method was once Final in
+     * Automaton, but it must be overriden here, because TMStates are not like
+     * standard states.
+     *
+     * @param point
+     *            the point to put the state at
+     */
+    @Override
+    public State createState(Point point) {
+        return createTMState(point);
+    }
 
-	/**
-	 * Creates a 1-tape Turing machine with no states and no transitions.
-	 */
-	public TuringMachine() {
-		this(1);
-	}
+    /**
+     * We need to implement our own clone() method, rather than use that of
+     * Automaton, because we use TMStates instead of ordinary states, and we
+     * handle the building block cloning in a more elegant way.
+     */
+    @Override
+    public TuringMachine clone() {
+        // MERLIN MERLIN MERLIN MERLIN MERLIN//
 
-	/**
-	 * Creates a Turing machine with a variable number of tapes, no states, and
-	 * no transitions.
-	 *
-	 * @param tapes
-	 *            the number of tapes for the Turing machine
-	 */
-	public TuringMachine(final int tapes) {
-		super();
-		this.tapes = tapes;
-	}
+        TuringMachine a = new TuringMachine(tapes());
+        a.setEnvironmentFrame(getEnvironmentFrame());
 
-	/**
-	 * Adds a transition to this Turing machine.
-	 *
-	 * @param t
-	 *            the transition to add
-	 * @throws IllegalArgumentException
-	 *             if this transition requires a different number of tapes than
-	 *             required by other Turing machines
-	 */
-	@Override
-	public void addTransition(final Transition t) {
-		try {
-			final int ttapes = ((TMTransition) t).tapes();
-			if (tapes == 0) {
-				tapes = ttapes;
-			}
-			if (ttapes != tapes) {
-				throw new IllegalArgumentException("Transition has " + ttapes + " tapes while TM has " + tapes);
-			}
-			super.addTransition(t);
-		} catch (final ClassCastException e) {
+        HashMap<TMState, TMState> map = new HashMap<>(); // Old
+        // states
+        // to
+        // new
+        // states.
+        for (Object o : states) {
 
-		}
-	}
+            // System.out.println(o.getClass().getName());
 
-	/**
-	 * We need to implement our own clone() method, rather than use that of
-	 * Automaton, because we use TMStates instead of ordinary states, and we
-	 * handle the building block cloning in a more elegant way.
-	 */
-	@Override
-	public TuringMachine clone() {
-		// MERLIN MERLIN MERLIN MERLIN MERLIN//
+            TMState tms = (TMState) o;
+            TMState ntms = new TMState(tms); // I could write a clone for that
+            // TM too, I suppose, but there's
+            // nothing wrong with a nice C++
+            // style copy constructor
+            ntms.setAutomaton(a); // recognize thine new master, after the
+            // convenience of the copy constructor, lest
+            // there be great many bugs.
 
-		final TuringMachine a = new TuringMachine(tapes());
-		a.setEnvironmentFrame(getEnvironmentFrame());
+            ntms.setLabel(tms.getLabel());
+            ntms.setName(tms.getName());
 
-		final HashMap<TMState, TMState> map = new HashMap<>(); // Old
-		// states
-		// to
-		// new
-		// states.
-		for (final Object o : states) {
+            map.put(tms, ntms);
 
-			// System.out.println(o.getClass().getName());
+            a.addState(ntms);
 
-			final TMState tms = (TMState) o;
-			final TMState ntms = new TMState(tms); // I could write a clone for
-													// that
-			// TM too, I suppose, but there's
-			// nothing wrong with a nice C++
-			// style copy constructor
-			ntms.setAutomaton(a); // recognize thine new master, after the
-			// convenience of the copy constructor, lest
-			// there be great many bugs.
+            // using OBJECT equality, and OBJECT hashcode, which is fine here
+            // because we want to know if the objects are literally the same
+            // (which they should be)
+        }
+        for (Object o : finalStates) {
+            TMState tms = (TMState) o;
+            a.addFinalState(map.get(tms));
+        }
+        a.setInitialState(map.get(getInitialState()));
 
-			ntms.setLabel(tms.getLabel());
-			ntms.setName(tms.getName());
+        for (Object o : states) {
+            TMState tms = (TMState) o;
+            List<Transition> ts = getTransitionsFromState(tms);
+            TMState from = map.get(tms);
+            for (int i = 0; i < ts.size(); i++) {
+                TMState to = map.get(ts.get(i).getToState());
+                Transition toBeAdded = (Transition) ts.get(i).clone();
+                toBeAdded.setFromState(from);
+                toBeAdded.setToState(to);
+                // a.addTransition(ts[i].copy(from, to));
+                a.addTransition(toBeAdded);
+            }
+        }
 
-			map.put(tms, ntms);
+        return a;
+    }
 
-			a.addState(ntms);
+    /**
+     * Creates a state, inserts it in this automaton, and returns that state.
+     * The ID for the state is set appropriately.
+     *
+     * @param point
+     *            the point to put the state at
+     */
+    public final TMState createBlock(Point point) {
+        int i = 0;
+        while (getStateWithID(i) != null) {
+            i++;
+        }
+        OpenAction read = new OpenAction();
+        OpenAction.setOpenOrRead(true);
+        JButton button = new JButton(read);
+        button.doClick();
+        OpenAction.setOpenOrRead(false);
+        return getAutomatonFromFile(i, point);
+    }
 
-			// using OBJECT equality, and OBJECT hashcode, which is fine here
-			// because we want to know if the objects are literally the same
-			// (which they should be)
-		}
-		for (final Object o : finalStates) {
-			final TMState tms = (TMState) o;
-			a.addFinalState(map.get(tms));
-		}
-		a.setInitialState(map.get(getInitialState()));
+    /**
+     * Reads the automaton in from a file.
+     */
+    private TMState getAutomatonFromFile(int i, Point point) {
+        TMState block = new TMState(i, point, this);
+        Serializable serial = OpenAction.getLastObjectOpened();
+        File lastFile = OpenAction.getLastFileOpened();
+        if (lastFile == null || OpenAction.isOpened() == false) {
+            return null;
+        }
 
-		for (final Object o : states) {
-			final TMState tms = (TMState) o;
-			final List<Transition> ts = getTransitionsFromState(tms);
-			final TMState from = map.get(tms);
-			for (int i = 0; i < ts.size(); i++) {
-				final TMState to = map.get(ts.get(i).getToState());
-				final Transition toBeAdded = (Transition) ts.get(i).clone();
-				toBeAdded.setFromState(from);
-				toBeAdded.setToState(to);
-				// a.addTransition(ts[i].copy(from, to));
-				a.addTransition(toBeAdded);
-			}
-		}
+        // block = putBlockContentsInAutomaton(block, serial,
+        // lastFile.getName(),
+        // this);
+        checkArgument(serial instanceof TuringMachine);
+        TuringMachine tm = (TuringMachine) serial;
 
-		return a;
-	}
+        tm.setEnvironmentFrame(getEnvironmentFrame());
+        block.setInternalName(lastFile.getName());
 
-	/**
-	 * Creates a state, inserts it in this automaton, and returns that state.
-	 * The ID for the state is set appropriately.
-	 *
-	 * @param point
-	 *            the point to put the state at
-	 */
-	public final TMState createBlock(final Point point) {
-		int i = 0;
-		while (getStateWithID(i) != null) {
-			i++;
-		}
-		final OpenAction read = new OpenAction();
-		OpenAction.setOpenOrRead(true);
-		final JButton button = new JButton(read);
-		button.doClick();
-		OpenAction.setOpenOrRead(false);
-		return getAutomatonFromFile(i, point);
-	}
+        // MERLIN MERLIN MERLIN MERLIN MERLIN//
 
-	public TMState createInnerTM(final Point point, final Serializable auto, final String name, final int i) {
-		final TMState ntms = new TMState(i, point, this);
-		final TuringMachine innerTM = (TuringMachine) auto;
-		addState(ntms);
-		ntms.setInnerTM(innerTM);
-		ntms.setInternalName(name);
-		return ntms;
-	}
+        block.setInnerTM(tm);
 
-	/**
-	 * Creates a TMState, inserts it in this automaton, and returns that state.
-	 * The ID for the state is set appropriately. This method was once Final in
-	 * Automaton, but it must be overriden here, because TMStates are not like
-	 * standard states.
-	 *
-	 * @param point
-	 *            the point to put the state at
-	 */
-	@Override
-	public State createState(final Point point) {
-		return createTMState(point);
-	}
+        block.setName(lastFile.getName().substring(0, lastFile.getName().length() - 4));
+        addState(block);
+        return block;
+    }
 
-	/**
-	 * For the sake of separation, some methods must unfortunately be
-	 * duplicated.
-	 *
-	 *
-	 */
-	public final TMState createTMState(final Point point) {
-		int i = 0;
-		while (getStateWithID(i) != null) {
-			i++;
-		}
-		final TMState state = new TMState(i, point, this);
-		addState(state);
-		return state;
-	}
+    /**
+     * For the sake of separation, some methods must unfortunately be
+     * duplicated.
+     *
+     *
+     */
+    public final TMState createTMStateWithID(Point p, int i) {
+        TMState state = new TMState(i, p, this);
+        addState(state);
+        return state;
+    }
 
-	/**
-	 * For the sake of separation, some methods must unfortunately be
-	 * duplicated.
-	 *
-	 *
-	 */
-	public final TMState createTMStateWithID(final Point p, final int i) {
-		final TMState state = new TMState(i, p, this);
-		addState(state);
-		return state;
-	}
+    /**
+     * For the sake of separation, some methods must unfortunately be
+     * duplicated.
+     *
+     *
+     */
+    public final TMState createTMState(Point point) {
+        int i = 0;
+        while (getStateWithID(i) != null) {
+            i++;
+        }
+        TMState state = new TMState(i, point, this);
+        addState(state);
+        return state;
+    }
 
-	/**
-	 * Reads the automaton in from a file.
-	 */
-	private TMState getAutomatonFromFile(final int i, final Point point) {
-		final TMState block = new TMState(i, point, this);
-		final Serializable serial = OpenAction.getLastObjectOpened();
-		final File lastFile = OpenAction.getLastFileOpened();
-		if (lastFile == null || OpenAction.isOpened() == false) {
-			return null;
-		}
+    public TMState createInnerTM(Point point, Serializable auto, String name, int i) {
+        TMState ntms = new TMState(i, point, this);
+        TuringMachine innerTM = (TuringMachine) auto;
+        addState(ntms);
+        ntms.setInnerTM(innerTM);
+        ntms.setInternalName(name);
+        return ntms;
+    }
 
-		// block = putBlockContentsInAutomaton(block, serial,
-		// lastFile.getName(),
-		// this);
-		checkArgument(serial instanceof TuringMachine);
-		final TuringMachine tm = (TuringMachine) serial;
+    public static void become(TuringMachine dest, TuringMachine src) {
+        logger.debug("Calling the real become");
+        System.out.println("Calling the real become");
 
-		tm.setEnvironmentFrame(getEnvironmentFrame());
-		block.setInternalName(lastFile.getName());
+        dest.clear();
+        // Copy over the states.
+        HashMap<TMState, TMState> map = new HashMap<>(); // Old
+        // states
+        // to
+        // new
+        // states.
+        // Iterator it = src.states.iterator();
+        for (Object o : src.states) {
+            logger.debug("become method, processing {}", o.getClass().getName());
+            TMState state = (TMState) o;
+            TMState nstate = new TMState(state.getID(), new Point(state.getPoint()), dest); // this
+            // time
+            // we're
+            // not
+            // using
+            // copy
+            // constructor
+            // copyStaticRelevantDataForBlocks(nstate, state, dest, src);
+            nstate.setLabel(state.getLabel());
+            nstate.setName(state.getName());
+            map.put(state, nstate);
+            dest.addState(nstate);
+        }
+        // Set special states.
+        for (Object o : src.finalStates) {
+            TMState tms = (TMState) o;
+            dest.addFinalState(map.get(tms));
+        }
+        dest.setInitialState(map.get(src.getInitialState()));
 
-		// MERLIN MERLIN MERLIN MERLIN MERLIN//
+        // Copy over the transitions.
+        for (Object o : src.states) {
+            TMState tms = (TMState) o;
+            List<Transition> ts = src.getTransitionsFromState(tms);
+            TMState from = map.get(tms);
+            for (int i = 0; i < ts.size(); i++) {
+                TMState to = map.get(ts.get(i).getToState());
+                Transition toBeAdded = (Transition) ts.get(i).clone();
+                toBeAdded.setFromState(from);
+                toBeAdded.setToState(to);
 
-		block.setInnerTM(tm);
+                // dest.addTransition(ts[i].copy(from, to));
+                dest.addTransition(toBeAdded);
+            }
+        }
+        for (int k = 0; k < src.getNotes().size(); k++) {
+            Note curNote = src.getNotes().get(k);
+            dest.addNote(new Note(curNote.getAutoPoint(), curNote.getText()));
+            dest.getNotes().get(k).initializeForView(curNote.getView());
+        }
+        dest.setEnvironmentFrame(src.getEnvironmentFrame());
+        // EDebug.print("finished");
+    }
 
-		block.setName(lastFile.getName().substring(0, lastFile.getName().length() - 4));
-		addState(block);
-		return block;
-	}
+    public Map<String, TuringMachine> getBlockMap() {
+        Map<String, TuringMachine> ret = new HashMap<>();
+        // that's right, EVERY state in TM has an inner Auto, even if that inner
+        // auto might be empty.
+        for (State s : states) {
+            TMState state = (TMState) s;
+            ret.put(state.getInternalName(), state.getInnerTM());
+        }
 
-	public Map<String, TuringMachine> getBlockMap() {
-		final Map<String, TuringMachine> ret = new HashMap<>();
-		// that's right, EVERY state in TM has an inner Auto, even if that inner
-		// auto might be empty.
-		for (final State s : states) {
-			final TMState state = (TMState) s;
-			ret.put(state.getInternalName(), state.getInnerTM());
-		}
+        return ret;
+    }
 
-		return ret;
-	}
+    public void setParent(TMState tms) {
+        parent = tms;
+    }
 
-	public TMState getParent() {
-		return parent;
-	}
+    public TMState getParent() {
+        return parent;
+    }
 
-	/**
-	 * Returns the class of <CODE>Transition</CODE> this automaton must accept.
-	 *
-	 * @return the <CODE>Class</CODE> object for
-	 *         <CODE>automata.tm.TMTransition</CODE>
-	 */
-	@Override
-	protected Class<? extends Transition> getTransitionClass() {
-		return edu.duke.cs.jflap.automata.turing.TMTransition.class;
-	}
+    /**
+     * The number of tapes. It's public for some hacky reasons related to
+     * serialization.
+     */
+    public int tapes;
 
-	public void setParent(final TMState tms) {
-		parent = tms;
-	}
+    public boolean isOuterMost;
 
-	/**
-	 * Returns the number of tapes this Turing machine uses.
-	 *
-	 * @return the number of tapes this Turing machine uses
-	 */
-	public int tapes() {
-		return tapes;
-	}
+    // MERLIN MERLIN MERLIN MERLIN MERLIN//
+    private TMState parent = null; // not going to force it with compiler, just
+    // make sure you set it WHERE it MATTERS
 }

@@ -16,17 +16,17 @@
 
 package edu.duke.cs.jflap.file.xml;
 
-import java.util.List;
-import java.util.Map;
+import edu.duke.cs.jflap.grammar.Grammar;
+import edu.duke.cs.jflap.grammar.Production;
+import edu.duke.cs.jflap.grammar.UnboundGrammar;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.grammar.Production;
-import edu.duke.cs.jflap.grammar.UnboundGrammar;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This transducer is the codec for {@link edu.duke.cs.jflap.grammar.Grammar}
@@ -35,104 +35,104 @@ import edu.duke.cs.jflap.grammar.UnboundGrammar;
  * @author Thomas Finley
  */
 public class GrammarTransducer extends AbstractTransducer {
-	/** The tag name for productions. */
-	public static final String PRODUCTION_NAME = "production";
+    /**
+     * Returns the type this transducer recognizes, "grammar".
+     *
+     * @return the string "grammar"
+     */
+    @Override
+    public String getType() {
+        return "edu/duke/cs/jflap/grammar";
+    }
 
-	/** The tag name for the left of the production. */
-	public static final String PRODUCTION_LEFT_NAME = "left";
+    /**
+     * Returns a production for a given node.
+     *
+     * @param node
+     *            the node the encapsulates a production
+     */
+    public static Production createProduction(Node node) {
+        Map<?, ?> e2t = elementsToText(node);
+        String left = (String) e2t.get(PRODUCTION_LEFT_NAME);
+        String right = (String) e2t.get(PRODUCTION_RIGHT_NAME);
+        if (left == null) {
+            left = "";
+        }
+        if (right == null) {
+            right = "";
+        }
+        return new Production(left, right);
+    }
 
-	/** The tag name for the right of the production. */
-	public static final String PRODUCTION_RIGHT_NAME = "right";
+    /**
+     * Returns an element that encodes a given production.
+     *
+     * @param document
+     *            the document to create the element in
+     * @param production
+     *            the production to encode
+     * @return an element that encodes a production
+     */
+    public static Element createProductionElement(Document document, Production production) {
+        Element pe = createElement(document, PRODUCTION_NAME, null, null);
+        pe.appendChild(createElement(document, PRODUCTION_LEFT_NAME, null, production.getLHS()));
+        pe.appendChild(createElement(document, PRODUCTION_RIGHT_NAME, null, production.getRHS()));
+        return pe;
+    }
 
-	/** The comment for the list of productions. */
-	private static final String COMMENT_PRODUCTIONS = "The list of productions.";
+    /**
+     * Given a document, this will return the corresponding grammar encoded in
+     * the DOM document.
+     *
+     * @param document
+     *            the DOM document to convert
+     * @return the {@link edu.duke.cs.jflap.grammar.Grammar} instance
+     */
+    @Override
+    public java.io.Serializable fromDOM(Document document) {
+        Grammar g = new UnboundGrammar();
+        NodeList list = document.getDocumentElement().getElementsByTagName(PRODUCTION_NAME);
+        for (int i = 0; i < list.getLength(); i++) {
+            Production p = createProduction(list.item(i));
+            g.addProduction(p);
+        }
+        return g;
+    }
 
-	/**
-	 * Returns a production for a given node.
-	 *
-	 * @param node
-	 *            the node the encapsulates a production
-	 */
-	public static Production createProduction(final Node node) {
-		final Map<?, ?> e2t = elementsToText(node);
-		String left = (String) e2t.get(PRODUCTION_LEFT_NAME);
-		String right = (String) e2t.get(PRODUCTION_RIGHT_NAME);
-		if (left == null) {
-			left = "";
-		}
-		if (right == null) {
-			right = "";
-		}
-		return new Production(left, right);
-	}
+    /**
+     * Given a JFLAP grammar, this will return the corresponding DOM encoding of
+     * the structure.
+     *
+     * @param structure
+     *            the JFLAP grammar to encode
+     * @return a DOM document instance
+     */
+    @Override
+    public Document toDOM(java.io.Serializable structure) {
+        Grammar grammar = (Grammar) structure;
+        Document doc = newEmptyDocument();
+        Element se = doc.getDocumentElement();
+        // Add the productions as subelements of the structure element.
+        List<Production> productions = grammar.getProductions();
+        if (productions.size() > 0) {
+            se.appendChild(createComment(doc, COMMENT_PRODUCTIONS));
+        }
+        for (int i = 0; i < productions.size(); i++) {
+            se.appendChild(createProductionElement(doc, productions.get(i)));
+        }
+        // Return the completed document.
+        return doc;
+    }
 
-	/**
-	 * Returns an element that encodes a given production.
-	 *
-	 * @param document
-	 *            the document to create the element in
-	 * @param production
-	 *            the production to encode
-	 * @return an element that encodes a production
-	 */
-	public static Element createProductionElement(final Document document, final Production production) {
-		final Element pe = createElement(document, PRODUCTION_NAME, null, null);
-		pe.appendChild(createElement(document, PRODUCTION_LEFT_NAME, null, production.getLHS()));
-		pe.appendChild(createElement(document, PRODUCTION_RIGHT_NAME, null, production.getRHS()));
-		return pe;
-	}
+    /** The tag name for productions. */
+    public static final String PRODUCTION_NAME = "production";
 
-	/**
-	 * Given a document, this will return the corresponding grammar encoded in
-	 * the DOM document.
-	 *
-	 * @param document
-	 *            the DOM document to convert
-	 * @return the {@link edu.duke.cs.jflap.grammar.Grammar} instance
-	 */
-	@Override
-	public java.io.Serializable fromDOM(final Document document) {
-		final Grammar g = new UnboundGrammar();
-		final NodeList list = document.getDocumentElement().getElementsByTagName(PRODUCTION_NAME);
-		for (int i = 0; i < list.getLength(); i++) {
-			final Production p = createProduction(list.item(i));
-			g.addProduction(p);
-		}
-		return g;
-	}
+    /** The tag name for the left of the production. */
+    public static final String PRODUCTION_LEFT_NAME = "left";
 
-	/**
-	 * Returns the type this transducer recognizes, "grammar".
-	 *
-	 * @return the string "grammar"
-	 */
-	@Override
-	public String getType() {
-		return "edu/duke/cs/jflap/grammar";
-	}
+    /** The tag name for the right of the production. */
+    public static final String PRODUCTION_RIGHT_NAME = "right";
 
-	/**
-	 * Given a JFLAP grammar, this will return the corresponding DOM encoding of
-	 * the structure.
-	 *
-	 * @param structure
-	 *            the JFLAP grammar to encode
-	 * @return a DOM document instance
-	 */
-	@Override
-	public Document toDOM(final java.io.Serializable structure) {
-		final Grammar grammar = (Grammar) structure;
-		final Document doc = newEmptyDocument();
-		final Element se = doc.getDocumentElement();
-		// Add the productions as subelements of the structure element.
-		final List<Production> productions = grammar.getProductions();
-		if (productions.size() > 0) {
-			se.appendChild(createComment(doc, COMMENT_PRODUCTIONS));
-		}
-		for (int i = 0; i < productions.size(); i++) {
-			se.appendChild(createProductionElement(doc, productions.get(i)));
-		}
-		// Return the completed document.
-		return doc;
-	}
+    /** The comment for the list of productions. */
+    private static final String COMMENT_PRODUCTIONS = "The list of productions.";
 }

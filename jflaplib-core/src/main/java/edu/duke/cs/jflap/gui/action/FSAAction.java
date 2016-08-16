@@ -16,9 +16,9 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import javax.swing.Icon;
-
 import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
+
+import javax.swing.Icon;
 
 /**
  * The <CODE>FSAAction</CODE> is the general action that various controllers for
@@ -30,36 +30,36 @@ import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
  * @author Thomas Finley
  */
 public abstract class FSAAction extends RestrictedAction {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Given an object, determine if this automaton action is able to be applied
-	 * to that object based on its class. By default, this method returns
-	 * <CODE>true</CODE> if this object is an instance of
-	 * <CODE>Automaton</CODE>.
-	 *
-	 * @param object
-	 *            the object to test for "applicability"
-	 * @return <CODE>true</CODE> if this action should be available to an object
-	 *         of this type, <CODE>false</CODE> otherwise.
-	 */
-	public static boolean isApplicable(final Object object) {
-		return object instanceof FiniteStateAutomaton;
-	}
+    /**
+     * Instantiates a new <CODE>FSAAction</CODE>.
+     *
+     * @param string
+     *            a string description
+     * @param icon
+     *            the optional icon, or <CODE>null</CODE> if there is to be no
+     *            icon associated with this action
+     */
+    public FSAAction(String string, Icon icon) {
+        super(string, icon);
+    }
 
-	/**
-	 * Instantiates a new <CODE>FSAAction</CODE>.
-	 *
-	 * @param string
-	 *            a string description
-	 * @param icon
-	 *            the optional icon, or <CODE>null</CODE> if there is to be no
-	 *            icon associated with this action
-	 */
-	public FSAAction(final String string, final Icon icon) {
-		super(string, icon);
-	}
+    /**
+     * Given an object, determine if this automaton action is able to be applied
+     * to that object based on its class. By default, this method returns
+     * <CODE>true</CODE> if this object is an instance of
+     * <CODE>Automaton</CODE>.
+     *
+     * @param object
+     *            the object to test for "applicability"
+     * @return <CODE>true</CODE> if this action should be available to an object
+     *         of this type, <CODE>false</CODE> otherwise.
+     */
+    public static boolean isApplicable(Object object) {
+        return object instanceof FiniteStateAutomaton;
+    }
 }

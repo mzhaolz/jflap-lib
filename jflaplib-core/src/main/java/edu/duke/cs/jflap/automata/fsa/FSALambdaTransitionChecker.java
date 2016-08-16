@@ -26,28 +26,28 @@ import edu.duke.cs.jflap.automata.Transition;
  * @author Ryan Cavalcante
  */
 public class FSALambdaTransitionChecker extends LambdaTransitionChecker {
-	/**
-	 * Creates instance of <CODE>FSALambdaTransitionChecker</CODE>.
-	 */
-	public FSALambdaTransitionChecker() {
-		super();
-	}
+    /**
+     * Creates instance of <CODE>FSALambdaTransitionChecker</CODE>.
+     */
+    public FSALambdaTransitionChecker() {
+        super();
+    }
 
-	/**
-	 * Returns true if <CODE>transition</CODE> is a lambda transition (i.e. it's
-	 * label is the lambda string).
-	 *
-	 * @param transition
-	 *            the transition
-	 * @return true if <CODE>transition</CODE> is a lambda transition (i.e. it's
-	 *         label is the lambda string).
-	 */
-	@Override
-	public boolean isLambdaTransition(final Transition transition) {
-		final FSATransition trans = (FSATransition) transition;
-		if (trans.getLabel().equals(LAMBDA)) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Returns true if <CODE>transition</CODE> is a lambda transition (i.e. it's
+     * label is the lambda string).
+     *
+     * @param transition
+     *            the transition
+     * @return true if <CODE>transition</CODE> is a lambda transition (i.e. it's
+     *         label is the lambda string).
+     */
+    @Override
+    public boolean isLambdaTransition(Transition transition) {
+        FSATransition trans = (FSATransition) transition;
+        if (trans.getLabel().equals(LAMBDA)) {
+            return true;
+        }
+        return false;
+    }
 }

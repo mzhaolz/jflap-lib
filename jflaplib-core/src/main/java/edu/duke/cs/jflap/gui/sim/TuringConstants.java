@@ -23,20 +23,20 @@ package edu.duke.cs.jflap.gui.sim;
  * @author Thomas Finley
  */
 interface TuringConstants {
-	static class FixCreator {
-		public static String getFix() {
-			final char c = edu.duke.cs.jflap.automata.turing.Tape.BLANK;
-			final StringBuffer b = new StringBuffer();
-			for (int i = 0; i < 20; i++) {
-				b.append(c);
-			}
-			return b.toString();
-		}
-	}
+    /** A simple prefix/postfix string for tape. */
+    public static final String FIX = FixCreator.getFix();
 
-	/** A simple prefix/postfix string for tape. */
-	public static final String FIX = FixCreator.getFix();
+    /** The size of the tape head. */
+    public static final int SIZE_HEAD = 4;
 
-	/** The size of the tape head. */
-	public static final int SIZE_HEAD = 4;
+    static class FixCreator {
+        public static String getFix() {
+            char c = edu.duke.cs.jflap.automata.turing.Tape.BLANK;
+            StringBuffer b = new StringBuffer();
+            for (int i = 0; i < 20; i++) {
+                b.append(c);
+            }
+            return b.toString();
+        }
+    }
 }

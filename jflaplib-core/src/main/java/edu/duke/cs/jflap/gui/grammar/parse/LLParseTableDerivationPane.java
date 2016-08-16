@@ -16,6 +16,12 @@
 
 package edu.duke.cs.jflap.gui.grammar.parse;
 
+import edu.duke.cs.jflap.grammar.Grammar;
+import edu.duke.cs.jflap.grammar.parse.LLParseTable;
+import edu.duke.cs.jflap.gui.SplitPaneFactory;
+import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
+import edu.duke.cs.jflap.gui.grammar.GrammarTable;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
@@ -24,97 +30,94 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 
-import edu.duke.cs.jflap.grammar.Grammar;
-import edu.duke.cs.jflap.grammar.parse.LLParseTable;
-import edu.duke.cs.jflap.gui.SplitPaneFactory;
-import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
-import edu.duke.cs.jflap.gui.grammar.GrammarTable;
-
 /**
  * This is the view for the derivation of a LL parse table from a grammar.
  *
  * @author Thomas Finley
  */
 public class LLParseTableDerivationPane extends JPanel {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	private LLParseDerivationController controller;
+    /**
+     * Instantiates a new derivation pane for a grammar environment.
+     *
+     * @param environment
+     *            the grammar environment
+     */
+    public LLParseTableDerivationPane(GrammarEnvironment environment) {
+        super(new BorderLayout());
+        Grammar g = environment.getGrammar();
+        JPanel right = new JPanel(new BorderLayout());
 
-	private LLParseTablePane parseTable;
+        JLabel description = new JLabel();
+        right.add(description, BorderLayout.NORTH);
 
-	/**
-	 * Instantiates a new derivation pane for a grammar environment.
-	 *
-	 * @param environment
-	 *            the grammar environment
-	 */
-	public LLParseTableDerivationPane(final GrammarEnvironment environment) {
-		super(new BorderLayout());
-		final Grammar g = environment.getGrammar();
-		final JPanel right = new JPanel(new BorderLayout());
+        // FirstFollowModel ffmodel = new FirstFollowModel(g);
+        FirstFollowTable fftable = new FirstFollowTable(g);
+        fftable.getColumnModel().getColumn(0).setPreferredWidth(30);
+        fftable.getFFModel().setCanEditFirst(true);
+        fftable.getFFModel().setCanEditFollow(true);
 
-		final JLabel description = new JLabel();
-		right.add(description, BorderLayout.NORTH);
+        LLParseTable parseTableModel = new LLParseTable(g) {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
 
-		// FirstFollowModel ffmodel = new FirstFollowModel(g);
-		final FirstFollowTable fftable = new FirstFollowTable(g);
-		fftable.getColumnModel().getColumn(0).setPreferredWidth(30);
-		fftable.getFFModel().setCanEditFirst(true);
-		fftable.getFFModel().setCanEditFollow(true);
+            @Override
+            public boolean isCellEditable(int r, int c) {
+                return controller.step != LLParseDerivationController.FINISHED
+                        && super.isCellEditable(r, c);
+            }
+        };
+        parseTable = new LLParseTablePane(parseTableModel);
+        parseTable.getColumnModel().getColumn(0).setPreferredWidth(30);
 
-		final LLParseTable parseTableModel = new LLParseTable(g) {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+        JSplitPane rightSplit = SplitPaneFactory.createSplit(environment, false, 0.5,
+                new JScrollPane(fftable), new JScrollPane(parseTable));
+        right.add(rightSplit, BorderLayout.CENTER);
 
-			@Override
-			public boolean isCellEditable(final int r, final int c) {
-				return controller.step != LLParseDerivationController.FINISHED && super.isCellEditable(r, c);
-			}
-		};
-		parseTable = new LLParseTablePane(parseTableModel);
-		parseTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+        controller = new LLParseDerivationController(g, environment, fftable, parseTable,
+                description);
 
-		final JSplitPane rightSplit = SplitPaneFactory.createSplit(environment, false, 0.5, new JScrollPane(fftable),
-				new JScrollPane(parseTable));
-		right.add(rightSplit, BorderLayout.CENTER);
+        GrammarTable table = new GrammarTable(
+                new edu.duke.cs.jflap.gui.grammar.GrammarTableModel(g) {
+                    /**
+                     *
+                     */
+                    private static final long serialVersionUID = 1L;
 
-		controller = new LLParseDerivationController(g, environment, fftable, parseTable, description);
+                    @Override
+                    public boolean isCellEditable(int r, int c) {
+                        return false;
+                    }
+                });
+        JSplitPane pane = SplitPaneFactory.createSplit(environment, true, 0.3, table, right);
+        this.add(pane, BorderLayout.CENTER);
 
-		final GrammarTable table = new GrammarTable(new edu.duke.cs.jflap.gui.grammar.GrammarTableModel(g) {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+        // Make the tool bar.
+        JToolBar toolbar = new JToolBar();
+        toolbar.add(controller.doSelectedAction);
+        toolbar.add(controller.doStepAction);
+        toolbar.add(controller.doAllAction);
+        toolbar.addSeparator();
+        toolbar.add(controller.nextAction);
+        toolbar.addSeparator();
+        toolbar.add(controller.parseAction);
+        this.add(toolbar, BorderLayout.NORTH);
+    }
 
-			@Override
-			public boolean isCellEditable(final int r, final int c) {
-				return false;
-			}
-		});
-		final JSplitPane pane = SplitPaneFactory.createSplit(environment, true, 0.3, table, right);
-		this.add(pane, BorderLayout.CENTER);
+    void makeParseUneditable() {
+        try {
+            parseTable.getCellEditor().stopCellEditing();
+        } catch (NullPointerException e) {
+        }
+    }
 
-		// Make the tool bar.
-		final JToolBar toolbar = new JToolBar();
-		toolbar.add(controller.doSelectedAction);
-		toolbar.add(controller.doStepAction);
-		toolbar.add(controller.doAllAction);
-		toolbar.addSeparator();
-		toolbar.add(controller.nextAction);
-		toolbar.addSeparator();
-		toolbar.add(controller.parseAction);
-		this.add(toolbar, BorderLayout.NORTH);
-	}
+    private LLParseDerivationController controller;
 
-	void makeParseUneditable() {
-		try {
-			parseTable.getCellEditor().stopCellEditing();
-		} catch (final NullPointerException e) {
-		}
-	}
+    private LLParseTablePane parseTable;
 }

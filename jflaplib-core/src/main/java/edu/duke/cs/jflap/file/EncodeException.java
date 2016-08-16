@@ -24,25 +24,25 @@ package edu.duke.cs.jflap.file;
  * @author Thomas Finley
  */
 public class EncodeException extends RuntimeException {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -4483833205748423210L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -4483833205748423210L;
 
-	/**
-	 * Creates a generic encoder exception.
-	 */
-	public EncodeException() {
-		super();
-	}
+    /**
+     * Creates a generic encoder exception.
+     */
+    public EncodeException() {
+        super();
+    }
 
-	/**
-	 * Creates a encode exception with the given message.
-	 *
-	 * @param message
-	 *            the exception message
-	 */
-	public EncodeException(final String message) {
-		super(message);
-	}
+    /**
+     * Creates a encode exception with the given message.
+     *
+     * @param message
+     *            the exception message
+     */
+    public EncodeException(String message) {
+        super(message);
+    }
 }

@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.automata.event;
 
-import java.util.EventObject;
-
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.Note;
+
+import java.util.EventObject;
 
 /**
  * This event is given to listeners of an automaton interested in events when a
@@ -34,83 +34,83 @@ import edu.duke.cs.jflap.automata.Note;
  * @author Thomas Finley
  */
 public class AutomataNoteEvent extends EventObject {
-	private static final long serialVersionUID = 12L;
+    private static final long serialVersionUID = 12L;
 
-	/** Was this an add? */
-	private final boolean myAdd;
+    /**
+     * Instantiates a new <CODE>AutomataStateEvent</CODE>.
+     *
+     * @param auto
+     *            the <CODE>Automaton</CODE> that generated the event
+     * @param note
+     *            the <CODE>Note</CODE> that was added or removed, or changed
+     * @param add
+     *            <CODE>true</CODE> if the note is added, <CODE>false</CODE> if
+     *            removed
+     * @param change
+     *            <CODE>true</CODE> if some property of the note was changed,
+     *            <CODE>false</CODE> if this is not simply added or removed
+     */
+    public AutomataNoteEvent(Automaton auto, Note note, boolean add, boolean change) {
+        super(auto);
+        myNote = note;
+        myAdd = add;
+        myChange = change;
+    }
 
-	/** Which transition did we add/remove? */
-	private final Note myNote;
+    /**
+     * Returns the <CODE>Automaton</CODE> that generated this event.
+     *
+     * @return the <CODE>Automaton</CODE> that generated this event
+     */
+    public Automaton getAutomaton() {
+        return (Automaton) getSource();
+    }
 
-	/** Is this a change in property? */
-	private final boolean myChange;
+    /**
+     * Returns the <CODE>Transition</CODE> that was added/removed.
+     *
+     * @return the <CODE>Transition</CODE> that was added/removed
+     */
+    public Note getNote() {
+        return myNote;
+    }
 
-	/**
-	 * Instantiates a new <CODE>AutomataStateEvent</CODE>.
-	 *
-	 * @param auto
-	 *            the <CODE>Automaton</CODE> that generated the event
-	 * @param note
-	 *            the <CODE>Note</CODE> that was added or removed, or changed
-	 * @param add
-	 *            <CODE>true</CODE> if the note is added, <CODE>false</CODE> if
-	 *            removed
-	 * @param change
-	 *            <CODE>true</CODE> if some property of the note was changed,
-	 *            <CODE>false</CODE> if this is not simply added or removed
-	 */
-	public AutomataNoteEvent(final Automaton auto, final Note note, final boolean add, final boolean change) {
-		super(auto);
-		myNote = note;
-		myAdd = add;
-		myChange = change;
-	}
+    /**
+     * Returns if this was an add.
+     *
+     * @return <CODE>true</CODE> if this event indicates the addition of a
+     *         transition, <CODE>false</CODE> otherwise
+     */
+    public boolean isAdd() {
+        return myAdd;
+    }
 
-	/**
-	 * Returns the <CODE>Automaton</CODE> that generated this event.
-	 *
-	 * @return the <CODE>Automaton</CODE> that generated this event
-	 */
-	public Automaton getAutomaton() {
-		return (Automaton) getSource();
-	}
+    /**
+     * Returns if this was a delete.
+     *
+     * @return <CODE>true</CODE> if this event indicates the removal of a
+     *         transition, <CODE>false</CODE> otherwise
+     */
+    public boolean isDelete() {
+        return !(myAdd || myChange);
+    }
 
-	/**
-	 * Returns the <CODE>Transition</CODE> that was added/removed.
-	 *
-	 * @return the <CODE>Transition</CODE> that was added/removed
-	 */
-	public Note getNote() {
-		return myNote;
-	}
+    /**
+     * Returns if this was a simple change in a property of the transition.
+     *
+     * @return <CODE>true</CODE> if the properties of this transition were
+     *         changed, <CODE>false</CODE> otherwise
+     */
+    public boolean isChange() {
+        return myChange;
+    }
 
-	/**
-	 * Returns if this was an add.
-	 *
-	 * @return <CODE>true</CODE> if this event indicates the addition of a
-	 *         transition, <CODE>false</CODE> otherwise
-	 */
-	public boolean isAdd() {
-		return myAdd;
-	}
+    /** Was this an add? */
+    private boolean myAdd;
 
-	/**
-	 * Returns if this was a simple change in a property of the transition.
-	 *
-	 * @return <CODE>true</CODE> if the properties of this transition were
-	 *         changed, <CODE>false</CODE> otherwise
-	 */
-	public boolean isChange() {
-		return myChange;
-	}
+    /** Which transition did we add/remove? */
+    private Note myNote;
 
-	/**
-	 * Returns if this was a delete.
-	 *
-	 * @return <CODE>true</CODE> if this event indicates the removal of a
-	 *         transition, <CODE>false</CODE> otherwise
-	 */
-	public boolean isDelete() {
-		return !(myAdd || myChange);
-	}
+    /** Is this a change in property? */
+    private boolean myChange;
 }

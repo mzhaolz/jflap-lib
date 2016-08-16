@@ -16,30 +16,30 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import java.awt.event.ActionEvent;
-
 import edu.duke.cs.jflap.gui.environment.Universe;
+
+import java.awt.event.ActionEvent;
 
 public class OpenURLAction extends RestrictedAction {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public OpenURLAction() {
-		super("Open URL", null);
-	}
+    public OpenURLAction() {
+        super("Open URL", null);
+    }
 
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-	}
+    @Override
+    public boolean isEnabled() {
+        if (Universe.CHOOSER == null) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		if (Universe.CHOOSER == null) {
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    }
 }

@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.gui.environment;
 
-import java.io.Serializable;
-
 import edu.duke.cs.jflap.grammar.lsystem.LSystem;
 import edu.duke.cs.jflap.gui.lsystem.LSystemInputPane;
+
+import java.io.Serializable;
 
 /**
  * The <CODE>LSystemEnvironment</CODE> is an environment for holding a L-system.
@@ -38,47 +38,47 @@ import edu.duke.cs.jflap.gui.lsystem.LSystemInputPane;
  * @author Thomas Finley
  */
 public class LSystemEnvironment extends Environment {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 5730339142671230425L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5730339142671230425L;
 
-	/** The L-system input pane. */
-	private LSystemInputPane input = null;
+    /**
+     * Instantiates a new <CODE>GrammarEnvironment</CODE> with the given
+     * <CODE>GrammarInputPane</CODE>.
+     *
+     * @param input
+     *            the <CODE>GrammarInputPane</CODE>
+     */
+    public LSystemEnvironment(LSystemInputPane input) {
+        super(null);
+        this.input = input;
+        input.addLSystemInputListener(event -> setDirty());
+    }
 
-	/**
-	 * Instantiates a new <CODE>GrammarEnvironment</CODE> with the given
-	 * <CODE>GrammarInputPane</CODE>.
-	 *
-	 * @param input
-	 *            the <CODE>GrammarInputPane</CODE>
-	 */
-	public LSystemEnvironment(final LSystemInputPane input) {
-		super(null);
-		this.input = input;
-		input.addLSystemInputListener(event -> setDirty());
-	}
+    /**
+     * Returns the L-system of this <CODE>LSystemEnvironment</CODE>, which is
+     * retrieved from the <CODE>LSystemInputPane</CODE>'s
+     * <CODE>.getLSystem</CODE> method.
+     *
+     * @see edu.duke.cs.jflap.gui.lsystem.LSystemInputPane#getLSystem
+     * @return the <CODE>LSystem</CODE> for this environment
+     */
+    @Override
+    public Serializable getObject() {
+        return getLSystem();
+    }
 
-	/**
-	 * Returns the L-system.
-	 *
-	 * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar()
-	 * @return the <CODE>ContextFreeGrammar</CODE> for this environment
-	 */
-	public LSystem getLSystem() {
-		return input.getLSystem();
-	}
+    /**
+     * Returns the L-system.
+     *
+     * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar()
+     * @return the <CODE>ContextFreeGrammar</CODE> for this environment
+     */
+    public LSystem getLSystem() {
+        return input.getLSystem();
+    }
 
-	/**
-	 * Returns the L-system of this <CODE>LSystemEnvironment</CODE>, which is
-	 * retrieved from the <CODE>LSystemInputPane</CODE>'s
-	 * <CODE>.getLSystem</CODE> method.
-	 *
-	 * @see edu.duke.cs.jflap.gui.lsystem.LSystemInputPane#getLSystem
-	 * @return the <CODE>LSystem</CODE> for this environment
-	 */
-	@Override
-	public Serializable getObject() {
-		return getLSystem();
-	}
+    /** The L-system input pane. */
+    private LSystemInputPane input = null;
 }

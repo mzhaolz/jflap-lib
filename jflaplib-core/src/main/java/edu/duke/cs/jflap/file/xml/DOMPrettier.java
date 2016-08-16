@@ -31,60 +31,60 @@ import org.w3c.dom.NodeList;
  * @author Thomas Finley
  */
 public class DOMPrettier {
-	/**
-	 * The changing indentation string. Whenever a new level of indent is
-	 * reached, this is prepended.
-	 */
-	public static final String INDENT = "\t";
+    /**
+     * Recursive private helper method that inserts indenting text nodes.
+     *
+     * @param dom
+     *            the DOM document
+     * @param indent
+     *            the indent string sofar
+     * @param node
+     *            the node that we are recursing on
+     * @return if the last node encountered was a text node
+     */
+    private static boolean makePretty(Document dom, String indent, Node node) {
+        if (node.getNodeType() == Node.TEXT_NODE) {
+            return true;
+        }
+        try {
+            node.getParentNode().insertBefore(dom.createTextNode(indent), node);
+        } catch (DOMException e) {
+            // This occurs when the parent is the document, in which
+            // case we don't want to insert the indentation anyway, so
+            // this is perfectly fine.
+        }
+        NodeList list = node.getChildNodes();
+        // Not good to insert nodes while accessing the list. :)
+        Node[] nodes = new Node[list.getLength()];
+        for (int i = 0; i < list.getLength(); i++) {
+            nodes[i] = list.item(i);
+        }
 
-	/**
-	 * Pretty-fies a DOM by inserting whitespace text nodes at appropriate
-	 * places. This modifies the DOM itself.
-	 *
-	 * @param dom
-	 *            the DOM document to make pretty
-	 */
-	public static void makePretty(final Document dom) {
-		final String newline = System.getProperty("line.separator");
-		makePretty(dom, newline, dom.getDocumentElement());
-	}
+        boolean lastChild = true; // If no children, don't want text inside.
+        for (Node node2 : nodes) {
+            lastChild = makePretty(dom, indent + INDENT, node2);
+        }
+        if (!lastChild) {
+            node.appendChild(dom.createTextNode(indent));
+        }
+        return false;
+    }
 
-	/**
-	 * Recursive private helper method that inserts indenting text nodes.
-	 *
-	 * @param dom
-	 *            the DOM document
-	 * @param indent
-	 *            the indent string sofar
-	 * @param node
-	 *            the node that we are recursing on
-	 * @return if the last node encountered was a text node
-	 */
-	private static boolean makePretty(final Document dom, final String indent, final Node node) {
-		if (node.getNodeType() == Node.TEXT_NODE) {
-			return true;
-		}
-		try {
-			node.getParentNode().insertBefore(dom.createTextNode(indent), node);
-		} catch (final DOMException e) {
-			// This occurs when the parent is the document, in which
-			// case we don't want to insert the indentation anyway, so
-			// this is perfectly fine.
-		}
-		final NodeList list = node.getChildNodes();
-		// Not good to insert nodes while accessing the list. :)
-		final Node[] nodes = new Node[list.getLength()];
-		for (int i = 0; i < list.getLength(); i++) {
-			nodes[i] = list.item(i);
-		}
+    /**
+     * Pretty-fies a DOM by inserting whitespace text nodes at appropriate
+     * places. This modifies the DOM itself.
+     *
+     * @param dom
+     *            the DOM document to make pretty
+     */
+    public static void makePretty(Document dom) {
+        String newline = System.getProperty("line.separator");
+        makePretty(dom, newline, dom.getDocumentElement());
+    }
 
-		boolean lastChild = true; // If no children, don't want text inside.
-		for (final Node node2 : nodes) {
-			lastChild = makePretty(dom, indent + INDENT, node2);
-		}
-		if (!lastChild) {
-			node.appendChild(dom.createTextNode(indent));
-		}
-		return false;
-	}
+    /**
+     * The changing indentation string. Whenever a new level of indent is
+     * reached, this is prepended.
+     */
+    public static final String INDENT = "\t";
 }

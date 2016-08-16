@@ -16,6 +16,9 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import edu.duke.cs.jflap.gui.environment.Profile;
+import edu.duke.cs.jflap.gui.environment.Universe;
+
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -28,9 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
 
-import edu.duke.cs.jflap.gui.environment.Profile;
-import edu.duke.cs.jflap.gui.environment.Universe;
-
 /**
  * The <CODE>TestTuringAction</CODE> is an action to load a structure from a
  * file, and create a new environment with that object.
@@ -38,61 +38,63 @@ import edu.duke.cs.jflap.gui.environment.Universe;
  * @author Stephen Reading
  */
 public class EmptyStringCharacterAction extends RestrictedAction {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Instantiates a new <CODE>Turing Test Action</CODE>.
-	 */
-	public EmptyStringCharacterAction() {
-		// super("Test Turing Machines", null);
-		super("Set the Empty String Character", null);
-		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_P, MAIN_MENU_MASK));
-	}
+    /**
+     * Instantiates a new <CODE>Turing Test Action</CODE>.
+     */
+    public EmptyStringCharacterAction() {
+        // super("Test Turing Machines", null);
+        super("Set the Empty String Character", null);
+        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_P, MAIN_MENU_MASK));
+    }
 
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-		final Profile current = Universe.curProfile;
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Profile current = Universe.curProfile;
 
-		// JFrame.setDefaultLookAndFeelDecorated(true);
-		final JFrame frame = new JFrame("Preferences");
+        // JFrame.setDefaultLookAndFeelDecorated(true);
+        final JFrame frame = new JFrame("Preferences");
 
-		final JRadioButton lambda = new JRadioButton("Lambda");
-		lambda.setMnemonic(KeyEvent.VK_B);
-		lambda.setActionCommand("Lambda");
-		lambda.addActionListener(event -> Universe.curProfile.setEmptyString(Universe.curProfile.lambda));
-		final JRadioButton epsilon = new JRadioButton("Epsilon");
-		epsilon.addActionListener(event -> Universe.curProfile.setEmptyString(Universe.curProfile.epsilon));
-		epsilon.setMnemonic(KeyEvent.VK_C);
-		epsilon.setActionCommand("Epsilon");
+        JRadioButton lambda = new JRadioButton("Lambda");
+        lambda.setMnemonic(KeyEvent.VK_B);
+        lambda.setActionCommand("Lambda");
+        lambda.addActionListener(
+                event -> Universe.curProfile.setEmptyString(Universe.curProfile.lambda));
+        JRadioButton epsilon = new JRadioButton("Epsilon");
+        epsilon.addActionListener(
+                event -> Universe.curProfile.setEmptyString(Universe.curProfile.epsilon));
+        epsilon.setMnemonic(KeyEvent.VK_C);
+        epsilon.setActionCommand("Epsilon");
 
-		if (current.getEmptyString().equals(current.lambda)) {
-			lambda.setSelected(true);
-		} else if (current.getEmptyString().equals(current.epsilon)) {
-			epsilon.setSelected(true);
-		}
+        if (current.getEmptyString().equals(current.lambda)) {
+            lambda.setSelected(true);
+        } else if (current.getEmptyString().equals(current.epsilon)) {
+            epsilon.setSelected(true);
+        }
 
-		final ButtonGroup group = new ButtonGroup();
-		group.add(lambda);
-		group.add(epsilon);
+        ButtonGroup group = new ButtonGroup();
+        group.add(lambda);
+        group.add(epsilon);
 
-		final JPanel panel = new JPanel();
-		panel.add(lambda);
-		panel.add(epsilon);
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
+        JPanel panel = new JPanel();
+        panel.add(lambda);
+        panel.add(epsilon);
+        frame.getContentPane().add(panel, BorderLayout.CENTER);
 
-		final JButton accept = new JButton("Accept");
-		accept.addActionListener(event -> {
-			frame.setVisible(false);
-			Universe.curProfile.savePreferences();
-		});
+        JButton accept = new JButton("Accept");
+        accept.addActionListener(event -> {
+            frame.setVisible(false);
+            Universe.curProfile.savePreferences();
+        });
 
-		frame.getContentPane().add(accept, BorderLayout.SOUTH);
-		frame.pack();
-		final Point point = new Point(100, 50);
-		frame.setLocation(point);
-		frame.setVisible(true);
-	}
+        frame.getContentPane().add(accept, BorderLayout.SOUTH);
+        frame.pack();
+        Point point = new Point(100, 50);
+        frame.setLocation(point);
+        frame.setVisible(true);
+    }
 }

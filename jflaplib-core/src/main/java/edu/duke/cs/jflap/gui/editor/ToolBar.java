@@ -16,6 +16,8 @@
 
 package edu.duke.cs.jflap.gui.editor;
 
+import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
+
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -39,152 +41,150 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
-import edu.duke.cs.jflap.gui.viewer.AutomatonDrawer;
-
 /**
  * A tool bar for editing and manipulating an automaton.
  *
  * @author Thomas Finley
  */
 public class ToolBar extends JToolBar implements ActionListener {
-	/**
-	 * The action that clicks a button.
-	 */
-	private class ButtonClicker extends AbstractAction {
-		private static final long serialVersionUID = 7L;
+    private static final long serialVersionUID = 6L;
 
-		AbstractButton button;
+    /**
+     * Instantiates a new tool bar.
+     *
+     * @param view
+     *            the view the automaton is displayed in
+     * @param drawer
+     *            the automaton drawer
+     * @param box
+     *            the toolbox to get the initial tools to put in the bar
+     */
+    public ToolBar(EditCanvas view, AutomatonDrawer drawer, ToolBox box) {
+        super();
+        adapter = new ToolAdapter(view);
+        this.view = view;
+        this.drawer = drawer;
+        tools = box.tools(view, drawer);
+        initBar();
+        view.addMouseListener(adapter);
+        view.addMouseMotionListener(adapter);
+    }
 
-		public ButtonClicker(final AbstractButton button) {
-			this.button = button;
-		}
+    /**
+     * Returns the view that the automaton is drawn in.
+     *
+     * @return the view that the automaton is drawn in
+     */
+    protected Component getView() {
+        return view;
+    }
 
-		@Override
-		public void actionPerformed(final ActionEvent e) {
-			button.doClick();
-		}
-	}
+    /**
+     * Returns the automaton drawer for the automaton.
+     *
+     * @return the automaton drawer for the automaton
+     */
+    protected AutomatonDrawer getDrawer() {
+        return drawer;
+    }
 
-	private static final long serialVersionUID = 6L;
+    /**
+     * Initializes the tool bar.
+     */
+    private void initBar() {
+        ButtonGroup group = new ButtonGroup();
+        JToggleButton button = null;
+        Iterator<Tool> it = tools.iterator();
+        KeyStroke key;
+        while (it.hasNext()) {
+            Tool tool = it.next();
+            button = new JToggleButton(tool.getIcon());
+            buttonsToTools.put(button, tool);
+            button.setToolTipText(tool.getShortcutToolTip());
+            group.add(button);
+            this.add(button);
+            button.addActionListener(this);
+            key = tool.getKey();
+            if (key == null) {
+                continue;
+            }
+            InputMap imap = button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+            ActionMap amap = button.getActionMap();
+            Object o = new Object();
+            imap.put(key, o);
+            amap.put(o, new ButtonClicker(button));
+        }
+    }
 
-	private final Component view;
+    /**
+     * If a tool is clicked, sets the new current tool.
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Tool tool = buttonsToTools.get(e.getSource());
+        if (tool != null) {
+            adapter.setAdapter(tool);
+            currentTool = tool;
+            view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+        if (tool instanceof DeleteTool) {
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            // Image image =
+            // toolkit.getImage("/JFLAP09CVS/ICON/deletecursor.gif");
+            URL url = getClass().getResource("/ICON/deletecursor.gif");
+            Image image = getToolkit().getImage(url);
+            Point hotSpot = new Point(5, 5);
+            Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "Delete");
+            view.setCursor(cursor);
+            // Cursor hourglassCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
+            // view.setCursor(hourglassCursor);
+        }
+    }
 
-	private final AutomatonDrawer drawer;
+    /**
+     * Draws the tool view.
+     *
+     * @param g
+     *            the graphics object to draw upon
+     */
+    public void drawTool(Graphics g) {
+        if (currentTool == null) {
+            return;
+        }
+        currentTool.draw(g);
+    }
 
-	private final List<Tool> tools;
+    public Tool getCurrentTool() {
+        return currentTool;
+    }
 
-	private final HashMap<JToggleButton, Tool> buttonsToTools = new HashMap<>();
+    /**
+     * The action that clicks a button.
+     */
+    private class ButtonClicker extends AbstractAction {
+        private static final long serialVersionUID = 7L;
 
-	private final ToolAdapter adapter;
+        public ButtonClicker(AbstractButton button) {
+            this.button = button;
+        }
 
-	private Tool currentTool = null;
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            button.doClick();
+        }
 
-	/**
-	 * Instantiates a new tool bar.
-	 *
-	 * @param view
-	 *            the view the automaton is displayed in
-	 * @param drawer
-	 *            the automaton drawer
-	 * @param box
-	 *            the toolbox to get the initial tools to put in the bar
-	 */
-	public ToolBar(final EditCanvas view, final AutomatonDrawer drawer, final ToolBox box) {
-		super();
-		adapter = new ToolAdapter(view);
-		this.view = view;
-		this.drawer = drawer;
-		tools = box.tools(view, drawer);
-		initBar();
-		view.addMouseListener(adapter);
-		view.addMouseMotionListener(adapter);
-	}
+        AbstractButton button;
+    }
 
-	/**
-	 * If a tool is clicked, sets the new current tool.
-	 */
-	@Override
-	public void actionPerformed(final ActionEvent e) {
-		final Tool tool = buttonsToTools.get(e.getSource());
-		if (tool != null) {
-			adapter.setAdapter(tool);
-			currentTool = tool;
-			view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		}
-		if (tool instanceof DeleteTool) {
-			final Toolkit toolkit = Toolkit.getDefaultToolkit();
-			// Image image =
-			// toolkit.getImage("/JFLAP09CVS/ICON/deletecursor.gif");
-			final URL url = getClass().getResource("/ICON/deletecursor.gif");
-			final Image image = getToolkit().getImage(url);
-			final Point hotSpot = new Point(5, 5);
-			final Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "Delete");
-			view.setCursor(cursor);
-			// Cursor hourglassCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
-			// view.setCursor(hourglassCursor);
-		}
-	}
+    private Component view;
 
-	/**
-	 * Draws the tool view.
-	 *
-	 * @param g
-	 *            the graphics object to draw upon
-	 */
-	public void drawTool(final Graphics g) {
-		if (currentTool == null) {
-			return;
-		}
-		currentTool.draw(g);
-	}
+    private AutomatonDrawer drawer;
 
-	public Tool getCurrentTool() {
-		return currentTool;
-	}
+    private List<Tool> tools;
 
-	/**
-	 * Returns the automaton drawer for the automaton.
-	 *
-	 * @return the automaton drawer for the automaton
-	 */
-	protected AutomatonDrawer getDrawer() {
-		return drawer;
-	}
+    private HashMap<JToggleButton, Tool> buttonsToTools = new HashMap<>();
 
-	/**
-	 * Returns the view that the automaton is drawn in.
-	 *
-	 * @return the view that the automaton is drawn in
-	 */
-	protected Component getView() {
-		return view;
-	}
+    private ToolAdapter adapter;
 
-	/**
-	 * Initializes the tool bar.
-	 */
-	private void initBar() {
-		final ButtonGroup group = new ButtonGroup();
-		JToggleButton button = null;
-		final Iterator<Tool> it = tools.iterator();
-		KeyStroke key;
-		while (it.hasNext()) {
-			final Tool tool = it.next();
-			button = new JToggleButton(tool.getIcon());
-			buttonsToTools.put(button, tool);
-			button.setToolTipText(tool.getShortcutToolTip());
-			group.add(button);
-			this.add(button);
-			button.addActionListener(this);
-			key = tool.getKey();
-			if (key == null) {
-				continue;
-			}
-			final InputMap imap = button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-			final ActionMap amap = button.getActionMap();
-			final Object o = new Object();
-			imap.put(key, o);
-			amap.put(o, new ButtonClicker(button));
-		}
-	}
+    private Tool currentTool = null;
 }

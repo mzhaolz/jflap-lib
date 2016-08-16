@@ -25,39 +25,39 @@ import javax.swing.AbstractAction;
  * @author Thomas Finley
  */
 public abstract class TooltipAction extends AbstractAction {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	public TooltipAction(final String name, final String tooltip) {
-		super(name);
-		putValue(SHORT_DESCRIPTION, tooltip);
-	}
+    public TooltipAction(String name, String tooltip) {
+        super(name);
+        putValue(SHORT_DESCRIPTION, tooltip);
+    }
 
-	/**
-	 * Gets the tool tip description.
-	 *
-	 * @return the tool tip for this action
-	 */
-	public String getTip() {
-		return (String) getValue(SHORT_DESCRIPTION);
-	}
+    /**
+     * Sets the tool tip description.
+     *
+     * @param tip
+     *            the new tool tip
+     */
+    public void setTip(String tip) {
+        if (tip == null) {
+            putValue(SHORT_DESCRIPTION, tip);
+            return;
+        }
+        if (tip.equals(getValue(SHORT_DESCRIPTION))) {
+            return;
+        }
+        putValue(SHORT_DESCRIPTION, tip);
+    }
 
-	/**
-	 * Sets the tool tip description.
-	 *
-	 * @param tip
-	 *            the new tool tip
-	 */
-	public void setTip(final String tip) {
-		if (tip == null) {
-			putValue(SHORT_DESCRIPTION, tip);
-			return;
-		}
-		if (tip.equals(getValue(SHORT_DESCRIPTION))) {
-			return;
-		}
-		putValue(SHORT_DESCRIPTION, tip);
-	}
+    /**
+     * Gets the tool tip description.
+     *
+     * @return the tool tip for this action
+     */
+    public String getTip() {
+        return (String) getValue(SHORT_DESCRIPTION);
+    }
 }

@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.pumping.reg;
 
-import com.google.common.collect.Lists;
-
 import edu.duke.cs.jflap.pumping.LemmaMath;
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
+
+import com.google.common.collect.Lists;
 
 /**
  * The regular pumping lemma for <i>L</i> = {<i>a<sup>n</sup>b<sup>n</sup></i> :
@@ -28,60 +28,60 @@ import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
  * @author Jinghui Lim & Chris Morgan
  */
 public class AnBn extends RegularPumpingLemma {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -4276138054767348836L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -4276138054767348836L;
 
-	@Override
-	public void chooseI() {
-		i = LemmaMath.flipCoin();
-	}
+    @Override
+    public String getTitle() {
+        return "a^n b^n : n >= 0";
+    }
 
-	@Override
-	protected void chooseW() {
-		w = pumpString("a", m) + pumpString("b", m);
-	}
+    @Override
+    public String getHTMLTitle() {
+        return "<i>a<sup>n</sup>b<sup>n</sup></i> : <i>n</i> " + GREATER_OR_EQ + " 0";
+    }
 
-	@Override
-	public String getHTMLTitle() {
-		return "<i>a<sup>n</sup>b<sup>n</sup></i> : <i>n</i> " + GREATER_OR_EQ + " 0";
-	}
+    @Override
+    public void setDescription() {
+        partitionIsValid = false;
+        explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
+                + "b<sup><i>m</i></sup>\".  The <i>y</i> value thus would be a multiple of \"a\".  "
+                + "For any <i>i</i> " + NOT_EQUAL + " 1, n<sub>a</sub> " + NOT_EQUAL
+                + " n<sub>b</sub>, giving a string "
+                + "which is not in the language.  Thus, the language is not regular.";
+    }
 
-	@Override
-	public String getTitle() {
-		return "a^n b^n : n >= 0";
-	}
+    @Override
+    protected void chooseW() {
+        w = pumpString("a", m) + pumpString("b", m);
+    }
 
-	@Override
-	public boolean isInLang(final String s) {
-		int a, b;
-		final char[] list = new char[] { 'a', 'b' };
-		if (LemmaMath.isMixture(s, list)) {
-			return false;
-		}
+    @Override
+    public void chooseI() {
+        i = LemmaMath.flipCoin();
+    }
 
-		a = LemmaMath.countInstances(s, 'a');
-		b = LemmaMath.countInstances(s, 'b');
-		if (a == b) {
-			return true;
-		}
-		return false;
-	}
+    @Override
+    protected void setRange() {
+        myRange = Lists.newArrayList(4, 18);
+    }
 
-	@Override
-	public void setDescription() {
-		partitionIsValid = false;
-		explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
-				+ "b<sup><i>m</i></sup>\".  The <i>y</i> value thus would be a multiple of \"a\".  "
-				+ "For any <i>i</i> " + NOT_EQUAL + " 1, n<sub>a</sub> " + NOT_EQUAL
-				+ " n<sub>b</sub>, giving a string "
-				+ "which is not in the language.  Thus, the language is not regular.";
-	}
+    @Override
+    public boolean isInLang(String s) {
+        int a, b;
+        char[] list = new char[] { 'a', 'b' };
+        if (LemmaMath.isMixture(s, list)) {
+            return false;
+        }
 
-	@Override
-	protected void setRange() {
-		myRange = Lists.newArrayList(4, 18);
-	}
+        a = LemmaMath.countInstances(s, 'a');
+        b = LemmaMath.countInstances(s, 'b');
+        if (a == b) {
+            return true;
+        }
+        return false;
+    }
 
 }
