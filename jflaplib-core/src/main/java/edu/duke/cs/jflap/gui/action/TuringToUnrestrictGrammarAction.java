@@ -32,34 +32,34 @@ import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
  */
 public class TuringToUnrestrictGrammarAction extends ConvertAutomatonToGrammarAction {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    public TuringToUnrestrictGrammarAction(AutomatonEnvironment automatonEnvironment) {
-        super("Convert to Unrestricted Grammar", automatonEnvironment);
-        // TODO Auto-generated constructor stub
-    }
+	public static boolean isApplicable(final Object object) {
+		return object instanceof TuringMachine;
+	}
 
-    @Override
-    // TODO: Need to put error check, make sure there is only one letter popping
-    // and placing
-    // More error check?
-    protected boolean checkAutomaton() {
-        // TODO Auto-generated method stub
-        // return true for now
-        return true;
-    }
+	public TuringToUnrestrictGrammarAction(final AutomatonEnvironment automatonEnvironment) {
+		super("Convert to Unrestricted Grammar", automatonEnvironment);
+		// TODO Auto-generated constructor stub
+	}
 
-    @Override
-    protected ConvertController initializeController(ConvertPane pane, SelectionDrawer drawer,
-            Automaton automaton) {
-        // TODO Auto-generated method stub
-        return new TuringConvertController(pane, drawer, (TuringMachine) automaton);
-    }
+	@Override
+	// TODO: Need to put error check, make sure there is only one letter popping
+	// and placing
+	// More error check?
+	protected boolean checkAutomaton() {
+		// TODO Auto-generated method stub
+		// return true for now
+		return true;
+	}
 
-    public static boolean isApplicable(Object object) {
-        return object instanceof TuringMachine;
-    }
+	@Override
+	protected ConvertController initializeController(final ConvertPane pane, final SelectionDrawer drawer,
+			final Automaton automaton) {
+		// TODO Auto-generated method stub
+		return new TuringConvertController(pane, drawer, (TuringMachine) automaton);
+	}
 }

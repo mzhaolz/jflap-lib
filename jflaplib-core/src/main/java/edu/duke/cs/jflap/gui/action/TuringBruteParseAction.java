@@ -16,16 +16,16 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.List;
+
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.parse.TMBruteParsePane;
-
-import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Special brute force parser for parsing grammar that was converted from Turing
@@ -36,108 +36,106 @@ import java.util.List;
  */
 public class TuringBruteParseAction extends GrammarAction {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** The grammar environment. */
-    private GrammarEnvironment environment;
+	/** The grammar environment. */
+	private final GrammarEnvironment environment;
 
-    private HashMap<String, String> myVariableMap;
+	private HashMap<String, String> myVariableMap;
 
-    /**
-     * Instantiates a new <CODE>BruteParseAction</CODE>.
-     *
-     * @param environment
-     *            the grammar environment
-     */
-    public TuringBruteParseAction(GrammarEnvironment environment) {
-        super("Parser for Converted Grammar from TM", null);
-        this.environment = environment;
-    }
+	/**
+	 * Instantiates a new <CODE>BruteParseAction</CODE>.
+	 *
+	 * @param environment
+	 *            the grammar environment
+	 */
+	public TuringBruteParseAction(final GrammarEnvironment environment) {
+		super("Parser for Converted Grammar from TM", null);
+		this.environment = environment;
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        // TODO Auto-generated method stub
-        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-        List<Production> p = g.getProductions();
-        Grammar g_trimmed = trim(p);
-        // FrameFactory.createFrame(g_trimed);
+	@Override
+	public void actionPerformed(final ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		final Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+		final List<Production> p = g.getProductions();
+		final Grammar g_trimmed = trim(p);
+		// FrameFactory.createFrame(g_trimed);
 
-        TMBruteParsePane bpp = new TMBruteParsePane(environment, g, g_trimmed, myVariableMap, null);
-        environment.add(bpp, "Parser for Converted Grammar from TM", new CriticalTag() {
-        });
-        environment.setActive(bpp);
-    }
+		final TMBruteParsePane bpp = new TMBruteParsePane(environment, g, g_trimmed, myVariableMap, null);
+		environment.add(bpp, "Parser for Converted Grammar from TM", new CriticalTag() {
+		});
+		environment.setActive(bpp);
+	}
 
-    /**
-     * Trimming grammar, so variable V(a0a) becomes normal variable like "A" or
-     * "B", etc.
-     *
-     * @param p
-     *            Productions that needs to be trimmed.
-     * @return
-     */
-    private Grammar trim(List<Production> p) {
-        myVariableMap = new HashMap<>();
-        char ch = 'A';
-        for (int i = 0; i < p.size(); i++) {
-            String lhs = p.get(i).getLHS();
-            if (ch == 'S' || ch == 'T') {
-                ch++;
-            }
-            int aa = lhs.indexOf("V(");
-            while (aa > -1) {
+	/**
+	 * Trimming grammar, so variable V(a0a) becomes normal variable like "A" or
+	 * "B", etc.
+	 *
+	 * @param p
+	 *            Productions that needs to be trimmed.
+	 * @return
+	 */
+	private Grammar trim(final List<Production> p) {
+		myVariableMap = new HashMap<>();
+		char ch = 'A';
+		for (int i = 0; i < p.size(); i++) {
+			String lhs = p.get(i).getLHS();
+			if (ch == 'S' || ch == 'T') {
+				ch++;
+			}
+			int aa = lhs.indexOf("V(");
+			while (aa > -1) {
 
-                // System.out.println("in 1st "+lhs+"===> ");
-                int bb = lhs.indexOf(")");
-                String var = "";
-                if ((aa + bb + 1) > lhs.length()) {
-                    var = lhs.substring(aa, aa + bb);
-                    lhs = lhs.substring(0, aa) + ch;
-                } else {
-                    var = lhs.substring(aa, aa + bb + 1);
-                    lhs = lhs.substring(0, aa) + ch + lhs.substring(aa + bb);
-                }
-                // System.out.println(var+ " and new lhs is = "+lhs);
-                aa = lhs.indexOf("V(");
+				// System.out.println("in 1st "+lhs+"===> ");
+				final int bb = lhs.indexOf(")");
+				String var = "";
+				if ((aa + bb + 1) > lhs.length()) {
+					var = lhs.substring(aa, aa + bb);
+					lhs = lhs.substring(0, aa) + ch;
+				} else {
+					var = lhs.substring(aa, aa + bb + 1);
+					lhs = lhs.substring(0, aa) + ch + lhs.substring(aa + bb);
+				}
+				// System.out.println(var+ " and new lhs is = "+lhs);
+				aa = lhs.indexOf("V(");
 
-                myVariableMap.put("" + ch, var);
-                // System.out.println(var+" converted to : "+ch);
+				myVariableMap.put("" + ch, var);
+				// System.out.println(var+" converted to : "+ch);
 
-                // lhs.replaceAll("V"+aa[j], "A");
-                for (int k = 0; k < p.size(); k++) {
+				// lhs.replaceAll("V"+aa[j], "A");
+				for (int k = 0; k < p.size(); k++) {
 
-                    String inner_lhs = p.get(k).getLHS();
-                    String inner_rhs = p.get(k).getRHS();
-                    int a = inner_lhs.indexOf(var);
-                    if (a > -1) {
-                        // System.out.println("in inner lhs "+inner_lhs+" ===>
-                        // ");
-                        inner_lhs = inner_lhs.substring(0, a) + "" + ch
-                                + inner_lhs.substring(a + var.length());
-                        // System.out.println(inner_lhs);
-                    }
-                    a = inner_rhs.indexOf(var);
-                    if (a > -1) {
-                        // System.out.println("in inner rhs "+inner_rhs+" ===>
-                        // ");
+					String inner_lhs = p.get(k).getLHS();
+					String inner_rhs = p.get(k).getRHS();
+					int a = inner_lhs.indexOf(var);
+					if (a > -1) {
+						// System.out.println("in inner lhs "+inner_lhs+" ===>
+						// ");
+						inner_lhs = inner_lhs.substring(0, a) + "" + ch + inner_lhs.substring(a + var.length());
+						// System.out.println(inner_lhs);
+					}
+					a = inner_rhs.indexOf(var);
+					if (a > -1) {
+						// System.out.println("in inner rhs "+inner_rhs+" ===>
+						// ");
 
-                        inner_rhs = inner_rhs.substring(0, a) + "" + ch
-                                + inner_rhs.substring(a + var.length());
-                        // System.out.println(inner_rhs);
+						inner_rhs = inner_rhs.substring(0, a) + "" + ch + inner_rhs.substring(a + var.length());
+						// System.out.println(inner_rhs);
 
-                    }
-                    p.set(k, new Production(inner_lhs, inner_rhs));
-                }
-                ch = (char) (ch + 1);
+					}
+					p.set(k, new Production(inner_lhs, inner_rhs));
+				}
+				ch = (char) (ch + 1);
 
-                // System.out.println(lhs);
-            }
-        }
-        Grammar g = new UnrestrictedGrammar();
-        g.addProductions(p);
-        return g;
-    }
+				// System.out.println(lhs);
+			}
+		}
+		final Grammar g = new UnrestrictedGrammar();
+		g.addProductions(p);
+		return g;
+	}
 }

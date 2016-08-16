@@ -30,76 +30,76 @@ import java.util.List;
  * @author Thomas Finley
  */
 public class CodecRegistry {
-    /**
-     * Adds a codec to the registry.
-     *
-     * @param codec
-     *            the codec to add
-     */
-    public void add(Codec codec) {
-        addEncoder(codec);
-        addDecoder(codec);
-    }
+	/** The encoders of the registry. */
+	private final List<Encoder> encoders = new ArrayList<>();
 
-    /**
-     * Add a {@link Encoder} to the registry.
-     *
-     * @param encoder
-     *            the encoder to add
-     */
-    private void addEncoder(Encoder encoder) {
-        encoders.add(encoder);
-    }
+	/** The decoders of the registry. */
+	private final List<Decoder> decoders = new ArrayList<>();
 
-    /**
-     * Add a {@link Decoder} to the registry.
-     *
-     * @param decoder
-     *            the decoder to add
-     */
-    private void addDecoder(Decoder decoder) {
-        decoders.add(decoder);
-    }
+	/**
+	 * Adds a codec to the registry.
+	 *
+	 * @param codec
+	 *            the codec to add
+	 */
+	public void add(final Codec codec) {
+		addEncoder(codec);
+		addDecoder(codec);
+	}
 
-    /**
-     * Returns a list of encoders that could encode a structure. The encoders
-     * are returned in the order they were placed in the registry with the
-     * {@link #add} method.
-     *
-     * @param structure
-     *            the structure the encoders should be able to possibly encode,
-     *            or <CODE>null</CODE> if all encoders should be returned
-     * @return the immutable list of encoders
-     */
-    public List<Encoder> getEncoders(Serializable structure) {
-        if (structure == null) {
-            return Collections.unmodifiableList(encoders);
-        }
-        List<Encoder> validEncoders = new ArrayList<>();
-        Iterator<Encoder> it = encoders.iterator();
-        while (it.hasNext()) {
-            Codec enc = (Codec) it.next();
-            if (enc.canEncode(structure)) {
-                validEncoders.add(enc);
-            }
-        }
-        return Collections.unmodifiableList(validEncoders);
-    }
+	/**
+	 * Add a {@link Decoder} to the registry.
+	 *
+	 * @param decoder
+	 *            the decoder to add
+	 */
+	private void addDecoder(final Decoder decoder) {
+		decoders.add(decoder);
+	}
 
-    /**
-     * Returns a list of decoders. All decoders are returned. The decoders are
-     * returned in the order they were placed in the registry with the
-     * {@link #add} method.
-     *
-     * @return the immutable list of decoders
-     */
-    public List<Decoder> getDecoders() {
-        return Collections.unmodifiableList(decoders);
-    }
+	/**
+	 * Add a {@link Encoder} to the registry.
+	 *
+	 * @param encoder
+	 *            the encoder to add
+	 */
+	private void addEncoder(final Encoder encoder) {
+		encoders.add(encoder);
+	}
 
-    /** The encoders of the registry. */
-    private List<Encoder> encoders = new ArrayList<>();
+	/**
+	 * Returns a list of decoders. All decoders are returned. The decoders are
+	 * returned in the order they were placed in the registry with the
+	 * {@link #add} method.
+	 *
+	 * @return the immutable list of decoders
+	 */
+	public List<Decoder> getDecoders() {
+		return Collections.unmodifiableList(decoders);
+	}
 
-    /** The decoders of the registry. */
-    private List<Decoder> decoders = new ArrayList<>();
+	/**
+	 * Returns a list of encoders that could encode a structure. The encoders
+	 * are returned in the order they were placed in the registry with the
+	 * {@link #add} method.
+	 *
+	 * @param structure
+	 *            the structure the encoders should be able to possibly encode,
+	 *            or <CODE>null</CODE> if all encoders should be returned
+	 * @return the immutable list of encoders
+	 */
+	public List<Encoder> getEncoders(final Serializable structure) {
+		if (structure == null) {
+			return Collections.unmodifiableList(encoders);
+		}
+		final List<Encoder> validEncoders = new ArrayList<>();
+		final Iterator<Encoder> it = encoders.iterator();
+		while (it.hasNext()) {
+			final Codec enc = (Codec) it.next();
+			if (enc.canEncode(structure)) {
+				validEncoders.add(enc);
+			}
+		}
+		return Collections.unmodifiableList(validEncoders);
+	}
 }

@@ -16,12 +16,12 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.environment.Environment;
-import edu.duke.cs.jflap.gui.environment.Universe;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
+
+import edu.duke.cs.jflap.gui.environment.Environment;
+import edu.duke.cs.jflap.gui.environment.Universe;
 
 /**
  * The <CODE>SetUndoAmount</CODE> is an action to set the amount of Undos that
@@ -30,70 +30,69 @@ import javax.swing.JOptionPane;
  * @author Henry Qin
  */
 public class SetUndoAmountAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>SetUndoAmountAction</CODE>.
-     *
-     * @param environment
-     *            the environment that holds the serializable object
-     */
-    public SetUndoAmountAction() {
-        super("Set Undo Amount", null);
-        // this.environment = environment;
-    }
+	/**
+	 * This action is restricted to those objects that are serializable.
+	 *
+	 * @param object
+	 *            the object to check for serializable-ness
+	 * @return <CODE>true</CODE> if the object is an instance of a serializable
+	 *         object, <CODE>false</CODE> otherwise
+	 */
+	public static boolean isApplicable(final Object object) {
+		return true;
+	}
 
-    /**
-     * If an Undo amount change was requested, then show a dialog and ask about
-     * it.
-     *
-     * @param event
-     *            the action event
-     */
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        String str;
-        int n;
-        while (true) {
-            // str = JOptionPane.showInputDialog(null, "Please type the number
-            // of Undos:", "How many undo?", ""+Universe.curProfile.undo_num,
-            // JOptionPane.PLAIN_MESSAGE);
-            str = JOptionPane.showInputDialog("Please type the number of Undos:",
-                    "" + Universe.curProfile.undo_num);
-            try {
-                n = Integer.parseInt(str);
-            } catch (NumberFormatException e) {
-                if (str != null) {
-                    continue;
-                } else {
-                    return;
-                }
-            }
-            break;
-        }
+	/** The environment that this save action accesses its Undo from. */
+	protected Environment environment;
 
-        // we better make sure this option is disabled for places where Undo
-        // does not apply.
-        // ((AutomatonEnvironment) environment).getUndoKeeper().setNumUndo(n);
-        Universe.curProfile.setNumUndo(n);
-        Universe.curProfile.savePreferences();
-    }
+	/**
+	 * Instantiates a new <CODE>SetUndoAmountAction</CODE>.
+	 *
+	 * @param environment
+	 *            the environment that holds the serializable object
+	 */
+	public SetUndoAmountAction() {
+		super("Set Undo Amount", null);
+		// this.environment = environment;
+	}
 
-    /**
-     * This action is restricted to those objects that are serializable.
-     *
-     * @param object
-     *            the object to check for serializable-ness
-     * @return <CODE>true</CODE> if the object is an instance of a serializable
-     *         object, <CODE>false</CODE> otherwise
-     */
-    public static boolean isApplicable(Object object) {
-        return true;
-    }
+	/**
+	 * If an Undo amount change was requested, then show a dialog and ask about
+	 * it.
+	 *
+	 * @param event
+	 *            the action event
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent event) {
+		String str;
+		int n;
+		while (true) {
+			// str = JOptionPane.showInputDialog(null, "Please type the number
+			// of Undos:", "How many undo?", ""+Universe.curProfile.undo_num,
+			// JOptionPane.PLAIN_MESSAGE);
+			str = JOptionPane.showInputDialog("Please type the number of Undos:", "" + Universe.curProfile.undo_num);
+			try {
+				n = Integer.parseInt(str);
+			} catch (final NumberFormatException e) {
+				if (str != null) {
+					continue;
+				} else {
+					return;
+				}
+			}
+			break;
+		}
 
-    /** The environment that this save action accesses its Undo from. */
-    protected Environment environment;
+		// we better make sure this option is disabled for places where Undo
+		// does not apply.
+		// ((AutomatonEnvironment) environment).getUndoKeeper().setNumUndo(n);
+		Universe.curProfile.setNumUndo(n);
+		Universe.curProfile.savePreferences();
+	}
 }

@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.environment.Environment;
-import edu.duke.cs.jflap.gui.environment.Universe;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
+
+import edu.duke.cs.jflap.gui.environment.Environment;
+import edu.duke.cs.jflap.gui.environment.Universe;
 
 /**
  * The <CODE>SaveAction</CODE> is an action to save a serializable object
@@ -31,36 +31,36 @@ import javax.swing.KeyStroke;
  * @author Thomas Finley
  */
 public class SaveAction extends SaveAsAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>SaveAction</CODE>.
-     *
-     * @param environment
-     *            the environment that holds the serializable
-     */
-    public SaveAction(Environment environment) {
-        super(environment);
-        putValue(NAME, "Save");
-        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, MAIN_MENU_MASK));
-        this.environment = environment;
-    }
+	/** The environment this action will handle saving for. */
+	private final Environment environment;
 
-    /**
-     * If a save was attempted, call the methods that handle the saving of the
-     * serializable object to a file.
-     *
-     * @param event
-     *            the action event
-     */
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        Universe.frameForEnvironment(environment).save(false);
-    }
+	/**
+	 * Instantiates a new <CODE>SaveAction</CODE>.
+	 *
+	 * @param environment
+	 *            the environment that holds the serializable
+	 */
+	public SaveAction(final Environment environment) {
+		super(environment);
+		putValue(NAME, "Save");
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, MAIN_MENU_MASK));
+		this.environment = environment;
+	}
 
-    /** The environment this action will handle saving for. */
-    private Environment environment;
+	/**
+	 * If a save was attempted, call the methods that handle the saving of the
+	 * serializable object to a file.
+	 *
+	 * @param event
+	 *            the action event
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent event) {
+		Universe.frameForEnvironment(environment).save(false);
+	}
 }

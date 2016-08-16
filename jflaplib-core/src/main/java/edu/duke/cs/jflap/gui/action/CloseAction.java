@@ -16,15 +16,15 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.editor.EditBlockPane;
-import edu.duke.cs.jflap.gui.environment.Environment;
-import edu.duke.cs.jflap.gui.environment.tag.PermanentTag;
-import edu.duke.cs.jflap.gui.environment.tag.Tag;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
+
+import edu.duke.cs.jflap.gui.editor.EditBlockPane;
+import edu.duke.cs.jflap.gui.environment.Environment;
+import edu.duke.cs.jflap.gui.environment.tag.PermanentTag;
+import edu.duke.cs.jflap.gui.environment.tag.Tag;
 
 /**
  * The <CODE>CloseAction</CODE> is an action for removing tabs in an
@@ -35,61 +35,61 @@ import javax.swing.KeyStroke;
  * @author Thomas Finley
  */
 public class CloseAction extends RestrictedAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a <CODE>CloseAction</CODE>.
-     *
-     * @param environment
-     *            the environment to handle the closing for
-     */
-    public CloseAction(Environment environment) {
-        super("Dismiss Tab", null);
-        this.environment = environment;
-        putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, MAIN_MENU_MASK));
-        environment.addChangeListener(e -> checkEnabled());
-        checkEnabled();
-    }
+	/** The environment to handle the closing of tabs for. */
+	private final Environment environment;
 
-    /**
-     * Handles the closing on the environment.
-     *
-     * @param e
-     *            the action event
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (environment.getActive() instanceof EditBlockPane) {
-            EditBlockPane blockEditor = (EditBlockPane) environment.getActive();
-            blockEditor.getAutomaton();
-            blockEditor.getBlock();
-        }
-        environment.remove(environment.getActive());
-        // if (editor) {
-        // EditorPane higherEditor = (EditorPane) environment.getActive();
-        // Automaton higher = higherEditor.getAutomaton();
-        // higher.replaceBlock(block, inside);
-        // }
-    }
+	/**
+	 * Instantiates a <CODE>CloseAction</CODE>.
+	 *
+	 * @param environment
+	 *            the environment to handle the closing for
+	 */
+	public CloseAction(final Environment environment) {
+		super("Dismiss Tab", null);
+		this.environment = environment;
+		putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, MAIN_MENU_MASK));
+		environment.addChangeListener(e -> checkEnabled());
+		checkEnabled();
+	}
 
-    /**
-     * Checks the environment to see if the currently active object has the
-     * <CODE>PermanentTag</CODE> associated with it, and if it does, disables
-     * this action; otherwise it makes it activate.
-     */
-    private void checkEnabled() {
-        Tag tag = environment.getTag(environment.getActive());
+	/**
+	 * Handles the closing on the environment.
+	 *
+	 * @param e
+	 *            the action event
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		if (environment.getActive() instanceof EditBlockPane) {
+			final EditBlockPane blockEditor = (EditBlockPane) environment.getActive();
+			blockEditor.getAutomaton();
+			blockEditor.getBlock();
+		}
+		environment.remove(environment.getActive());
+		// if (editor) {
+		// EditorPane higherEditor = (EditorPane) environment.getActive();
+		// Automaton higher = higherEditor.getAutomaton();
+		// higher.replaceBlock(block, inside);
+		// }
+	}
 
-        if (environment.tabbed.getTabCount() == 1) {
-            setEnabled(false);
-        } else {
-            setEnabled(!(tag instanceof PermanentTag));
-        }
-    }
+	/**
+	 * Checks the environment to see if the currently active object has the
+	 * <CODE>PermanentTag</CODE> associated with it, and if it does, disables
+	 * this action; otherwise it makes it activate.
+	 */
+	private void checkEnabled() {
+		final Tag tag = environment.getTag(environment.getActive());
 
-    /** The environment to handle the closing of tabs for. */
-    private Environment environment;
+		if (environment.tabbed.getTabCount() == 1) {
+			setEnabled(false);
+		} else {
+			setEnabled(!(tag instanceof PermanentTag));
+		}
+	}
 }

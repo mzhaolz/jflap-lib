@@ -16,9 +16,6 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.editor.EditorPane;
-import edu.duke.cs.jflap.gui.environment.Universe;
-
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,71 +30,19 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-/**
- * This utility was created to factor out the massive amounts of common code in
- * the four Graphics saving action classes.
- */
-public class SaveGraphUtility {
+import edu.duke.cs.jflap.gui.editor.EditorPane;
+import edu.duke.cs.jflap.gui.environment.Universe;
 
-    public static void saveGraph(Component apane, JComponent c, String description, String format) {
+class AcceptAllFileFilter extends FileFilter {
+	@Override
+	public boolean accept(final File f) {
+		return true;
+	}
 
-        if (apane instanceof EditorPane) {
-            apane = ((EditorPane) apane).getAutomatonPane();
-        }
-
-        Image canvasimage = apane.createImage(apane.getWidth(), apane.getHeight());
-        Graphics imgG = canvasimage.getGraphics();
-        apane.paint(imgG);
-        BufferedImage bimg = new BufferedImage(canvasimage.getWidth(null),
-                canvasimage.getHeight(null), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = bimg.createGraphics();
-        g.drawImage(canvasimage, null, null);
-
-        Universe.CHOOSER.resetChoosableFileFilters();
-        Universe.CHOOSER.setAcceptAllFileFilterUsed(false);
-
-        FileFilter spec = new FileNameExtensionFilter(description, format.split(","));
-
-        Universe.CHOOSER.addChoosableFileFilter(spec);
-        Universe.CHOOSER.addChoosableFileFilter(new AcceptAllFileFilter());
-        Universe.CHOOSER.setFileFilter(spec);
-
-        int result = Universe.CHOOSER.showSaveDialog(c);
-        while (result == JFileChooser.APPROVE_OPTION) {
-            File file = Universe.CHOOSER.getSelectedFile();
-
-            if (!new FileNameExtensionFilter(description, format.split(",")).accept(file)) {
-                // append
-                // if
-                // the
-                // chosen
-                // name
-                // is
-                // not
-                // acceptable
-                file = new File(file.getAbsolutePath() + "." + format.split(",")[0]);
-            }
-
-            if (file.exists()) {
-                int confirm = JOptionPane.showConfirmDialog(Universe.CHOOSER,
-                        "File exists. Shall I overwrite?", "FILE OVERWRITE ATTEMPTED",
-                        JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.NO_OPTION) {
-                    result = Universe.CHOOSER.showSaveDialog(c);
-                    continue;
-                }
-            }
-
-            try {
-                ImageIO.write(bimg, format.split(",")[0], file);
-                return;
-            } catch (IOException ioe) {
-                JOptionPane.showMessageDialog(c, "Save failed with error:\n" + ioe.getMessage(),
-                        "Save failed", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-    }
+	@Override
+	public String getDescription() {
+		return "All files";
+	}
 }
 
 /**
@@ -107,41 +52,95 @@ public class SaveGraphUtility {
  * @author Henry
  */
 class FileNameExtensionFilter extends FileFilter {
-    String[] myAcceptedFormats;
-    String myDescription;
+	String[] myAcceptedFormats;
+	String myDescription;
 
-    public FileNameExtensionFilter(String description, String... formats) {
-        myDescription = description;
-        myAcceptedFormats = formats;
-    }
+	public FileNameExtensionFilter(final String description, final String... formats) {
+		myDescription = description;
+		myAcceptedFormats = formats;
+	}
 
-    @Override
-    public boolean accept(File f) {
-        if (f.isDirectory()) {
-            return true;
-        }
-        for (String myAcceptedFormat : myAcceptedFormats) {
-            if (f.getName().endsWith("." + myAcceptedFormat)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	@Override
+	public boolean accept(final File f) {
+		if (f.isDirectory()) {
+			return true;
+		}
+		for (final String myAcceptedFormat : myAcceptedFormats) {
+			if (f.getName().endsWith("." + myAcceptedFormat)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    @Override
-    public String getDescription() {
-        return myDescription;
-    }
+	@Override
+	public String getDescription() {
+		return myDescription;
+	}
 }
 
-class AcceptAllFileFilter extends FileFilter {
-    @Override
-    public boolean accept(File f) {
-        return true;
-    }
+/**
+ * This utility was created to factor out the massive amounts of common code in
+ * the four Graphics saving action classes.
+ */
+public class SaveGraphUtility {
 
-    @Override
-    public String getDescription() {
-        return "All files";
-    }
+	public static void saveGraph(Component apane, final JComponent c, final String description, final String format) {
+
+		if (apane instanceof EditorPane) {
+			apane = ((EditorPane) apane).getAutomatonPane();
+		}
+
+		final Image canvasimage = apane.createImage(apane.getWidth(), apane.getHeight());
+		final Graphics imgG = canvasimage.getGraphics();
+		apane.paint(imgG);
+		final BufferedImage bimg = new BufferedImage(canvasimage.getWidth(null), canvasimage.getHeight(null),
+				BufferedImage.TYPE_INT_RGB);
+		final Graphics2D g = bimg.createGraphics();
+		g.drawImage(canvasimage, null, null);
+
+		Universe.CHOOSER.resetChoosableFileFilters();
+		Universe.CHOOSER.setAcceptAllFileFilterUsed(false);
+
+		final FileFilter spec = new FileNameExtensionFilter(description, format.split(","));
+
+		Universe.CHOOSER.addChoosableFileFilter(spec);
+		Universe.CHOOSER.addChoosableFileFilter(new AcceptAllFileFilter());
+		Universe.CHOOSER.setFileFilter(spec);
+
+		int result = Universe.CHOOSER.showSaveDialog(c);
+		while (result == JFileChooser.APPROVE_OPTION) {
+			File file = Universe.CHOOSER.getSelectedFile();
+
+			if (!new FileNameExtensionFilter(description, format.split(",")).accept(file)) {
+				// append
+				// if
+				// the
+				// chosen
+				// name
+				// is
+				// not
+				// acceptable
+				file = new File(file.getAbsolutePath() + "." + format.split(",")[0]);
+			}
+
+			if (file.exists()) {
+				final int confirm = JOptionPane.showConfirmDialog(Universe.CHOOSER, "File exists. Shall I overwrite?",
+						"FILE OVERWRITE ATTEMPTED", JOptionPane.YES_NO_OPTION);
+				if (confirm == JOptionPane.NO_OPTION) {
+					result = Universe.CHOOSER.showSaveDialog(c);
+					continue;
+				}
+			}
+
+			try {
+				ImageIO.write(bimg, format.split(",")[0], file);
+				return;
+			} catch (final IOException ioe) {
+				JOptionPane.showMessageDialog(c, "Save failed with error:\n" + ioe.getMessage(), "Save failed",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		}
+	}
 }

@@ -16,10 +16,10 @@
 
 package edu.duke.cs.jflap.pumping.reg;
 
+import com.google.common.collect.Lists;
+
 import edu.duke.cs.jflap.pumping.LemmaMath;
 import edu.duke.cs.jflap.pumping.RegularPumpingLemma;
-
-import com.google.common.collect.Lists;
 
 /**
  * The regular pumping lemma for <i>L</i> =
@@ -30,60 +30,60 @@ import com.google.common.collect.Lists;
  *
  */
 public class AnBkCnk extends RegularPumpingLemma {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -2843533645633275259L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -2843533645633275259L;
 
-    @Override
-    public String getTitle() {
-        return "a^n b^k c^(n+k) : n >= 0, k >= 0";
-    }
+	@Override
+	public void chooseI() {
+		i = LemmaMath.flipCoin();
+	}
 
-    @Override
-    public String getHTMLTitle() {
-        return "<i>a<sup>n</sup>b<sup>k</sup>c<sup>n+k</sup></i> : <i>n</i> " + GREATER_OR_EQ
-                + " 0, <i>k</i> " + GREATER_OR_EQ + " 0";
-    }
+	@Override
+	protected void chooseW() {
+		w = pumpString("a", getM()) + pumpString("b", getM()) + pumpString("c", getM() * 2);
+	}
 
-    @Override
-    public void setDescription() {
-        partitionIsValid = false;
-        explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
-                + "b<sup><i>m</i></sup>c<sup>2<i>m</i></sup>\".  The <i>y</i> value thus would be a multiple of \"a\".  "
-                + "If <i>i</i> = 0, the string becomes at most \"a<sup><i>m</i>-1</sup>b<sup><i>m</i></sup>"
-                + "c<sup>2<i>m</i></sup>\", which is not in the language.  Thus, the language is not regular.";
-    }
+	@Override
+	public String getHTMLTitle() {
+		return "<i>a<sup>n</sup>b<sup>k</sup>c<sup>n+k</sup></i> : <i>n</i> " + GREATER_OR_EQ + " 0, <i>k</i> "
+				+ GREATER_OR_EQ + " 0";
+	}
 
-    @Override
-    protected void setRange() {
-        myRange = Lists.newArrayList(2, 9);
-    }
+	@Override
+	public String getTitle() {
+		return "a^n b^k c^(n+k) : n >= 0, k >= 0";
+	}
 
-    @Override
-    protected void chooseW() {
-        w = pumpString("a", getM()) + pumpString("b", getM()) + pumpString("c", getM() * 2);
-    }
+	@Override
+	public boolean isInLang(final String s) {
+		int a, b, c;
+		final char[] list = new char[] { 'a', 'b', 'c' };
+		if (LemmaMath.isMixture(s, list)) {
+			return false;
+		}
 
-    @Override
-    public void chooseI() {
-        i = LemmaMath.flipCoin();
-    }
+		a = LemmaMath.countInstances(s, 'a');
+		b = LemmaMath.countInstances(s, 'b');
+		c = LemmaMath.countInstances(s, 'c');
+		if (a + b == c) {
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public boolean isInLang(String s) {
-        int a, b, c;
-        char[] list = new char[] { 'a', 'b', 'c' };
-        if (LemmaMath.isMixture(s, list)) {
-            return false;
-        }
+	@Override
+	public void setDescription() {
+		partitionIsValid = false;
+		explanation = "For any <i>m</i> value, a possible value for <i>w</i> is \"a<sup><i>m</i></sup>"
+				+ "b<sup><i>m</i></sup>c<sup>2<i>m</i></sup>\".  The <i>y</i> value thus would be a multiple of \"a\".  "
+				+ "If <i>i</i> = 0, the string becomes at most \"a<sup><i>m</i>-1</sup>b<sup><i>m</i></sup>"
+				+ "c<sup>2<i>m</i></sup>\", which is not in the language.  Thus, the language is not regular.";
+	}
 
-        a = LemmaMath.countInstances(s, 'a');
-        b = LemmaMath.countInstances(s, 'b');
-        c = LemmaMath.countInstances(s, 'c');
-        if (a + b == c) {
-            return true;
-        }
-        return false;
-    }
+	@Override
+	protected void setRange() {
+		myRange = Lists.newArrayList(2, 9);
+	}
 }
