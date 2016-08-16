@@ -34,8 +34,6 @@ import java.util.stream.IntStream;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import org.openjdk.jmh.annotations.Benchmark;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -573,7 +571,6 @@ public class UnrestrictedTreePanel extends TreePanel {
 	 *            the end result of a parse tree derivation, or
 	 *            <CODE>null</CODE> if no answer should be displayed
 	 */
-	@Benchmark
 	public void setAnswer(ParseNode answer) {
 		// TODO: this method has become absurdly slow.
 		long start = System.nanoTime();
