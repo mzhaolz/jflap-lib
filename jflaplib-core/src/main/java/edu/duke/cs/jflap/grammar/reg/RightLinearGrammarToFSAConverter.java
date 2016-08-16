@@ -16,6 +16,9 @@
 
 package edu.duke.cs.jflap.grammar.reg;
 
+import java.awt.Point;
+import java.util.List;
+
 import edu.duke.cs.jflap.automata.Automaton;
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.StatePlacer;
@@ -25,9 +28,6 @@ import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.GrammarToAutomatonConverter;
 import edu.duke.cs.jflap.grammar.Production;
 import edu.duke.cs.jflap.grammar.ProductionChecker;
-
-import java.awt.Point;
-import java.util.List;
 
 /**
  * The right linear grammar converter can be used to convert regular grammars,
@@ -43,77 +43,77 @@ import java.util.List;
  * @author Ryan Cavalcante
  */
 public class RightLinearGrammarToFSAConverter extends GrammarToAutomatonConverter {
-    /**
-     * Creates an instance of <CODE>RightLinearGrammarToFSAConverter</CODE>.
-     */
-    public RightLinearGrammarToFSAConverter() {
-    }
+	protected String FINAL_STATE = "FINAL";
 
-    /**
-     * Returns the transition created by converting <CODE>production</CODE> to
-     * its equivalent transition.
-     *
-     * @param production
-     *            the production
-     * @return the equivalent transition.
-     */
-    @Override
-    public Transition getTransitionForProduction(Production production) {
-        String lhs = production.getLHS();
-        State from = getStateForVariable(lhs);
+	/**
+	 * Creates an instance of <CODE>RightLinearGrammarToFSAConverter</CODE>.
+	 */
+	public RightLinearGrammarToFSAConverter() {
+	}
 
-        /** if of the form A->xB */
-        if (ProductionChecker.isRightLinearProductionWithVariable(production)) {
-            List<String> variables = production.getVariablesOnRHS();
-            String variable = variables.get(0);
-            State to = getStateForVariable(variable);
-            String rhs = production.getRHS();
-            String label = rhs.substring(0, rhs.length() - 1);
-            FSATransition trans = new FSATransition(from, to, label);
-            return trans;
-        }
-        /** if of the form A->x */
-        else if (ProductionChecker.isLinearProductionWithNoVariable(production)) {
-            String transLabel = production.getRHS();
-            State finalState = getStateForVariable(FINAL_STATE);
-            FSATransition ftrans = new FSATransition(from, finalState, transLabel);
-            return ftrans;
-        }
-        return null;
-    }
+	/**
+	 * Adds all states to <CODE>automaton</CODE> necessary for the conversion of
+	 * <CODE>grammar</CODE> to its equivalent automaton. This creates a state
+	 * for each variable in <CODE>grammar</CODE> and maps each created state to
+	 * the variable it was created for by calling mapStateToVariable.
+	 *
+	 * @param grammar
+	 *            the grammar being converted.
+	 * @param automaton
+	 *            the automaton being created.
+	 */
+	@Override
+	public void createStatesForConversion(final Grammar grammar, final Automaton automaton) {
+		initialize();
+		final StatePlacer sp = new StatePlacer();
+		final List<String> variables = grammar.getVariables();
+		for (int k = 0; k < variables.size(); k++) {
+			final String variable = variables.get(k);
+			final Point point = sp.getPointForState(automaton);
+			final State state = automaton.createState(point);
+			if (variable.equals(grammar.getStartVariable())) {
+				automaton.setInitialState(state);
+			}
+			state.setLabel(variable);
+			mapStateToVariable(state, variable);
+		}
 
-    /**
-     * Adds all states to <CODE>automaton</CODE> necessary for the conversion of
-     * <CODE>grammar</CODE> to its equivalent automaton. This creates a state
-     * for each variable in <CODE>grammar</CODE> and maps each created state to
-     * the variable it was created for by calling mapStateToVariable.
-     *
-     * @param grammar
-     *            the grammar being converted.
-     * @param automaton
-     *            the automaton being created.
-     */
-    @Override
-    public void createStatesForConversion(Grammar grammar, Automaton automaton) {
-        initialize();
-        StatePlacer sp = new StatePlacer();
-        List<String> variables = grammar.getVariables();
-        for (int k = 0; k < variables.size(); k++) {
-            String variable = variables.get(k);
-            Point point = sp.getPointForState(automaton);
-            State state = automaton.createState(point);
-            if (variable.equals(grammar.getStartVariable())) {
-                automaton.setInitialState(state);
-            }
-            state.setLabel(variable);
-            mapStateToVariable(state, variable);
-        }
+		final Point pt = sp.getPointForState(automaton);
+		final State finalState = automaton.createState(pt);
+		automaton.addFinalState(finalState);
+		mapStateToVariable(finalState, FINAL_STATE);
+	}
 
-        Point pt = sp.getPointForState(automaton);
-        State finalState = automaton.createState(pt);
-        automaton.addFinalState(finalState);
-        mapStateToVariable(finalState, FINAL_STATE);
-    }
+	/**
+	 * Returns the transition created by converting <CODE>production</CODE> to
+	 * its equivalent transition.
+	 *
+	 * @param production
+	 *            the production
+	 * @return the equivalent transition.
+	 */
+	@Override
+	public Transition getTransitionForProduction(final Production production) {
+		final String lhs = production.getLHS();
+		final State from = getStateForVariable(lhs);
 
-    protected String FINAL_STATE = "FINAL";
+		/** if of the form A->xB */
+		if (ProductionChecker.isRightLinearProductionWithVariable(production)) {
+			final List<String> variables = production.getVariablesOnRHS();
+			final String variable = variables.get(0);
+			final State to = getStateForVariable(variable);
+			final String rhs = production.getRHS();
+			final String label = rhs.substring(0, rhs.length() - 1);
+			final FSATransition trans = new FSATransition(from, to, label);
+			return trans;
+		}
+		/** if of the form A->x */
+		else if (ProductionChecker.isLinearProductionWithNoVariable(production)) {
+			final String transLabel = production.getRHS();
+			final State finalState = getStateForVariable(FINAL_STATE);
+			final FSATransition ftrans = new FSATransition(from, finalState, transLabel);
+			return ftrans;
+		}
+		return null;
+	}
 }

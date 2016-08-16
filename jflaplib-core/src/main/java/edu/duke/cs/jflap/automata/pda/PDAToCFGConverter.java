@@ -16,19 +16,19 @@
 
 package edu.duke.cs.jflap.automata.pda;
 
-import edu.duke.cs.jflap.automata.Automaton;
-import edu.duke.cs.jflap.automata.State;
-import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.grammar.Production;
-import edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar;
-import edu.duke.cs.jflap.gui.grammar.GrammarTableModel;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+
+import edu.duke.cs.jflap.automata.Automaton;
+import edu.duke.cs.jflap.automata.State;
+import edu.duke.cs.jflap.automata.Transition;
+import edu.duke.cs.jflap.grammar.Production;
+import edu.duke.cs.jflap.grammar.cfg.ContextFreeGrammar;
+import edu.duke.cs.jflap.gui.grammar.GrammarTableModel;
 
 /**
  * The PDA to context free grammar converter can be used to convert a pushdown
@@ -48,551 +48,542 @@ import java.util.Stack;
  * @author Ryan Cavalcante
  */
 public class PDAToCFGConverter {
-    /**
-     * Creates an instance of <CODE>PDAToCFGConverter</CODE>.
-     */
-    public PDAToCFGConverter() {
-        initializeConverter();
-    }
+	protected static final String START_SYMBOL = "S";
 
-    /**
-     * Initializes converter for pda to cfg conversion (clears map and sets
-     * unique id)
-     */
-    public void initializeConverter() {
-        MAP = new HashMap<>();
-        UNIQUE_ID = 0;
-    }
+	protected static final String LEFT_PAREN = "(";
 
-    /**
-     * Returns true if <CODE>automaton</CODE> has a single final state that is
-     * entered if and only if the stack is empty.
-     *
-     * @param automaton
-     *            the automaton.
-     * @return true if <CODE>automaton</CODE> has a single final state that is
-     *         entered if and only if the stack is empty.
-     */
-    public boolean hasSingleFinalState(Automaton automaton) {
-        List<State> finalStates = automaton.getFinalStates();
-        if (finalStates.size() != 1) {
-            // System.err.println("There is not exactly one final state!");
-            return false;
-        }
+	protected static final String RIGHT_PAREN = ")";
 
-        State finalState = finalStates.get(0);
-        List<Transition> transitions = automaton.getTransitionsToState(finalState);
-        for (int k = 0; k < transitions.size(); k++) {
-            PDATransition trans = (PDATransition) transitions.get(k);
-            String toPop = trans.getStringToPop();
-            if (!(toPop.substring(toPop.length() - 1)).equals(BOTTOM_OF_STACK)) {
-                // System.err.println("Bad transition to final state! "+trans);
-                // System.err.println(toPop.substring(toPop.length()-1));
-                return false;
-            }
-        }
-        return true;
-    }
+	protected static final String BOTTOM_OF_STACK = "Z";
 
-    /**
-     * Returns true if all transitions in <CODE>automaton</CODE> read a single
-     * character from the input, pop a single character from the stack and push
-     * either zero or two characters on to the stack.
-     *
-     * @param automaton
-     *            the automaton
-     * @return true if all transitions in <CODE>automaton</CODE> read a single
-     *         character from the input, pop a single character from the stack
-     *         and push either zero or two characters on to the stack.
-     */
-    public boolean hasTransitionsInCorrectForm(Automaton automaton) {
-        List<Transition> transitions = automaton.getTransitions();
-        for (int k = 0; k < transitions.size(); k++) {
-            if (!isPushLambdaTransition(transitions.get(k))
-                    && !isPushTwoTransition(transitions.get(k))) {
-                return false;
-            }
-        }
-        return true;
-    }
+	protected int UNIQUE_ID;
 
-    /**
-     * Returns true if <CODE>automaton</CODE> is in the correct form to perform
-     * the conversion to CFG. The correct form enforces two restrictions on
-     * <CODE>automaton</CODE> : 1. it has a single final state that is entered
-     * if and only if the stack is empty. 2. all transitions read a single
-     * character from the input, pop a single character from the stack and
-     * either push two or zero characters on to the stack.
-     *
-     * @param automaton
-     *            the automaton
-     * @return true if <CODE>automaton</CODE> is in the correct form to perform
-     *         the conversion to CFG.
-     */
-    public boolean isInCorrectFormForConversion(Automaton automaton) {
-        if (hasSingleFinalState(automaton) && hasTransitionsInCorrectForm(automaton)) {
-            return true;
-        }
-        return false;
-    }
+	protected HashMap<String, String> MAP;
 
-    /**
-     * Returns true if <CODE>transition</CODE> reads a single character from the
-     * input tape, pops a single character from the stack, and writes TWO
-     * characters to the stack.
-     *
-     * @param transition
-     *            the transition
-     * @return true if <CODE>transition</CODE> reads a single character from the
-     *         input tape, pops a single character from the stack, and writes
-     *         TWO characters to the stack.
-     */
-    public boolean isPushTwoTransition(Transition transition) {
-        PDATransition trans = (PDATransition) transition;
-        String toPush = trans.getStringToPush();
-        if (toPush.length() != 2) {
-            return false;
-        }
-        /*
-         * String input = trans.getInputToRead(); if(input.length() != 1) return
-         * false;
-         */
-        String toPop = trans.getStringToPop();
-        if (toPop.length() != 1) {
-            return false;
-        }
-        return true;
-    }
+	/**
+	 * Creates an instance of <CODE>PDAToCFGConverter</CODE>.
+	 */
+	public PDAToCFGConverter() {
+		initializeConverter();
+	}
 
-    /**
-     * Returns true if <CODE>transition</CODE> reads a single character from the
-     * input tape, pops a single character from the stack, and writes NO
-     * characters to the stack.
-     *
-     * @param transition
-     *            the transition
-     * @return true if <CODE>transition</CODE> reads a single character from the
-     *         input tape, pops a single character from the stack, and writes NO
-     *         characters to the stack.
-     */
-    public boolean isPushLambdaTransition(Transition transition) {
-        PDATransition trans = (PDATransition) transition;
-        String toPush = trans.getStringToPush();
-        if (toPush.length() != 0) {
-            return false;
-        }
-        /*
-         * String input = trans.getInputToRead(); if(input.length() != 1) return
-         * false;
-         */
-        String toPop = trans.getStringToPop();
-        if (toPop.length() != 1) {
-            return false;
-        }
-        return true;
-    }
+	/**
+	 * Returns a ContextFreeGrammar object that represents a grammar equivalent
+	 * to <CODE>automaton</CODE>.
+	 *
+	 * @param automaton
+	 *            the automaton.
+	 * @return a cfg equivalent to <CODE>automaton</CODE>.
+	 */
+	public ContextFreeGrammar convertToContextFreeGrammar(final Automaton automaton) {
+		/** check if automaton is pda. */
+		if (!(automaton instanceof PushdownAutomaton)) {
+			throw new IllegalArgumentException("automaton must be PushdownAutomaton");
+		}
 
-    /**
-     * Returns a unique variable.
-     *
-     * @return a unique variable.
-     */
-    private String getUniqueVariable() {
-        char[] ch = new char[1];
-        ch[0] = (char) ('A' + UNIQUE_ID);
-        UNIQUE_ID++;
-        if (('A' + UNIQUE_ID) == 'S') {
-            UNIQUE_ID++;
-        }
-        return new String(ch);
-    }
+		if (!isInCorrectFormForConversion(automaton)) {
+			throw new IllegalArgumentException("automaton not in correct form for conversion to CFG");
+		}
 
-    /**
-     * Returns true if <CODE>variable</CODE> is the start symbol. (i.e.
-     * "(q0Zqf)")
-     *
-     * @param variable
-     *            the variable.
-     * @param automaton
-     *            the automaton.
-     * @return true if <CODE>variable</CODE> is the start symbol.
-     */
-    public boolean isStartSymbol(String variable, Automaton automaton) {
-        State startState = automaton.getInitialState();
-        List<State> finalStates = automaton.getFinalStates();
-        if (finalStates.size() > 1) {
-            // System.err.println("MORE THAN ONE FINAL STATE");
-            return false;
-        }
-        State finalState = finalStates.get(0);
-        String startSymbol = LEFT_PAREN.concat(startState.getName()
-                .concat(BOTTOM_OF_STACK.concat(finalState.getName().concat(RIGHT_PAREN))));
-        if (variable.equals(startSymbol)) {
-            return true;
-        }
-        return false;
-    }
+		initializeConverter();
 
-    /**
-     * Returns a list of productions created for <CODE>transition</CODE>, a
-     * transition that pushes TWO characters on the stack.
-     *
-     * @param transition
-     *            the transition
-     * @param automaton
-     *            the automaton
-     * @return a list of productions created for <CODE>transition</CODE>, a
-     *         transition that pushes TWO characters on the stack.
-     */
-    public List<Production> getProductionsForPushTwoTransition(Transition transition,
-            Automaton automaton) {
-        List<Production> list = new ArrayList<>();
-        String fromState = transition.getFromState().getName();
-        String toState = transition.getToState().getName();
-        PDATransition trans = (PDATransition) transition;
-        String toPop = trans.getStringToPop();
-        String toRead = trans.getInputToRead();
-        String toPush = trans.getStringToPush();
-        String toPushOne = toPush.substring(0, 1);
-        String toPushTwo = toPush.substring(1);
+		final List<Production> list = new ArrayList<>();
+		final ContextFreeGrammar grammar = new ContextFreeGrammar();
 
-        List<State> states = automaton.getStates();
-        for (int k = 0; k < states.size(); k++) {
-            String state = states.get(k).getName();
-            String lhs = LEFT_PAREN
-                    .concat(fromState.concat(toPop.concat(state.concat(RIGHT_PAREN))));
-            for (int j = 0; j < states.size(); j++) {
-                String lstate = states.get(j).getName();
-                String variable1 = LEFT_PAREN
-                        .concat(toState.concat(toPushOne.concat(lstate.concat(RIGHT_PAREN))));
-                String variable2 = LEFT_PAREN
-                        .concat(lstate.concat(toPushTwo.concat(state.concat(RIGHT_PAREN))));
+		final List<Transition> transitions = automaton.getTransitions();
+		for (int k = 0; k < transitions.size(); k++) {
+			list.addAll(createProductionsForTransition(transitions.get(k), automaton));
+		}
 
-                /** Map to unique variables. */
-                if (MAP.get(lhs) == null) {
-                    if (isStartSymbol(lhs, automaton)) {
-                        MAP.put(lhs, START_SYMBOL);
-                    } else {
-                        MAP.put(lhs, getUniqueVariable());
-                    }
-                }
-                if (MAP.get(variable1) == null) {
-                    if (isStartSymbol(variable1, automaton)) {
-                        MAP.put(variable1, START_SYMBOL);
-                    } else {
-                        MAP.put(variable1, getUniqueVariable());
-                    }
-                }
-                if (MAP.get(variable2) == null) {
-                    if (isStartSymbol(variable2, automaton)) {
-                        MAP.put(variable2, START_SYMBOL);
-                    } else {
-                        MAP.put(variable2, getUniqueVariable());
-                    }
-                }
+		final Iterator<Production> it = list.iterator();
+		while (it.hasNext()) {
+			final Production p = it.next();
+			grammar.addProduction(getSimplifiedProduction(p));
+		}
 
-                String rhs = toRead.concat(variable1.concat(variable2));
+		return grammar;
+	}
 
-                Production p = new Production(lhs, rhs);
-                list.add(p);
-            }
-        }
-        return list;
-    }
+	/**
+	 * Returns a list of productions that represent the same functionality as
+	 * <CODE>transition</CODE> in <CODE>automaton</CODE>.
+	 *
+	 * @param transition
+	 *            the transition
+	 * @param automaton
+	 *            the automaton that transition is a part of.
+	 * @return a list of productions.
+	 */
+	public List<Production> createProductionsForTransition(final Transition transition, final Automaton automaton) {
+		final List<Production> list = new ArrayList<>();
+		if (isPushLambdaTransition(transition)) {
+			list.addAll(getProductionsForPushLambdaTransition(transition, automaton));
+		} else if (isPushTwoTransition(transition)) {
+			list.addAll(getProductionsForPushTwoTransition(transition, automaton));
+		}
 
-    /**
-     * Returns a list of productions created for <CODE>transition</CODE>, a
-     * transition that pushes NO characters on the stack. This list will always
-     * contain a single production.
-     *
-     * @param transition
-     *            the transition
-     * @return a list of productions created for <CODE>transition</CODE>, a
-     *         transition that pushes NO characters on the stack. This list will
-     *         always contain a single produciton.
-     */
-    public List<Production> getProductionsForPushLambdaTransition(Transition transition,
-            Automaton automaton) {
-        List<Production> list = new ArrayList<>();
-        String fromState = transition.getFromState().getName();
-        String toState = transition.getToState().getName();
-        PDATransition trans = (PDATransition) transition;
-        String toPop = trans.getStringToPop();
-        String toRead = trans.getInputToRead();
+		return list;
+	}
 
-        String lhs = LEFT_PAREN.concat(fromState.concat(toPop.concat(toState.concat(RIGHT_PAREN))));
-        if (MAP.get(lhs) == null) {
-            if (isStartSymbol(lhs, automaton)) {
-                MAP.put(lhs, START_SYMBOL);
-            } else {
-                MAP.put(lhs, getUniqueVariable());
-            }
-        }
-        String rhs = toRead;
+	/**
+	 * Returns a list of productions created for <CODE>transition</CODE>, a
+	 * transition that pushes NO characters on the stack. This list will always
+	 * contain a single production.
+	 *
+	 * @param transition
+	 *            the transition
+	 * @return a list of productions created for <CODE>transition</CODE>, a
+	 *         transition that pushes NO characters on the stack. This list will
+	 *         always contain a single produciton.
+	 */
+	public List<Production> getProductionsForPushLambdaTransition(final Transition transition,
+			final Automaton automaton) {
+		final List<Production> list = new ArrayList<>();
+		final String fromState = transition.getFromState().getName();
+		final String toState = transition.getToState().getName();
+		final PDATransition trans = (PDATransition) transition;
+		final String toPop = trans.getStringToPop();
+		final String toRead = trans.getInputToRead();
 
-        Production production = new Production(lhs, rhs);
-        list.add(production);
-        return list;
-    }
+		final String lhs = LEFT_PAREN.concat(fromState.concat(toPop.concat(toState.concat(RIGHT_PAREN))));
+		if (MAP.get(lhs) == null) {
+			if (isStartSymbol(lhs, automaton)) {
+				MAP.put(lhs, START_SYMBOL);
+			} else {
+				MAP.put(lhs, getUniqueVariable());
+			}
+		}
+		final String rhs = toRead;
 
-    /**
-     * Returns a list of productions that represent the same functionality as
-     * <CODE>transition</CODE> in <CODE>automaton</CODE>.
-     *
-     * @param transition
-     *            the transition
-     * @param automaton
-     *            the automaton that transition is a part of.
-     * @return a list of productions.
-     */
-    public List<Production> createProductionsForTransition(Transition transition,
-            Automaton automaton) {
-        List<Production> list = new ArrayList<>();
-        if (isPushLambdaTransition(transition)) {
-            list.addAll(getProductionsForPushLambdaTransition(transition, automaton));
-        } else if (isPushTwoTransition(transition)) {
-            list.addAll(getProductionsForPushTwoTransition(transition, automaton));
-        }
+		final Production production = new Production(lhs, rhs);
+		list.add(production);
+		return list;
+	}
 
-        return list;
-    }
+	/**
+	 * Returns a list of productions created for <CODE>transition</CODE>, a
+	 * transition that pushes TWO characters on the stack.
+	 *
+	 * @param transition
+	 *            the transition
+	 * @param automaton
+	 *            the automaton
+	 * @return a list of productions created for <CODE>transition</CODE>, a
+	 *         transition that pushes TWO characters on the stack.
+	 */
+	public List<Production> getProductionsForPushTwoTransition(final Transition transition, final Automaton automaton) {
+		final List<Production> list = new ArrayList<>();
+		final String fromState = transition.getFromState().getName();
+		final String toState = transition.getToState().getName();
+		final PDATransition trans = (PDATransition) transition;
+		final String toPop = trans.getStringToPop();
+		final String toRead = trans.getInputToRead();
+		final String toPush = trans.getStringToPush();
+		final String toPushOne = toPush.substring(0, 1);
+		final String toPushTwo = toPush.substring(1);
 
-    /**
-     * Returns an equivalent production to <CODE>production</CODE> but with each
-     * variable (e.g. "q1Aq3") replaced by a unique variable (e.g. "B");
-     *
-     * @param production
-     *            the production
-     * @return an equivalent production to <CODE>production</CODE> with a single
-     *         variable replacing groups of characters.
-     */
-    public Production getSimplifiedProduction(Production production) {
-        String lhs = MAP.get(production.getLHS());
-        String rhs = production.getRHS();
-        int leftIndex, rightIndex; // Position of left and right parentheses.
-        StringBuffer newRhs = new StringBuffer();
-        while ((leftIndex = rhs.indexOf('(')) != -1 && (rightIndex = rhs.indexOf(')')) != -1) {
-            newRhs.append(rhs.substring(0, leftIndex));
-            String variable = rhs.substring(leftIndex, rightIndex + 1);
-            newRhs.append(MAP.get(variable));
-            rhs = rhs.substring(rightIndex + 1);
-        }
-        newRhs.append(rhs);
-        Production p = new Production(lhs, newRhs.toString());
-        return p;
-    }
+		final List<State> states = automaton.getStates();
+		for (int k = 0; k < states.size(); k++) {
+			final String state = states.get(k).getName();
+			final String lhs = LEFT_PAREN.concat(fromState.concat(toPop.concat(state.concat(RIGHT_PAREN))));
+			for (int j = 0; j < states.size(); j++) {
+				final String lstate = states.get(j).getName();
+				final String variable1 = LEFT_PAREN
+						.concat(toState.concat(toPushOne.concat(lstate.concat(RIGHT_PAREN))));
+				final String variable2 = LEFT_PAREN.concat(lstate.concat(toPushTwo.concat(state.concat(RIGHT_PAREN))));
 
-    /**
-     * Returns the number of unique variables defined sofar in this conversion.
-     *
-     * @return the number of unique variables
-     */
-    public int numberVariables() {
-        return (new HashSet<>(MAP.values())).size();
-    }
+				/** Map to unique variables. */
+				if (MAP.get(lhs) == null) {
+					if (isStartSymbol(lhs, automaton)) {
+						MAP.put(lhs, START_SYMBOL);
+					} else {
+						MAP.put(lhs, getUniqueVariable());
+					}
+				}
+				if (MAP.get(variable1) == null) {
+					if (isStartSymbol(variable1, automaton)) {
+						MAP.put(variable1, START_SYMBOL);
+					} else {
+						MAP.put(variable1, getUniqueVariable());
+					}
+				}
+				if (MAP.get(variable2) == null) {
+					if (isStartSymbol(variable2, automaton)) {
+						MAP.put(variable2, START_SYMBOL);
+					} else {
+						MAP.put(variable2, getUniqueVariable());
+					}
+				}
 
-    /**
-     * Returns a ContextFreeGrammar object that represents a grammar equivalent
-     * to <CODE>automaton</CODE>.
-     *
-     * @param automaton
-     *            the automaton.
-     * @return a cfg equivalent to <CODE>automaton</CODE>.
-     */
-    public ContextFreeGrammar convertToContextFreeGrammar(Automaton automaton) {
-        /** check if automaton is pda. */
-        if (!(automaton instanceof PushdownAutomaton)) {
-            throw new IllegalArgumentException("automaton must be PushdownAutomaton");
-        }
+				final String rhs = toRead.concat(variable1.concat(variable2));
 
-        if (!isInCorrectFormForConversion(automaton)) {
-            throw new IllegalArgumentException(
-                    "automaton not in correct form for conversion to CFG");
-        }
+				final Production p = new Production(lhs, rhs);
+				list.add(p);
+			}
+		}
+		return list;
+	}
 
-        initializeConverter();
+	/**
+	 * Returns an equivalent production to <CODE>production</CODE> but with each
+	 * variable (e.g. "q1Aq3") replaced by a unique variable (e.g. "B");
+	 *
+	 * @param production
+	 *            the production
+	 * @return an equivalent production to <CODE>production</CODE> with a single
+	 *         variable replacing groups of characters.
+	 */
+	public Production getSimplifiedProduction(final Production production) {
+		final String lhs = MAP.get(production.getLHS());
+		String rhs = production.getRHS();
+		int leftIndex, rightIndex; // Position of left and right parentheses.
+		final StringBuffer newRhs = new StringBuffer();
+		while ((leftIndex = rhs.indexOf('(')) != -1 && (rightIndex = rhs.indexOf(')')) != -1) {
+			newRhs.append(rhs.substring(0, leftIndex));
+			final String variable = rhs.substring(leftIndex, rightIndex + 1);
+			newRhs.append(MAP.get(variable));
+			rhs = rhs.substring(rightIndex + 1);
+		}
+		newRhs.append(rhs);
+		final Production p = new Production(lhs, newRhs.toString());
+		return p;
+	}
 
-        List<Production> list = new ArrayList<>();
-        ContextFreeGrammar grammar = new ContextFreeGrammar();
+	/**
+	 * Returns a unique variable.
+	 *
+	 * @return a unique variable.
+	 */
+	private String getUniqueVariable() {
+		final char[] ch = new char[1];
+		ch[0] = (char) ('A' + UNIQUE_ID);
+		UNIQUE_ID++;
+		if (('A' + UNIQUE_ID) == 'S') {
+			UNIQUE_ID++;
+		}
+		return new String(ch);
+	}
 
-        List<Transition> transitions = automaton.getTransitions();
-        for (int k = 0; k < transitions.size(); k++) {
-            list.addAll(createProductionsForTransition(transitions.get(k), automaton));
-        }
+	/**
+	 * Returns true if <CODE>automaton</CODE> has a single final state that is
+	 * entered if and only if the stack is empty.
+	 *
+	 * @param automaton
+	 *            the automaton.
+	 * @return true if <CODE>automaton</CODE> has a single final state that is
+	 *         entered if and only if the stack is empty.
+	 */
+	public boolean hasSingleFinalState(final Automaton automaton) {
+		final List<State> finalStates = automaton.getFinalStates();
+		if (finalStates.size() != 1) {
+			// System.err.println("There is not exactly one final state!");
+			return false;
+		}
 
-        Iterator<Production> it = list.iterator();
-        while (it.hasNext()) {
-            Production p = it.next();
-            grammar.addProduction(getSimplifiedProduction(p));
-        }
+		final State finalState = finalStates.get(0);
+		final List<Transition> transitions = automaton.getTransitionsToState(finalState);
+		for (int k = 0; k < transitions.size(); k++) {
+			final PDATransition trans = (PDATransition) transitions.get(k);
+			final String toPop = trans.getStringToPop();
+			if (!(toPop.substring(toPop.length() - 1)).equals(BOTTOM_OF_STACK)) {
+				// System.err.println("Bad transition to final state! "+trans);
+				// System.err.println(toPop.substring(toPop.length()-1));
+				return false;
+			}
+		}
+		return true;
+	}
 
-        return grammar;
-    }
+	/**
+	 * Returns true if all transitions in <CODE>automaton</CODE> read a single
+	 * character from the input, pop a single character from the stack and push
+	 * either zero or two characters on to the stack.
+	 *
+	 * @param automaton
+	 *            the automaton
+	 * @return true if all transitions in <CODE>automaton</CODE> read a single
+	 *         character from the input, pop a single character from the stack
+	 *         and push either zero or two characters on to the stack.
+	 */
+	public boolean hasTransitionsInCorrectForm(final Automaton automaton) {
+		final List<Transition> transitions = automaton.getTransitions();
+		for (int k = 0; k < transitions.size(); k++) {
+			if (!isPushLambdaTransition(transitions.get(k)) && !isPushTwoTransition(transitions.get(k))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    /**
-     * Recursive function used by <code>purgeProductions()</code> to determine
-     * which productions should be included in the grammar. It takes a variable
-     * and recursively checks all productions that have it on the left-hand side
-     * to determine whether each production should be accepted
-     *
-     * @param lhs
-     *            the variable on the left-hand side. The initial variable is
-     *            the initial state + 'Z' + the final state.
-     * @param productions
-     *            the current list of productions.
-     * @param valid
-     *            set of variables that potentially end in terminals
-     * @param validProductions
-     *            an int array used to mark all productions that should not be
-     *            removed. The values that can be in it are: <br>
-     *            <br>
-     *            -1 - production should be removed <br>
-     *            0 - yet to be processed <br>
-     *            1 - currently being processed (helps prevent cycling) <br>
-     *            2 - production should be kept
-     * @return true if one of the following three are true, false otherwise.<br>
-     *         <br>
-     *         1. the lhs leads to a leaf node. <br>
-     *         2. the lhs leads to a cycle. <br>
-     *         3. All variables on the right side lead to a cycle or a leaf
-     *         node.
-     */
-    private void purgeProductionsHelper(String lhs, List<Production> productions,
-            HashSet<String> valid, int[] validProductions) {
-        List<String> variables;
-        String rhs;
-        for (int i = 0; i < productions.size(); i++) {
-            if (productions.get(i).getLHS().equals(lhs) && validProductions[i] == 0) {
-                validProductions[i] = 1;
-                variables = new ArrayList<>();
-                rhs = new String(productions.get(i).getRHS());
-                while (rhs.indexOf(LEFT_PAREN) > -1) {
-                    variables.add(
-                            rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
-                    if (rhs.indexOf(RIGHT_PAREN) != rhs.length() - 1) {
-                        rhs = rhs.substring(rhs.indexOf(RIGHT_PAREN) + 1);
-                    } else {
-                        rhs = "";
-                    }
-                }
-                for (int j = 0; j < variables.size(); j++) {
-                    if (validProductions[i] == 1 && !valid.contains(variables.get(j))) {
-                        validProductions[i] = -1;
-                    }
-                }
-                if (validProductions[i] == 1) {
-                    validProductions[i] = 2;
-                    for (int j = 0; j < variables.size(); j++) {
-                        purgeProductionsHelper(variables.get(j), productions, valid,
-                                validProductions);
-                    }
-                }
-            }
-        }
-    }
+	/**
+	 * Initializes converter for pda to cfg conversion (clears map and sets
+	 * unique id)
+	 */
+	public void initializeConverter() {
+		MAP = new HashMap<>();
+		UNIQUE_ID = 0;
+	}
 
-    /**
-     * Gets rid of superfluous productions in the table before transforming into
-     * a CFG.
-     *
-     * @param automaton
-     *            the current automaton
-     * @param model
-     *            the table of productions
-     * @author Chris Morgan
-     */
-    public void purgeProductions(Automaton automaton, GrammarTableModel model) {
-        List<Production> productions = model.getProductions();
-        HashSet<String> valid = new HashSet<>();
-        Stack<String> variables, invalid;
-        boolean updated;
-        int[] validProductions = new int[productions.size()];
+	/**
+	 * Returns true if <CODE>automaton</CODE> is in the correct form to perform
+	 * the conversion to CFG. The correct form enforces two restrictions on
+	 * <CODE>automaton</CODE> : 1. it has a single final state that is entered
+	 * if and only if the stack is empty. 2. all transitions read a single
+	 * character from the input, pop a single character from the stack and
+	 * either push two or zero characters on to the stack.
+	 *
+	 * @param automaton
+	 *            the automaton
+	 * @return true if <CODE>automaton</CODE> is in the correct form to perform
+	 *         the conversion to CFG.
+	 */
+	public boolean isInCorrectFormForConversion(final Automaton automaton) {
+		if (hasSingleFinalState(automaton) && hasTransitionsInCorrectForm(automaton)) {
+			return true;
+		}
+		return false;
+	}
 
-        // After initializing variables, add all variables that can eventually
-        // end in terminals
-        // to a stack.
-        do {
-            updated = false;
-            for (int i = 0; i < validProductions.length; i++) {
-                variables = new Stack<>();
-                invalid = new Stack<>();
-                String rhs = productions.get(i).getRHS();
-                while (rhs.indexOf(LEFT_PAREN) > -1) {
-                    variables.push(
-                            rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
-                    if (rhs.indexOf(RIGHT_PAREN) != rhs.length() - 1) {
-                        rhs = rhs.substring(rhs.indexOf(RIGHT_PAREN) + 1);
-                    } else {
-                        rhs = "";
-                    }
-                }
+	/**
+	 * Returns true if <CODE>transition</CODE> reads a single character from the
+	 * input tape, pops a single character from the stack, and writes NO
+	 * characters to the stack.
+	 *
+	 * @param transition
+	 *            the transition
+	 * @return true if <CODE>transition</CODE> reads a single character from the
+	 *         input tape, pops a single character from the stack, and writes NO
+	 *         characters to the stack.
+	 */
+	public boolean isPushLambdaTransition(final Transition transition) {
+		final PDATransition trans = (PDATransition) transition;
+		final String toPush = trans.getStringToPush();
+		if (toPush.length() != 0) {
+			return false;
+		}
+		/*
+		 * String input = trans.getInputToRead(); if(input.length() != 1) return
+		 * false;
+		 */
+		final String toPop = trans.getStringToPop();
+		if (toPop.length() != 1) {
+			return false;
+		}
+		return true;
+	}
 
-                while (variables.size() > 0) {
-                    if (!valid.contains(variables.peek())) {
-                        invalid.push(variables.pop());
-                    } else {
-                        variables.pop();
-                    }
-                }
-                if (invalid.size() == 0 && !valid.contains(productions.get(i).getLHS())) {
-                    updated = true;
-                    valid.add(productions.get(i).getLHS());
-                }
-            }
-        } while (updated);
+	/**
+	 * Returns true if <CODE>transition</CODE> reads a single character from the
+	 * input tape, pops a single character from the stack, and writes TWO
+	 * characters to the stack.
+	 *
+	 * @param transition
+	 *            the transition
+	 * @return true if <CODE>transition</CODE> reads a single character from the
+	 *         input tape, pops a single character from the stack, and writes
+	 *         TWO characters to the stack.
+	 */
+	public boolean isPushTwoTransition(final Transition transition) {
+		final PDATransition trans = (PDATransition) transition;
+		final String toPush = trans.getStringToPush();
+		if (toPush.length() != 2) {
+			return false;
+		}
+		/*
+		 * String input = trans.getInputToRead(); if(input.length() != 1) return
+		 * false;
+		 */
+		final String toPop = trans.getStringToPop();
+		if (toPop.length() != 1) {
+			return false;
+		}
+		return true;
+	}
 
-        // Then, trace a path from the initial variable to all terminals that it
-        // can reach.
-        String initVar = LEFT_PAREN + automaton.getInitialState().getName() + BOTTOM_OF_STACK
-                + automaton.getFinalStates().get(0).getName() + RIGHT_PAREN;
-        purgeProductionsHelper(initVar, productions, valid, validProductions);
+	/**
+	 * Returns true if <CODE>variable</CODE> is the start symbol. (i.e.
+	 * "(q0Zqf)")
+	 *
+	 * @param variable
+	 *            the variable.
+	 * @param automaton
+	 *            the automaton.
+	 * @return true if <CODE>variable</CODE> is the start symbol.
+	 */
+	public boolean isStartSymbol(final String variable, final Automaton automaton) {
+		final State startState = automaton.getInitialState();
+		final List<State> finalStates = automaton.getFinalStates();
+		if (finalStates.size() > 1) {
+			// System.err.println("MORE THAN ONE FINAL STATE");
+			return false;
+		}
+		final State finalState = finalStates.get(0);
+		final String startSymbol = LEFT_PAREN
+				.concat(startState.getName().concat(BOTTOM_OF_STACK.concat(finalState.getName().concat(RIGHT_PAREN))));
+		if (variable.equals(startSymbol)) {
+			return true;
+		}
+		return false;
+	}
 
-        // Next, delete all superfluous rows and make note of those
-        // capital-letter variable
-        // assignments that are freed up in a new map.
-        HashMap<String, String> newMap = new HashMap<>();
-        HashSet<String> freeValues = new HashSet<>();
-        String key;
-        for (int i = 0; i < 26; i++) {
-            freeValues.add("" + (char) ('A' + i));
-        }
-        for (int i = validProductions.length - 1; i >= 0; i--) {
-            if (validProductions[i] < 2) {
-                model.deleteRow(i);
-            } else {
-                key = productions.get(i).getLHS();
-                newMap.put(key, MAP.get(key));
-                if (MAP.get(key).charAt(0) <= 'Z') {
-                    freeValues.remove(MAP.get(key));
-                }
-            }
-        }
+	/**
+	 * Returns the number of unique variables defined sofar in this conversion.
+	 *
+	 * @return the number of unique variables
+	 */
+	public int numberVariables() {
+		return (new HashSet<>(MAP.values())).size();
+	}
 
-        // Finally, assign the new map to the old map, and assign one-letter
-        // variables to
-        // any variables that need one.
-        MAP = newMap;
-        Iterator<String> freeIter, mapIter;
-        freeIter = freeValues.iterator();
-        mapIter = newMap.keySet().iterator();
+	/**
+	 * Gets rid of superfluous productions in the table before transforming into
+	 * a CFG.
+	 *
+	 * @param automaton
+	 *            the current automaton
+	 * @param model
+	 *            the table of productions
+	 * @author Chris Morgan
+	 */
+	public void purgeProductions(final Automaton automaton, final GrammarTableModel model) {
+		final List<Production> productions = model.getProductions();
+		final HashSet<String> valid = new HashSet<>();
+		Stack<String> variables, invalid;
+		boolean updated;
+		final int[] validProductions = new int[productions.size()];
 
-        while (mapIter.hasNext()) {
-            key = mapIter.next();
-            if (MAP.get(key).charAt(0) > 'Z') {
-                MAP.put(key, freeIter.next());
-            }
-        }
-    }
+		// After initializing variables, add all variables that can eventually
+		// end in terminals
+		// to a stack.
+		do {
+			updated = false;
+			for (int i = 0; i < validProductions.length; i++) {
+				variables = new Stack<>();
+				invalid = new Stack<>();
+				String rhs = productions.get(i).getRHS();
+				while (rhs.indexOf(LEFT_PAREN) > -1) {
+					variables.push(rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
+					if (rhs.indexOf(RIGHT_PAREN) != rhs.length() - 1) {
+						rhs = rhs.substring(rhs.indexOf(RIGHT_PAREN) + 1);
+					} else {
+						rhs = "";
+					}
+				}
 
-    protected static final String START_SYMBOL = "S";
+				while (variables.size() > 0) {
+					if (!valid.contains(variables.peek())) {
+						invalid.push(variables.pop());
+					} else {
+						variables.pop();
+					}
+				}
+				if (invalid.size() == 0 && !valid.contains(productions.get(i).getLHS())) {
+					updated = true;
+					valid.add(productions.get(i).getLHS());
+				}
+			}
+		} while (updated);
 
-    protected int UNIQUE_ID;
+		// Then, trace a path from the initial variable to all terminals that it
+		// can reach.
+		final String initVar = LEFT_PAREN + automaton.getInitialState().getName() + BOTTOM_OF_STACK
+				+ automaton.getFinalStates().get(0).getName() + RIGHT_PAREN;
+		purgeProductionsHelper(initVar, productions, valid, validProductions);
 
-    protected HashMap<String, String> MAP;
+		// Next, delete all superfluous rows and make note of those
+		// capital-letter variable
+		// assignments that are freed up in a new map.
+		final HashMap<String, String> newMap = new HashMap<>();
+		final HashSet<String> freeValues = new HashSet<>();
+		String key;
+		for (int i = 0; i < 26; i++) {
+			freeValues.add("" + (char) ('A' + i));
+		}
+		for (int i = validProductions.length - 1; i >= 0; i--) {
+			if (validProductions[i] < 2) {
+				model.deleteRow(i);
+			} else {
+				key = productions.get(i).getLHS();
+				newMap.put(key, MAP.get(key));
+				if (MAP.get(key).charAt(0) <= 'Z') {
+					freeValues.remove(MAP.get(key));
+				}
+			}
+		}
 
-    protected static final String LEFT_PAREN = "(";
+		// Finally, assign the new map to the old map, and assign one-letter
+		// variables to
+		// any variables that need one.
+		MAP = newMap;
+		Iterator<String> freeIter, mapIter;
+		freeIter = freeValues.iterator();
+		mapIter = newMap.keySet().iterator();
 
-    protected static final String RIGHT_PAREN = ")";
+		while (mapIter.hasNext()) {
+			key = mapIter.next();
+			if (MAP.get(key).charAt(0) > 'Z') {
+				MAP.put(key, freeIter.next());
+			}
+		}
+	}
 
-    protected static final String BOTTOM_OF_STACK = "Z";
+	/**
+	 * Recursive function used by <code>purgeProductions()</code> to determine
+	 * which productions should be included in the grammar. It takes a variable
+	 * and recursively checks all productions that have it on the left-hand side
+	 * to determine whether each production should be accepted
+	 *
+	 * @param lhs
+	 *            the variable on the left-hand side. The initial variable is
+	 *            the initial state + 'Z' + the final state.
+	 * @param productions
+	 *            the current list of productions.
+	 * @param valid
+	 *            set of variables that potentially end in terminals
+	 * @param validProductions
+	 *            an int array used to mark all productions that should not be
+	 *            removed. The values that can be in it are: <br>
+	 *            <br>
+	 *            -1 - production should be removed <br>
+	 *            0 - yet to be processed <br>
+	 *            1 - currently being processed (helps prevent cycling) <br>
+	 *            2 - production should be kept
+	 * @return true if one of the following three are true, false otherwise.<br>
+	 *         <br>
+	 *         1. the lhs leads to a leaf node. <br>
+	 *         2. the lhs leads to a cycle. <br>
+	 *         3. All variables on the right side lead to a cycle or a leaf
+	 *         node.
+	 */
+	private void purgeProductionsHelper(final String lhs, final List<Production> productions,
+			final HashSet<String> valid, final int[] validProductions) {
+		List<String> variables;
+		String rhs;
+		for (int i = 0; i < productions.size(); i++) {
+			if (productions.get(i).getLHS().equals(lhs) && validProductions[i] == 0) {
+				validProductions[i] = 1;
+				variables = new ArrayList<>();
+				rhs = new String(productions.get(i).getRHS());
+				while (rhs.indexOf(LEFT_PAREN) > -1) {
+					variables.add(rhs.substring(rhs.indexOf(LEFT_PAREN), rhs.indexOf(RIGHT_PAREN) + 1));
+					if (rhs.indexOf(RIGHT_PAREN) != rhs.length() - 1) {
+						rhs = rhs.substring(rhs.indexOf(RIGHT_PAREN) + 1);
+					} else {
+						rhs = "";
+					}
+				}
+				for (int j = 0; j < variables.size(); j++) {
+					if (validProductions[i] == 1 && !valid.contains(variables.get(j))) {
+						validProductions[i] = -1;
+					}
+				}
+				if (validProductions[i] == 1) {
+					validProductions[i] = 2;
+					for (int j = 0; j < variables.size(); j++) {
+						purgeProductionsHelper(variables.get(j), productions, valid, validProductions);
+					}
+				}
+			}
+		}
+	}
 }

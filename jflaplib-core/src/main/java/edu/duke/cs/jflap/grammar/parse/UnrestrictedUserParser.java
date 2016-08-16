@@ -26,15 +26,15 @@ import edu.duke.cs.jflap.grammar.Grammar;
  */
 public class UnrestrictedUserParser extends UserParser {
 
-    /**
-     * Creates a new unrestricted user parser.
-     *
-     * @param grammar
-     *            the unrestricted grammar to parse
-     * @param target
-     *            the target string
-     */
-    public UnrestrictedUserParser(Grammar grammar, String target) {
-        super(grammar, target);
-    }
+	/**
+	 * Creates a new unrestricted user parser.
+	 *
+	 * @param grammar
+	 *            the unrestricted grammar to parse
+	 * @param target
+	 *            the target string
+	 */
+	public UnrestrictedUserParser(final Grammar grammar, final String target) {
+		super(grammar, target);
+	}
 }

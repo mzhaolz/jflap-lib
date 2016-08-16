@@ -16,6 +16,13 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
+
 import edu.duke.cs.jflap.grammar.CNFConverter;
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.LambdaProductionRemover;
@@ -35,13 +42,6 @@ import edu.duke.cs.jflap.gui.grammar.transform.UnitPane;
 import edu.duke.cs.jflap.gui.grammar.transform.UselessController;
 import edu.duke.cs.jflap.gui.grammar.transform.UselessPane;
 
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.swing.JOptionPane;
-
 /**
  * CYK Parsing Action class
  *
@@ -50,201 +50,198 @@ import javax.swing.JOptionPane;
  */
 public class CYKParseAction extends GrammarAction {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** The grammar environment. */
-    protected GrammarEnvironment environment;
+	/** The grammar environment. */
+	protected GrammarEnvironment environment;
 
-    /** The frame for the grammar environment. */
-    protected EnvironmentFrame frame;
+	/** The frame for the grammar environment. */
+	protected EnvironmentFrame frame;
 
-    /** The Grammar that is going to be transformed into CNF */
-    protected Grammar myGrammar;
+	/** The Grammar that is going to be transformed into CNF */
+	protected Grammar myGrammar;
 
-    /**
-     * Boolean variable that would tell whehter or not error has occured during
-     * transformation
-     */
-    protected boolean myErrorInTransform;
+	/**
+	 * Boolean variable that would tell whehter or not error has occured during
+	 * transformation
+	 */
+	protected boolean myErrorInTransform;
 
-    private ArrayList<Production> myTempCNF;
+	private ArrayList<Production> myTempCNF;
 
-    /**
-     * Instantiates a new <CODE>CYKParse Action</CODE>.
-     *
-     * @param environment
-     *            the grammar environment
-     */
-    public CYKParseAction(GrammarEnvironment environment) {
-        super("CYK Parse", null);
-        this.environment = environment;
-        frame = Universe.frameForEnvironment(environment);
-    }
+	/**
+	 * Instantiates a new <CODE>CYKParse Action</CODE>.
+	 *
+	 * @param environment
+	 *            the grammar environment
+	 */
+	public CYKParseAction(final GrammarEnvironment environment) {
+		super("CYK Parse", null);
+		this.environment = environment;
+		frame = Universe.frameForEnvironment(environment);
+	}
 
-    /**
-     * Another Constructor that is going to be called by its subclasses
-     */
-    public CYKParseAction(String tag, GrammarEnvironment environment) {
-        super(tag, null);
-        this.environment = environment;
-        frame = Universe.frameForEnvironment(environment);
-    }
+	/**
+	 * Another Constructor that is going to be called by its subclasses
+	 */
+	public CYKParseAction(final String tag, final GrammarEnvironment environment) {
+		super(tag, null);
+		this.environment = environment;
+		frame = Universe.frameForEnvironment(environment);
+	}
 
-    /**
-     * Performs the action.
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-        myGrammar = g;
-        if (g == null) {
-            return;
-        }
-        if (g.getTerminals().size() == 0) {
-            JOptionPane.showMessageDialog(environment,
-                    "Error : This grammar does not accept any Strings. ", "Cannot Proceed with CYK",
-                    JOptionPane.ERROR_MESSAGE);
-            myErrorInTransform = true;
-            return;
-        }
-        hypothesizeLambda(environment, g);
-        if (!myErrorInTransform) {
-            CYKParsePane cykPane = new CYKParsePane(environment, g, myGrammar);
-            environment.add(cykPane, "CYK Parse", new CriticalTag() {
-            });
-            environment.setActive(cykPane);
-        }
-    }
+	/**
+	 * Performs the action.
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		final Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+		myGrammar = g;
+		if (g == null) {
+			return;
+		}
+		if (g.getTerminals().size() == 0) {
+			JOptionPane.showMessageDialog(environment, "Error : This grammar does not accept any Strings. ",
+					"Cannot Proceed with CYK", JOptionPane.ERROR_MESSAGE);
+			myErrorInTransform = true;
+			return;
+		}
+		hypothesizeLambda(environment, g);
+		if (!myErrorInTransform) {
+			final CYKParsePane cykPane = new CYKParsePane(environment, g, myGrammar);
+			environment.add(cykPane, "CYK Parse", new CriticalTag() {
+			});
+			environment.setActive(cykPane);
+		}
+	}
 
-    /**
-     * Getting rid of the lambda variable and lambda derivers in the grammar
-     *
-     * @param env
-     *            Our grammar environment
-     * @param g
-     *            Original grammar that is going to be changed
-     */
-    protected void hypothesizeLambda(GrammarEnvironment env, Grammar g) {
-        Set<?> lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(g);
-        if (lambdaDerivers.contains(g.getStartVariable())) {
-            JOptionPane.showMessageDialog(env,
-                    "WARNING : The start variable derives lambda.\n"
-                            + "New Grammar will not produce lambda String.",
-                    "Start Derives Lambda", JOptionPane.ERROR_MESSAGE);
-        }
-        if (lambdaDerivers.size() > 0) {
-            LambdaPane lp = new LambdaPane(env, g);
-            LambdaController controller = new LambdaController(lp, g);
-            controller.doAll();
-            g = controller.getGrammar();
-        }
-        hypothesizeUnit(env, g);
-    }
+	private void convertToCNF(final CNFConverter converter, Production p) {
+		if (!converter.isChomsky(p)) {
+			final List<Production> temp = converter.replacements(p);
+			for (int j = 0; j < temp.size(); j++) {
+				p = temp.get(j);
+				convertToCNF(converter, p);
+			}
+		} else {
+			myTempCNF.add(p);
+		}
+	}
 
-    /**
-     * Method for getting rid of unit productions
-     *
-     * @param env
-     *            Our grammar environment
-     * @param g
-     *            Grammar in transformation
-     */
-    protected void hypothesizeUnit(GrammarEnvironment env, Grammar g) {
-        if (UnitProductionRemover.getUnitProductions(g).size() > 0) {
-            UnitPane up = new UnitPane(env, g);
-            UnitController controller = new UnitController(up, g);
-            controller.doAll();
-            g = controller.getGrammar();
-        }
-        hypothesizeUseless(env, g);
-    }
+	/**
+	 * Method for finalizing Chomsky form
+	 *
+	 * @param env
+	 *            Our grammar environment
+	 * @param g
+	 *            Grammar in transformation
+	 */
+	protected void hypothesizeChomsky(final GrammarEnvironment env, Grammar g) {
+		// System.out.println("Chomsky TIME");
 
-    /**
-     * Method for getting rid of useless productions
-     *
-     * @param env
-     *            Our grmmar environment
-     * @param g
-     *            Grammar in transformation
-     */
-    protected void hypothesizeUseless(GrammarEnvironment env, Grammar g) {
-        Grammar g2 = UselessProductionRemover.getUselessProductionlessGrammar(g);
+		CNFConverter converter = null;
+		try {
+			converter = new CNFConverter(g);
+		} catch (final IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(env, e.getMessage(), "Illegal Grammar", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		final List<Production> p = g.getProductions();
+		boolean chomsky = true;
+		for (int i = 0; i < p.size(); i++) {
+			chomsky &= converter.isChomsky(p.get(i));
+		}
 
-        if (g2.getTerminals().size() == 0) {
-            JOptionPane.showMessageDialog(env, "Error : This grammar does not accept any Strings. ",
-                    "Cannot Proceed with CYK", JOptionPane.ERROR_MESSAGE);
-            myErrorInTransform = true;
-            return;
-        }
-        List<Production> p1 = g.getProductions();
-        List<Production> p2 = g2.getProductions();
-        if (p1.size() > p2.size()) {
-            UselessPane up = new UselessPane(env, g);
-            UselessController controller = new UselessController(up, g);
-            controller.doAll();
-            g = controller.getGrammar();
-        }
-        hypothesizeChomsky(env, g);
-    }
+		if (!chomsky) {
+			final ArrayList<Production> resultList = new ArrayList<>();
+			for (int i = 0; i < p.size(); i++) {
+				myTempCNF = new ArrayList<>();
+				converter = new CNFConverter(g);
+				convertToCNF(converter, p.get(i));
+				resultList.addAll(myTempCNF);
+			}
+			List<Production> pp = new ArrayList<>();
+			for (int i = 0; i < pp.size(); i++) {
+				pp.add(resultList.get(i));
+			}
+			pp = CNFConverter.convert(pp);
+			final String var = g.getStartVariable();
+			g = new UnrestrictedGrammar();
+			g.addProductions(pp);
+			g.setStartVariable(var);
+		}
+		myGrammar = g;
+	}
 
-    /**
-     * Method for finalizing Chomsky form
-     *
-     * @param env
-     *            Our grammar environment
-     * @param g
-     *            Grammar in transformation
-     */
-    protected void hypothesizeChomsky(GrammarEnvironment env, Grammar g) {
-        // System.out.println("Chomsky TIME");
+	/**
+	 * Getting rid of the lambda variable and lambda derivers in the grammar
+	 *
+	 * @param env
+	 *            Our grammar environment
+	 * @param g
+	 *            Original grammar that is going to be changed
+	 */
+	protected void hypothesizeLambda(final GrammarEnvironment env, Grammar g) {
+		final Set<?> lambdaDerivers = LambdaProductionRemover.getCompleteLambdaSet(g);
+		if (lambdaDerivers.contains(g.getStartVariable())) {
+			JOptionPane.showMessageDialog(env,
+					"WARNING : The start variable derives lambda.\n" + "New Grammar will not produce lambda String.",
+					"Start Derives Lambda", JOptionPane.ERROR_MESSAGE);
+		}
+		if (lambdaDerivers.size() > 0) {
+			final LambdaPane lp = new LambdaPane(env, g);
+			final LambdaController controller = new LambdaController(lp, g);
+			controller.doAll();
+			g = controller.getGrammar();
+		}
+		hypothesizeUnit(env, g);
+	}
 
-        CNFConverter converter = null;
-        try {
-            converter = new CNFConverter(g);
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(env, e.getMessage(), "Illegal Grammar",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        List<Production> p = g.getProductions();
-        boolean chomsky = true;
-        for (int i = 0; i < p.size(); i++) {
-            chomsky &= converter.isChomsky(p.get(i));
-        }
+	/**
+	 * Method for getting rid of unit productions
+	 *
+	 * @param env
+	 *            Our grammar environment
+	 * @param g
+	 *            Grammar in transformation
+	 */
+	protected void hypothesizeUnit(final GrammarEnvironment env, Grammar g) {
+		if (UnitProductionRemover.getUnitProductions(g).size() > 0) {
+			final UnitPane up = new UnitPane(env, g);
+			final UnitController controller = new UnitController(up, g);
+			controller.doAll();
+			g = controller.getGrammar();
+		}
+		hypothesizeUseless(env, g);
+	}
 
-        if (!chomsky) {
-            ArrayList<Production> resultList = new ArrayList<>();
-            for (int i = 0; i < p.size(); i++) {
-                myTempCNF = new ArrayList<>();
-                converter = new CNFConverter(g);
-                convertToCNF(converter, p.get(i));
-                resultList.addAll(myTempCNF);
-            }
-            List<Production> pp = new ArrayList<>();
-            for (int i = 0; i < pp.size(); i++) {
-                pp.add(resultList.get(i));
-            }
-            pp = CNFConverter.convert(pp);
-            String var = g.getStartVariable();
-            g = new UnrestrictedGrammar();
-            g.addProductions(pp);
-            g.setStartVariable(var);
-        }
-        myGrammar = g;
-    }
+	/**
+	 * Method for getting rid of useless productions
+	 *
+	 * @param env
+	 *            Our grmmar environment
+	 * @param g
+	 *            Grammar in transformation
+	 */
+	protected void hypothesizeUseless(final GrammarEnvironment env, Grammar g) {
+		final Grammar g2 = UselessProductionRemover.getUselessProductionlessGrammar(g);
 
-    private void convertToCNF(CNFConverter converter, Production p) {
-        if (!converter.isChomsky(p)) {
-            List<Production> temp = converter.replacements(p);
-            for (int j = 0; j < temp.size(); j++) {
-                p = temp.get(j);
-                convertToCNF(converter, p);
-            }
-        } else {
-            myTempCNF.add(p);
-        }
-    }
+		if (g2.getTerminals().size() == 0) {
+			JOptionPane.showMessageDialog(env, "Error : This grammar does not accept any Strings. ",
+					"Cannot Proceed with CYK", JOptionPane.ERROR_MESSAGE);
+			myErrorInTransform = true;
+			return;
+		}
+		final List<Production> p1 = g.getProductions();
+		final List<Production> p2 = g2.getProductions();
+		if (p1.size() > p2.size()) {
+			final UselessPane up = new UselessPane(env, g);
+			final UselessController controller = new UselessController(up, g);
+			controller.doAll();
+			g = controller.getGrammar();
+		}
+		hypothesizeChomsky(env, g);
+	}
 }

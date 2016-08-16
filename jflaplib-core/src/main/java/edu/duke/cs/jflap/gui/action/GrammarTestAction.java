@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.gui.action;
 
+import java.awt.event.ActionEvent;
+
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnrestrictedGrammar;
 import edu.duke.cs.jflap.gui.environment.GrammarEnvironment;
 import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
 import edu.duke.cs.jflap.gui.grammar.transform.ChomskyPane;
-
-import java.awt.event.ActionEvent;
 
 /**
  * This is a simple test action for grammars.
@@ -30,37 +30,37 @@ import java.awt.event.ActionEvent;
  * @author Thomas Finley
  */
 public class GrammarTestAction extends GrammarAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>GrammarOutputAction</CODE>.
-     *
-     * @param environment
-     *            the grammar environment
-     */
-    public GrammarTestAction(GrammarEnvironment environment) {
-        super("Grammar Test", null);
-        this.environment = environment;
-    }
+	/** The grammar environment. */
+	private final GrammarEnvironment environment;
 
-    /**
-     * Performs the action.
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
-        if (g == null) {
-            return;
-        }
-        ChomskyPane cp = new ChomskyPane(environment, g);
-        environment.add(cp, "Test", new CriticalTag() {
-        });
-        environment.setActive(cp);
-    }
+	/**
+	 * Instantiates a new <CODE>GrammarOutputAction</CODE>.
+	 *
+	 * @param environment
+	 *            the grammar environment
+	 */
+	public GrammarTestAction(final GrammarEnvironment environment) {
+		super("Grammar Test", null);
+		this.environment = environment;
+	}
 
-    /** The grammar environment. */
-    private GrammarEnvironment environment;
+	/**
+	 * Performs the action.
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent e) {
+		final Grammar g = environment.getGrammar(UnrestrictedGrammar.class);
+		if (g == null) {
+			return;
+		}
+		final ChomskyPane cp = new ChomskyPane(environment, g);
+		environment.add(cp, "Test", new CriticalTag() {
+		});
+		environment.setActive(cp);
+	}
 }

@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.automata.graph;
 
-import edu.duke.cs.jflap.automata.Automaton;
-import edu.duke.cs.jflap.automata.State;
-import edu.duke.cs.jflap.automata.Transition;
-
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.List;
+
+import edu.duke.cs.jflap.automata.Automaton;
+import edu.duke.cs.jflap.automata.State;
+import edu.duke.cs.jflap.automata.Transition;
 
 /**
  * This extension of the graph makes it easier for a graph to be built from an
@@ -35,32 +35,32 @@ import java.util.List;
  * @author Thomas Finley
  */
 public class AutomatonGraph extends Graph<State> {
-    /**
-     * Constructures a graph using an automaton.
-     *
-     * @param automaton
-     *            the automaton to build the graph from
-     */
-    public AutomatonGraph(Automaton automaton) {
-        super();
-        List<State> states = automaton.getStates();
-        List<Transition> transitions = automaton.getTransitions();
-        for (State state : states) {
-            addVertex(state, state.getPoint());
-        }
-        for (Transition trans : transitions) {
-            addEdge(trans.getFromState(), trans.getToState());
-        }
-    }
+	/**
+	 * Constructures a graph using an automaton.
+	 *
+	 * @param automaton
+	 *            the automaton to build the graph from
+	 */
+	public AutomatonGraph(final Automaton automaton) {
+		super();
+		final List<State> states = automaton.getStates();
+		final List<Transition> transitions = automaton.getTransitions();
+		for (final State state : states) {
+			addVertex(state, state.getPoint());
+		}
+		for (final Transition trans : transitions) {
+			addEdge(trans.getFromState(), trans.getToState());
+		}
+	}
 
-    /**
-     * Moves the states of the underlying automaton to synchronize with the
-     * positions of the corresponding vertices in the graph.
-     */
-    public void moveAutomatonStates() {
-        for (State state : vertices()) {
-            Point2D point = pointForVertex(state);
-            state.setPoint(new Point((int) point.getX(), (int) point.getY()));
-        }
-    }
+	/**
+	 * Moves the states of the underlying automaton to synchronize with the
+	 * positions of the corresponding vertices in the graph.
+	 */
+	public void moveAutomatonStates() {
+		for (final State state : vertices()) {
+			final Point2D point = pointForVertex(state);
+			state.setPoint(new Point((int) point.getX(), (int) point.getY()));
+		}
+	}
 }

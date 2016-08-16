@@ -16,14 +16,14 @@
 
 package edu.duke.cs.jflap.automata.graph.layout;
 
-import edu.duke.cs.jflap.automata.graph.Graph;
-import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
-
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import edu.duke.cs.jflap.automata.graph.Graph;
+import edu.duke.cs.jflap.automata.graph.LayoutAlgorithm;
 
 /**
  * A layout algorithm that lays out groupings of vertices in circles. Each
@@ -36,204 +36,199 @@ import java.util.Set;
  * @author Chris Morgan
  */
 public class CircleLayoutAlgorithm<V> extends LayoutAlgorithm<V> {
-    /**
-     * This list contains all the boxes that are used in this algorithm.
-     */
-    private ArrayList<Box> boxes;
+	/**
+	 * A box is a <code>CircleChain</code> with some additional code for placing
+	 * it in the graph so that no box will be on top of another.
+	 *
+	 * @author Chris Morgan
+	 */
+	private class Box extends CircleChain<V> {
+		/**
+		 * The size of the square in which only this box may layout values.
+		 */
+		public Dimension size;
+		/**
+		 * Pointers to boxes immediately to the right and below this box. They
+		 * allow for the boxes to form a linked list according to how they are
+		 * laid out.
+		 */
+		public Box down, right;
+		/**
+		 * The point in the upper left corner of the box. All points determined
+		 * by the <code>
+		 * CircleChain</code> layout functions are relative to this point.
+		 */
+		public Point2D upperLeft;
 
-    /**
-     * Assigns some default values.
-     */
-    public CircleLayoutAlgorithm() {
-        super();
-    }
+		/**
+		 * Constructor.
+		 *
+		 * @param g
+		 *            the graph from which edge information is processed.
+		 * @param vDim
+		 *            value for <code>vertexDim</code>.
+		 * @param vBuffer
+		 *            value for <code>vertexBuffer</code>.
+		 */
+		public Box(final Graph<V> g, final Dimension vDim, final double vBuffer) {
+			super(g, vDim, vBuffer);
+			upperLeft = new Point2D.Double(0, 0);
+			right = null;
+			down = null;
+		}
 
-    /**
-     * Constructor allowing the user to customize certain values.
-     *
-     * @param pSize
-     *            value for <code>size</code>.
-     * @param vDim
-     *            value for <code>vertexDim</code>.
-     * @param vBuffer
-     *            value for <code>vertexBuffer</code>.
-     */
-    public CircleLayoutAlgorithm(Dimension pSize, Dimension vDim, double vBuffer) {
-        super(pSize, vDim, vBuffer);
-    }
+		/**
+		 * Lays out the contents of the box in a circle and finds room on the
+		 * screen to place the box. All vertex points are returned as Cartesian
+		 * points, and not polar points, as is done in
+		 * <code>CircleChain.layoutInCircle()</code>.
+		 */
+		public void layoutInCircleAndPack() {
+			layoutInCircle();
+			polarToCartesian(graph, getVertices());
+			size = new Dimension((int) (2 * (getRadius() + vertexBuffer) + vertexDim.width),
+					(int) (2 * (getRadius() + vertexBuffer) + vertexDim.height));
+			if (boxes.indexOf(this) != 0) {
+				setUpperLeft(boxes.get(0));
+				for (int i = 0; i < size(); i++) {
+					graph.moveVertex(get(i), new Point2D.Double(upperLeft.getX() + graph.pointForVertex(get(i)).getX(),
+							upperLeft.getY() + graph.pointForVertex(get(i)).getY()));
+				}
+			}
+		}
 
-    @Override
-    public void layout(Graph<V> graph, Set<V> notMoving) {
-        List<V> vertices = getMovableVertices(graph, notMoving);
-        if (graph == null || vertices.size() == 0) {
-            return;
-        }
+		/**
+		 * Moves all vertices in the box given into this box.
+		 *
+		 * @param b
+		 *            the box whose vertices will be added to this one.
+		 */
+		public void merge(final Box b) {
+			for (int i = 0; i < b.size(); i++) {
+				addVertex(b.get(i));
+			}
+		}
 
-        boxes = new ArrayList<>();
-        for (int i = 0; i < vertices.size(); i++) {
-            if (!addToExistingBox(vertices.get(i))) {
-                Box box = new Box(graph, vertexDim, vertexBuffer);
-                box.addVertex(vertices.get(i));
-                boxes.add(box);
-            }
-        }
+		/**
+		 * Sets the value of the point representing this box's upper-left
+		 * corner. This is calculated by traversing the linked list the boxes
+		 * form and attempting to find an open space. If the height of this box
+		 * is less than or equal to the parameter box, then this box's upperLeft
+		 * point will be in the first available point to the right of the
+		 * parameter box, with the same height. If not, the point will be below
+		 * and perhaps to the right of the parameter box.
+		 *
+		 * @param current
+		 *            the current box in the traversal of the linked list.
+		 */
+		public void setUpperLeft(Box current) {
+			if (size.getHeight() <= current.size.getHeight()) {
+				upperLeft = new Point2D.Double(upperLeft.getX() + current.size.getWidth(), upperLeft.getY());
+				while (current.right != null) {
+					current = current.right;
+					upperLeft = new Point2D.Double(upperLeft.getX() + current.size.getWidth(), upperLeft.getY());
+				}
+				current.right = this;
+				return;
+			}
+			upperLeft = new Point2D.Double(upperLeft.getX(), upperLeft.getY() + current.size.getHeight());
+			if (current.down == null) {
+				current.down = this;
+			} else {
+				setUpperLeft(current.down);
+			}
+		}
+	}
 
-        for (int i = boxes.size() - 1; i > 0; i--) {
-            mergeIfPossible(boxes.get(i), i);
-        }
+	/**
+	 * This list contains all the boxes that are used in this algorithm.
+	 */
+	private ArrayList<Box> boxes;
 
-        for (int i = 0; i < boxes.size(); i++) {
-            boxes.get(i).layoutInCircleAndPack();
-        }
+	/**
+	 * Assigns some default values.
+	 */
+	public CircleLayoutAlgorithm() {
+		super();
+	}
 
-        shiftOntoScreen(graph, size, vertexDim, true);
-    }
+	/**
+	 * Constructor allowing the user to customize certain values.
+	 *
+	 * @param pSize
+	 *            value for <code>size</code>.
+	 * @param vDim
+	 *            value for <code>vertexDim</code>.
+	 * @param vBuffer
+	 *            value for <code>vertexBuffer</code>.
+	 */
+	public CircleLayoutAlgorithm(final Dimension pSize, final Dimension vDim, final double vBuffer) {
+		super(pSize, vDim, vBuffer);
+	}
 
-    /**
-     * Adds the given vertex to a box if it has an edge to one of them.
-     *
-     * return Whether the given vertex was added.
-     */
-    private boolean addToExistingBox(V vertex) {
-        for (int i = 0; i < boxes.size(); i++) {
-            if (boxes.get(i).isEdgeToChainMember(vertex)) {
-                boxes.get(i).addVertex(vertex);
-                return true;
-            }
-        }
-        return false;
-    }
+	/**
+	 * Adds the given vertex to a box if it has an edge to one of them.
+	 *
+	 * return Whether the given vertex was added.
+	 */
+	private boolean addToExistingBox(final V vertex) {
+		for (int i = 0; i < boxes.size(); i++) {
+			if (boxes.get(i).isEdgeToChainMember(vertex)) {
+				boxes.get(i).addVertex(vertex);
+				return true;
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Tries to merge two boxes, and will do so if one vertex in the given box
-     * has an edge with any boxes in the list of boxes.
-     *
-     * @param current
-     *            the box for which the list will be searched for matches.
-     * @param max
-     *            the maximum box, exclusive, in the list of boxes to search for
-     *            matches. All boxes in the list from 0 to max-1 are searched.
-     */
-    private void mergeIfPossible(Box current, int max) {
-        Box toSearch;
-        for (int j = max - 1; j >= 0; j--) {
-            toSearch = boxes.get(j);
-            for (int k = 0; k < current.size(); k++) {
-                if (toSearch.isEdgeToChainMember(current.get(k))) {
-                    toSearch.merge(current);
-                    boxes.remove(current);
-                    return;
-                }
-            }
-        }
-    }
+	@Override
+	public void layout(final Graph<V> graph, final Set<V> notMoving) {
+		final List<V> vertices = getMovableVertices(graph, notMoving);
+		if (graph == null || vertices.size() == 0) {
+			return;
+		}
 
-    /**
-     * A box is a <code>CircleChain</code> with some additional code for placing
-     * it in the graph so that no box will be on top of another.
-     *
-     * @author Chris Morgan
-     */
-    private class Box extends CircleChain<V> {
-        /**
-         * The size of the square in which only this box may layout values.
-         */
-        public Dimension size;
-        /**
-         * Pointers to boxes immediately to the right and below this box. They
-         * allow for the boxes to form a linked list according to how they are
-         * laid out.
-         */
-        public Box down, right;
-        /**
-         * The point in the upper left corner of the box. All points determined
-         * by the <code>
-         * CircleChain</code> layout functions are relative to this point.
-         */
-        public Point2D upperLeft;
+		boxes = new ArrayList<>();
+		for (int i = 0; i < vertices.size(); i++) {
+			if (!addToExistingBox(vertices.get(i))) {
+				final Box box = new Box(graph, vertexDim, vertexBuffer);
+				box.addVertex(vertices.get(i));
+				boxes.add(box);
+			}
+		}
 
-        /**
-         * Constructor.
-         *
-         * @param g
-         *            the graph from which edge information is processed.
-         * @param vDim
-         *            value for <code>vertexDim</code>.
-         * @param vBuffer
-         *            value for <code>vertexBuffer</code>.
-         */
-        public Box(Graph<V> g, Dimension vDim, double vBuffer) {
-            super(g, vDim, vBuffer);
-            upperLeft = new Point2D.Double(0, 0);
-            right = null;
-            down = null;
-        }
+		for (int i = boxes.size() - 1; i > 0; i--) {
+			mergeIfPossible(boxes.get(i), i);
+		}
 
-        /**
-         * Moves all vertices in the box given into this box.
-         *
-         * @param b
-         *            the box whose vertices will be added to this one.
-         */
-        public void merge(Box b) {
-            for (int i = 0; i < b.size(); i++) {
-                addVertex(b.get(i));
-            }
-        }
+		for (int i = 0; i < boxes.size(); i++) {
+			boxes.get(i).layoutInCircleAndPack();
+		}
 
-        /**
-         * Sets the value of the point representing this box's upper-left
-         * corner. This is calculated by traversing the linked list the boxes
-         * form and attempting to find an open space. If the height of this box
-         * is less than or equal to the parameter box, then this box's upperLeft
-         * point will be in the first available point to the right of the
-         * parameter box, with the same height. If not, the point will be below
-         * and perhaps to the right of the parameter box.
-         *
-         * @param current
-         *            the current box in the traversal of the linked list.
-         */
-        public void setUpperLeft(Box current) {
-            if (size.getHeight() <= current.size.getHeight()) {
-                upperLeft = new Point2D.Double(upperLeft.getX() + current.size.getWidth(),
-                        upperLeft.getY());
-                while (current.right != null) {
-                    current = current.right;
-                    upperLeft = new Point2D.Double(upperLeft.getX() + current.size.getWidth(),
-                            upperLeft.getY());
-                }
-                current.right = this;
-                return;
-            }
-            upperLeft = new Point2D.Double(upperLeft.getX(),
-                    upperLeft.getY() + current.size.getHeight());
-            if (current.down == null) {
-                current.down = this;
-            } else {
-                setUpperLeft(current.down);
-            }
-        }
+		shiftOntoScreen(graph, size, vertexDim, true);
+	}
 
-        /**
-         * Lays out the contents of the box in a circle and finds room on the
-         * screen to place the box. All vertex points are returned as Cartesian
-         * points, and not polar points, as is done in
-         * <code>CircleChain.layoutInCircle()</code>.
-         */
-        public void layoutInCircleAndPack() {
-            layoutInCircle();
-            polarToCartesian(graph, getVertices());
-            size = new Dimension((int) (2 * (getRadius() + vertexBuffer) + vertexDim.width),
-                    (int) (2 * (getRadius() + vertexBuffer) + vertexDim.height));
-            if (boxes.indexOf(this) != 0) {
-                setUpperLeft(boxes.get(0));
-                for (int i = 0; i < size(); i++) {
-                    graph.moveVertex(get(i),
-                            new Point2D.Double(
-                                    upperLeft.getX() + graph.pointForVertex(get(i)).getX(),
-                                    upperLeft.getY() + graph.pointForVertex(get(i)).getY()));
-                }
-            }
-        }
-    }
+	/**
+	 * Tries to merge two boxes, and will do so if one vertex in the given box
+	 * has an edge with any boxes in the list of boxes.
+	 *
+	 * @param current
+	 *            the box for which the list will be searched for matches.
+	 * @param max
+	 *            the maximum box, exclusive, in the list of boxes to search for
+	 *            matches. All boxes in the list from 0 to max-1 are searched.
+	 */
+	private void mergeIfPossible(final Box current, final int max) {
+		Box toSearch;
+		for (int j = max - 1; j >= 0; j--) {
+			toSearch = boxes.get(j);
+			for (int k = 0; k < current.size(); k++) {
+				if (toSearch.isEdgeToChainMember(current.get(k))) {
+					toSearch.merge(current);
+					boxes.remove(current);
+					return;
+				}
+			}
+		}
+	}
 }

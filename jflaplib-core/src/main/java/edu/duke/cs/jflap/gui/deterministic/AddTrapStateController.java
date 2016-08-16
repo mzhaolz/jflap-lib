@@ -16,13 +16,6 @@
 
 package edu.duke.cs.jflap.gui.deterministic;
 
-import edu.duke.cs.jflap.automata.State;
-import edu.duke.cs.jflap.automata.Transition;
-import edu.duke.cs.jflap.automata.fsa.FSATransition;
-import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
-import edu.duke.cs.jflap.gui.environment.FrameFactory;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +25,13 @@ import java.util.TreeSet;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+
+import edu.duke.cs.jflap.automata.State;
+import edu.duke.cs.jflap.automata.Transition;
+import edu.duke.cs.jflap.automata.fsa.FSATransition;
+import edu.duke.cs.jflap.automata.fsa.FiniteStateAutomaton;
+import edu.duke.cs.jflap.gui.environment.FrameFactory;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
 
 /**
  * Controller that is responsible for creating trap state and adding necessary
@@ -43,286 +43,278 @@ import javax.swing.JOptionPane;
  */
 public class AddTrapStateController {
 
-    /** The current step of the conversion process. */
-    private int currentStep = -1;
+	/**
+	 * The state IDs of each of the steps.
+	 */
+	private static final int CREATE_SINGLE_TRAPSTATE = 0, TRANSITIONS_TO_TRAPSTATE = 1, FINISHED = 200;
 
-    /** The automaton that's going to add trap state */
-    private FiniteStateAutomaton automaton;
+	/** The current step of the conversion process. */
+	private int currentStep = -1;
 
-    /** The selection drawer that the editor holds. */
-    private SelectionDrawer drawer;
+	/** The automaton that's going to add trap state */
+	private final FiniteStateAutomaton automaton;
 
-    /** The main step label. */
-    private JLabel mainStep;
+	/** The selection drawer that the editor holds. */
+	private final SelectionDrawer drawer;
 
-    /** The detail step label. */
-    private JLabel detailStep;
+	/** The main step label. */
+	private final JLabel mainStep;
 
-    /** The frame holding all this. */
-    private JFrame frame;
+	/** The detail step label. */
+	private final JLabel detailStep;
 
-    /**
-     * The number of things left to do. This can be used by different steps.
-     */
-    private int remaining = 0;
+	/** The frame holding all this. */
+	private final JFrame frame;
 
-    /**
-     * Tree Set of readable alphabets in DFA
-     */
-    private TreeSet<String> myReadSets;
+	/**
+	 * The number of things left to do. This can be used by different steps.
+	 */
+	private int remaining = 0;
 
-    /**
-     * Hash Map that consists of key of state number and value as transitions
-     */
-    private HashMap<Integer, ArrayList<String>> myTransitionsMap;
+	/**
+	 * Tree Set of readable alphabets in DFA
+	 */
+	private TreeSet<String> myReadSets;
 
-    /**
-     * Hash Map of transitions that needed to complete DFA
-     */
-    private HashMap<Integer, ArrayList<String>> myNeededTransitionMap;
+	/**
+	 * Hash Map that consists of key of state number and value as transitions
+	 */
+	private HashMap<Integer, ArrayList<String>> myTransitionsMap;
 
-    /**
-     * Map holds state ID as key and actual state object as value
-     */
-    private HashMap<Integer, State> myStateMap;
-    /**
-     * Trap State
-     */
-    private State myTrapState;
+	/**
+	 * Hash Map of transitions that needed to complete DFA
+	 */
+	private HashMap<Integer, ArrayList<String>> myNeededTransitionMap;
+	/**
+	 * Map holds state ID as key and actual state object as value
+	 */
+	private HashMap<Integer, State> myStateMap;
 
-    /**
-     * The state IDs of each of the steps.
-     */
-    private static final int CREATE_SINGLE_TRAPSTATE = 0, TRANSITIONS_TO_TRAPSTATE = 1,
-            FINISHED = 200;
+	/**
+	 * Trap State
+	 */
+	private State myTrapState;
 
-    /**
-     * Instantiates a new <CODE>AddTrapStateController</CODE>.
-     *
-     * @param automaton
-     *            the automaton that is in the process of being converted
-     * @param drawer
-     *            the selection drawer in the editor
-     * @param mainStep
-     *            the label holding the description of the main step
-     * @param detailStep
-     *            the label holding the detail description of whatever the user
-     *            must do now
-     * @param frame
-     *            the window that this is all happening in
-     */
-    public AddTrapStateController(FiniteStateAutomaton automaton,
-            SelectionDrawer drawer,
-            JLabel mainStep,
-            JLabel detailStep,
-            JFrame frame) {
-        this.automaton = automaton;
-        this.drawer = drawer;
-        this.mainStep = mainStep;
-        this.detailStep = detailStep;
-        this.frame = frame;
-        currentStep = CREATE_SINGLE_TRAPSTATE;
-        nextStep();
-    }
+	/**
+	 * Instantiates a new <CODE>AddTrapStateController</CODE>.
+	 *
+	 * @param automaton
+	 *            the automaton that is in the process of being converted
+	 * @param drawer
+	 *            the selection drawer in the editor
+	 * @param mainStep
+	 *            the label holding the description of the main step
+	 * @param detailStep
+	 *            the label holding the detail description of whatever the user
+	 *            must do now
+	 * @param frame
+	 *            the window that this is all happening in
+	 */
+	public AddTrapStateController(final FiniteStateAutomaton automaton, final SelectionDrawer drawer,
+			final JLabel mainStep, final JLabel detailStep, final JFrame frame) {
+		this.automaton = automaton;
+		this.drawer = drawer;
+		this.mainStep = mainStep;
+		this.detailStep = detailStep;
+		this.frame = frame;
+		currentStep = CREATE_SINGLE_TRAPSTATE;
+		nextStep();
+	}
 
-    /**
-     * Proceed the next step
-     */
-    private void nextStep() {
-        switch (currentStep) {
-            case CREATE_SINGLE_TRAPSTATE:
-                currentStep = CREATE_SINGLE_TRAPSTATE;
-                mainStep.setText("Make Single Trap State");
-                detailStep.setText("Create a new state to make a single trap state.");
-                if (automaton.getFinalStates().size() != 1
-                        || automaton.getFinalStates().get(0) == automaton.getInitialState()) {
-                    return;
-                }
-                return;
-            case TRANSITIONS_TO_TRAPSTATE:
-                if (myReadSets == null) {
-                    determineRemainingTransition();
-                }
-                mainStep.setText("Adding Transitions    Readable String : " + myReadSets);
-                detailStep.setText("Put transitions from all states to the trap state.   "
-                        + remaining + " transitions must be added");
-                // We know we're done when...
-                if (drawer.numberSelected() != 0) {
-                    return;
-                }
-                return;
+	/**
+	 * Determines how many transitions are needed from states to a single trap
+	 * state
+	 */
+	private void determineRemainingTransition() {
+		myTransitionsMap = new HashMap<>();
+		myNeededTransitionMap = new HashMap<>();
+		myReadSets = new TreeSet<>();
+		myStateMap = new HashMap<>();
+		final List<State> s = automaton.getStates();
+		for (int i = 0; i < s.size(); i++) {
+			myTransitionsMap.put(s.get(i).getID(), new ArrayList<String>());
+			myStateMap.put(s.get(i).getID(), s.get(i));
+		}
 
-            case FINISHED:
-                mainStep.setText("Adding a Trap State and Transitions is Finished!");
-                detailStep.setText("");
-                JOptionPane.showMessageDialog(frame,
-                        "The DFA is now complete!\n" + "It will now be placed in a new window.");
-                FrameFactory.createFrame((FiniteStateAutomaton) automaton.clone());
-                return;
-        }
-    }
+		final List<Transition> t = automaton.getTransitions();
+		for (int i = 0; i < t.size(); i++) {
+			myReadSets.add(t.get(i).getDescription());
+			final int id = t.get(i).getFromState().getID();
+			final ArrayList<String> temp = myTransitionsMap.get(id);
+			temp.add(t.get(i).getDescription());
+			myTransitionsMap.put(id, temp);
+		}
 
-    /**
-     * Determines how many transitions are needed from states to a single trap
-     * state
-     */
-    private void determineRemainingTransition() {
-        myTransitionsMap = new HashMap<>();
-        myNeededTransitionMap = new HashMap<>();
-        myReadSets = new TreeSet<>();
-        myStateMap = new HashMap<>();
-        List<State> s = automaton.getStates();
-        for (int i = 0; i < s.size(); i++) {
-            myTransitionsMap.put(s.get(i).getID(), new ArrayList<String>());
-            myStateMap.put(s.get(i).getID(), s.get(i));
-        }
+		for (final Integer key : myTransitionsMap.keySet()) {
+			final ArrayList<String> temp = new ArrayList<>();
+			for (final String alpha : myReadSets) {
+				if (!myTransitionsMap.get(key).contains(alpha)) {
+					temp.add(alpha);
+					remaining++;
+				}
+			}
+			myNeededTransitionMap.put(key, temp);
+		}
 
-        List<Transition> t = automaton.getTransitions();
-        for (int i = 0; i < t.size(); i++) {
-            myReadSets.add(t.get(i).getDescription());
-            int id = t.get(i).getFromState().getID();
-            ArrayList<String> temp = myTransitionsMap.get(id);
-            temp.add(t.get(i).getDescription());
-            myTransitionsMap.put(id, temp);
-        }
+		/*
+		 * System.out.println("Read Sets = "+myReadSets);
+		 * System.out.println("MAP = "+myTransitionsMap);
+		 * System.out.println("NEEDED MAP = "+myNeededTransitionMap);
+		 */
+	}
 
-        for (Integer key : myTransitionsMap.keySet()) {
-            ArrayList<String> temp = new ArrayList<>();
-            for (String alpha : myReadSets) {
-                if (!myTransitionsMap.get(key).contains(alpha)) {
-                    temp.add(alpha);
-                    remaining++;
-                }
-            }
-            myNeededTransitionMap.put(key, temp);
-        }
+	/**
+	 * Called when user clicks on "Do All" option it automatically finishes
+	 * adding transitions, if user created a single trap state
+	 */
+	public void doAll() {
+		// TODO Auto-generated method stub
+		switch (currentStep) {
+		case CREATE_SINGLE_TRAPSTATE:
+			JOptionPane.showMessageDialog(frame, "Just create a state.\nIt's not too difficult.", "Create the State",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		for (final Integer key : myNeededTransitionMap.keySet()) {
+			final ArrayList<String> list = myNeededTransitionMap.get(key);
+			for (final String terminal : list) {
+				final FSATransition t = new FSATransition(myStateMap.get(key), myTrapState, terminal);
+				automaton.addTransition(t);
+				frame.repaint();
+			}
+		}
+		currentStep = FINISHED;
+		nextStep();
+		return;
+	}
 
-        /*
-         * System.out.println("Read Sets = "+myReadSets);
-         * System.out.println("MAP = "+myTransitionsMap);
-         * System.out.println("NEEDED MAP = "+myNeededTransitionMap);
-         */
-    }
+	/**
+	 * Proceed the next step
+	 */
+	private void nextStep() {
+		switch (currentStep) {
+		case CREATE_SINGLE_TRAPSTATE:
+			currentStep = CREATE_SINGLE_TRAPSTATE;
+			mainStep.setText("Make Single Trap State");
+			detailStep.setText("Create a new state to make a single trap state.");
+			if (automaton.getFinalStates().size() != 1
+					|| automaton.getFinalStates().get(0) == automaton.getInitialState()) {
+				return;
+			}
+			return;
+		case TRANSITIONS_TO_TRAPSTATE:
+			if (myReadSets == null) {
+				determineRemainingTransition();
+			}
+			mainStep.setText("Adding Transitions    Readable String : " + myReadSets);
+			detailStep.setText(
+					"Put transitions from all states to the trap state.   " + remaining + " transitions must be added");
+			// We know we're done when...
+			if (drawer.numberSelected() != 0) {
+				return;
+			}
+			return;
 
-    /**
-     * Called when user clicks on "Do All" option it automatically finishes
-     * adding transitions, if user created a single trap state
-     */
-    public void doAll() {
-        // TODO Auto-generated method stub
-        switch (currentStep) {
-            case CREATE_SINGLE_TRAPSTATE:
-                JOptionPane.showMessageDialog(frame,
-                        "Just create a state.\nIt's not too difficult.", "Create the State",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-        }
-        for (Integer key : myNeededTransitionMap.keySet()) {
-            ArrayList<String> list = myNeededTransitionMap.get(key);
-            for (String terminal : list) {
-                FSATransition t = new FSATransition(myStateMap.get(key), myTrapState, terminal);
-                automaton.addTransition(t);
-                frame.repaint();
-            }
-        }
-        currentStep = FINISHED;
-        nextStep();
-        return;
-    }
+		case FINISHED:
+			mainStep.setText("Adding a Trap State and Transitions is Finished!");
+			detailStep.setText("");
+			JOptionPane.showMessageDialog(frame,
+					"The DFA is now complete!\n" + "It will now be placed in a new window.");
+			FrameFactory.createFrame(automaton.clone());
+			return;
+		}
+	}
 
-    /**
-     * Called when the user creates a new state on the pane
-     *
-     * @param point
-     * @return the trap state
-     */
-    public State stateCreate(Point point) {
+	/**
+	 * This method should be called when the user undertakes an action that is
+	 * inappropriate for the current step. This merely displays a small dialog
+	 * to the user informing him of this fact, and takes no further action.
+	 */
+	protected void outOfOrder() {
+		JOptionPane.showMessageDialog(frame, "That action is inappropriate for this step!", "Out of Order",
+				JOptionPane.ERROR_MESSAGE);
+	}
 
-        if (currentStep != CREATE_SINGLE_TRAPSTATE) {
-            outOfOrder();
-            return null;
-        }
-        myTrapState = automaton.createState(point);
-        myTrapState.setLabel("Trap State");
-        frame.repaint();
-        currentStep = TRANSITIONS_TO_TRAPSTATE;
-        nextStep();
-        return myTrapState;
-    }
+	/**
+	 * Called when the user creates a new state on the pane
+	 *
+	 * @param point
+	 * @return the trap state
+	 */
+	public State stateCreate(final Point point) {
 
-    /**
-     * Create transition from one state to another
-     *
-     * @param from
-     *            From state
-     * @param to
-     *            To state
-     */
-    public void transitionCreate(State from, State to) {
-        // TODO Auto-generated method stub
-        if (currentStep != TRANSITIONS_TO_TRAPSTATE) {
-            outOfOrder();
-            return;
-        }
-        if (!to.equals(myTrapState)) {
-            JOptionPane.showMessageDialog(frame, "You have to make transition to the trap state!",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        /*
-         * Transition t = new FSATransition(from, to, "");
-         * automaton.addTransition(t); frame.repaint();
-         */
+		if (currentStep != CREATE_SINGLE_TRAPSTATE) {
+			outOfOrder();
+			return null;
+		}
+		myTrapState = automaton.createState(point);
+		myTrapState.setLabel("Trap State");
+		frame.repaint();
+		currentStep = TRANSITIONS_TO_TRAPSTATE;
+		nextStep();
+		return myTrapState;
+	}
 
-        String terminal = JOptionPane.showInputDialog(frame, "Transition on what terminal?");
-        if (terminal == null) {
-            return;
-        }
-        if (terminal.length() > 1) {
-            JOptionPane.showMessageDialog(frame, "Terminal can only be a single letter", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        ArrayList<String> list = myNeededTransitionMap.get(from.getID());
-        if (list.contains(terminal)) {
-            FSATransition t = new FSATransition(from, to, terminal);
-            automaton.addTransition(t);
-            frame.repaint();
-            list.remove(terminal);
-            myNeededTransitionMap.put(from.getID(), list);
-            remaining--;
-            if (remaining == 0) {
-                currentStep = FINISHED;
-                nextStep();
-                return;
-            }
-            detailStep.setText("Put transitions from all states to the trap state.   " + remaining
-                    + " transitions must be added");
+	/**
+	 * Create transition from one state to another
+	 *
+	 * @param from
+	 *            From state
+	 * @param to
+	 *            To state
+	 */
+	public void transitionCreate(final State from, final State to) {
+		// TODO Auto-generated method stub
+		if (currentStep != TRANSITIONS_TO_TRAPSTATE) {
+			outOfOrder();
+			return;
+		}
+		if (!to.equals(myTrapState)) {
+			JOptionPane.showMessageDialog(frame, "You have to make transition to the trap state!", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		/*
+		 * Transition t = new FSATransition(from, to, "");
+		 * automaton.addTransition(t); frame.repaint();
+		 */
 
-            return;
-        } else {
-            if (!myReadSets.contains(terminal)) {
-                JOptionPane.showMessageDialog(frame,
-                        "Terminal " + terminal + " is not part of readable string in DFA",
-                        "Incorrect input", JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane
-                        .showMessageDialog(frame,
-                                "There is already a transition using Terminal " + terminal
-                                        + " from this state",
-                                "Incorrect input", JOptionPane.ERROR_MESSAGE);
-            }
-            return;
-        }
-    }
+		final String terminal = JOptionPane.showInputDialog(frame, "Transition on what terminal?");
+		if (terminal == null) {
+			return;
+		}
+		if (terminal.length() > 1) {
+			JOptionPane.showMessageDialog(frame, "Terminal can only be a single letter", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		final ArrayList<String> list = myNeededTransitionMap.get(from.getID());
+		if (list.contains(terminal)) {
+			final FSATransition t = new FSATransition(from, to, terminal);
+			automaton.addTransition(t);
+			frame.repaint();
+			list.remove(terminal);
+			myNeededTransitionMap.put(from.getID(), list);
+			remaining--;
+			if (remaining == 0) {
+				currentStep = FINISHED;
+				nextStep();
+				return;
+			}
+			detailStep.setText(
+					"Put transitions from all states to the trap state.   " + remaining + " transitions must be added");
 
-    /**
-     * This method should be called when the user undertakes an action that is
-     * inappropriate for the current step. This merely displays a small dialog
-     * to the user informing him of this fact, and takes no further action.
-     */
-    protected void outOfOrder() {
-        JOptionPane.showMessageDialog(frame, "That action is inappropriate for this step!",
-                "Out of Order", JOptionPane.ERROR_MESSAGE);
-    }
+			return;
+		} else {
+			if (!myReadSets.contains(terminal)) {
+				JOptionPane.showMessageDialog(frame, "Terminal " + terminal + " is not part of readable string in DFA",
+						"Incorrect input", JOptionPane.ERROR_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(frame,
+						"There is already a transition using Terminal " + terminal + " from this state",
+						"Incorrect input", JOptionPane.ERROR_MESSAGE);
+			}
+			return;
+		}
+	}
 }

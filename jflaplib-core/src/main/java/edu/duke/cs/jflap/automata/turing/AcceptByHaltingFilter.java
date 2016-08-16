@@ -19,23 +19,23 @@
 package edu.duke.cs.jflap.automata.turing;
 
 public class AcceptByHaltingFilter implements AcceptanceFilter { // note that
-    // building
-    // blocks
-    // should be
-    // STRIPPED of
-    // FINAL states
-    // //or we
-    // could simply
-    // ignore final
-    // states in
-    // nonTopLevel.
-    @Override
-    public boolean accept(TMConfiguration tmc) {
-        return tmc.isHalted();
-    }
+	// building
+	// blocks
+	// should be
+	// STRIPPED of
+	// FINAL states
+	// //or we
+	// could simply
+	// ignore final
+	// states in
+	// nonTopLevel.
+	@Override
+	public boolean accept(final TMConfiguration tmc) {
+		return tmc.isHalted();
+	}
 
-    @Override
-    public String getName() {
-        return "Accept by Halting";
-    }
+	@Override
+	public String getName() {
+		return "Accept by Halting";
+	}
 }

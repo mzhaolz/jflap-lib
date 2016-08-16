@@ -16,11 +16,11 @@
 
 package edu.duke.cs.jflap.gui.environment;
 
+import java.io.Serializable;
+
 import edu.duke.cs.jflap.grammar.Grammar;
 import edu.duke.cs.jflap.grammar.UnboundGrammar;
 import edu.duke.cs.jflap.gui.grammar.GrammarInputPane;
-
-import java.io.Serializable;
 
 /**
  * The <CODE>GrammarEnvironment</CODE> is an environment for holding a grammar.
@@ -39,60 +39,60 @@ import java.io.Serializable;
  * @author Thomas Finley
  */
 public class GrammarEnvironment extends Environment {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>GrammarEnvironment</CODE> with the given
-     * <CODE>GrammarInputPane</CODE>.
-     *
-     * @param input
-     *            the <CODE>GrammarInputPane</CODE>
-     */
-    public GrammarEnvironment(GrammarInputPane input) {
-        super(null);
-        this.input = input;
-        input.getTable().getModel().addTableModelListener(event -> setDirty());
-    }
+	/** The grammar input pane. */
+	private GrammarInputPane input = null;
 
-    /**
-     * Returns the grammar of this <CODE>GrammarEnvironment</CODE>, which is
-     * retrieved from the <CODE>GrammarInputPane</CODE>'s
-     * <CODE>.getGrammar</CODE> method.
-     *
-     * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar
-     * @return the <CODE>Grammar</CODE> for this environment
-     */
-    @Override
-    public Serializable getObject() {
-        return getGrammar(UnboundGrammar.class);
-    }
+	/**
+	 * Instantiates a new <CODE>GrammarEnvironment</CODE> with the given
+	 * <CODE>GrammarInputPane</CODE>.
+	 *
+	 * @param input
+	 *            the <CODE>GrammarInputPane</CODE>
+	 */
+	public GrammarEnvironment(final GrammarInputPane input) {
+		super(null);
+		this.input = input;
+		input.getTable().getModel().addTableModelListener(event -> setDirty());
+	}
 
-    /**
-     * Returns the context free grammar.
-     *
-     * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar()
-     * @return the <CODE>ContextFreeGrammar</CODE> for this environment
-     */
-    public Grammar getGrammar() {
-        return input.getGrammar();
-    }
+	/**
+	 * Returns the context free grammar.
+	 *
+	 * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar()
+	 * @return the <CODE>ContextFreeGrammar</CODE> for this environment
+	 */
+	public Grammar getGrammar() {
+		return input.getGrammar();
+	}
 
-    /**
-     * Returns the grammar of the specified type.
-     *
-     * @param grammarClass
-     *            specification of the type of grammar which should be returned
-     * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar(Class)
-     * @return the <CODE>Grammar</CODE> for this environment of the specified
-     *         type
-     */
-    public Grammar getGrammar(Class<? extends Grammar> grammarClass) {
-        return input.getGrammar(grammarClass);
-    }
+	/**
+	 * Returns the grammar of the specified type.
+	 *
+	 * @param grammarClass
+	 *            specification of the type of grammar which should be returned
+	 * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar(Class)
+	 * @return the <CODE>Grammar</CODE> for this environment of the specified
+	 *         type
+	 */
+	public Grammar getGrammar(final Class<? extends Grammar> grammarClass) {
+		return input.getGrammar(grammarClass);
+	}
 
-    /** The grammar input pane. */
-    private GrammarInputPane input = null;
+	/**
+	 * Returns the grammar of this <CODE>GrammarEnvironment</CODE>, which is
+	 * retrieved from the <CODE>GrammarInputPane</CODE>'s
+	 * <CODE>.getGrammar</CODE> method.
+	 *
+	 * @see edu.duke.cs.jflap.gui.grammar.GrammarInputPane#getGrammar
+	 * @return the <CODE>Grammar</CODE> for this environment
+	 */
+	@Override
+	public Serializable getObject() {
+		return getGrammar(UnboundGrammar.class);
+	}
 }

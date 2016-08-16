@@ -52,255 +52,255 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
  */
 
 public class WebFrame extends JFrame {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * An action to browse back.
+	 */
+	private class BackAction implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			goBack();
+		}
+	}
 
-    /**
-     * This constructs a new <TT>WebFrame</TT> that initializes its display to
-     * the location shown.
-     *
-     * @param myHtmlFile
-     *            the URL to load, either in the form of a web page (starting
-     *            with `http') or some sort of file (starting, I suppose,
-     *            without the `http').
-     */
-    public WebFrame(String myHtmlFile) {
-        setTitle("Help Browser");
-        JPanel mainpanel = new JPanel(new BorderLayout());
+	/**
+	 * An action to browse forward.
+	 */
+	private class ForwardAction implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			goForward();
+		}
+	}
 
-        Hyperactive hyper = new Hyperactive();
-        myBrowserDisplay.setEditable(false);
-        myBrowserDisplay.addHyperlinkListener(hyper);
-        JScrollPane htmlscrollpane = new JScrollPane(myBrowserDisplay);
-        mainpanel.add(htmlscrollpane, BorderLayout.CENTER);
-        mainpanel.add(getToolBar(), BorderLayout.NORTH);
+	/**
+	 * An action to browse back to the start.
+	 */
+	private class HomeAction implements ActionListener {
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			goHome();
+		}
+	}
 
-        String url = myHtmlFile;
-        if (!myHtmlFile.startsWith("http://")) {
-            URL u = this.getClass().getResource(myHtmlFile);
-            url = u == null ? "" : u.toString();
-        }
-        setContentPane(mainpanel);
-        pack();
-        setSize(600, 700);
-        setLocation(50, 50);
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
+	/**
+	 * This listener listenens for hyperlink clicks, and updates the frame to
+	 * the new contents.
+	 */
+	public class Hyperactive implements HyperlinkListener {
+		@Override
+		public void hyperlinkUpdate(final HyperlinkEvent e) {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				final JEditorPane pane = (JEditorPane) e.getSource();
+				if (e instanceof HTMLFrameHyperlinkEvent) {
+					final HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e;
+					final HTMLDocument doc = (HTMLDocument) pane.getDocument();
+					doc.processHTMLFrameHyperlinkEvent(evt);
+				} else {
+					try {
+						goNew(e.getURL().toString());
+					} catch (final Throwable t) {
+						t.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 
-        goNew(url);
-    }
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Goes to a particular page.
-     *
-     * @param url
-     *            the url to go to
-     */
-    public void gotoURL(String url) {
-        if (!url.startsWith("http://")) {
-            URL u = this.getClass().getResource(url);
-            url = u == null ? "" : u.toString();
-        }
-        goNew(url);
-    }
+	/** The JEditorPane display. */
+	private final JEditorPane myBrowserDisplay = new JEditorPane();
 
-    /**
-     * Returns the toolbar for browsing this help display.
-     *
-     * @return the toolbar for browsing this help display
-     */
-    private JToolBar getToolBar() {
-        JToolBar toReturn = new JToolBar();
-        toReturn.setFloatable(false);
-        myBackButton = makeButton("Back", "left.gif", new BackAction(), null);
-        myForwardButton = makeButton("Forward", "right.gif", new ForwardAction(), null);
-        myStartButton = makeButton("Main Index", "start.gif", new HomeAction(), null);
-        toReturn.add(myBackButton);
-        toReturn.add(myForwardButton);
-        toReturn.add(myStartButton);
-        return toReturn;
-    }
+	/** The vector that holds old addresses. */
+	private final ArrayList<String> myURLHistory = new ArrayList<>();
 
-    /**
-     * Makes a web browser button with the specified attributes.
-     *
-     * @param label
-     *            the label on the button
-     * @param iconName
-     *            the icon name for the button in the web browser icon directory
-     * @param listener
-     *            the action listener for the button
-     * @param tooltip
-     *            the tool tip for the button
-     */
-    private JButton makeButton(String label, String iconName, ActionListener listener,
-            String tooltip) {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/ICON/web/" + iconName));
-        JButton button = new JButton(label, icon);
-        button.addActionListener(listener);
-        button.setToolTipText(tooltip);
-        return button;
-    }
+	/** Our current position in the vector of addresses. */
+	private int myCurrentPosition = -1;
 
-    /**
-     * Goes to the previous address in the history.
-     */
-    private void goBack() {
-        try {
-            myCurrentPosition--;
-            String url = myURLHistory.get(myCurrentPosition);
-            setDisplay(url);
-        } catch (Throwable e) {
-            myCurrentPosition++;
-        }
-    }
+	/** The back button. */
+	private JButton myBackButton;
 
-    /**
-     * Goes to the start address.
-     */
-    private void goHome() {
-        int oldIndex = myCurrentPosition;
-        try {
-            myCurrentPosition = 0;
-            String url = myURLHistory.get(myCurrentPosition);
-            setDisplay(url);
-        } catch (Throwable e) {
-            myCurrentPosition = oldIndex;
-        }
-    }
+	/** The forward button. */
+	private JButton myForwardButton;
 
-    /**
-     * Goes to the next address in the history.
-     */
-    private void goForward() {
-        try {
-            myCurrentPosition++;
-            String url = myURLHistory.get(myCurrentPosition);
-            setDisplay(url);
-        } catch (Throwable e) {
-            myCurrentPosition--;
-        }
-    }
+	/** The start button. */
+	private JButton myStartButton;
 
-    /**
-     * Sets the display of the browser to the URL.
-     *
-     * @param url
-     *            the name of the url
-     */
-    private void setDisplay(String url) {
-        try {
-            myBrowserDisplay.setPage(url);
-        } catch (IOException e) {
-            // Display an alert to that effect.
-            System.err.println(e);
-            JOptionPane.showMessageDialog(this, "Could not access URL " + url + "!", "Web Error",
-                    JOptionPane.ERROR_MESSAGE);
-            myURLHistory.remove(myCurrentPosition);
-            myCurrentPosition--;
-        }
-        setEnabledStates();
-    }
+	/**
+	 * This constructs a new <TT>WebFrame</TT> that initializes its display to
+	 * the location shown.
+	 *
+	 * @param myHtmlFile
+	 *            the URL to load, either in the form of a web page (starting
+	 *            with `http') or some sort of file (starting, I suppose,
+	 *            without the `http').
+	 */
+	public WebFrame(final String myHtmlFile) {
+		setTitle("Help Browser");
+		final JPanel mainpanel = new JPanel(new BorderLayout());
 
-    /**
-     * Go to a completely new page, clearing all visited history past this
-     * point.
-     *
-     * @param url
-     *            the new url to go to
-     */
-    private void goNew(String url) {
-        myCurrentPosition++;
-        try {
-            while (true) {
-                myURLHistory.remove(myCurrentPosition);
-            }
-        } catch (Throwable e) {
+		final Hyperactive hyper = new Hyperactive();
+		myBrowserDisplay.setEditable(false);
+		myBrowserDisplay.addHyperlinkListener(hyper);
+		final JScrollPane htmlscrollpane = new JScrollPane(myBrowserDisplay);
+		mainpanel.add(htmlscrollpane, BorderLayout.CENTER);
+		mainpanel.add(getToolBar(), BorderLayout.NORTH);
 
-        }
-        myURLHistory.add(url);
-        setDisplay(url);
-    }
+		String url = myHtmlFile;
+		if (!myHtmlFile.startsWith("http://")) {
+			final URL u = this.getClass().getResource(myHtmlFile);
+			url = u == null ? "" : u.toString();
+		}
+		setContentPane(mainpanel);
+		pack();
+		setSize(600, 700);
+		setLocation(50, 50);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-    /**
-     * Sets the enabled states of the browsing buttons.
-     */
-    private void setEnabledStates() {
-        myBackButton.setEnabled(myCurrentPosition != 0);
-        myStartButton.setEnabled(myCurrentPosition != 0);
-        myForwardButton.setEnabled(myCurrentPosition != myURLHistory.size() - 1);
-    }
+		goNew(url);
+	}
 
-    /**
-     * This listener listenens for hyperlink clicks, and updates the frame to
-     * the new contents.
-     */
-    public class Hyperactive implements HyperlinkListener {
-        @Override
-        public void hyperlinkUpdate(HyperlinkEvent e) {
-            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                JEditorPane pane = (JEditorPane) e.getSource();
-                if (e instanceof HTMLFrameHyperlinkEvent) {
-                    HTMLFrameHyperlinkEvent evt = (HTMLFrameHyperlinkEvent) e;
-                    HTMLDocument doc = (HTMLDocument) pane.getDocument();
-                    doc.processHTMLFrameHyperlinkEvent(evt);
-                } else {
-                    try {
-                        goNew(e.getURL().toString());
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
+	/**
+	 * Returns the toolbar for browsing this help display.
+	 *
+	 * @return the toolbar for browsing this help display
+	 */
+	private JToolBar getToolBar() {
+		final JToolBar toReturn = new JToolBar();
+		toReturn.setFloatable(false);
+		myBackButton = makeButton("Back", "left.gif", new BackAction(), null);
+		myForwardButton = makeButton("Forward", "right.gif", new ForwardAction(), null);
+		myStartButton = makeButton("Main Index", "start.gif", new HomeAction(), null);
+		toReturn.add(myBackButton);
+		toReturn.add(myForwardButton);
+		toReturn.add(myStartButton);
+		return toReturn;
+	}
 
-    /**
-     * An action to browse back.
-     */
-    private class BackAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            goBack();
-        }
-    }
+	/**
+	 * Goes to the previous address in the history.
+	 */
+	private void goBack() {
+		try {
+			myCurrentPosition--;
+			final String url = myURLHistory.get(myCurrentPosition);
+			setDisplay(url);
+		} catch (final Throwable e) {
+			myCurrentPosition++;
+		}
+	}
 
-    /**
-     * An action to browse forward.
-     */
-    private class ForwardAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            goForward();
-        }
-    }
+	/**
+	 * Goes to the next address in the history.
+	 */
+	private void goForward() {
+		try {
+			myCurrentPosition++;
+			final String url = myURLHistory.get(myCurrentPosition);
+			setDisplay(url);
+		} catch (final Throwable e) {
+			myCurrentPosition--;
+		}
+	}
 
-    /**
-     * An action to browse back to the start.
-     */
-    private class HomeAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            goHome();
-        }
-    }
+	/**
+	 * Goes to the start address.
+	 */
+	private void goHome() {
+		final int oldIndex = myCurrentPosition;
+		try {
+			myCurrentPosition = 0;
+			final String url = myURLHistory.get(myCurrentPosition);
+			setDisplay(url);
+		} catch (final Throwable e) {
+			myCurrentPosition = oldIndex;
+		}
+	}
 
-    /** The JEditorPane display. */
-    private JEditorPane myBrowserDisplay = new JEditorPane();
+	/**
+	 * Go to a completely new page, clearing all visited history past this
+	 * point.
+	 *
+	 * @param url
+	 *            the new url to go to
+	 */
+	private void goNew(final String url) {
+		myCurrentPosition++;
+		try {
+			while (true) {
+				myURLHistory.remove(myCurrentPosition);
+			}
+		} catch (final Throwable e) {
 
-    /** The vector that holds old addresses. */
-    private ArrayList<String> myURLHistory = new ArrayList<>();
+		}
+		myURLHistory.add(url);
+		setDisplay(url);
+	}
 
-    /** Our current position in the vector of addresses. */
-    private int myCurrentPosition = -1;
+	/**
+	 * Goes to a particular page.
+	 *
+	 * @param url
+	 *            the url to go to
+	 */
+	public void gotoURL(String url) {
+		if (!url.startsWith("http://")) {
+			final URL u = this.getClass().getResource(url);
+			url = u == null ? "" : u.toString();
+		}
+		goNew(url);
+	}
 
-    /** The back button. */
-    private JButton myBackButton;
+	/**
+	 * Makes a web browser button with the specified attributes.
+	 *
+	 * @param label
+	 *            the label on the button
+	 * @param iconName
+	 *            the icon name for the button in the web browser icon directory
+	 * @param listener
+	 *            the action listener for the button
+	 * @param tooltip
+	 *            the tool tip for the button
+	 */
+	private JButton makeButton(final String label, final String iconName, final ActionListener listener,
+			final String tooltip) {
+		final ImageIcon icon = new ImageIcon(getClass().getResource("/ICON/web/" + iconName));
+		final JButton button = new JButton(label, icon);
+		button.addActionListener(listener);
+		button.setToolTipText(tooltip);
+		return button;
+	}
 
-    /** The forward button. */
-    private JButton myForwardButton;
+	/**
+	 * Sets the display of the browser to the URL.
+	 *
+	 * @param url
+	 *            the name of the url
+	 */
+	private void setDisplay(final String url) {
+		try {
+			myBrowserDisplay.setPage(url);
+		} catch (final IOException e) {
+			// Display an alert to that effect.
+			System.err.println(e);
+			JOptionPane.showMessageDialog(this, "Could not access URL " + url + "!", "Web Error",
+					JOptionPane.ERROR_MESSAGE);
+			myURLHistory.remove(myCurrentPosition);
+			myCurrentPosition--;
+		}
+		setEnabledStates();
+	}
 
-    /** The start button. */
-    private JButton myStartButton;
+	/**
+	 * Sets the enabled states of the browsing buttons.
+	 */
+	private void setEnabledStates() {
+		myBackButton.setEnabled(myCurrentPosition != 0);
+		myStartButton.setEnabled(myCurrentPosition != 0);
+		myForwardButton.setEnabled(myCurrentPosition != myURLHistory.size() - 1);
+	}
 }

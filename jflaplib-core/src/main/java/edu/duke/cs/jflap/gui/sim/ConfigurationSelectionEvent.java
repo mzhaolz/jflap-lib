@@ -31,27 +31,27 @@ import java.util.EventObject;
  * @author Thomas Finley
  */
 public class ConfigurationSelectionEvent extends EventObject {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a new <CODE>ConfigurationSelectionEvent</CODE> object.
-     *
-     * @param configurationPane
-     *            the configuration pane where the selection state has changed
-     */
-    public ConfigurationSelectionEvent(ConfigurationPane configurationPane) {
-        super(configurationPane);
-    }
+	/**
+	 * Instantiates a new <CODE>ConfigurationSelectionEvent</CODE> object.
+	 *
+	 * @param configurationPane
+	 *            the configuration pane where the selection state has changed
+	 */
+	public ConfigurationSelectionEvent(final ConfigurationPane configurationPane) {
+		super(configurationPane);
+	}
 
-    /**
-     * Returns the configuration pane that generated this event.
-     *
-     * @return the configuration pane that generated this event
-     */
-    public ConfigurationPane getPane() {
-        return (ConfigurationPane) getSource();
-    }
+	/**
+	 * Returns the configuration pane that generated this event.
+	 *
+	 * @return the configuration pane that generated this event
+	 */
+	public ConfigurationPane getPane() {
+		return (ConfigurationPane) getSource();
+	}
 }

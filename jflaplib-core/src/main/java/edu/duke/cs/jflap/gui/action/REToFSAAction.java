@@ -16,13 +16,13 @@
 
 package edu.duke.cs.jflap.gui.action;
 
-import edu.duke.cs.jflap.gui.environment.RegularEnvironment;
-import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
-import edu.duke.cs.jflap.gui.regular.ConvertToAutomatonPane;
-
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
+
+import edu.duke.cs.jflap.gui.environment.RegularEnvironment;
+import edu.duke.cs.jflap.gui.environment.tag.CriticalTag;
+import edu.duke.cs.jflap.gui.regular.ConvertToAutomatonPane;
 
 /**
  * This class initiates the conversion of a regular expression to a
@@ -31,41 +31,41 @@ import javax.swing.JOptionPane;
  * @author Thomas Finley
  */
 public class REToFSAAction extends RegularAction {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Instantiates a <CODE>REToFSAAction</CODE>.
-     *
-     * @param environment
-     *            the environment which is home to the regular expression to
-     *            convert
-     */
-    public REToFSAAction(RegularEnvironment environment) {
-        super("Convert to NFA", null, environment);
-    }
+	/**
+	 * Instantiates a <CODE>REToFSAAction</CODE>.
+	 *
+	 * @param environment
+	 *            the environment which is home to the regular expression to
+	 *            convert
+	 */
+	public REToFSAAction(final RegularEnvironment environment) {
+		super("Convert to NFA", null, environment);
+	}
 
-    /**
-     * This begins the process of converting a regular expression to an NFA.
-     *
-     * @param event
-     *            the event to process
-     */
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        // JFrame frame = Universe.frameForEnvironment(environment);
-        try {
-            getExpression().asCheckedString();
-        } catch (UnsupportedOperationException e) {
-            JOptionPane.showMessageDialog(getEnvironment(), e.getMessage(), "Illegal Expression",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        ConvertToAutomatonPane pane = new ConvertToAutomatonPane(getEnvironment());
-        getEnvironment().add(pane, "Convert RE to NFA", new CriticalTag() {
-        });
-        getEnvironment().setActive(pane);
-    }
+	/**
+	 * This begins the process of converting a regular expression to an NFA.
+	 *
+	 * @param event
+	 *            the event to process
+	 */
+	@Override
+	public void actionPerformed(final ActionEvent event) {
+		// JFrame frame = Universe.frameForEnvironment(environment);
+		try {
+			getExpression().asCheckedString();
+		} catch (final UnsupportedOperationException e) {
+			JOptionPane.showMessageDialog(getEnvironment(), e.getMessage(), "Illegal Expression",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		final ConvertToAutomatonPane pane = new ConvertToAutomatonPane(getEnvironment());
+		getEnvironment().add(pane, "Convert RE to NFA", new CriticalTag() {
+		});
+		getEnvironment().setActive(pane);
+	}
 }

@@ -18,16 +18,6 @@ package edu.duke.cs.jflap.gui.sim;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import edu.duke.cs.jflap.automata.AutomatonSimulator;
-import edu.duke.cs.jflap.automata.Configuration;
-import edu.duke.cs.jflap.automata.turing.TMConfiguration;
-import edu.duke.cs.jflap.automata.turing.TMSimulator;
-import edu.duke.cs.jflap.automata.turing.TMState;
-import edu.duke.cs.jflap.automata.turing.TuringMachine;
-import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
-
-import com.google.common.collect.Lists;
-
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +30,16 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 
+import com.google.common.collect.Lists;
+
+import edu.duke.cs.jflap.automata.AutomatonSimulator;
+import edu.duke.cs.jflap.automata.Configuration;
+import edu.duke.cs.jflap.automata.turing.TMConfiguration;
+import edu.duke.cs.jflap.automata.turing.TMSimulator;
+import edu.duke.cs.jflap.automata.turing.TMState;
+import edu.duke.cs.jflap.automata.turing.TuringMachine;
+import edu.duke.cs.jflap.gui.viewer.SelectionDrawer;
+
 /**
  * This is an intermediary object between the simulator GUI and the automaton
  * simulators.
@@ -47,450 +47,446 @@ import javax.swing.JSplitPane;
  * @author Thomas Finley
  */
 public class ConfigurationController implements ConfigurationSelectionListener {
-    /**
-     * Instantiates a new configuration controller.
-     *
-     * @param pane
-     *            the pane from which we retrieve configurations
-     * @param simulator
-     *            the automaton simulator
-     * @param drawer
-     *            the drawer of the automaton
-     * @param component
-     *            the component in which the automaton is displayed
-     */
-    public ConfigurationController(ConfigurationPane pane,
-            AutomatonSimulator simulator,
-            SelectionDrawer drawer,
-            Component component) {
-        configurations = pane;
-        this.simulator = simulator;
-        this.drawer = drawer;
-        this.component = component;
-        changeSelection();
-        configurations.addSelectionListener(this);
-        originalConfigurations = Lists.newArrayList(configurations.getConfigurations());
-        // for(int k = 0; k < originalConfigurations.length; k++){
-        // Configuration current = originalConfigurations[k];
-        // if(current instanceof TMConfiguration){
-        // TMConfiguration currentTM = (TMConfiguration)current;
-        // originalConfigurations[k] = (Configuration)currentTM.clone();
-        // }
-        // }
-    }
+	/** The error message displayed when there is no config selected. */
+	private static final String NO_CONFIGURATION_ERROR = "Select at least one configuration!";
 
-    /**
-     * This sets the configuration pane to have the initial configuration for
-     * this input.
-     */
-    public void reset() {
-        configurations.clear();
-        if (simulator instanceof TMSimulator) {
-            TMSimulator tmSim = (TMSimulator) simulator;
-            List<Configuration> configs = tmSim.getInitialConfigurations(tmSim.getInputStrings());
-            for (Configuration config : configs) {
-                configurations.add(config);
-            }
-        } else {
-            for (int i = 0; i < originalConfigurations.size(); i++) {
-                originalConfigurations.get(i).reset();
-                configurations.add(originalConfigurations.get(i));
-            }
-        }
-        // What the devil do I have to do to get it to repaint?
-        // configurations.invalidate();
-        configurations.validate();
-        configurations.repaint();
+	/** The error message displayed when there is no config selected. */
+	private static final String NO_CONFIGURATION_ERROR_TITLE = "No Configuration Selected";
 
-        // Change them darned selections.
-        changeSelection();
-    }
+	/** The error message displayed when there is no config selected. */
+	private static final String FOCUS_CONFIGURATION_ERROR = "JFLAP can only focus on one configuration at a time!";
 
-    /**
-     * This method should be called when the simulator pane that this
-     * configuration controller belongs to is removed from the environment. This
-     * will remove all of the open configuration trace windows.
-     */
-    public void cleanup() {
-        Collection<TraceWindow> windows = configurationToTraceWindow.values();
-        Iterator<TraceWindow> it = windows.iterator();
-        while (it.hasNext()) {
-            it.next().dispose();
-        }
-        configurationToTraceWindow.clear();
-    }
+	/** The error message displayed when there is no config selected. */
+	private static final String FOCUS_CONFIGURATION_ERROR_TITLE = "Too many configurations selected";
 
-    /**
-     * The step method takes all configurations from the configuration pane, and
-     * replaces them with "successor" transitions.
-     *
-     * @param blockStep
-     */
-    public void step(boolean blockStep) {
-        List<Configuration> configs = configurations.getValidConfigurations();
-        List<Configuration> list = new ArrayList<>();
-        HashSet<Configuration> reject = new HashSet<>();
+	/** This is the pane holding the configurations. */
+	private final ConfigurationPane configurations;
 
-        // Clear out old states.
-        configurations.clearThawed();
+	/** This is the simulator that we step through configurations with. */
+	private final AutomatonSimulator simulator;
 
-        if (!blockStep) { // for ordinary automaton
-            for (Configuration config : configs) {
-                // System.out.println("HERE!");
-                List<? extends Configuration> next = simulator.stepConfiguration(config);
-                // MERLIN MERLIN MERLIN MERLIN MERLIN//
-                if (next.size() == 0) { // crucial check for rejection
-                    // System.out.println("Rejected");
-                    reject.add(config);
-                    list.add(config);
-                } else {
-                    list.addAll(next);
-                }
-            }
-        } else {
-            do {
-                checkArgument(configs.size() == 1);
-                checkArgument(configs.get(0) instanceof TMConfiguration);
-                checkArgument(simulator instanceof TMSimulator);
+	/** This is the selection drawer that draws the automaton. */
+	private final SelectionDrawer drawer;
 
-                if (configs.size() == 0) {
-                    break; // bit of a hack, but not much time to debug right
-                    // now.
-                }
+	/*
+	 * public Automaton findAutomaton(Automaton checkTop, Stack heirarchy, State
+	 * parent, boolean select) { Configuration[] configs; configs =
+	 * configurations.getConfigurations(); for (int k = 0; k < configs.length;
+	 * k++) { if (configs[k].getFocused()) { Automaton temp = (Automaton)
+	 * configs[k].getAutoStack().peek(); return temp; } } while (parent != null)
+	 * { if (select) drawer.addSelected(parent); checkTop = (Automaton)
+	 * simulator.getAutomaton().getBlockMap().get( parent.getInternalName()); if
+	 * (checkTop != null) { while (!heirarchy.isEmpty()) { State popped =
+	 * (State) heirarchy.pop(); checkTop = (Automaton)
+	 * checkTop.getBlockMap().get( popped.getInternalName()); } break; } else
+	 * heirarchy.push(parent); parent = parent.getParentBlock(); } return
+	 * checkTop; }
+	 */
 
-                List<Configuration> next = ((TMSimulator) simulator)
-                        .stepBlock((TMConfiguration) configs.get(0));
-                // MERLIN MERLIN MERLIN MERLIN MERLIN//
-                if (next.size() == 0) { // crucial check for rejection
-                    // System.out.println("Rejected");
-                    reject.add(configs.get(0));
-                    list.add(configs.get(0));
-                } else {
-                    list.addAll(next);
-                }
+	/** This is the pane in which the automaton is displayed. */
+	private final Component component;
 
-            } while (false);
-        }
+	/**
+	 * The mapping of a particular configuration to a trace window. If there is
+	 * no trace window for that configuration, then that trace window no longer
+	 * exists.
+	 */
+	private final HashMap<Configuration, TraceWindow> configurationToTraceWindow = new HashMap<>();
 
-        // Replace them with the successors.
-        Iterator<Configuration> it = list.iterator();
-        while (it.hasNext()) {
-            Configuration config = it.next();
-            configurations.add(config);
-            if (reject.contains(config)) {
-                configurations.setReject(config);
-            }
-        }
-        // What the devil do I have to do to get it to repaint?
-        configurations.validate();
-        configurations.repaint();
+	/**
+	 * This is the set of original configurations when the configuration pane
+	 * started.
+	 */
+	private List<Configuration> originalConfigurations = new ArrayList<>();
 
-        // Change them darned selections.
-        changeSelection();
-        // Ready for the ugliest code in the whole world, ever?
-        try {
-            // I take this action without the knowledge or sanction of
-            // my government...
-            JSplitPane split = (JSplitPane) configurations.getParent().getParent().getParent()
-                    .getParent();
-            int loc = split.getDividerLocation();
-            split.setDividerLocation(loc - 1);
-            split.setDividerLocation(loc);
-            // Yes! GridLayout doesn't display properly in a scroll
-            // pane, but if the user "wiggled" the size a little it
-            // displays correctly -- now the size is wiggled in code!
-        } catch (Throwable e) {
+	/**
+	 * Instantiates a new configuration controller.
+	 *
+	 * @param pane
+	 *            the pane from which we retrieve configurations
+	 * @param simulator
+	 *            the automaton simulator
+	 * @param drawer
+	 *            the drawer of the automaton
+	 * @param component
+	 *            the component in which the automaton is displayed
+	 */
+	public ConfigurationController(final ConfigurationPane pane, final AutomatonSimulator simulator,
+			final SelectionDrawer drawer, final Component component) {
+		configurations = pane;
+		this.simulator = simulator;
+		this.drawer = drawer;
+		this.component = component;
+		changeSelection();
+		configurations.addSelectionListener(this);
+		originalConfigurations = Lists.newArrayList(configurations.getConfigurations());
+		// for(int k = 0; k < originalConfigurations.length; k++){
+		// Configuration current = originalConfigurations[k];
+		// if(current instanceof TMConfiguration){
+		// TMConfiguration currentTM = (TMConfiguration)current;
+		// originalConfigurations[k] = (Configuration)currentTM.clone();
+		// }
+		// }
+	}
 
-        }
+	/**
+	 * Sets the drawer to draw the selected configurations' states as selected,
+	 * or to draw all configurations' states as selected in the event that there
+	 * are no selected configurations. In this case, the selection refers to the
+	 * selection of states within the automata, though
+	 */
+	public void changeSelection() {
+		drawer.clearSelected();
+		Set<Configuration> configs;
+		configs = configurations.getConfigurations();
+		boolean foundFocused = false;
+		for (final Configuration current : configs) {
+			foundFocused = setFocusIfNeeded(current, foundFocused);
 
-        // State current = null;
-        // Iterator iter = list.iterator();
-        // int count = 0;
+			if (current instanceof TMConfiguration) {
+				// then blocks become relevant
+				TMState cur = (TMState) current.getCurrentState();
+				while (((TuringMachine) cur.getAutomaton()).getParent() != null) {
+					cur = ((TuringMachine) cur.getAutomaton()).getParent();
+				}
+				drawer.addSelected(cur);
+			}
 
-        // MERLIN MERLIN MERLIN MERLIN MERLIN// //forgetting BlockStep for now
-        //// if (blockStep) { //should ONLY apply to Turing Machines // while
-        // (iter.hasNext()) {
-        //// Configuration configure = (Configuration) iter.next();
-        //// current = configure.getCurrentState();
-        //// if (configure.getBlockStack().size() > 0) {
-        //// if(((Automaton)configure.getAutoStack().peek()).getInitialState()
-        // != current || configure.getBlockStack().size()>1){
-        //// if(!configure.isAccept()){
-        //// count++;
-        //// if(count > 10000){
-        //// int result = JOptionPane.showConfirmDialog(null, "JFLAP has
-        // generated 10000 configurations. Continue?");
-        //// switch (result) {
-        //// case JOptionPane.CANCEL_OPTION:
-        //// case JOptionPane.NO_OPTION:
-        //// return;
-        //// default:
-        //// }
-        //// }
-        // step(blockStep);
-        //// }
-        //// break;
-        //// }
-        //// }
-        //// }
-        // }
-    }
+			// Stack blocks = (Stack) configs[i].getBlockStack().clone();
+			// if (!blocks.empty()) {
+			// State parent = (State) configs[i].getBlockStack().peek();
+			// int start = blocks.lastIndexOf(parent);
+			// while (start >= 0) {
+			// parent = (State) blocks.get(start);
+			// drawer.addSelected(parent);
+			// start--;
+			// }
+			// }
+			drawer.addSelected(current.getCurrentState());
+		}
+		component.repaint();
+	}
 
-    /**
-     * Freezes selected configurations.
-     */
-    public void freeze() {
-        Set<Configuration> configs = configurations.getSelected();
-        if (configs.size() == 0) {
-            JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
-                    NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        for (Configuration config : configs) {
-            configurations.setFrozen(config);
-        }
-        configurations.deselectAll();
-        configurations.repaint();
-    }
+	/**
+	 * This method should be called when the simulator pane that this
+	 * configuration controller belongs to is removed from the environment. This
+	 * will remove all of the open configuration trace windows.
+	 */
+	public void cleanup() {
+		final Collection<TraceWindow> windows = configurationToTraceWindow.values();
+		final Iterator<TraceWindow> it = windows.iterator();
+		while (it.hasNext()) {
+			it.next().dispose();
+		}
+		configurationToTraceWindow.clear();
+	}
 
-    /**
-     * Removes the selected configurations.
-     */
-    public void remove() {
-        Set<Configuration> configs = configurations.getSelected();
-        if (configs.size() == 0) {
-            JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
-                    NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        for (Configuration config : configs) {
-            configurations.remove(config);
-        }
-        configurations.validate();
-        configurations.repaint();
-    }
+	/**
+	 * Listens for configuration selection events.
+	 *
+	 * @param event
+	 *            the selection event
+	 */
+	@Override
+	public void configurationSelectionChange(final ConfigurationSelectionEvent event) {
+		// changeSelection();
+	}
 
-    /**
-     * Zooms in on selected configuration
-     */
-    public void focus() {
-        List<Configuration> configs = Lists.newArrayList(configurations.getSelected());
-        if (configs.size() == 0) {
-            JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
-                    NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
-            return;
-        } else if (configs.size() > 1) {
-            JOptionPane.showMessageDialog(configurations, FOCUS_CONFIGURATION_ERROR,
-                    FOCUS_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+	public void defocus() {
+		final Set<Configuration> configs = configurations.getConfigurations();
+		for (final Configuration config : configs) {
+			if (config.getFocused()) {
+				configurations.defocus(config);
+			}
+		}
+		drawer.setAutomaton(simulator.getAutomaton());
+		drawer.invalidate();
+		component.repaint();
+	}
 
-        Configuration toFocus = configs.get(0);
-        configurations.setFocused(toFocus);
-        toFocus.setFocused(true);
+	/**
+	 * Zooms in on selected configuration
+	 */
+	public void focus() {
+		final List<Configuration> configs = Lists.newArrayList(configurations.getSelected());
+		if (configs.size() == 0) {
+			JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR, NO_CONFIGURATION_ERROR_TITLE,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		} else if (configs.size() > 1) {
+			JOptionPane.showMessageDialog(configurations, FOCUS_CONFIGURATION_ERROR, FOCUS_CONFIGURATION_ERROR_TITLE,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
-        // State block = toFocus.getCurrentState().getParentBlock();
-        // State parent = block;
-        // Automaton checkTop = null;
-        // Stack heirarchy = new Stack();
-        // if (parent != null) {
-        // checkTop = findAutomaton(checkTop, heirarchy, parent, false);
-        // //System.out.println("Call from focus");
-        // if (checkTop != null)
-        // drawer.setAutomaton(checkTop);
-        // }
-        // drawer.invalidate();
-        component.repaint();
-    }
+		final Configuration toFocus = configs.get(0);
+		configurations.setFocused(toFocus);
+		toFocus.setFocused(true);
 
-    /*
-     * public Automaton findAutomaton(Automaton checkTop, Stack heirarchy, State
-     * parent, boolean select) { Configuration[] configs; configs =
-     * configurations.getConfigurations(); for (int k = 0; k < configs.length;
-     * k++) { if (configs[k].getFocused()) { Automaton temp = (Automaton)
-     * configs[k].getAutoStack().peek(); return temp; } } while (parent != null)
-     * { if (select) drawer.addSelected(parent); checkTop = (Automaton)
-     * simulator.getAutomaton().getBlockMap().get( parent.getInternalName()); if
-     * (checkTop != null) { while (!heirarchy.isEmpty()) { State popped =
-     * (State) heirarchy.pop(); checkTop = (Automaton)
-     * checkTop.getBlockMap().get( popped.getInternalName()); } break; } else
-     * heirarchy.push(parent); parent = parent.getParentBlock(); } return
-     * checkTop; }
-     */
+		// State block = toFocus.getCurrentState().getParentBlock();
+		// State parent = block;
+		// Automaton checkTop = null;
+		// Stack heirarchy = new Stack();
+		// if (parent != null) {
+		// checkTop = findAutomaton(checkTop, heirarchy, parent, false);
+		// //System.out.println("Call from focus");
+		// if (checkTop != null)
+		// drawer.setAutomaton(checkTop);
+		// }
+		// drawer.invalidate();
+		component.repaint();
+	}
 
-    /**
-     * Sets the drawer to draw the selected configurations' states as selected,
-     * or to draw all configurations' states as selected in the event that there
-     * are no selected configurations. In this case, the selection refers to the
-     * selection of states within the automata, though
-     */
-    public void changeSelection() {
-        drawer.clearSelected();
-        Set<Configuration> configs;
-        configs = configurations.getConfigurations();
-        boolean foundFocused = false;
-        for (Configuration current : configs) {
-            foundFocused = setFocusIfNeeded(current, foundFocused);
+	/**
+	 * Freezes selected configurations.
+	 */
+	public void freeze() {
+		final Set<Configuration> configs = configurations.getSelected();
+		if (configs.size() == 0) {
+			JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR, NO_CONFIGURATION_ERROR_TITLE,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		for (final Configuration config : configs) {
+			configurations.setFrozen(config);
+		}
+		configurations.deselectAll();
+		configurations.repaint();
+	}
 
-            if (current instanceof TMConfiguration) {
-                // then blocks become relevant
-                TMState cur = (TMState) current.getCurrentState();
-                while (((TuringMachine) cur.getAutomaton()).getParent() != null) {
-                    cur = ((TuringMachine) cur.getAutomaton()).getParent();
-                }
-                drawer.addSelected(cur);
-            }
+	/**
+	 * This method is used to find out if we need the <b>Focus</b> and
+	 * <b>Defocus</b> buttons in the simulator.
+	 *
+	 * @return <code>true</code> if the automaton is a turing machine,
+	 *         <code>false</code> otherwise
+	 * @author Jinghui Lim
+	 */
+	public boolean isTuringMachine() {
+		/*
+		 * Sorry about this pretty cheap method.
+		 */
+		return simulator instanceof TMSimulator;
+	}
 
-            // Stack blocks = (Stack) configs[i].getBlockStack().clone();
-            // if (!blocks.empty()) {
-            // State parent = (State) configs[i].getBlockStack().peek();
-            // int start = blocks.lastIndexOf(parent);
-            // while (start >= 0) {
-            // parent = (State) blocks.get(start);
-            // drawer.addSelected(parent);
-            // start--;
-            // }
-            // }
-            drawer.addSelected(current.getCurrentState());
-        }
-        component.repaint();
-    }
+	/**
+	 * Removes the selected configurations.
+	 */
+	public void remove() {
+		final Set<Configuration> configs = configurations.getSelected();
+		if (configs.size() == 0) {
+			JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR, NO_CONFIGURATION_ERROR_TITLE,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		for (final Configuration config : configs) {
+			configurations.remove(config);
+		}
+		configurations.validate();
+		configurations.repaint();
+	}
 
-    private boolean setFocusIfNeeded(Configuration current, boolean foundFocused) {
-        Configuration parentConfig = current.getParent();
-        if (parentConfig == null) {
-            return foundFocused;
-        }
+	/**
+	 * This sets the configuration pane to have the initial configuration for
+	 * this input.
+	 */
+	public void reset() {
+		configurations.clear();
+		if (simulator instanceof TMSimulator) {
+			final TMSimulator tmSim = (TMSimulator) simulator;
+			final List<Configuration> configs = tmSim.getInitialConfigurations(tmSim.getInputStrings());
+			for (final Configuration config : configs) {
+				configurations.add(config);
+			}
+		} else {
+			for (int i = 0; i < originalConfigurations.size(); i++) {
+				originalConfigurations.get(i).reset();
+				configurations.add(originalConfigurations.get(i));
+			}
+		}
+		// What the devil do I have to do to get it to repaint?
+		// configurations.invalidate();
+		configurations.validate();
+		configurations.repaint();
 
-        if (parentConfig.getFocused()) {
-            current.setFocused(true);
-            if (!foundFocused) {
-                configurations.setFocused(current);
-                current.setFocused(true);
+		// Change them darned selections.
+		changeSelection();
+	}
 
-                // MERLIN MERLIN MERLIN MERLIN MERLIN// //not sure what might
-                // have been broken here
-                // Automaton setWith = (Automaton)
-                // current.getAutoStack().peek();
-                // System.out.println("Stack size "
-                // + current.getAutoStack().size());
-                // drawer.setAutomaton(setWith);
-                foundFocused = true;
-            }
-        }
-        return foundFocused;
-    }
+	private boolean setFocusIfNeeded(final Configuration current, boolean foundFocused) {
+		final Configuration parentConfig = current.getParent();
+		if (parentConfig == null) {
+			return foundFocused;
+		}
 
-    public void defocus() {
-        Set<Configuration> configs = configurations.getConfigurations();
-        for (Configuration config : configs) {
-            if (config.getFocused()) {
-                configurations.defocus(config);
-            }
-        }
-        drawer.setAutomaton(simulator.getAutomaton());
-        drawer.invalidate();
-        component.repaint();
-    }
+		if (parentConfig.getFocused()) {
+			current.setFocused(true);
+			if (!foundFocused) {
+				configurations.setFocused(current);
+				current.setFocused(true);
 
-    /**
-     * Thaws the selected configurations.
-     */
-    public void thaw() {
-        Set<Configuration> configs = configurations.getSelected();
-        if (configs.size() == 0) {
-            JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
-                    NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        for (Configuration config : configs) {
-            configurations.setNormal(config);
-        }
-        configurations.deselectAll();
-        configurations.repaint();
-    }
+				// MERLIN MERLIN MERLIN MERLIN MERLIN// //not sure what might
+				// have been broken here
+				// Automaton setWith = (Automaton)
+				// current.getAutoStack().peek();
+				// System.out.println("Stack size "
+				// + current.getAutoStack().size());
+				// drawer.setAutomaton(setWith);
+				foundFocused = true;
+			}
+		}
+		return foundFocused;
+	}
 
-    /**
-     * Given the selected configurations, shows their "trace."
-     */
-    public void trace() {
-        Set<Configuration> configs = configurations.getSelected();
-        if (configs.size() == 0) {
-            JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR,
-                    NO_CONFIGURATION_ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        for (Configuration config : configs) {
-            TraceWindow window = configurationToTraceWindow.get(config);
-            if (window == null) {
-                configurationToTraceWindow.put(config, new TraceWindow(config));
-            } else {
-                window.setVisible(true);
-                window.toFront();
-            }
-        }
-    }
+	/**
+	 * The step method takes all configurations from the configuration pane, and
+	 * replaces them with "successor" transitions.
+	 *
+	 * @param blockStep
+	 */
+	public void step(final boolean blockStep) {
+		final List<Configuration> configs = configurations.getValidConfigurations();
+		final List<Configuration> list = new ArrayList<>();
+		final HashSet<Configuration> reject = new HashSet<>();
 
-    /**
-     * This method is used to find out if we need the <b>Focus</b> and
-     * <b>Defocus</b> buttons in the simulator.
-     *
-     * @return <code>true</code> if the automaton is a turing machine,
-     *         <code>false</code> otherwise
-     * @author Jinghui Lim
-     */
-    public boolean isTuringMachine() {
-        /*
-         * Sorry about this pretty cheap method.
-         */
-        return simulator instanceof TMSimulator;
-    }
+		// Clear out old states.
+		configurations.clearThawed();
 
-    /**
-     * Listens for configuration selection events.
-     *
-     * @param event
-     *            the selection event
-     */
-    @Override
-    public void configurationSelectionChange(ConfigurationSelectionEvent event) {
-        // changeSelection();
-    }
+		if (!blockStep) { // for ordinary automaton
+			for (final Configuration config : configs) {
+				// System.out.println("HERE!");
+				final List<? extends Configuration> next = simulator.stepConfiguration(config);
+				// MERLIN MERLIN MERLIN MERLIN MERLIN//
+				if (next.size() == 0) { // crucial check for rejection
+					// System.out.println("Rejected");
+					reject.add(config);
+					list.add(config);
+				} else {
+					list.addAll(next);
+				}
+			}
+		} else {
+			do {
+				checkArgument(configs.size() == 1);
+				checkArgument(configs.get(0) instanceof TMConfiguration);
+				checkArgument(simulator instanceof TMSimulator);
 
-    /** This is the pane holding the configurations. */
-    private ConfigurationPane configurations;
+				if (configs.size() == 0) {
+					break; // bit of a hack, but not much time to debug right
+					// now.
+				}
 
-    /** This is the simulator that we step through configurations with. */
-    private AutomatonSimulator simulator;
+				final List<Configuration> next = ((TMSimulator) simulator).stepBlock((TMConfiguration) configs.get(0));
+				// MERLIN MERLIN MERLIN MERLIN MERLIN//
+				if (next.size() == 0) { // crucial check for rejection
+					// System.out.println("Rejected");
+					reject.add(configs.get(0));
+					list.add(configs.get(0));
+				} else {
+					list.addAll(next);
+				}
 
-    /** This is the selection drawer that draws the automaton. */
-    private SelectionDrawer drawer;
+			} while (false);
+		}
 
-    /** This is the pane in which the automaton is displayed. */
-    private Component component;
+		// Replace them with the successors.
+		final Iterator<Configuration> it = list.iterator();
+		while (it.hasNext()) {
+			final Configuration config = it.next();
+			configurations.add(config);
+			if (reject.contains(config)) {
+				configurations.setReject(config);
+			}
+		}
+		// What the devil do I have to do to get it to repaint?
+		configurations.validate();
+		configurations.repaint();
 
-    /**
-     * The mapping of a particular configuration to a trace window. If there is
-     * no trace window for that configuration, then that trace window no longer
-     * exists.
-     */
-    private HashMap<Configuration, TraceWindow> configurationToTraceWindow = new HashMap<>();
+		// Change them darned selections.
+		changeSelection();
+		// Ready for the ugliest code in the whole world, ever?
+		try {
+			// I take this action without the knowledge or sanction of
+			// my government...
+			final JSplitPane split = (JSplitPane) configurations.getParent().getParent().getParent().getParent();
+			final int loc = split.getDividerLocation();
+			split.setDividerLocation(loc - 1);
+			split.setDividerLocation(loc);
+			// Yes! GridLayout doesn't display properly in a scroll
+			// pane, but if the user "wiggled" the size a little it
+			// displays correctly -- now the size is wiggled in code!
+		} catch (final Throwable e) {
 
-    /**
-     * This is the set of original configurations when the configuration pane
-     * started.
-     */
-    private List<Configuration> originalConfigurations = new ArrayList<>();
+		}
 
-    /** The error message displayed when there is no config selected. */
-    private static final String NO_CONFIGURATION_ERROR = "Select at least one configuration!";
+		// State current = null;
+		// Iterator iter = list.iterator();
+		// int count = 0;
 
-    /** The error message displayed when there is no config selected. */
-    private static final String NO_CONFIGURATION_ERROR_TITLE = "No Configuration Selected";
+		// MERLIN MERLIN MERLIN MERLIN MERLIN// //forgetting BlockStep for now
+		//// if (blockStep) { //should ONLY apply to Turing Machines // while
+		// (iter.hasNext()) {
+		//// Configuration configure = (Configuration) iter.next();
+		//// current = configure.getCurrentState();
+		//// if (configure.getBlockStack().size() > 0) {
+		//// if(((Automaton)configure.getAutoStack().peek()).getInitialState()
+		// != current || configure.getBlockStack().size()>1){
+		//// if(!configure.isAccept()){
+		//// count++;
+		//// if(count > 10000){
+		//// int result = JOptionPane.showConfirmDialog(null, "JFLAP has
+		// generated 10000 configurations. Continue?");
+		//// switch (result) {
+		//// case JOptionPane.CANCEL_OPTION:
+		//// case JOptionPane.NO_OPTION:
+		//// return;
+		//// default:
+		//// }
+		//// }
+		// step(blockStep);
+		//// }
+		//// break;
+		//// }
+		//// }
+		//// }
+		// }
+	}
 
-    /** The error message displayed when there is no config selected. */
-    private static final String FOCUS_CONFIGURATION_ERROR = "JFLAP can only focus on one configuration at a time!";
+	/**
+	 * Thaws the selected configurations.
+	 */
+	public void thaw() {
+		final Set<Configuration> configs = configurations.getSelected();
+		if (configs.size() == 0) {
+			JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR, NO_CONFIGURATION_ERROR_TITLE,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		for (final Configuration config : configs) {
+			configurations.setNormal(config);
+		}
+		configurations.deselectAll();
+		configurations.repaint();
+	}
 
-    /** The error message displayed when there is no config selected. */
-    private static final String FOCUS_CONFIGURATION_ERROR_TITLE = "Too many configurations selected";
+	/**
+	 * Given the selected configurations, shows their "trace."
+	 */
+	public void trace() {
+		final Set<Configuration> configs = configurations.getSelected();
+		if (configs.size() == 0) {
+			JOptionPane.showMessageDialog(configurations, NO_CONFIGURATION_ERROR, NO_CONFIGURATION_ERROR_TITLE,
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		for (final Configuration config : configs) {
+			final TraceWindow window = configurationToTraceWindow.get(config);
+			if (window == null) {
+				configurationToTraceWindow.put(config, new TraceWindow(config));
+			} else {
+				window.setVisible(true);
+				window.toFront();
+			}
+		}
+	}
 }
