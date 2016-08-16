@@ -122,3 +122,6 @@ local.properties
 
 # sbteclipse plugin
 .target
+
+## Bazel
+bazel-*

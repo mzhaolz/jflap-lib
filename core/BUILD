@@ -19,8 +19,6 @@ java_library(
 	  ]
 )
 
-COMMON_PREFIX = "//third_party/java/jflap-lib/jflaplib-core/"
-
 java_binary(
     name = "jflap",
     srcs = glob([ "**/JFLAP.java" ]),
@@ -29,8 +27,8 @@ java_binary(
     ],
     main_class = "edu.duke.cs.jflap.JFLAP",
     resources = [
-        COMMON_PREFIX + "src/main/resources/ICON:icons",
-        COMMON_PREFIX + "src/main/resources/MEDIA:media",
-        COMMON_PREFIX + "src/main/resources/DOCS:docs",
+        "//core/src/main/resources/ICON:icons",
+        "//core/src/main/resources/MEDIA:media",
+        "//core/src/main/resources/DOCS:docs",
     ],
 )
