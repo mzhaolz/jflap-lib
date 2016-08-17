@@ -3,7 +3,7 @@ package(
 )
 
 java_library(
-	  name = "jflaplib_core",
+	  name = "core",
 	  srcs = glob(["**/*.java"], exclude = ["**/LRParser.java"]),
 	  visibility = [ "//visibility:public" ],
 	  deps = [
@@ -23,7 +23,7 @@ java_binary(
     name = "jflap",
     srcs = glob([ "**/JFLAP.java" ]),
     deps = [
-        ":jflaplib_core",
+        ":core",
     ],
     main_class = "edu.duke.cs.jflap.JFLAP",
     resources = [
