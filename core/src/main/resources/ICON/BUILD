@@ -7,5 +7,5 @@ exports_files(glob(["**/*.gif"]))
 
 filegroup(
     name = "icons",
-    srcs= glob(["**/*.gif"]),
+    srcs= glob(["**/*.gif"]) + glob(["**/*.jpg"]),
 )

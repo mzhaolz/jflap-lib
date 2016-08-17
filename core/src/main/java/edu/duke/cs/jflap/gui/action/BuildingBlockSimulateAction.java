@@ -98,7 +98,7 @@ public class BuildingBlockSimulateAction extends SimulateAction {
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		final Object input = initialInput((Component) e.getSource(), "");
+		final String[] input = initialInput((Component) e.getSource(), "");
 		if (input == null) {
 			return;
 		}
@@ -106,10 +106,10 @@ public class BuildingBlockSimulateAction extends SimulateAction {
 		final AutomatonSimulator simulator = getSimulator(automaton);
 		// Get the initial configurations.
 		if (getObject() instanceof TuringMachine) {
-			final String[] s = (String[]) input;
+			final String[] s = input;
 			configs = ((TMSimulator) simulator).getInitialConfigurations(Arrays.asList(s));
 		} else {
-			final String s = (String) input;
+			final String s = input[0];
 			configs = simulator.getInitialConfigurations(s);
 		}
 		handleInteraction(automaton, simulator, configs, input);
