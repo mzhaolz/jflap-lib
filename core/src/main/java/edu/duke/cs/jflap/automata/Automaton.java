@@ -103,7 +103,7 @@ public class Automaton implements Serializable, Cloneable {
 				final State to = map.get(transition.getToState());
 				// call clone instead of copy so that GUI can get appropriately
 				// updated
-				final Transition toBeAdded = (Transition) transition.clone();
+				final Transition toBeAdded = transition.clone();
 				toBeAdded.setFromState(from);
 				toBeAdded.setToState(to);
 				dest.addTransition(toBeAdded);

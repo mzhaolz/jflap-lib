@@ -95,7 +95,7 @@ public class TuringMachine extends Automaton {
 			final TMState from = map.get(tms);
 			for (int i = 0; i < ts.size(); i++) {
 				final TMState to = map.get(ts.get(i).getToState());
-				final Transition toBeAdded = (Transition) ts.get(i).clone();
+				final Transition toBeAdded = ts.get(i).clone();
 				toBeAdded.setFromState(from);
 				toBeAdded.setToState(to);
 
@@ -222,7 +222,7 @@ public class TuringMachine extends Automaton {
 			final TMState from = map.get(tms);
 			for (int i = 0; i < ts.size(); i++) {
 				final TMState to = map.get(ts.get(i).getToState());
-				final Transition toBeAdded = (Transition) ts.get(i).clone();
+				final Transition toBeAdded = ts.get(i).clone();
 				toBeAdded.setFromState(from);
 				toBeAdded.setToState(to);
 				// a.addTransition(ts[i].copy(from, to));
