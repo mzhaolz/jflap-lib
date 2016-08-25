@@ -1,9 +1,3 @@
-new_local_repository(
-	name = "jflaplib_core",
-	path = "third_party/java/jflap-lib/jflaplib-core",
-	build_file = "third_party/java/jflap-lib/jflaplib-core/BUILD",
-)
-
 maven_jar(
 	name = "com_google_guava",
 	artifact = "com.google.guava:guava:19.0",
