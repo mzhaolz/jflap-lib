@@ -25,6 +25,8 @@ import java.util.HashMap;
 
 import javax.swing.tree.TreeNode;
 
+import com.google.common.base.Joiner;
+
 import edu.duke.cs.jflap.automata.State;
 import edu.duke.cs.jflap.automata.fsa.MinimizeTreeNode;
 import edu.duke.cs.jflap.gui.tree.DefaultNodeDrawer;
@@ -47,7 +49,7 @@ public class MinimizeNodeDrawer extends DefaultNodeDrawer {
 	 */
 	private static String getStateString(final MinimizeTreeNode node) {
 		final State[] states = (State[]) node.getUserObject();
-		final int[] ids = new int[states.length];
+		final Integer[] ids = new Integer[states.length];
 		for (int i = 0; i < ids.length; i++) {
 			ids[i] = states[i].getID();
 		}
@@ -59,7 +61,7 @@ public class MinimizeNodeDrawer extends DefaultNodeDrawer {
 			}
 			buffer.append(ids[i]);
 		}
-		return buffer.toString();
+		return Joiner.on(", ").join(ids);
 	}
 
 	/** The map of nodes to labels. */

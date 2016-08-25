@@ -252,16 +252,6 @@ public class LSystemInputPane extends JPanel {
 
 		scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		/*
-		 * final JComboBox box = new JComboBox ((String[]) Renderer.ASSIGN_WORDS
-		 * box.setLightWeightPopupEnabled(false);
-		 * scroller.setCorner(JScrollPane.UPPER_RIGHT_CORNER, box);
-		 * box.addItemListener(new ItemListener() { public void
-		 * itemStateChanged(ItemEvent e) { if (e.getStateChange() != e.SELECTED)
-		 * return; String s = (String) e.getItem(); box.setSelectedIndex(-1); //
-		 * No selection! setEditing(s); } });
-		 */
-
 		final JPopupMenu menu = new JPopupMenu();
 		final ActionListener listener = e -> setEditing(e.getActionCommand());
 		final Set<String> words = Renderer.ASSIGN_WORDS;

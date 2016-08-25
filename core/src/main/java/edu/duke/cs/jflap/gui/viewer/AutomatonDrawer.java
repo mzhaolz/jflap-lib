@@ -213,30 +213,6 @@ public class AutomatonDrawer {
 		g.setColor(Color.black);
 		drawTransitions(g);
 
-		// int sh = automaton.hashCode();
-
-		// if (specHash != sh){
-		// specHash = sh;
-		// hs.clear();
-		// lhs.clear();
-		// // Draw every state...or not
-		// State[] states = automaton.getStates();
-		//
-		// // for (int i = 0; i < states.length; i++) {
-		// for (int i = states.length - 1; i >= 0; i--) {
-		// // drawState(g, states[i]);
-		// if (!lhs.contains(states[i].getPoint())){
-		// hs.add(states[i]);
-		// lhs.add(states[i].getPoint());
-		// }
-		// }
-		// }
-
-		// //reverse again, to get the correct ordering for non-overlapping
-		// things
-		// for (int i = hs.size() - 1; i >= 0; i--)
-		// drawState(g, hs.get(i));
-
 		final List<State> states = automaton.getStates();
 		for (final State state : states) {
 			drawState(g, state);

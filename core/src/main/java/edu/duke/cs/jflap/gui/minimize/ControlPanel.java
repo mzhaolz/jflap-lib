@@ -167,11 +167,6 @@ class ControlPanel extends JToolBar {
 
 			@Override
 			public void actionPerformed(final ActionEvent event) {
-				/*
-				 * TreeNode[] selected = treeDrawer.getSelected(); for (int i=0;
-				 * i<selected.length; i++)
-				 * controller.addChild((MinimizeTreeNode)selected[i]);
-				 */
 				controller.addChild();
 				controller.setEnabledness();
 			}

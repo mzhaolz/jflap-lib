@@ -434,15 +434,6 @@ public class AutomatonPane extends JPanel implements Scrollable {
 	 *            this component adapts it's size
 	 */
 	public void reformTransform(final Rectangle viewBounds) {
-		// completely unrelated
-		// MouseListener[] k;
-		// System.out.println((k =
-		// this.getListeners(MouseListener.class)).length);
-		// for (int i = 0; i < k.length; i++)
-		// System.out.println(k[i]);
-
-		// end completely unrelated
-
 		transformNeedsReform = false;
 		// System.out.print("hello\n");
 		final Rectangle bounds = new Rectangle(getAutomatonBounds());

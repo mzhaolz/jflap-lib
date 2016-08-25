@@ -295,7 +295,7 @@ public class SimulateAction extends AutomatonAction {
 	 * @return the object that represents the initial input to the machine, or
 	 *         <CODE>null</CODE> if the user elected to cancel
 	 */
-	protected Object initialInput(final Component component, String title) {
+	protected String[] initialInput(final Component component, String title) {
 		if (title.equals("")) {
 			title = "Input";
 		}
@@ -331,7 +331,7 @@ public class SimulateAction extends AutomatonAction {
 	 * @param title
 	 * @return
 	 */
-	private Object openInputGUI(final Component component, final String title, final int tapes) {
+	private String[] openInputGUI(final Component component, final String title, final int tapes) {
 		// TODO Auto-generated method stub
 		JPanel panel;
 		JTextField[] fields;
@@ -395,7 +395,7 @@ public class SimulateAction extends AutomatonAction {
 			return null;
 		}
 		if (tapes == 0) {
-			final String input = fields[0].getText();
+			final String[] input = new String[] { fields[0].getText() };
 			return input;
 		} else {
 			final String[] input = new String[tapes];
